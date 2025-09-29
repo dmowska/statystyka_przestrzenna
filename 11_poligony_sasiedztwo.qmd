@@ -1,0 +1,418 @@
+# Określanie sąsiedztwa danych obszarowych
+
+Dane obszarowe (ang. *areal data*) powstają poprzez podzielenie obszaru badań na jednostki przestrzenne, w których agregowane są wyniki, np. podział na jednostki administracyjne (gminy, powiaty). Dane obszarowe charakteryzują się skokową zmiennością wartości. Przykładami danych obszarowych są np. dane społeczno-ekonomiczne udostępniane w ramach spisów ludności (np. poziom bezrobocia wg powiatów).
+
+Koncepcja sąsiedztwa przestrzennego jest przydatna do eksploracji danych obszarowych w celu oceny autokorelacji przestrzennej i sprawdzenia, czy obszary bliskie mają podobne, czy różne wartości.
+
+<!--    W3, U2  Wykład, Ćwiczenia w salach komputerowych-->
+
+```{r}
+#| message: false
+#| warning: false
+library(sf)
+library(tmap)
+library(spdep)
+```
+
+## Kryteria wyznaczania sąsiedztwa
+
+Sąsiadów przestrzennych można definiować na kilka sposobów.
+
+### Kryterium wspólnej granicy obszarów (*adjacency*)
+
+Kryterium wspólnej granicy obszarów (*adjacency*) zakłada, że sąsiedzi to obszary, które mają wspólną granincę. Wspólną granicę obszarów można wyznaczyć posługując się regułą *Rook* lub *Queen*
+
+```{r}
+#| message: false
+#| echo: false
+library(terra)
+library(tmap)
+library(sf)
+r1 = rast(matrix(c(0, 1, 0, 1, 2, 1, 0, 1, 0), nrow = 3))
+r1 = extend(r1, 1, fill = 0)
+r1p = st_as_sf(as.polygons(r1, dissolve = FALSE))
+tm1 = tm_shape(r1) + tm_raster(col.legend = tm_legend_hide()) + 
+  tm_shape(r1p) + tm_borders() +
+  tm_title("Rook") + tm_layout(frame = FALSE)
+r2 = rast(matrix(c(1, 1, 1, 1, 2, 1, 1, 1, 1), nrow = 3))
+r2 = extend(r2, 1, fill = 0)
+r2p = st_as_sf(as.polygons(r2, dissolve = FALSE))
+tm2 = tm_shape(r2) + tm_raster(col.legend = tm_legend_hide()) + 
+  tm_shape(r2p) + tm_borders() +
+  tm_title("Queen") + tm_layout(frame = FALSE)
+tmap_arrange(tm1, tm2)
+```
+
+### Kryterium odległości
+
+Kryterium odległości (odległość mierzona między centroidami obszarów) zakłada, że sąsiedzi to obszary znajdujące się w pewnej odległości od siebie, ale niekoniecznie sąsiadujące. Wyróżnia się:
+
+-   ***macierz sąsiadów w promieniu*** **d\* km**\* - sąsiadem będzie obiekt, którego środek jest oddalony w linii prostej o nie więcej niż d km
+
+-   ***k najbliższych sąsiadów (*****knn*)*** - najbliższy sąsiad to obszar którego środek leży najbliżej środka danego obszaru stosując odległość euklidesową.
+
+    -   tworzona dla danych punktowych
+    -   używając danych obszarowych należy najpierw wyznaczyć ich centroidy
+    -   na liczbę najbliższych sąsiadów ma zatem wpływ wielkość oraz kształt regionu i regionów sąsiednich
+
+-   ***odległość odwrotna (***$\frac{1}{d}$)
+
+```{r}
+#| echo: false
+#| eval: true
+#| message: false
+#| warning: false
+
+library(spdep)
+library(tmap)
+granica = read_sf("data/gminy.gpkg")
+colnames(granica) = c("Nazwa", "geom")
+
+#Kryterium wspolna granica 
+pres_nb_q = poly2nb(granica, queen = TRUE, row.names = as.character(granica$Nazwa))
+pres_lw = nb2listw(pres_nb_q, style = "B")
+pres_mat = listw2mat(pres_lw)
+
+nazwy = as.character(granica$Nazwa)
+pzn = nazwy[pres_nb_q[[which(nazwy=="Poznań")]]]
+sel = granica[granica$Nazwa%in%pzn,]
+
+kryterium_granica = tm_shape(granica) + tm_polygons(col = "black") + 
+  tm_shape(sel) + tm_polygons(fill = "darkgreen") + 
+  tm_title("Wspólna granica (queen)") + 
+  tm_layout(frame = FALSE)
+
+# Kryterium d 
+
+pres_cen = st_centroid(st_geometry(granica), of_largest_polygon = FALSE)
+pres_nb_d = dnearneigh(pres_cen, d1 = 0, d2 = 30000, longlat = FALSE, row.names = as.character(granica$Nazwa))
+
+
+nazwy = as.character(granica$Nazwa)
+pzn = nazwy[pres_nb_d[[which(nazwy=="Poznań")]]]
+sel = granica[granica$Nazwa%in%pzn,]
+
+kryterium_d = tm_shape(granica) + tm_polygons(col = "black") + 
+  tm_shape(sel) + tm_polygons(fill = "darkgreen") + 
+  tm_title("Kryterium odległości\nd = 30km") + 
+  tm_layout(frame = FALSE)
+
+
+# Kryterium k 
+pres_cen = st_centroid(st_geometry(granica), of_largest_polygon = FALSE)
+pres_knn = knearneigh(pres_cen, k = 5)
+pres_nb_knn = knn2nb(pres_knn)
+
+sel = granica[c(5,14,18,31,32),]
+
+kryterium_k = tm_shape(granica) + tm_polygons(col = "black") + 
+  tm_shape(sel) + tm_polygons(fill = "darkgreen") + 
+  tm_title("Kryterium k \nnajbliższych sąsiadów (k = 5)") + 
+   tm_layout(frame = FALSE)
+
+tmap_arrange(kryterium_granica, kryterium_d, kryterium_k, ncol = 3)
+```
+
+## Macierz wag przestrzennych
+
+Macierz wag przestrzennych przedstawiana jest w formie tabeli, w której przechowywane są informacje o występowaniu oraz sile zależności przestrzennych między obiektami (np. jednostkami administracyjnymi). Każdy element macierzy reprezentuje powiązanie między parą obszarów. Macierz wag przestrzennych stanowi podstawę wielu technik analizy przestrzennej, w tym autokorelacji przestrzennej, grupowania przestrzennego i regresji przestrzennej.
+
+Macierz wag przestrzennych tworzona jest w dwóch krokach:
+
+-   utworzenie macierzy sąsiedztwa
+-   standaryzacja macierzy sąsiedztwa w celu otrzymania wag.
+
+![](figs/macierz_wag_przestrzennych.png)
+
+### Macierz sąsiedztwa
+
+Mając definicję sąsiedztwa przestrzennego, możemy skonstruować ***macierz sąsiedztwa przestrzennego*** - tabelę, w której przechowywane są informacje o występowaniu (lub nie) relacji między obszarami (czy obszary ze sobą sąsiadują?). Najprostszą formą macierzy sąsiedztwa jest macierz binarna.
+
+$$
+\begin{cases}
+1 & \text{obiekt i jest sąsiadem obiektu j (mają wspólną granicę)} \\
+0 & \text{obiekt i nie jest sąsiadem obiektu j (nie mają wspólnej granicy)} \\
+0 & \text{elementy diagonalne macierzy} \\
+\end{cases}
+$$
+
+### Standaryzacja macierzy sąsiedztwa
+
+W kolejnym kroku standaryzuje się macierz sąsiedztwa w celu otrzymania wag przestrzennych. Najczęściej stosowaną standaryzacją jest standaryzacja wierszami do jedynki tak aby suma wag w każdym wierszu była równa 1:
+
+$$
+w_{ij} = { m_{ij} \over w_i}
+$$
+
+$m_{ij}$ - wartość macierzy sąsiedztwa dla obiektu i oraz j, $w_i$ jest sumą wiersza.
+
+## Macierze wag przestrzennych w R
+
+Do utworzenia macierzy wag przestrzennych wykorzystuje się w R funkcje z pakietu `spdep`.
+
+Dwie główne klasy z pakietu **spdep**:
+
+-   klasa `"nb"` - lista sąsiadów
+-   klasa `"listw"` - lista sąsiadów z wagami przestrzennymi dla wybranego schematu.
+
+Możliwe jest przekształcenie tych klas w inne klasy i z powrotem, np:
+
+-   `nb2mat()` - funkcja generuje macierz wag przestrzennych dla listy sąsiadów dla dowolnego schematu kodowania wag.
+-   `nb2listw()` - funkcja uzupełnia listę sąsiadów o wartości wag wygenerowane dla dowolnego schematu kodowania.
+-   `listw2mat()` - funkcja przekształca listę sąsiadów z przypisanymi wagami w macierz.
+
+Macierz sąsiedztwa, w zależności od wybranego kryterium tworzona jest z wykorzystaniem następujących funkcji:
+
+-   Na podstawie sąsiedztwa wyznaczanego przez wspólną granicę (funkcja `poly2nb()`, `nb2listw()`)
+-   Na podstawie odległości (funkcja `dnearneigh()`)
+-   Metoda k-najbliższych sąsiadów (funkcja `knearneigh()`)
+-   Macierze sąsiedztwa dostarczone przez użytkownika (np. przy użyciu funkcji `mat2listw()`)
+-   Odwrotność odległości
+
+## Przykład 1: Kryterium sąsiedztwa - wspólna granica
+
+Tworzenie macierzy wag przestrzennych na podstawie kryterium wspólnej granicy wymaga wykonania w R 3 kroków:
+
+-   utworzenia listy sąsiadów (`poly2nb()`)
+-   utworzenia listy zawierającej wagi (`nb2listw`)
+-   przekształcenia listy w macierz wag przestrzennych (`listw2mat()`)
+
+### Dane
+
+```{r}
+#| message: false
+#| warning: false
+#wczytanie danych
+library(sf)
+ex = read_sf("data/area_ex.gpkg")
+rownames(ex) <- ex$id
+ex = ex[order(rownames(ex)),]
+st_crs(ex) <- 2180
+```
+
+```{r}
+#| message: false
+#| warning: false
+#| fig-width: 4
+#wyswietlenie danych
+tm_shape(ex) +
+  tm_polygons(col = "grey", legend.show = FALSE) + 
+  tm_text("id", size = 2)
+```
+
+### Utworzenie macierzy wag przestrzennych
+
+-   **Tworzenie listy sąsiadów**
+
+Lista sąsiadów tworzona jest z wykorzystaniem funkcji `poly2nb()`. Funkcja ta tworzy listę sąsiadów na podstawie obiektu poligonowego wczytanego lub utworzonego za pomocą biblioteki `sf`. Pozwala ona na zdefiniowanie czy lista sąsiadów ma być tworzona z wykorzystaniem reguły *Rook* (opcja `queen = FALSE`) czy reguły *Queen* (`queen = TRUE`)
+
+```{r}
+ex_nb = poly2nb(ex, queen = FALSE)
+ex_nb
+```
+
+W wyniku otrzymamy **listę** sąsiadów dla każdego z obszarów. Poniższa lista składa się z 6 elementów (mamy 6 obszarów w zbiorze danych). Każdy element oznacza sąsiadów dla danego obszaru (np. obszar 1 wg reguły *Rook* ma dwóch sąsiadów: obszar nr 2 oraz obszar nr 4).
+
+```{r}
+str(ex_nb)
+```
+
+-   **Tworzenie macierzy sąsiedztwa**
+
+Funkcja `nb2listw()` uzupełnia listę sąsiadów o wagi przestrzenne dla wybranego schematu kodowania (patrz opcje dla argumentu *style*) `style = "B"` oznacza, że chcemy utworzyć macierz binarną.
+
+```{r}
+ex_lw = nb2listw(ex_nb, style = "B")
+ex_lw
+```
+
+Funkcja `listsw2mat()` przekształca listę na macierz. W wyniku otrzymamy macierz binarną, gdzie 1 oznacza, że obiekty ze sobą sąsiadują, a 0 oznacza brak sąsiedztwa między obszarami
+
+```{r}
+ex_mat = listw2mat(ex_lw)
+ex_mat
+```
+
+-   **Tworzenie macierzy wag przestrzennych**
+
+Argument `style = "W"` tworzy macierz wag przestrzennych, gdzie wagi są standaryzowane wierszami (wagi w każdym wierszu sumują się do 1).
+
+```{r}
+ex_lwp = nb2listw(ex_nb, style = "W")
+ex_mat_wp = listw2mat(ex_lwp)
+ex_mat_wp
+```
+
+> Utwórz macierz sąsiedztwa oraz macierz wag przestrzennych dla sąsiedztwa poligonów wyznaczonego regułą *Queen*.
+
+## Przykład 2: Sąsiedztwo obszarów - powiaty województwa wielkopolskiego
+
+### Dane
+
+```{r}
+#| message: false
+#| warning: false
+powiaty = read_sf("data/wlkp_powiaty.gpkg")
+tm_shape(powiaty) + tm_polygons(fill = "grey", col = "black")
+```
+
+### Sąsiedztwo: krytetium wspólnej granicy
+
+W poniższym przykładzie dla każdego z powiatów w województwie wielkopolskim wyznaczono sąsiadów posługując się kryterium wspólnej granicy (określonej poprzez regułę *Queen*)
+
+```{r}
+#lista sąsiadów
+powiaty_nb_q = poly2nb(powiaty, queen = TRUE, row.names = as.character(powiaty$Nazwa))
+#macierz binarna, aby otrzymać macierz standaryzowaną wierszami należy podac style = "W"
+powiaty_lw = nb2listw(powiaty_nb_q, style = "B")
+powiaty_mat = listw2mat(powiaty_lw)
+colnames(powiaty_mat) <- as.character(powiaty$Nazwa)
+```
+
+Macierz sąsiedztwa powiatów w województwie wielkopolskim
+
+```{r}
+powiaty_mat[1:5, 1:5]
+```
+
+Poniższy kod pozwala na wypisanie sąsiadów dla danego powiatu
+
+```{r}
+powiat_nazwy = as.character(powiaty$Nazwa)
+powiat_nazwy[powiaty_nb_q[[which(powiat_nazwy=="poznański")]]]
+```
+
+> Z jakimi powiatami graniczy powiat koniński?
+
+> Z jakimi powiatami graniczy powiat pilski?
+
+#### Wizualizacja macierzy sąsiedztwa {.unnumbered}
+
+```{r}
+#wyznaczenie centroidów dla powiatów 
+powiaty_cen = st_centroid(st_geometry(powiaty), of_largest_polygon = FALSE)
+#konwersja listy sąsiadów na obiekt liniowy (linie łączące sąsiadujące powiaty)
+powiaty_nb_net = st_as_sf(nb2lines(powiaty_nb_q, coords = st_coordinates(powiaty_cen)))
+st_crs(powiaty_nb_net)<- 2180
+#wizualizacja
+tm_shape(powiaty) + tm_polygons() + 
+  tm_shape(powiaty_nb_net) + tm_lines() + tm_shape(powiaty_cen) + tm_dots(size =0.6 , col = "black")
+```
+
+### Sąsiedztwo: krytetium odległości
+
+-   odległość między obszarami jest mierzona między centroidami obszarów.
+-   sąsiadem będzie obiekt, którego środek jest oddalony w linii prostej o nie więcej niż d km.
+
+#### Analiza odległości centroidami sąsiadujących powiatów {.unnumbered}
+
+```{r}
+#centroidy powiatów
+powiaty_cen = st_centroid(st_geometry(powiaty), of_largest_polygon = FALSE)
+#lista sąsiadów wg kryterium sąsiedztwa 
+powiaty_nb_q = poly2nb(powiaty, queen = TRUE, row.names = as.character(powiaty$Nazwa))
+#obliczenie odległosci między sąsiadami, obiekt powiaty_dists zwraca odległosc euklidesową między centroidami sąsiadujących powiatów
+powiaty_dists = nbdists(powiaty_nb_q, powiaty_cen)
+head(powiaty_dists, 2)
+```
+
+```{r}
+powiaty_dists_vec = unlist(powiaty_dists)
+```
+
+Poniższy histogram pokazuje rozkład odległości między centroidami sąsiadujących powiatów.
+
+```{r}
+hist(powiaty_dists_vec)
+```
+
+Poniżej obliczone zostały statystyki opisowe dla odległości euklidesowej między centroidami sąsiadujących powiatów.
+
+```{r}
+summary(powiaty_dists_vec)
+```
+
+#### Macierz sąsiedztwa na podstawie kryterium odległości {.unnumbered}
+
+Funkcja `dnearneigh()` identyfikuje sąsiadów na podstawie zadanej odległości. W poniższym przykładzie za sąsiadów zostaną uznane powiaty, których centroidy w linii prostej (odległość euklidesowa) są od siebie oddalone o 0 do 30000 m.
+
+```{r}
+powiaty_nb_d = dnearneigh(powiaty_cen, d1 = 0, d2 = 30000, longlat = FALSE, row.names = as.character(powiaty$Nazwa))
+powiaty_nb_d
+```
+
+```{r}
+powiaty_mat2 = nb2mat(powiaty_nb_d, zero.policy = TRUE)
+colnames(powiaty_mat2) <- as.character(powiaty$Nazwa)
+powiaty_mat2[1:5, 1:5]
+```
+
+#### Wizualizacja sąsiedztwa {.unnumbered}
+
+-   **Wizualizacja sąsiedztwa używając funkcji `plot()`**
+
+```{r}
+plot(st_geometry(powiaty), border = "grey", lwd = 1.5, cex = 3)
+plot(powiaty_nb_d, coords = st_coordinates(powiaty_cen), add = TRUE, lwd = 1.5)
+```
+
+-   **Wizualizacja sąsiedztwa używając pakietu `tmap()`**
+
+```{r}
+#| message: false
+#| warning: false
+
+#przekształcenie obiektu klasy nb na obiekt klasy sf
+powiaty_nb_d_net = st_as_sf(nb2lines(powiaty_nb_d, coords = st_coordinates(powiaty_cen)))
+st_crs(powiaty_nb_d_net)<- 2180
+#wizualizacja
+tm_shape(powiaty) + tm_polygons() + 
+  tm_shape(powiaty_nb_d_net) + tm_lines() + tm_shape(powiaty_cen) + tm_dots(size =0.6 , col = "black")
+```
+
+Poniższy kod pozwala na wypisanie sąsiadów dla danego powiatu.
+
+-   Jakie powiaty sąsiadują z powiatem Poznań?
+
+```{r}
+powiat_nazwy = as.character(powiaty$Nazwa)
+powiat_nazwy[powiaty_nb_d[[which(powiat_nazwy=="Poznań")]]]
+```
+
+-   Jakie powiaty sąsiadują z powiatem Kalisz?
+
+```{r}
+powiat_nazwy[powiaty_nb_d[[which(powiat_nazwy=="Kalisz")]]]
+```
+
+> Jakie powiaty sąsiadują z powiatem konińskim biorąc pod uwagę kryterium odległości (30km)?
+
+### Sąsiedztwo: k-najbliższych sąsiadów
+
+-   tworzona dla danych punktowych
+
+-   używając danych obszarowych należy najpierw wyznaczyć ich centroidy
+
+-   najbliższy sąsiad to obszar którego środek leży najbliżej środka danego obszaru stosując odległość euklidesową.
+
+    -   na liczbę najbliższych sąsiadów ma zatem wpływ wielkość oraz kształt regionu i regionów sąsiednich
+
+Funkcja `knearneigh()` wyznacza k najbliższych sąsiadów na podstawie odległości między centroidami powiatów.
+
+```{r}
+powiaty_cen = st_centroid(st_geometry(powiaty), of_largest_polygon = FALSE)
+powiaty_knn = knearneigh(powiaty_cen, k = 5)
+powiaty_nb_knn = knn2nb(powiaty_knn)
+powiaty_nb_knn[1:3]
+```
+
+Każdy element listy odnosi się do powiatu, np. \[\[1\]\] oznacza powiat chodzieski, a poszczególne elementy wskazują id powiatów, z które stanowią 5 najbliższych sąsiadów. Dla powiatu chodzieskiego będą to powiaty:
+
+```{r}
+powiaty$Nazwa[rownames(powiaty)%in%c(2, 19 ,22, 32, 35)]
+```
+
+```{r}
+plot(st_geometry(powiaty), border = "darkgrey", lwd = 2.5, cex = 3)
+plot(powiaty_nb_knn, coords = st_coordinates(powiaty_cen), add = TRUE, lwd = 2.5)
+```

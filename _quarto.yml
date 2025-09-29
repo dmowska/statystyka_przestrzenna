@@ -1,0 +1,53 @@
+project:
+  type: book
+
+book:
+  title: "Statystyka przestrzenna"
+  author: "Jakub Nowosad, Anna Dmowska"
+  date: 2025-09-19
+  date-format: iso
+  chapters:
+    - index.qmd
+    - part: 01_wstep.qmd
+      chapters:
+        - 02_wprowadzenie.qmd
+        - 03_zastosowanie.qmd
+        - 04_daneprzestrzenne.qmd
+        - 05_eksploracja.qmd
+    - part: 06_punkty.qmd
+      chapters:
+        - 07_punkty_centrograficzne.qmd
+        - 08_punkty_odleglosc.qmd
+        - 09_punkty_intensywnosc.qmd
+    - part: 10_poligony.qmd
+      chapters: 
+        - 11_poligony_sasiedztwo.qmd
+        - 12_poligony_autokorelacja.qmd
+    - part: 13_pola.qmd
+      chapters: 
+        - 14_pola_interpolacja.qmd
+        - 15_pola_modelowanie.qmd
+        - 16_pola_estymacja.qmd
+        - 17_pola_ocena.qmd
+    - part: "ZADANIA"
+      chapters: 
+        - 18_zadania_samodzielne.qmd
+        - 19_projekt.qmd
+        - 20_projekt_geostatystyka.qmd
+  cover-image: cover.jpg
+
+execute:
+  freeze: auto
+    
+bibliography: references.bib
+
+format:
+  html:
+    theme:
+      - cosmo
+      - brand
+  pdf:
+    documentclass: scrreprt
+
+editor: visual
+

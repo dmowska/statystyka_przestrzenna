@@ -1,0 +1,154 @@
+# Zastosowania statystyki przestrzennej
+
+## Główne nurty metodologiczne w statystyce przestrzennej
+
+Ze względu na **rodzaj analizowanych danych** w statystyce przestrzennej można wyróżnić trzy główne nurty:
+
+1.  analizę danych punktowych (ang. *point pattern analysis*)
+2.  geostatystykę
+3.  metody analizy danych obszarowych i punktowych atrybutowych.
+
+Griffith (1999) wśród metod statystyki przestrzennej wyróżnia:
+
+-   analizę danych punktowych
+-   geostatystykę
+-   autoregresję przestrzenną
+-   metody wizualizacji danych
+
+## Analiza danych punktowych (bezatybutowych)
+
+### Cel
+
+-   określenie w jaki sposób dane obiekty/zdarzenia są rozmieszczone w przestrzeni.
+
+    -   Czy punkty są rozmieszczone **losowo**? (tzn. na ich rozmieszczenie nie działa żaden czynnik lub zależą od wielu czynników które się wzajemnie znoszą)
+    -   Czy punkty są romieszczone **regularnie**? (tj. efekt świafomego działania, nie jest to proces naturalny)
+    -   Czy występują **skupiska (klastry)** punktów? (tzn. na rozmieszczenie punktów wpływa jakiś czynnik)
+
+-   rozpoznanie wzorca rozmieszczenia punktów w przestrzeni jest podstawą do wykrycia zależności przestrzennych.
+
+### Dane punktowe
+
+Przykładami danych punktowych bezatrybutowych są:
+
+-   dane epidemiologiczne dotyczące występowania przypadków zachorowań
+-   rozkłady występowania określonych gatunków roślin czy zwierząt.
+
+### Przykłady danych punktowych: zbiory danych z pakietu spatstat
+
+![](figs/point_examples.png)
+
+![](figs/point_examples2.png)
+
+### Zastosowanie
+
+Analiza przestrzennych danych punktowych jest stosowana w wielu dziedzinach:
+
+-   **biologia, ekologia, botanika** -
+
+    -   rozmieszczenie gatunków roślin,
+    -   rozmieszczenie gatunków ptaków i ich lęgowisk
+    -   badanie rozkładu gatunków drzew w przestrzeni (badanie rozmieszczenia roślin stało się pierwowzorem technik analizy przestrzennych danych punktowych)
+
+-   **epidemiologia** - rozprzestrzenianie się chorób (wirusów, bakterii)
+
+-   **ochrona zdrowia** - obszary występowania chorób zakaźnych, nowotworów
+
+-   **nauki ekonomiczne** - przestrzenne zróżnicowanie zjawisk ekonomicznych, np. dochodów, bezrobocia
+
+-   **archeologia**
+
+    -   zróżnicowanie lokalizacji stanowisk archeologicznych w kontekście rozwoju społeczno-środowiskowego
+    -   analiza wzorców stanowisk stanowi mocną metodę zrozumienia preferencji lokalizacji stanowisk w archeologii.
+
+-   **geografia**
+
+    -   rozprzestrzenianie się pożarów
+
+<!--https://www.sciencedirect.com/science/article/pii/S2352409X22004102-->
+
+<!--https://benmarwick.github.io/How-To-Do-Archaeological-Science-Using-R/basic-spatial-analysis-in-r-point-pattern-analysis.html -->
+
+## Geostatystyka
+
+-   Geostatystyka to gałąź statystyki skupiająca się na przestrzennych lub czasoprzestrzennych zbiorach danych.
+-   Uwzględnia w analizie przestrzenną i czasową lokalizację.
+-   Podstawą opisu struktury przestrzennej jest semiwariogram - funkcja określająca zależność pomiędzy średnim zróżnicowaniem wartości analizowanej cechy i odległością między punktami pomiaru (zakłada się, że podobieństwo wartości maleje wraz z odleglością).
+-   Początki geostatystyki: lata 60.XX w. (francuski matematyk G. Matheron w 1963 roku zaproponował metodę krigingu opartą mająca na celu optymalizacje szacowania parametrów geologicznych).
+
+### Cel
+
+-   zrozumienie zmienności przestrzennej lub czasowej zjawiska
+-   szacowanie wartości dla całego obszaru (dane ciągłe) na podstawie danych punktowych (estymacja)
+-   określenie prawdopodobieństwa przekroczenia w danym punkcie lub obszarze wartości progowej
+-   Optymalizacja próbkowania oraz sieci monitoringowych
+
+### Przykłady zastosowania
+
+Modelowanie zmienności przestrzennej opadów na podstawie zbioru danych `sic97` (*Spatial Interpolation Comparison 1997 data set: Swiss Rainfall*) z pakietu `gstat` przedstawiającego 100 pomiarów wysokości opadów w obszarze Szwajcarii.
+
+![](figs/geostat_ex_swiss_rainfall.png)
+
+Modelowanie zmienności przestrzennej zanieczyszczenia gleb (zmienna *Co*) na podstawie zbioru danych `jura` z pakietu `gstat`. Zbiór danych przedstawia pomiary zanieczyszczenia gleby metalami ciężkimi w 259 lokalizacjach. Zbiór danych jura pochodzi z ksiązki Pierre Goovaerts' (Goovaerts, P. 1997. Geostatistics for Natural Resources Evaluation. Oxford Univ. Press, New-York, 483)
+
+![](figs/geostat_ex_jura_co.png)
+
+Modelowanie zmienności przestrzennej zanieczyszczenia powietrza w Kalifornii (średnia zawartość Ozonu w latach 1980-2009) na podstawie zbioru danych `airqual` z pakietu `rspat`.
+
+![](figs/geostat_ex_ca_airquality_kriging.png)
+
+### Zastosowanie geostatystyki
+
+Geostatystyka jest stosowana obecnie w wielu dyscyplinach, takich jak: geologia naftowa, oceanografia, geochemia,logistyka, leśnictwo, gleboznawstwo, hydrologia, meteorologia, epidemiologia.
+
+-   Górnictwo, geologia, eksploracja zasobów naturalnych:
+
+    -   szacowanie rezerw mineralnych,
+    -   charakterystyki złoża,
+    -   optymalizacji miejsc wierceń.
+    -   <https://geojournals.pgi.gov.pl/bp/article/view/28824/pdf>
+
+-   Zarządzanie kryzysowe
+
+    -   ocena ryzyka związanego z klęskami żywiołowymi, takimi jak trzęsienia ziemi, osuwiska i powodzie, w celu opracowania strategii zarządzania katastrofami i łagodzenia ryzyka.
+
+-   Rolnictwo
+
+    -   analizę jakości gleby,
+    -   prognozowanie plonów
+    -   precyzyjne rolnictwo poprzez pomiar zmienności przestrzennej właściwości gleby.
+
+-   Geografia
+
+    -   ocena zanieczyszczeń, np. mapy zanieczyszczeń powietrza.
+
+-   Hydrologia
+
+    -   modelowanie głębokości wód gruntowych,
+    -   prognozowanie występowania opadów
+    -   ocena ryzyka powodzi poprzez analizę wzorców przestrzennych zmiennych hydrologicznych.
+
+-   Epidemiologia i geografia zdrowia
+
+    -   badanie przestrzennego rozmieszczenia chorób,
+    -   analiza dostępu do opieki zdrowotnej i
+    -   przewidywania wybuchów chorób w różnych lokalizacjach.
+
+-   Ubezpieczenia i finanse:
+
+    -   wykorzystywane w branży ubezpieczeniowej do oceny i zarządzania ryzykiem związanym z klęskami żywiołowymi lub rozprzestrzenianiem się chorób w celu decydowania o odpowiednich składkach i skutecznego zarządzania portfelami.
+
+<https://desktop.arcgis.com/en/arcmap/latest/extensions/geostatistical-analyst/geostatistical-analyst-example-applications.htm>
+
+## Autokorelacja przestrzenna danych obszarowych
+
+### Cel
+
+-   analiza podobieństwa i różnic między obszarami/regionami
+-   wyszukanie obszarów podobnych do siebie
+-   znalezienie obszarów znacząco różnych od sąsiednich
+-   kluczowe zadanie: określenie, które obszary ze sobą sąsiadują.
+
+### Przykład zastosowania
+
+![](figs/bezrobocie.png)

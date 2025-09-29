@@ -1,0 +1,547 @@
+# Eksploracyjna analiza danych przestrzennych
+
+```{r}
+#| message: false
+library(tmap)
+library(sf)
+library(ggplot2)
+library(dplyr)
+```
+
+<!-- https://bookdown.org/nowosad/geostatystyka/eksploracja-analiza-danych-nieprzestrzennych.html -->
+
+<!-- https://bookdown.org/nowosad/geostatystyka/eksploracyjna-analiza-danych-przestrzennych.html -->
+
+<!-- pytanie czy to przeredagować (żeby było uniwersalne dla wszystkich typów danych przestrzennych) czy też przenieść do rozdziałów geostatyski, albo też trochę to i to -->
+
+## Eksploracyjna analiza danych
+
+-   Każda analiza danych przestrzennych powinna być poprzedzona **eksploracyjną analizą danych**. Celem eksploracyjnej analizy danych jest **uzyskanie podstawowych informacji o analizowanych danych.**
+
+-   Sposób wykonania eksploracyjnej analizy danych (np. dobór wykorzystywanych metod) różni się w zależności od posiadanego zbioru danych, jak i od postawionego pytania.
+
+### Cele eksploracyjnej analizy danych
+
+Ogólne cele eksploracyjnej analizy danych obejmują:
+
+-   Przygotowanie ogólnej charakterystyki danych oraz badanego zjawiska.
+-   Identyfikacja przestrzennego/czasowego typu próbkowania.
+-   Ocena relacji zachodzących pomiędzy lokalizacją pomiaru/obserwacji, a czynnikami wpływającymi na zmienność przestrzenną badanych cech.
+
+### Eksploracyjna analiza nieprzestrzenna i przestrzenna
+
+Eksploracyjna analiza danych dzieli się na analizę nieprzestrzenną i przestrzenną.
+
+| Nieprzestrzenna | Przestrzenna |
+|--------------------------------------------|----------------------------|
+| w analizie uwzględniane są wartości atrybutów, a nie ich lokalizacja | podstawą analizy danych jest lokalizacja obserwacji |
+| *analiza statystyczna danych* wykonywana w oparciu o tabelę atrybutów dołączoną do danych geoprzestrzennych |  |
+| podstawowe statystyki opisowe, typ rozkładu danych, analiza korelacji, zmienność cechy w grupach | typ próbkowania, ogólny pogląd na zmienność przestrzenną zjawiska |
+
+![](figs/eksploracja_danych.png)
+
+<!-- ograniczenia danych -->
+
+## Eksploracyjna analiza dla różnych typów danych
+
+### Statystyka punktów
+
+Cel:
+
+-   określenie w jaki sposób obiekty/zdarzenia są rozmieszczone w przestrzeni
+
+Eksploracyjna analiza danych:
+
+-   Sprawdzenie poprawności współrzędnych
+-   Wgląd w typ próbkowania
+-   Określenie zależności między lokalizacją, a innymi czynnikami (np. więcej włamań notuje się w obszarach z wysokimi cenami nieruchomości)
+
+### Statystyka powierzchni (dane poligonowe)
+
+Cel:
+
+-   analiza podobieństwa i różnic między obszarami/regionami
+-   wyszukanie obszarów podobnych do siebie
+-   znalezienie obszarów znacząco różnych od sąsiednich
+
+Eksploracyjna analiza danych:
+
+-   Charakterystyka statystyczna danych (statystyki podstawowe, wartości odstające globalnie, rozkład danych)
+-   Sprawdzenie poprawności danych, w tym między innymi identyfikacja danych odstających lokalnie
+
+### Geostatystyka
+
+Cel:
+
+-   zrozumienie zmienności przestrzennej lub czasowej zjawiska
+-   szacowanie wartości dla całego obszaru (dane ciągłe) na podstawie danych punktowych (estymacja)
+
+Eksploracyjna analiza danych:
+
+-   Charakterystyka statystyczna danych (statystyki podstawowe, wartości odstające globalnie, rozkład danych)
+-   Sprawdzenie poprawności współrzędnych
+-   Sprawdzenie poprawności danych, w tym między innymi identyfikacja danych odstających lokalnie
+-   Wgląd w tym próbkowania
+-   Ogólny pogląd na zmienność przestrzenną, wykorzystanie prostej automatycznej procedury interpolacji
+
+## Przykład 1. Analiza rozkładu temperatury powietrza
+
+### Dane i cel analizy
+
+#### Cel
+
+Celem analizy jest uzyskanie informacji o przestrzennym rozkładzie wartości temperatury w analizowanym obszarze. Dane punktowe przedstawiające lokalizacje pomiaru temperatury powietrza zostaną wykorzystane następnie w analizie geostatystycznej mającej w celu oszacowania wartości dla całego obszaru z wykorzystaniem jednej z geostatystycznych metod estymacji.
+
+#### Dane
+
+Dla analizowanego obszaru dysponujemy:
+
+-   danymi punktowymi (*punkty.csv*) zapisanymi w pliku tekstowym zawierającymi lokalizacje, w których wykonano pomiary temperatury powietrza. Dla każdej lokalizacji dysponujemy także zestawem zmiennych dodatkowych (ndvi, wysokość n.p.m (srtm), klasa pokrycia terenu (clc)).
+-   plikiem wektorowym w formacie *.gpkg* (*granica.gpkg*) zawierającym granicę obszaru analizy.
+
+```{r}
+#| message: false
+granica = read_sf("data/granica.gpkg")
+#wczytanie danych oraz konwersja do klasy sf
+pkt = read.csv("data/punkty.csv")
+pkt = pkt[!is.na(pkt$temp), ]
+punkty = st_as_sf(pkt, coords = c("x", "y"), crs = "EPSG:2180")
+```
+
+```{r}
+str(punkty)
+```
+
+### Eksploracyjna nieprzestrzenna analiza danych
+
+#### Podsumowanie numeryczne
+
+Podstawowe informacje o analizowanej zmiennej (w tym przykładzie temperatura powietrza *temp*) można uzyskać za pomocą funkcji `summary()`. Dodatkowo można obliczyć inne statystyki opisowe, np. odchylenie standardowe (funkcja `sd`).
+
+```{r}
+summary(punkty$temp)
+```
+
+```{r}
+sd(punkty$temp)
+```
+
+#### Rozkład danych
+
+Rozkład danych można przedstawić graficznie wykorzystując histogram (*geom_histogram*) lub estymator jądrowy gęstości (*geom_density*).
+
+```{r}
+library(ggplot2)
+
+ggplot(punkty, aes(temp)) + 
+  geom_histogram() + 
+  labs(x = "Zmienna temp", y = "Liczba obserwacji") + 
+  theme_bw()
+```
+
+```{r}
+ggplot(punkty, aes(temp)) + geom_density() + theme_bw()
+```
+
+Dodatkowo rozkład danych można opisać za pomocą dwóch statystyk opisowych: skośności oraz kurtozy.
+
+```{r}
+#| message: false
+#| warning: false
+#| eval: false
+
+library(e1071)
+skewness(punkty$temp)
+kurtosis(punkty$temp)
+```
+
+#### Dane globalnie odstające
+
+Dane globalnie odstające to bardzo niskie lub bardzo wysokie wartości względem pozostałych w zbiorze danych. Można je zidentyfikować poprzez wykonanie histogramu oraz obejrzenie rozkładu danych.
+
+#### Zależność między temperaturą, a zmiennymi ndvi i srtm
+
+Do określenia związku między zmiennymi ilościowymi (np. temperaturą a wartościami zmiennych srtm oraz ndvi) można wykorzystać wykres rozrzutu oraz miary korelacji (współczynnik korelacji liniowej lub współczynnik korelacji rang Spearmana). Poniżej wykonano wykresy rozrzutu pokazujące zależnośc między zmienną temp, a ndvi oraz zmienną temp, a srtm.
+
+```{r}
+ggplot(punkty, aes(temp, ndvi)) +
+  geom_point() +
+  labs(x = "Zmienna temp", y = "Zmienna ndvi") + 
+  theme_bw()
+```
+
+> Czy istnieje zależność między zmienną temp, a ndvi?
+
+```{r}
+ggplot(punkty, aes(temp, srtm)) +
+  geom_point() +
+  labs(x = "Zmienna temp", y = "Zmienna srtm") + 
+  theme_bw()
+```
+
+> Czy istnieje zależność między zmienną temp, a srtm?
+
+Do liczbowego określenia zależności między zmiennymi wykorzystano test korelacji dla współczynnika korelacji rang Spearmana. Test korelacji wyliczany jest z wykorzystaniem funkcji `cor.test()`, w której jako metodę (argument *method*) można podać współczynnik korelacji rang Spearmana (*method = "spearman"*) lub współczynnik korelacji liniowej Pearsona (*method = "pearson"*). W wyniku otrzymamy wartość współczynnika korelacji oraz poziom istotności.
+
+```{r}
+cor.test(punkty$temp, punkty$ndvi, method = "spearman")
+```
+
+```{r}
+cor.test(punkty$temp, punkty$srtm, method = "spearman")
+```
+
+> Jaka jest wartość korelacji dla zmiennych temp/ndvi, oraz temp/srtm? Czy w każdym z przypadków uzyskano wynik istotny statystycznie?
+
+#### Zmienność temperatury w klasach pokrycia terenu {.unnumbered}
+
+Zależność między zmienną ilościową a jakościową można przedstawić na wykresie pudełkowym.
+
+```{r}
+punkty$clc = as.factor(punkty$clc)
+ggplot(punkty, aes(x = clc, y = temp)) + 
+  geom_boxplot() + 
+  labs(x = "Zmienna clc", y = "Zmienna temp") + 
+  theme_bw()
+```
+
+> Czy temperatura różnicuje się w zależności od klasy pokrycia terenu?
+
+Do określenia istotności różnić średniej pomiędzy grupami można wykorzystać analizę wariancji. Analiza wariancji (ang. *Analysis of Variance - ANOVA*) służy do testowania istotności różnic między średnimi w wielu grupach. Metoda ta służy do oceny czy średnie wartości cechy Y różnią się istotnie pomiędzy grupami wyznaczonymi przez zmienną X.
+
+```{r}
+aov_test = aov(temp ~ clc, data = punkty)
+summary(aov_test)
+```
+
+ANOVA nie pozwala natomiast na stwierdzenie między którymi grupami występują różnice. Aby to stwierdzić konieczne jest wykonanie porównań wielokrotnych (post-hoc), np. testu Tukeya.
+
+```{r}
+tukey = TukeyHSD(aov_test, "clc")
+plot(tukey, las = 1)
+```
+
+> Czy temperatura różnicuje się **istotnie** w zależności od klasy pokrycia terenu?
+
+### Eksploracyjna przestrzenna analiza danych
+
+Do sprawdzenia poprawności współrzędnych, określenia typu próbkowania oraz identyfikacji danych odstających lokalnie można wykorzystać mapę lokalizacyjną pokazującą lokalizację wykonania pomiarów. Mapę lokalizacyjną można wykonać wykorzystując pakiet `tmap`.
+
+#### Sprawdzenie poprawności współrzędnych oraz określenie typu próbkowania
+
+-   Czy współrzędne są w odpowiednim porządku (X-Y, Y-X)?
+-   Czy współrzędne są w odpowiednim układzie?
+-   Czy wszystkie punkty znajdują się na badanym obszarze?
+
+```{r}
+#| message: false
+tm_shape(granica) +
+        tm_polygons() +
+        tm_shape(punkty) +
+        tm_symbols() +
+        tm_grid()
+```
+
+#### Sprawdzenie poprawności danych oraz identyfikacja danych odstających lokalnie {.unnumbered}
+
+```{r}
+#| message: false
+#| fig-cap: "Rozkład wartości temperatury powietrza w analizowanym obszarze."
+tm_shape(punkty) +
+  tm_graticules(labels.show = FALSE) +
+  tm_symbols(col = "temp",
+             style = "cont", 
+             n = 10,
+             palette = "-Spectral",
+             title.col = "Zmienna temp")
+```
+
+## Przykład 2: Analiza przestępczości w hrabstwie Cook
+
+### Dane
+
+-   Plik *socio_economic_variables.gpkg* dostarcza danych społeczno-ekonomicznych dla obszaru hrabstwa Cook (centralna część miasta Chicago). Dane te pochodzą ze zbioru danych American Community Survey: ACS 2016-2020.
+
+-   Plik *crimes_vehicle_theft.gpkg* zawiera lokalizacje przestępstw (kradzieży samochodów) dla centralnej części Chicago dla 2020 roku.
+
+```{r}
+socio_data = read_sf("data/socio_economic_variables.gpkg")
+crimes = read_sf("data/crimes_vehicle_theft.gpkg")
+```
+
+```{r}
+tm_shape(socio_data) + 
+  tm_borders(col = "grey") + 
+tm_shape(crimes) +
+  tm_dots(fill = "red")
+```
+
+Kolorem czerwonym zaznaczono lokalizacje przestępstw (kradzieży samochodów), a szarym granice obszarów spisowych w hrabstwie Cook, dla których pozyskano dane ekonomiczne.
+
+Wykorzystując funkcję `str()` możemy uzyskać podstawowe informacje o analizowanych zmiennych.
+
+```{r}
+str(socio_data)
+```
+
+Ramka danych *socio_data* zawiera szereg zmiennych społeczno-ekonomicznych i demograficznych:
+
+-   liczbę ludności w każdym obszarze spisowym (*POP*)
+-   odsetek ludności w podziale na grupy rasowo-etniczne (*WHITE, BLACK, ASIAN, HISPANIC, OTHER*)
+-   odsetek osób urodzonych za granicą (*FOREIGN_BORN*)
+-   odsetek osób bezrobotnych (*UNEMPL*)
+-   odsetek osób korzystających z pomocy społecznej (*PUBLIC_ASSIST*)
+-   odsetek niezamieszkłaych domów oraz mieszkań (*VACANT*)
+-   odsetek zamieszkałych domów oraz mieszkań (*OCCUPPIED*)
+-   odsetek domów/mieszkań zamieszkałych przez właściciela (*OWNER*)
+-   odsetek domów/mieszkań zamieszkałych przez osoby wynajmujące (*RENTER*)
+-   mediana dochodów w obszarze spisowym (*MEDIAN_INCOME*)
+-   mediana wieku zabudowy w obszarze spisowym (*MEDIAN_BUILT_YEAR*)
+-   mediana wartości domów w obszarze spisowym (*MEDIAN_HOME_VALUE*)
+-   odsetek osób w wyższym wykształceniem (*EDU_HIGH*)
+-   wartość domów: niska, średnia, wysoka (*HOME_VALUES_CAT*)
+-   dochód: niski, średni, wysoki (*INCOME_CAT*)
+-   wiek zabudowy: nowa, średnia, stara zabudowa (*BUILT_YEAR_CAT*)
+
+### Cel analizy
+
+Celem analizy jest znalezienie czynników społeczno-ekonomicznych wpływających na poziom przestępczości (kradzieży samochodów). **Czy istnieje zależność między poziomem przestępczości, a zmiennymi społeczno-ekonomicznymi?**
+
+### Przygotowanie danych do analizy
+
+-   Ujednolicenie układów współrzędnych między warstwami.
+
+*Lokalizacja przestępstw jest w układzie WGS84, warstwę trzeba przekształcić do układu warstwy z danymi społeczno-ekonomicznymi.*
+
+```{r}
+crimes = st_transform(crimes, st_crs(socio_data))
+```
+
+-   selekcja obszarow spisowych, w których zlokalizowane są przestępstwa.
+
+```{r}
+socio_data = socio_data[crimes, ]
+```
+
+-   zliczenie przestępstw w obszarach spisowych
+
+```{r}
+socio_data$NB_CRIMES <- lengths(st_intersects(socio_data, crimes))
+```
+
+-   obliczenie odsetka przestępst na 1000 mieszkańców (ang. *crime rates*)
+
+```{r}
+socio_data$CRIME_RATE = (socio_data$NB_CRIMES/socio_data$POP)*1000
+```
+
+-   utworzenie ramki danych bez kolumny z geometrią (będzie potrzebne przy części analiz statystycznych)
+
+```{r}
+socio_data_attr = socio_data
+socio_data_attr$geom <-NULL
+```
+
+### Eksploracyjna nieprzestrzenna analiza danych
+
+#### Podsumowanie numeryczne {.unnumbered}
+
+```{r}
+summary(socio_data_attr)
+```
+
+```{r}
+table(socio_data_attr$INCOME_CAT)
+```
+
+```{r}
+table(socio_data_attr$HOME_VALUES_CAT)
+```
+
+```{r}
+table(socio_data_attr$BUILT_YEAR_CAT)
+```
+
+#### Rozkład danych o przestępczości
+
+```{r}
+ggplot(socio_data_attr, aes(x = CRIME_RATE)) + geom_histogram() + theme_bw()
+```
+
+#### Zależność między odsetkiem przestępstw a zmiennymi społeczno-ekonomicznymi
+
+```{r}
+cor = cor(socio_data_attr[24], socio_data_attr[3:19], method = "spearman", use = "complete.obs")
+round(cor, 2)
+```
+
+W kolejnym kroku zostaną wyselekcjonowane wartości współczynnika korelacji +/- 0,5, a następnie dla nich zostaną wykonane wykresy rozrzutu.
+
+```{r}
+cor_v = as.vector(cor)
+names(cor_v) = colnames(cor)
+sel_cor = cor_v[abs(cor)>0.5]
+round(sel_cor, 2)
+```
+
+Objaśnienie zmiennych:
+
+```         
+- WHITE - odsetek ludności białych
+- BLACK - odsetek ludności czarnej 
+- FOREIGN_BORN - odsetek ludności urodzonej zagranicą
+- PUBLIC ASSIST - odestek gospodarstw domowych korzystających z pomocy społecznej
+- VACANT - odsetek niezamieszkałych budynków
+- OCCUPIED - odsetek zamieszkałych budynków
+```
+
+Wizualizacja zależności między zmiennymi ze współczynnikiem korelacji +/- 0,5.
+
+```{r}
+#| message: false
+#| warning: false
+library(PerformanceAnalytics)
+list_variables = names(sel_cor)
+chart.Correlation(socio_data_attr[, c("CRIME_RATE", list_variables)], histogram=TRUE, pch=19, method = "spearman")
+```
+
+#### Zmienność odsetka przestępczości w klasach poziomu dochodu, cen domów oraz wieku zabudowy
+
+-   **Zależność między odsetkiem przestępczości a poziomem dochodów.**
+
+Wyróżniono 3 klasy używając zmiennej MEDIAN_INCOME:
+
+-   low - wartości dochodów niższe od kwartyla 1.
+-   medium - wartości dochodów między 1 i 3 kwartylem.
+-   high - wartości dochodów wyższe do 3. kwartyla.
+
+```{r}
+library(dplyr)
+socio_data_attr %>% na.omit() %>%  
+  mutate(INCOME_CAT = factor(INCOME_CAT,level=c("low", "medium", "high"))) %>% 
+ggplot(., aes(x = INCOME_CAT, y = CRIME_RATE)) + 
+  geom_boxplot()  + 
+  xlab("Household income") + ylab("Crime rates") + 
+  theme_bw()
+```
+
+-   **Zależność między odsetkiem przestępczości a cenami domów**.
+
+Wyróżniono 3 klasy używając zmiennej MEDIAN_HOME_VALUE:
+
+-   low - wartości cen domów niższe od kwartyla 1.
+-   medium - wartości cen domów między 1 i 3 kwartylem.
+-   high - wartości cen domów wyższe do 3. kwartyla.
+
+```{r}
+socio_data_attr %>% na.omit() %>%  
+  mutate(HOME_VALUES_CAT = factor(HOME_VALUES_CAT,level=c("low", "medium", "high"))) %>% 
+ggplot(., aes(x = HOME_VALUES_CAT, y = CRIME_RATE)) + 
+  geom_boxplot()  + 
+  xlab("Home values") + ylab("Crime rates") + 
+  theme_bw()
+```
+
+-   **Zależnośc między odsetkiem przestęczpości, a wiekiem zabudowy**.
+
+Wyróżnione zostały 3 klasy zabudowy:
+
+-   old - wybudowane przed 1950,
+-   medium - wybudowane między 1950 a 2000,
+-   new - wybudowane po 2000.
+
+```{r}
+socio_data_attr %>% na.omit() %>%  
+  mutate(BUILT_YEAR_CAT = factor(BUILT_YEAR_CAT,level=c("old", "medium", "new"))) %>% 
+ggplot(., aes(x = BUILT_YEAR_CAT, y = CRIME_RATE)) + 
+  geom_boxplot()  + 
+  xlab("Housing age") + ylab("Crime rates") + 
+  theme_bw()
+```
+
+### Eksploracyjna przestrzenna analiza danych
+
+Eksploracyjna przestrzenna analiza danych obejmuje przede wszystkim wizualizację zmiennych społeczno-ekonomicznych oraz odsetka przestępczości w celu wizualnego określenia, czy istnieją obszary o wysokim/niskim odsetku przestępczości i czy są one powiązane z wyższymi/niższymi wartościami zmiennych społeczno-ekonomicznych.
+
+Wizualizacja danych ma także na celu sprawdzenie poprawności danych, w tym między innymi identyfikacja danych odstających lokalnie.
+
+#### Odsetek przestępczości
+
+```{r}
+#| message: false
+tm_shape(socio_data) + 
+  tm_polygons(fill = "CRIME_RATE", palette = "YlOrRd", n = 4, style = 'jenks')
+```
+
+#### Struktura rasowo-etniczna ludności
+
+```{r}
+#| message: false
+tm_shape(socio_data) + 
+  tm_polygons(fill = "WHITE", palette = "YlOrRd")
+```
+
+```{r}
+#| message: false
+tm_shape(socio_data) + 
+  tm_polygons(fill = "BLACK", palette = "YlOrRd") 
+```
+
+```{r}
+#| message: false
+tm_shape(socio_data) + 
+  tm_polygons(fill = "FOREIGN_BORN", palette = "YlOrRd", n = 3) 
+```
+
+#### Poziom wykształcenia
+
+```{r}
+#| message: false
+tm_shape(socio_data) + 
+  tm_polygons(fill = "EDU_HIGH", palette = "YlOrRd")
+```
+
+#### Zabudowa niezamieszkała
+
+```{r}
+#| message: false
+tm_shape(socio_data) + 
+  tm_polygons(fill = "VACANT", palette = "YlOrRd")
+```
+
+#### Poziom dochodów
+
+```{r}
+#| message: false
+tm_shape(socio_data) + 
+  tm_polygons(fill = "INCOME_CAT", palette = c(low="#FFF68F", medium="#EEB422", high="#FF4040"))
+```
+
+#### Ceny domów
+
+```{r}
+#| message: false
+tm_shape(socio_data) + 
+  tm_polygons(fill = "HOME_VALUES_CAT", palette = c(low="#FFF68F", medium="#EEB422", high="#FF4040"))
+```
+
+#### Wiek zabudowy
+
+```{r}
+#| message: false
+tm_shape(socio_data) + 
+  tm_polygons(fill = "BUILT_YEAR_CAT", palette = c(old="#FFF68F", medium="#EEB422", new="#FF4040"))
+```
+
+### Podsumowanie
+
+-   Przeprowadzona analiza korelacji wskazała na istnienie słabej zależności:
+
+    -   wprostproporcjonalnej przekraczającej 0.5 między odsetkiem przestępstw na 1000 mieszkańców a odsetkiem czarnych (zmienna BLACK) oraz odsetkiem niezamieszkałej zabudowy (zmienna VACANT) oraz odsetkiem osób korzystających z pomocy społecznej
+    -   odwrotnieproporcjonalnej przekraczającej 0.5 między odsetkiem przestępstw na 1000 miekszańców a odsetkiem ludności białej (zmienna WHITE), odsetkiem zamieszkałej zabudowy (zmienna OCCUPIED) oraz odsetkiem osób urodzonych za granicą.
+
+-   Analiza wykresów pudełkowych pokazuje, że odsetek przestępczości przyjmuje wyższe wartości dla klasy o niskich dochodach, niskich cenach domów oraz dla obszarów o nowej zabudowie (powstałej po 2000 roku).
+
+-   Obszary o niskim dochodzie (184 obszary), a także o małej wartości domów (258 obszarów) są zlokalizowane przede wszystkim w południowej części analizowanego obszaru.
+
+-   Mapa przestępczości pokazuje wyższe wartości w południowej części analizowanego obszaru oraz środkowej części obszaru.

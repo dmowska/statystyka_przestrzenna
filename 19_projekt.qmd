@@ -1,0 +1,265 @@
+# Projekt
+
+## Opis projektu
+
+Projekt wykorzystuje dane o przestępczości oraz dane społeczno-ekonomiczne dla wybranego hrabstwa w Stanach Zjednoczonych dla 2020 roku.
+
+Projekt składa się z 3 części:
+
+1.  Eksploracyjna analiza danych ma na celu sprawdzenie **Czy istnieje zależność między poziomem przestępczości, a zmiennymi społeczno-ekonomicznymi?**
+2.  Analiza rozkładu przestrzennego danych o przestępczości ma na celu określenie **jaki rozkład charakteryzuje lokalizacje o przestępczości** (czy jest to rozkład losowy? czy istnieją skupienia punktów?)
+3.  Analiza podobieństwa/różnic wartości wybranych zmiennych społeczno-ekonomicznych ma na celu określenie **czy w analizowanych danych istnieje autokorelacja przestrzenna**,**gdzie znajdują się obszary o wysokich oraz niskich wartościach zmiennych?** Czy tworzą one skupienia?
+
+## Rozwiązanie projektu
+
+-   Rozwiązanie zadań wykonanych w ramach projektu należy przedstawić w formie **pisemnego raportu** zawierającego wyniki (wykresy, mapy, statystyki) wraz z krótkim podsumowaniem uzyskanych wyników.
+
+-   Raport proszę przygotować w dokumencie Quarto oraz wyeksportować do pliku html.
+
+-   Proszę zastosować opcję ukrycia kodu (code-fold: true).
+
+```{r}
+#| eval: false
+#| echo: true
+format:
+  html:
+    code-fold: true
+```
+
+### Struktura raportu
+
+-   Tytuł raportu: Jak sformułujesz tytuł raportu?
+
+-   Autor raportu
+
+-   Wprowadzenie
+
+-   Dane
+
+    -   rozdział można podzielić na 2 podrozdziały: Dane o przestępczości oraz Dane społeczon-ekonomiczne
+    -   krótki opis wykorzystanych danych
+    -   jakie były źródła danych?
+    -   dla jakiego obszaru są analizowane dane?
+    -   jakie zmienne społeczno-ekonomiczne zostały uwzględnione w analizie?
+    -   jaki typ przestępczości jest analizowany?
+
+-   Wpływ wskaźników społeczno-ekonomicznych na poziom przestępczości
+
+    -   rozdział ten zawiera wyniki części 1: eksploracyjna analiza danych
+    -   jaki jest rozkład danych o przestępczości?
+    -   jaka jest zależność między poziomem przestępczości a zmiennymi społeczno-ekonimicznymi?
+    -   jak różnicuje się poziom przestępczości dla zmiennych skategoryzowanych określających ceny domów, wiek zabudowy oraz dochód?
+
+-   Analiza rozkładu przestrzennego danych o przestępczości
+
+    -   rozdział ten zawiera wyniki z części 2.
+    -   jaki jest rozkład danych o przestępczości?
+
+-   Analiza podobieństwa/różnic wartości wybranych zmiennych społeczno-ekonomicznych
+
+    -   rozdział ten zawiera wyniki z części 3.
+
+-   Podsumowanie
+
+    -   czego dowiedzieliśmy się nt. analizowanego hrabstwa na podstawie wykonanych analiz w ramach części 1, 2 oraz 3.
+
+### Ryciny i tabele w raporcie
+
+-   Każdy wykres, mapa oraz tabela zamieszczona w raporcie musi być podpisana.
+
+    -   Tabele podpisujemy nad tabelą, np. Tabela 1. Statystyki opisowe dla zmiennych społeczno-ekonomicznych.
+    -   Ryciny (wykresy i mapy) podpisujemy pod ryciną. Np. Ryc. 1. Rozkład lokalizacji włamań w obszarze hrabstwa Cook w 2020 roku.
+
+-   Do każdego wykresu, mapy oraz tabeli zamieszczonej w raporcie musimy się odwołać w tekście raportu.
+
+## Dane
+
+Uwaga! W projekcie zostaną wykorzystane dane z **2020 roku**. Dane o przestępczości oraz dane społeczno-ekonomiczne należy pobrać dla roku **2020**.
+
+Poniższa tabela zestawia nazwy miast (kolumna CITY) używane do pobrania danych o przestępczości oraz nazwy hrabstw (COUNTY) oraz kod hrabstwa (COUNTY_CODE) używane do pobrania danych społeczno-ekonomicznych.
+
+```{r}
+cities = read.csv("projekt/cities.csv", colClasses = rep("character", 5))
+cities
+```
+
+### Dane o przestępczości
+
+Pakiet `crimedata` udostępnia publicznie dostępne, zarejestrowane przez policję, otwarte dane o przestępczości w dużych miastach w Stanach Zjednoczonych, które są zawarte w Otwartej Bazie Danych o Przestępstwach (*Crime Open Database*, <https://osf.io/zyaqn/>).
+
+-   Proszę pobrać dane dla wybranego miasta. Dostępne miasta znajdują się w powyższej tabeli w kolumnie CITY.
+
+-   Proszę pobrać dane jako 'tbl'.
+
+-   Proszę wyselekcjonować dane dla jednego z poniższych typów przestępczości:
+
+    -   offense_type: murder and nonnegligent manslaughter
+    -   offense_type: residential burglary/breaking & entering
+    -   offense_type: personal robbery
+    -   offense_type: motor vehicle theft
+
+-   Proszę pamiętąć, że po wyselekcjonowaniu danych należy użyć funkcji `droplevels`, aby usunąć dla zmiennych czynnikowych (`factor`) nie występujące w zbiorze poziomy zmiennej.
+
+-   Wyselekcjonowane dane należy przekształcić na obiekt klasy `sf`.
+
+-   Używając obiektu klasy sf, proszę wyselekcjonować wyłącznie dane dla wskazanego hrabstwa. Warstwa poligonowa zawierająca granice hrabstw znajduje się w pliku *hrabstwa.gpkg*. Plik projekt.xlsx zawiera zestawienie nazw miast dla których dostępne są dane wraz z nazwą hrabstwa stanowiącego centralną część miasta.
+
+-   Wybrane dane zapisać w geopaczce o nazwie \[miasto\]*\[hrabstwo\]*\[offense_type\].gpkg, np. chicago_cook_burglary.gpkg
+
+Do pobrania i przygotowania danych można użyć poniższy kod.
+
+```{r}
+#| eval: false
+#| message: false
+#| warning: false
+library(crimedata)
+library(sf)
+library(dplyr)
+
+crime <- get_crime_data(
+    years = 2020, 
+    cities = "Chicago", # TU PODAĆ NAZWĘ WYBRANEGO MIASTA. Patrz tabela powyżej. 
+    type = "core",
+    quiet = TRUE,
+    output = "tbl"
+  )
+  
+#selekcja danych dla jednej z wybranych kategorii, np. 
+crime_sel <- crime %>% 
+  filter(offense_type == 'residential burglary/breaking & entering') %>% 
+  droplevels()
+
+#przekształcenie danych na obiekt klasy sf
+library(sf)
+crime_sf  = st_as_sf(burglary, coords = c("longitude", "latitude"), crs = "EPSG:4326")
+
+county = read_sf("data/projekt/hrabstwo.gpkg") #podać sciezke do pliku zawierajacego granice hrabstwa. Patrz tabela powyżej - tabela zestawia nazwy miast oraz hrabstw
+#wyselekcjonowanie danych dla danego hrabstwa
+crime_sf_hrabstwo = crime_sf[county, ]
+
+#zapisanie geopaczki
+write_sf(crime_sf_hrabstwo, "chicago_burglary.gpkg")
+```
+
+### Dane społeczno-ekonomiczne
+
+Pakiet `tidycensus` umożliwia pobranie danych American Community Survey dla wybranego hrabstwa. W celu pobrania zestawu danych społeczno-ekonomicznych można wykorzystać skrypt "Projekt_przygotowanie_danych.qmd"
+
+-   Proszę przygotować zestaw danych społeczno-ekonomicznych dla wskazanego roku dla wybranego hrabstwa wykorzystując 5-letnie dane American Community Survey (ACS).
+-   Proszę pobrać dane **dla tego samego hrabstwa, dla którego zostały pobrane dane o przestępczości**.
+-   Pobrane dane należy zapisać do geopaczki. (Skrypt "Projekt_przygotowanie_danych.qmd" pobiera, przygotowuje oraz zapisuje dane do geopaczki). W skrypcie wystarczy zdefiniować 3 parametry:
+
+```{r}
+state_code = "IL" #PODAC KOD STANU. Patrz tabela powyżej (kolumna STATE_CODE)
+county_code = "17031" #PODAC KOD HRABSTWA Patrz tabela powyżej (kolumna COUNTY_CODE)
+year = 2020 #pozostaje rok 2020. 
+```
+
+## Zadania 
+## Część 1: Eksploracja danych {-}
+
+### Cel analizy {-}
+
+Celem analizy jest znalezienie czynników społeczno-ekonomicznych wpływających na poziom przestępczości dla wybranej kategorii przestępstw. **Czy istnieje zależność między poziomem przestępczości, a zmiennymi społeczno-ekonomicznymi?**
+
+W tym celu musimy przygotować warstwę poligonową z zestawem danych społeczno-ekonomicznych oraz osetkiem przestępstw w każdym obszarze spisowym.
+
+### Dane {-}
+
+-   wczytać z geopaczki warstwę punktową z lokalizacją przestępstw oraz przypisać ją do obiektu *crime_data*
+-   wczytać z geopaczki warstwę poligonową zawierająca zestaw danych społeczno-ekonomicznych oraz przypisać ją do obiektu *socio_data*
+
+#### Przygotowanie danych społeczno-ekonomicznych {-}
+
+Proszę do zestawu danych społeczno-ekonomicznych dodać 3 zmienne jakościowe:
+
+-   INCOME_CAT zawierającą 3 kategorie wyróżnione używając zmiennej MEDIAN_INCOME:
+
+    -   low - wartości dochodów niższe od kwartyla 1.
+    -   medium - wartości dochodów między 1 i 3 kwartylem.
+    -   high - wartości dochodów wyższe do 3. kwartyla.
+
+-   HOME_VALUES_CAT zawierającą 3 kategorie wyróżnione używając zmiennej MEDIAN_HOME_VALUE:
+
+    -   low - wartości cen domów niższe od kwartyla 1.
+    -   medium - wartości cen domów między 1 i 3 kwartylem.
+    -   high - wartości cen domów wyższe do 3. kwartyla.
+
+-   BUILT_YEAR_CAT zawierającą 3 kategorie wyróżnione używając zmiennej MEDIAN_BUILT_YEAR:
+
+    -   old - wybudowane przed 1950,
+    -   medium - wybudowane między 1950 a 2000,
+    -   new - wybudowane po 2000.
+
+Poniższy kod można wykorzystać do przygotowania 3 zmiennych jakościowych.
+
+```{r}
+#| eval: false
+# INCOME_CAT
+q1mi = quantile(socio_data$MEDIAN_INCOME, probs = 0.25, na.rm = TRUE)
+q3mi = quantile(socio_data$MEDIAN_INCOME, probs = 0.75, na.rm = TRUE)
+q1mhv = quantile(socio_data$MEDIAN_HOME_VALUE, probs = 0.25, na.rm = TRUE)
+q3mhv = quantile(socio_data$MEDIAN_HOME_VALUE, probs = 0.75, na.rm = TRUE)
+
+socio_data  <- socio_data %>% 
+  mutate(INCOME_CAT=cut(MEDIAN_INCOME, breaks=c(-Inf, q1mi, q3mi, Inf), labels=c("low","medium","high")),
+         HOME_VALUES_CAT=cut(MEDIAN_HOME_VALUE, breaks=c(-Inf, q1mvh, q3mhv, Inf), labels=c("low","medium","high")),
+         BUILT_YEAR_CAT=cut(MEDIAN_BUILT_YEAR, breaks=c(-Inf,1950, 2000, Inf), labels=c("old","medium","new")))
+```
+
+#### Przygotowanie danych do analizy {-}
+
+-   ujednolicenie układów współrzędnych dla obu warstw
+
+    -   Lokalizacja przestępstw jest w układzie WGS84, warstwę trzeba przekształcić do układu warstwy z danymi społeczno-ekonomicznymi.
+
+-   z warstwy zawierającej dane społeczno-ekonomiczne należy wyselekcjonować obszary spisowe, w których zlokalizowane są przestępstwa.
+
+-   zliczenie przestępstw w obszarach spisowych
+
+-   obliczenie odsetka przestępstw na 1000 mieszkańców (ang. *crime rates*)
+
+W wyniku przygotowania danych powstanie warstwa zawierająca informacje społeczno-ekonomiczne oraz odsetek przestępstw na 1000 mieszkańców w obszarach spisowych. Warstwę tą należy zapisac jako socio\_\[hrabstwo\]\*\[offense_type\].gpkg, np. socio_cook_burglary.gpkg
+
+### Eksploracyjna analiza danych przestrzennych {-}
+
+#### Eksploracyjna nieprzestrzenna analiza danych {-}
+
+Wykorzystując materiały zawarte w przykładzie 2 w dokumencie "Eksploracyjna analiza danych przestrzennych" proszę przeprowadzić ekspoloracyjną analizę danych.
+
+-   Proszę obliczyć statystyki opisowe
+
+-   Proszę scharakteryzować rozkład zmiennej CRIME_RATE - odsetek przestępczości na 1000 mieszkańców.
+
+-   Proszę przeanalizować czy istnieje zależność między odsetkiem przestępczości (zmienna CRIME_RATE), a zmiennymi społeczno-ekonomicznymi.
+
+    -   Proszę obliczyć współczynnik korelacji między zmiennymi ilościowymi a odsetkiem przestępczości. Proszę wybrać zmienne dla których współczynnik osiąga wartość większą od +/- 0,5 oraz zwizualizować zależność dla tych zmiennych w postaci macierzy wykresów rozrzutu. Jakie to są zmienne?
+    -   Proszę przeanalizować czy wartość odsetka przestępczości (CRIME_RATE) zmienia się w klasach zmiennych INCOME_CAT, HOME_VALUES_CAT, oraz BUILT_YEAR_CAT.
+
+#### Eksploracyjna przestrzenna analiza danych {-}
+
+Proszę przedstawić na mapie odsetek przestępczości, odsetek poszczególnych grup rasowo-etnicznych, poziom wykształcenia, oraz zmienne skategoryzowane dotyczące poziomu dochodów, wieku zabudowy, oraz cen domów.
+
+## Część 2. Analiza rozkładu przestrzennego danych o przestępczości {-}
+
+Proszę przeprowadzić analizę rozkładu danych o przestępczości w wybranym obszarze.
+
+-   Oblicz statystyki centrograficzne (średnią centralną, odległość standardową, elipsę odchylenia standardowego) dla danych o przestępczości. Zwizualizuj statystyki centrograficzne i lokalizacje przestępstw na mapie.
+-   Oblicz statystyki opisowe do najbliższego sąsiada. Przedstaw odległości na wykresie w postaci dystrybuanty. Zintrepretuj wyniki.
+-   Oblicz wskaźnik Clarka - Evansa. Zinterpretuj wynik.
+-   Wykorzystaj funkcję G do testowania istotności hipotezy dotyczącej rozkładu punktów. Przedstaw wyniki na wykresie. Zinterpretuj wyniki.
+-   Oblicz średnią intensywność przestępstw. Jako pole odniesienia (window) wykorzystaj granicę hrabstwa.
+-   Oblicz średnią intensywność przestępstw. Jako pole odniesienia (window) wykorzystaj zasięg (bounding box) warstwy z punktami. Jak zmieniła się wartość intensywności w zależności od przyjętej granicy obszaru?
+-   Wykorzystaj test zliczania w kwadratach do sprawdzenia hipotezy, czy lokalizacje przestępczości mają rozkład losowy. Zintrepretuj wyniki testu.
+-   Przedstaw na mapie w jaki sposób zmienia się intensywność lokalizacji przestępstw. Wykorzystaj taką samą liczbę kwadratów jak w teście zliczania w kwdratach.
+
+**Czego dowiedzieliśmy się na temat rozkładu przestrzennego przestępczości z wykonanych analiz (czy wyniki wskazują na rozkład losowy, istnenie skupień w danych itp.)**
+
+## Część 3. Analiza podobieństwa/różnic wartości wybranych zmiennych społeczno-ekonomicznych {-}
+
+-   Stwórz obiekt przestrzenny zawierający 3 wybrane zmienne społeczno-ekonomiczne.
+-   Stwórz obiekt socio_lw klasy "listw" zawierający listę sąsiedztwa z wagami przestrzennymi używając sąsiedztwa queen i binarnych wag.
+-   Określ czy wybrane zmienne charakteryzuje autokorelacja przestrzenna. Zastosuj do tego globalny test I Morana oraz test C Geary'ego.
+-   Zlokalizuj hot i cold spoty dla 3 analizowanych zmiennych wykorzystując w tym celu lokalną statystyke G Getisa & Orda. Zwizualizuj i zinterpretuj wyniki.
+-   Zlokalizuj przestrzenne zgrupowania podobnych wartości dla 3 analizowanych zmiennych wykorzystując w tym celu lokalny test Morana. Zwizualizuj i zinterpretuj wyniki.
+-   Używając wyników z poprzedniego zadania określ klastry "niskie-niskie", "niskie-wysokie", "wysokie-niskie", oraz "wysokie-wysokie". Zwizualizuj i zinterpretuj wyniki dla 3 analizowanych zmiennych.

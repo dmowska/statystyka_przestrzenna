@@ -1,0 +1,503 @@
+# Geostatystyka: Analiza i modelowanie autokorelacji przestrzennej
+
+```{r}
+#| message: false
+library(sf)
+library(tmap)
+library(gstat)
+library(terra)
+```
+
+W poniższych przykładach wykorzystamy dane zapisane w pliku `punkty.csv` oraz przestrzenny zasięg granicy obszaru (`granica.gpkg`).
+
+```{r}
+punkty = read.csv("data/punkty.csv")
+punkty = st_as_sf(punkty, coords = c("x", "y"), crs = "EPSG:2180")
+punkty = punkty[!is.na(punkty$temp), ]
+granica = read_sf("data/granica.gpkg")
+```
+
+## Geostatystyczna analiza danych
+
+Geostatystyka to gałąź statystyki skupiająca się na przestrzennych lub czasoprzestrzennych zbiorach danych.
+
+Celem geostatystyki może być:
+
+-   zrozumienie zmienności przestrzennej lub czasowej zjawiska,
+-   interpolacja (estymacja przestrzenna),
+-   symulowanie wartości,
+-   optymalizacja sieci pomiarowej.
+
+Geostatystyczna analiza danych może przyjmować różną postać w zależności od postawionego celu analizy. Poniższy schemat przedstawia uproszczoną ścieżkę postępowania geostatystycznego.
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| out-height: 20cm
+#| fig-cap: 'Uproszczona ścieżka postępowania geostatystycznego.'
+
+library(DiagrammeR)
+# library('trelliscope')
+pg = DiagrammeR::mermaid('
+                graph TB;
+                Pozyskanie[<center>Pozyskanie <br>i wstępna weryfikacja danych</center>];
+                Pozyskanie-->Eksploracja[<center>Nieprzestrzenna i przestrzenna <br>eksploracja danych</center>];
+                Eksploracja-->Analiza[<center>Analiza <br>i interpretacja <br>struktury przestrzennej</center>];
+                Analiza -->Modelowanie["<center>Modelowanie matematyczne <br>struktury przestrzennej (autokorelacji przestrzennej) </center>"];
+                
+                Modelowanie -->Estymacja;
+                Modelowanie -->Optymalizacja;
+                Estymacja -->Symulacja;
+                
+                Modelowanie -->Symulacja;
+                Estymacja -->Optymalizacja;
+                Symulacja -->Optymalizacja;
+                Optymalizacja -->Pozyskanie;
+                ')
+pg
+```
+
+### Etap 1: Pozyskanie i wstępna weryfikacja danych {.unnumbered}
+
+Punktem wyjścia analizy geostatystycznej jest posiadanie danych przestrzennych opisujących badane zjawisko, np. w **postaci punktowej**. Przykładem takiego zjawiska są punktowo wykonane pomiary temperatury.
+
+```{r}
+#| echo: false
+#| message: false
+punkty = read.csv("data/punkty.csv")
+punkty = st_as_sf(punkty, coords = c("x", "y"), crs = "EPSG:2180")
+punkty = punkty[!is.na(punkty$temp), ]
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| fig-cap: "Rozkład wartości temperatury powietrza w analizowanym obszarze."
+tm_shape(punkty) +
+  tm_graticules(labels.show = FALSE) +
+  tm_symbols(col = "temp",
+             style = "cont", 
+             n = 10,
+             palette = "-Spectral",
+             title.col = "Zmienna temp")
+```
+
+### Etap 2: Nieprzestrzenna i przestrzenna eksploracja danych {.unnumbered}
+
+Dane należy poddać eksploracji w celu ich lepszego poznania, wyszukania relacji między zmiennymi, czy znalezienia potencjalnych błędów.
+
+Eksploracyjna analiza danych obejmuje:
+
+-   Charakterystykę statystyczną danych.
+-   Sprawdzenie poprawności współrzędnych.
+-   Sprawdzenie poprawności danych, w tym między innymi identyfikacja danych odstających lokalnie.
+-   Wgląd w tym próbkowania.
+-   Ogólny pogląd na zmienność przestrzenną, wykorzystanie prostej automatycznej procedury interpolacji.
+
+### Etap 3: Analiza i interpretacja struktury przestrzennej {.unnumbered}
+
+Jednym z celów geostatystycznej analizy danych jest **identyfikacja i zrozumienie przestrzennej zmienności analizowanej cechy**. Zmienność przestrzenna analizowanej cechy może być określona za pomocą **semiwariancji**, a następnie zwizualizowana za pomocą **semiwariogramu**.
+
+Semiwariogram empiryczny (oparty o danych) jest wykresem pokazującym relację pomiędzy odległością a semiwariancją (jedną z miar autokorelacji przestrzennej). Za jego pomocą możemy stwierdzić jak to zjawisko zmienia się w przestrzeni.
+
+```{r}
+#| echo: false
+#| fig-cap: "Wykres, nazywany semiwariogramem, reprezentujący niepodobieństwo wartości wraz z odległością dla zmiennej temperatura."
+
+var = variogram(temp ~ 1, locations = punkty)
+plot(var, pch = 20, cex = 1.5)
+```
+
+### Etap 4: Modelowanie matematyczne struktury przestrzennej (autokorelacji przestrzennej) {.unnumbered}
+
+**Modelowanie struktury przestrzennej** polega na dopasowanie modelu (funkcji) do semiwariogramu empirycznego (wyliczonego z danych). Pozwala on zarówno na lepszy opis zmienności zjawiska, jak również służy do tworzenia **estymacji** czy też **symulacji**.
+
+```{r}
+#| echo: false 
+
+fitted_sph = fit.variogram(var, vgm(model = "Sph", nugget = 1))
+plot(var, model = fitted_sph, pch = 20, cex = 1.5)
+```
+
+### Etap 5: Estymacja lub symulacja
+
+**Estymacja** to rodzaj interpolacji przestrzennej, która oblicza najbardziej potencjalnie możliwą wartość dla wybranej lokalizacji.
+
+```{r}
+#| echo: false
+#| message: false
+#| fig-cap: "Estymacja (oszacowanie) wartości badanej zmiennej dla całego obszaru."
+library(stars)
+siatka = read_stars("data/siatka.tif")
+sk = krige(temp~1, 
+            locations = punkty,
+            newdata = siatka,
+            model = fitted_sph,
+            beta = 16, 
+            debug.level = 0)
+tm_shape(sk) +
+        tm_raster(col = "var1.pred", style = "cont", 
+                  palette = "-Spectral", title = "") +
+        tm_layout(main.title = "Estymacja")
+```
+
+Rolą **symulacji** jest natomiast generowanie równie prawdopodobne możliwości rozkładu badanej cechy.
+
+```{r}
+#| echo: false
+#| message: false
+#| fig-cap: "Przykłady symulowanych wartości badanej zmiennej dla całego obszaru."
+sym_ok = krige(temp~1, 
+                locations = punkty,
+                newdata = siatka, 
+                model = fitted_sph,
+                nmax = 30, 
+                nsim = 4, 
+                debug.level = 0)
+tm_shape(sym_ok) +
+        tm_raster(style = "cont", palette = "-Spectral",
+                  title = "") +
+        tm_layout(main.title = "Symulacje")
+```
+
+## Wykres rozrzutu z przesunięciem
+
+W klasycznej statystyce relację między dwoma zmiennymi określa się za pomocą korelacji (np. współczynnik korelacji liniowej Pearsona). W geostatystyce badamy jedną zmienną, ale pomiędzy dwoma punktami odległymi od siebie o pewien dystans (określany jako lag, *h*). Wykorzystuje się w tym celu **wykres rozrzutu z przesunięciem**. Wykres rozrzutu z przesunięciem pokazuje korelację pomiędzy wartościami analizowanej cechy w pewnych grupach odległości. Taki wykres można stworzyć używając funkcji `hscat()` z pakietu `gstat`
+
+```{r}
+hscat(temp~1, data = punkty, breaks = seq(0, 4000, by = 500))
+```
+
+Przykładowo, na powyższym wykresie widać wartość cechy temp z kolejnymi przesunięciami - od 0 do 500 metrów, od 500 metrów do 1000 metrów, itd. W pierwszym przedziale wartość cechy temp z przesunięciem wykazuje korelację na poziomie 0,876, a następnie z każdym kolejnym przedziałem (odległością) ta wartość maleje. W przedziale 3500 do 4000 metrów osiąga jedynie 0,128. Pozwala to na stwierdzenie, że cecha temp wykazuje zmienność przestrzenną - podobieństwo jej wartości zmniejsza się wraz z odległością.
+
+## Semiwariancja
+
+Zmienność przestrzenna analizowanej cechy może być określona m.in za pomocą **semiwariancji** $\gamma(h)$.
+
+Semiwariancja to połowa średniej kwadratu różnicy pomiędzy wartościami badanej zmiennej ($z$) w dwóch lokalizacjach odległych o wektor $h$
+
+$$\gamma(h) = \frac{1}{2}(z(u_{\alpha}) - z(u_{\alpha} + h))^2$$
+
+### Obliczenie semiwariancji między dwoma punktami
+
+Przykładowo, aby wyliczyć wartość semiwariancji (`gamma`) pomiędzy dwoma punktami musimy znać:
+
+-   wartość pierwszego z nich ($z(u_{\alpha})$),
+
+    -   w przykładzie $z(u_{\alpha}) = 13.85$ stopni Celcjusza
+
+-   wartość drugiego z nich ($z(u_{\alpha} + h)$,
+
+    -   w przykładzie $z(u_{\alpha} + h)=15.48$ stopni Celsjusza.
+
+Możemy zatem obliczyć wartość semiwariancji:
+
+$$\gamma(h) = \frac{1}{2}(13,85 - 15,48)^2 = 
+\frac{1}{2}(-1,63)^2 = \\
+\frac{1}{2} \times 2,6569 = 1,32845 \approx 1,33 $$
+
+Korzystając z wzoru na semiwariację otrzymujemy wartość równą ok. 1,33. Znamy również odległość między punktami (ok. 3240,89 metra), więc możemy w uproszczeniu stwierdzić, że dla tej pary punktów odległych o 3240 metrów wartość semiwariancji wynosi około 1,33.
+
+W R obliczenia wyglądałyby następująco:
+
+```{r}
+#wykorzystanie funkcji st_distance do obliczenia odległości między dwoma punktami
+odl = st_distance(punkty[c(1, 2), ])[2]
+#obliczenie wartości semiwariancji między dwoma puntami
+gamma = 0.5 * (punkty$temp[1] - punkty$temp[2]) ^ 2
+gamma
+```
+
+### Chmura semiwariogramu
+
+Jeżeli w badanej próbie mamy $n$ obserwacji oznacza to, że możemy zaobserwować $\frac{1}{2}n(n-1)$ par obserwacji. Dla każdej z par obserwacji obliczana jest semiwariancja. Tę semiwariancję można zaprezentować na wykresie zwanym **chmurą semiwariogramu**. Lokalizacja każdego punktu na chmurze semiwariogramu określona jest przez 2 współrzędne:
+
+-   $x$: odległość między dwoma punktami
+-   $y$: wartość semiwariancji.
+
+Chmurę semiwariogramu w R używając funkcji `variogram()` z argumentem `cloud = TRUE`.
+
+```{r}
+#| fig-cap: "Chmura semiwariogramu zmiennej temp."
+vario_cloud = variogram(temp ~ 1, locations = punkty, 
+                         cloud = TRUE)
+plot(vario_cloud)
+```
+
+Chmura semiwariogramu pozwala także na zauważenie par punktów, których wartości znacząco odstają.
+
+## Semiwariogram: charakterystyka struktury przestrzennej
+
+Semiwariogram jest wykresem pokazującym relację pomiędzy odległością a semiwariancją. Inaczej mówiąc, dla kolejnych odstępów (lagów) wartość semiwariancji jest uśredniana i przestawiania w odniesieniu do odległości.
+
+$$\hat{\gamma}(h) = \frac{1}{2N(h)}\sum_{\alpha=1}^{N(h)}(z(u_{\alpha}) - z(u_{\alpha}+h))^2$$
+
+, gdzie $N(h)$ oznacza liczbę par punktów w odstępie $h$.
+
+W oparciu o semiwariogram empiryczny (czyli oparty na danych) możemy następnie dopasować do niego model.
+
+### Tworzenie semiwariogramu
+
+Stworzenie podstawowego semiwariogramu w pakiecie `gstat` odbywa się z użyciem funkcji `variogram()`. Należy w niej zdefiniować analizowaną zmienną (w tym przykładzie `temp ~ 1`) oraz zbiór punktowy (`punkty`).
+
+```{r}
+vario_par = variogram(temp ~ 1, locations = punkty)
+vario_par
+```
+
+Do wyświetlenia semiwariogramu służy funkcja `plot()`. Można również dodać informację o liczbie par punktów, jaka posłużyła do wyliczenia semiwariancji dla kolejnych odstępów poprzez argument `plot.numbers = TRUE`
+
+```{r}
+#| fig-cap: "Semiwariogram empiryczny zmiennej temp wraz z zaznaczoną liczbą par dla każdego odstępu."
+plot(vario_par, plot.numbers = TRUE)
+```
+
+### Parametry semiwariogramu
+
+Przy ustalaniu parametrów semiwariogramu powinno się stosować do kilku utartych zasad (tzw. *rules of thumb*):
+
+-   W każdym odstępie powinno się znaleźć co najmniej 30 par punktów.
+-   Maksymalny zasięg semiwariogramu (ang. *cutoff distance*) to 1/2 pierwiastka z badanej powierzchni (inne źródła mówią o połowie z przekątnej badanego obszaru/jednej trzeciej).
+-   Liczba odstępów powinna nie być mniejsza niż 10.
+-   Optymalnie maksymalny zasięg semiwariogramu powinien być dłuższy o 10-15% od zasięgu zjawiska.
+-   Optymalnie odstępy powinny być jak najbliżej siebie i jednocześnie nie być chaotyczne.
+-   Warto metodą prób i błędów określić optymalne parametry semiwariogramu.
+
+### Obliczenia pomocnicze
+
+#### Liczba par obserwacji {.unnumbered}
+
+W zrozumieniu danych oraz przy określaniu parametrów semiwariogramu może pomóc szereg obliczeń pomocniczych. Przykładowo, aby wyliczyć liczbę par obserwacji można użyć poniższego kodu.
+
+```{r}
+0.5 * nrow(punkty) * (nrow(punkty) - 1)
+```
+
+#### Średnia odległość między punktami {.unnumbered}
+
+Powierzchnia zajmowana przez jedną próbkę jest osiągana poprzez podzielenie całej badanej powierzchni poprzez liczbę punktów.
+
+```{r}
+pow_pr = st_area(granica) / nrow(punkty)
+pow_pr
+```
+
+Średnia odległość między punktami to wartość pierwiastka z powierzchni zajmowanej przez jedną próbkę.
+
+```{r 06-semiwariancja-16 }
+sqrt(pow_pr)
+```
+
+#### Maksymalny zasięg semiwariogramu {.unnumbered}
+
+Ostatnim obliczeniem pomocniczym jest określenie połowy pierwiastka powierzchni. Może być ono następnie użyte do ustalenia maksymalnego zasięgu semiwariogramu.
+
+```{r}
+pow = st_area(granica)
+0.5 * sqrt(pow)
+```
+
+### Modyfikacja semiwariogramu
+
+Maksymalny zasięg semiwariogramu (ang. *cutoff distance*) jest domyślnie wyliczany w pakiecie **gstat** jako 1/3 z najdłuższej przekątnej badanego obszaru. Można jednak tę wartość zmodyfikować używając argumentu `cutoff` .
+
+```{r}
+#| fig-cap: "Semiwariogram empiryczny zmiennej temp używając ręcznie ustalonej wartości maksymalnego zasięgu semiwariogramu."
+vario_par = variogram(temp ~ 1, locations = punkty,
+                      cutoff = 4000)
+plot(vario_par)
+```
+
+Dodatkowo, domyślnie w pakiecie `gstat` odległość między przedziałami (ang. *interval width*) jest wyliczana jako maksymalny zasięg semiwariogramu podzielony przez 15. Można to oczywiście zmienić używając zarówno argumentu cutoff, jak i argumentu width mówiącego o szerokości odstępów
+
+```{r}
+#| fig-cap: "Semiwariogram empiryczny zmiennej temp używając ręcznie ustalonej wartości szerokości odstępów."
+vario_par = variogram(temp ~ 1, locations = punkty,
+                      cutoff = 4000, width = 100)
+plot(vario_par)
+```
+
+## Modelowanie autokorelacji przestrzennej
+
+Modelowanie autokorelacji przestrzennej polega na dopasowanie modelu (funkcji) do semiwariogramu empirycznego (wyliczonego z danych). Pozwala on zarówno na lepszy opis zmienności zjawiska, jak również służy do tworzenia estymacji czy też symulacji.
+
+### Model semiwariogramu
+
+Model semiwariogramu składa się zazwyczaj z trzech podstawowych elementów:
+
+-   **Nugget** - efekt nuggetowy - pozwala na określenie błędu w danych wejściowych oraz zmienności na dystansie krótszym niż pierwszy odstęp.
+-   **Sill** - semiwariancja progowa - oznacza wariancję badanej zmiennej.
+-   **Range** - zasięg - to odległość do której istnieje przestrzenna korelacja.
+
+```{r}
+#| echo: false
+#| fig-cap: "Podstawowe elementy modelu semiwariogramu."
+#| out-width: 12cm
+
+knitr::include_graphics("figs/variogram_text.png")
+```
+
+#### Modele podstawowe
+
+Pakiet `gstat` zawiera 20 podstawowych modeli geostatystycznych, w tym najczęściej używane takie jak:
+
+-   **Nuggetowy (ang. *Nugget effect model*)**
+
+    -   określa sytuację, w której analizowana zmienna nie wykazuje autokorelacji (niepodobieństwo jej wartości nie wzrasta wraz z odległością)
+    -   nie powinien być używany samodzielnie - w większości zastosowań jest on elementem modelu złożonego. Służy on do określania, między innymi, błędu pomiarowego czy zmienności na krótkich odstępach.
+
+-   **Sferyczny (ang. *Spherical model*)**
+
+    -   jeden z najczęściej stosowanych modeli
+
+-   **Wykładniczy (ang. *Exponential model*)**
+
+    -   jeden z najczęściej stosowanych modeli;
+    -   nie ma skończonego zasięgu,
+    -   zamiast zasięgu podaje się tzw. zasięg praktyczny, tj. odległość na jakiej model osiąga 95% wartości wariancji progowej
+
+-   **Gaussowski (ang. *Gaussian model*)**
+
+    -   posiada zasięg praktyczny definiowany jako 95% wartości wariancji progowej
+    -   jego cechą charakterystyczną jest paraboliczny kształt na początkowym odcinku.
+
+-   **Potęgowy (ang. *Power model*)**
+
+    -   przykład tzw. modelu nieograniczonego
+    -   wartość modelu rośnie w nieskończoność, dlatego niemożliwe jest określenie jego zasięgu.
+    -   w przypadku modelu potęgowego, parametr *range* oznacza wykładnik potęgowy.
+
+Do wyświetlenia listy nazw modeli i ich skrótów służy funkcja `vgm()`.
+
+```{r}
+vgm()
+```
+
+Można się również im przyjrzeć używając funkcji `show.vgms()`
+
+```{r}
+show.vgms()
+```
+
+Istnieje możliwość wyświetlenia tylko wybranych modeli podstawowych poprzez argument *models*
+
+```{r}
+show.vgms(models = c("Sph", "Gau", "Pow", "Exp"), 
+          range = 1.4, max = 2.5)
+```
+
+Dodatkowo, można je porównać na jednym wykresie poprzez argument *as.groups = TRUE*
+
+```{r}
+show.vgms(models = c("Sph", "Gau", "Pow", "Exp"), 
+          range = 1.4, max = 2.5, as.groups = TRUE)
+```
+
+#### Dopasowanie modelu w R
+
+Do zbudowania modelu semiwariogramu należy wykonać szereg kroków:
+
+1.  Stworzyć i wyświetlić semiwariogram empiryczny analizowanej zmiennej z użyciem funkcji `variogram()` oraz `plot()`.
+
+2.  Zdefiniować wejściowe parametry semiwariogramu.
+
+    -   W najprostszej sytuacji wystarczy zdefiniować używany model/e poprzez skróconą nazwę używanej funkcji (`model`).
+    -   Możliwe, ale nie wymagane jest także określenie wejściowej semiwariancji cząstkowej (`psill`) oraz zasięgu modelu (`range`) w funkcji `vgm()`.
+    -   Uzyskany model można przedstawić w funkcji `plot()` podając nazwę obiektu zawierającego semiwariogram empiryczny oraz obiektu zawierającego model.
+
+3.  Dopasować parametry modelu używając funkcji `fit.variogram()`.
+
+    -   To dopasowanie można również zwizualizować używając funkcji `plot()`.
+
+### Przykład: Analiza i modelowanie struktury przestrzennej zmiennej temperatura
+
+#### Dane {.unnumbered}
+
+```{r}
+punkty = read.csv("data/punkty.csv")
+punkty = st_as_sf(punkty, coords = c("x", "y"), crs = "EPSG:2180")
+punkty = punkty[!is.na(punkty$temp), ]
+```
+
+#### Etap 1: Stworzenie i wyświetlenie semiwariogramu empirycznego {.unnumbered}
+
+Semiwariogram empiryczny tworzy się używając funkcji `variogram()` z pakietu `gstat()`. Należy w niej zdefiniować analizowaną zmienną (w tym przykładzie `temp ~ 1`) oraz zbiór punktowy (`punkty`).
+
+```{r}
+vario = variogram(temp ~ 1, locations = punkty)
+plot(vario)
+```
+
+#### Etap 2: Zdefiniowanie podstawowych parametrów semiwariogramu {.unnumbered}
+
+W tym kroku należy podjąć decyzję o typie modelu (sferyczny, wykładniczy, itp.) oraz zdefiniować podstawowe parametry semiwarigramu:
+
+-   nugget
+
+    -   zazwyczaj semiwariogram nie zaczyna się w punkcie (0,0).
+    -   wartość nuggetu odczytujemy jako przesunięcie wartości na osi y
+
+-   semiwariancję progową (*psill*)
+
+    -   oznacza wariancję badanej zmiennej;
+    -   wartość semiwariancji progowej odczytujemy z osi y: wartość semiwaiancji po ustabilizowaniu się jej wartości (wartość ta już nie rośnie wraz z odległością)
+
+-   zasięg (*range*)
+
+    -   to odległość do której istnieje przestrzenna autokorelacja;
+    -   jest to wartość odczytana z osi x (odległość) do której następuje wzrost wartości semiwariancji wraz z odległością.
+
+W R do określenia typu modelu oraz jego podstawowych parametrów używa się funkcji `vgm()` z pakietu `gstat`
+
+```{r}
+model_sph = vgm(psill = 10, model = "Sph", range = 3000)
+model_sph
+```
+
+Funkcja `plot()` pozwala na wizualizację dopasowania modelu do danych. Najważniejsze jest dobre dopasowanie modelu do semiwariogramu empirycznego (punkty na wykresie poniżej) w początkowym odcinku semiwariogramu (tam gdzie obserwujemy wzrost semiwariancji wraz z odleglością).
+
+```{r}
+plot(vario, model = model_sph)
+```
+
+Do powyżej zdefiniowanych parametrów dodamy jeszcze wartość efektu nuggetowego:
+
+```{r}
+model_sph2 = vgm(psill = 10, model = "Sph", range = 3000, nugget =0.5)
+model_sph2
+```
+
+```{r}
+plot(vario, model = model_sph)
+```
+
+Możemy zaobserwować, że dodanie wartości nuggetu "nieco podniosło" linię modelu powodując, że jest ona lepiej dopasowana w początkowym odcinku semiwariogramu.
+
+#### Etap 3: Dopasowanie parametrów modelu {.unnumbered}
+
+Funkcja `fit.variogram()` pozwala na automatyczne dopasowanie modelu w oparciu o wstępnie podane parametry.
+
+```{r}
+fitted_sph = fit.variogram(vario, model_sph2)
+fitted_sph
+```
+
+```{r}
+plot(vario, model = fitted_sph)
+```
+
+<!-- model_sph4 <- fit.variogram(vario, model = vgm("Sph", "Gau", "Exp")) -->
+
+<!-- https://bookdown.org/nowosad/geostatystyka/geostatystyka-prolog.html#parametry-semiwariogramu -->
+
+<!-- https://bookdown.org/nowosad/geostatystyka/geostatystyka-prolog.html#obliczenia-pomocnicze -->
+
+<!-- https://bookdown.org/nowosad/geostatystyka/geostatystyka-prolog.html#modyfikacja-semiwariogramu -->
+
+<!-- wspomnienie: https://bookdown.org/nowosad/geostatystyka/geostatystyka-prolog.html#anizotropia -->
+
+<!-- wspomnienie: -->
+
+<!-- modele złożone -->
+
+<!-- modelowanie anizotropowe -->

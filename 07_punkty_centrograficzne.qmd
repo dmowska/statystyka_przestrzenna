@@ -1,0 +1,301 @@
+# Statystyki centrograficzne
+
+## Statystyki centrograficzne
+
+Statystyki centrograficzne stanowią przestrzenną modyfikację statystyk opisowych w klasycznej statystyce. Są podstawową formą opisu rozkładu przestrzennego danych punktowych. Statystyki centrograficzne oblicza się za pomocą funkcji z pakietu `sfdep`.
+
+![](figs/stat_centrograficzne.png)
+
+Żródło: <https://mgimond.github.io/Spatial/chp11_0.html#centrography>
+
+### Średnia centralna
+
+Średnia centralna wyznaczona jest przez punkt o współrzędnych $\overline{x_c}$, $\overline{y_c}$ stanowiących średnią arytmetyczną długości i szerokości geograficznej obiektów rozproszonych w przestrzeni.
+
+$$\overline{x_c} = \frac{\sum_{i=1}^{n} x_i}{n}$$
+
+$$\overline{y_c} = \frac{\sum_{i=1}^{n} y_i}{n}$$
+
+Statystyki centrograficzne (średnia centralna, odległość standardowa) mogą być obliczone na podstawie ramki danych zawierającej współrzędne x oraz y. Funkcja `st_coordinates()` z pakietu `sf` pozwala na wydobycie współrzędnych z obiektu punktowego klasy `sf` oraz stworzenie ramki danych zawierającej dwie kolumny: x oraz y.
+
+```{r}
+library(sf)
+p2019 = read_sf("data/przestepstwa_2019.gpkg")
+#granica miasta Poznań
+pzn = read_sf("data/pzn_borders.gpkg")
+
+p2019_coords = st_coordinates(p2019)
+head(p2019_coords)
+```
+
+Średnią centralną obliczamy poprzez wyliczenie średniej wartości dla kolumny X oraz Y.
+
+```{r}
+# mean center
+mc = apply(p2019_coords, 2, mean)
+mc
+```
+
+Wizualizacja średniej centralnej wymaga utworzenia obiektu przestrzennego w oparciu o współrzędne punktu. W tym celu wykorzystanie zostanie funkcja `st_point()` oraz `st_sfc()` z pakietu `sf`.
+
+```{r}
+#Przekształcenie obiektu mc na obiekt przestrzenny klasy sfc_POINT
+mc_point = st_sfc(st_point(mc), crs = st_crs(p2019))
+```
+
+```{r}
+#| eval: false
+plot(mc_point)
+```
+
+### Odległość standardowa
+
+Odległość standardowa określa średnią odległość puntków ($x_{i}$, $y_{i}$) od punktu centralnego (centroidu, ($\overline{x_c}$, $\overline{y_c}$)) i obliczana jest wg wzoru:
+
+$$d = \sqrt{\frac{\sum_{i=1}^{n} d_{ic}^2}{n}}$$
+
+$$d_{ic}^2 = (x_i - \overline{x_c})^2 + (y_i - \overline{y_c})^2 $$
+
+W powyższym wzorze
+
+-   $x_{i}$ oznacza współrzędną x dla każdego punktu (p2019_coords\[,1\] ),\
+-   $y_{i}$ oznacza współrzędną y dla każdego punktu (p2019_coords\[,2\]),
+-   $\overline{x_c}$ to współrzędna x dla średniej centralnej (mc\[1\]),
+-   $\overline{y_c}$ to współrzędna y dla średniej centralnej (mc\[2\]).
+
+```{r}
+# standard distance
+sd = sqrt(sum((p2019_coords[,1] - mc[1])^2 + (p2019_coords[,2] - mc[2])^2) / nrow(p2019_coords))
+sd
+```
+
+Odległość standardowa graficznie przedstawiana jest jako koło o środku w punkcie wyznaczonym przez średnią centralną oraz promieniu równym odległości standardowej. Do stworzenia obiektu przestrzennego przedstawiającego zasięg odległości standardowej wykorzystana zostanie funkcja `st_buffer()` z pakietu `sf`.
+
+```{r}
+#wyznaczenie strefy buforowej wokół średniej centralnej o promieniu równym odległości standardowej
+sd_buffer = st_buffer(mc_point, sd)
+```
+
+### Wizualizacja średniej centralnej i odległości standardowej {.unnumbered}
+
+```{r}
+#| message: false
+#| warning: false
+library(tmap)
+
+tm_shape(pzn) + 
+    tm_borders() +
+    tm_shape(p2019) +
+    tm_dots() +
+    tm_shape(mc_point) +
+    tm_symbols(fill = "red") +
+    tm_shape(sd_buffer) +
+    tm_borders(col = "red", lwd = 2)
+```
+
+### Elipsa odchylenia standardowego
+
+Elipsa odchylenia standardowego pozwala na określenia kierunków rozrzutu obiektów (obserwacji) w przestrzeni. W R może być obliczona za pomocą funkcji `std_dev_ellipse()` z pakietu `sfdep`.
+
+## Statystyki centrograficzne w R
+
+Statystyki centrograficzne w R oblicza sie z wykorzystaniem funkcji z pakietu `sfdep`. Pakiet `sfdep` pozwala na obliczanie różnych statystyk centrograficznych w oparciu o dane punktowe wczytane za pomocą pakietu `sf`:
+
+-   `center_mean()` - średnia centralna
+-   `std_distance()` - odległość standardowa
+-   `std_dev_ellipse()` - elipsa odchylenia standardowego
+
+## Przykład 1: Przestępczość w Poznaniu
+
+### Dane
+
+W przykładzie 1 wykorzystano dane dotyczące przestępczości w Poznaniu (plik *przestepstwa_2019.gpkg*) wraz z granicą miasta Poznania (plik *pzn_borders.gpkg*). Do podsumowania rozkładu przestępczości wykorzystano statystyki centrograficzne. Plik `przestepstwa_2019.gpkg` zawiera tylko kolumnę *geom* bez dodatkowych atrybutów.
+
+```{r}
+library(sf)
+# dane punktowe
+p2019 = read_sf("data/przestepstwa_2019.gpkg")
+#granica miasta Poznań
+pzn = read_sf("data/pzn_borders.gpkg")
+```
+
+```{r}
+head(p2019)
+```
+
+```{r}
+#| message: false
+
+library(tmap)
+tm_shape(pzn) + 
+    tm_borders() +
+    tm_shape(p2019) +
+    tm_dots()
+```
+
+### Obliczanie statystyk centrograficznych - pakiet sfdep {.unnumbered}
+
+Statystyki centrograficzne w R można wyznaczyć używając funkcji z pakietu `sfdep`:
+
+-   `center_mean()` - średnia centralna
+
+```{r}
+#| message: false
+library(pracma)
+library(sfdep)
+
+#srednia centralna
+mc_point2 = center_mean(p2019)
+```
+
+-   `std_distance()` - odległość standardowa
+
+```{r}
+#| message: false
+library(pracma)
+library(sfdep)
+
+# odległość standardowa 
+sd2 = std_distance(p2019) #zwraca wartość z odległością
+sd2_buffer = st_buffer(mc_point2, sd2) #zwraca obiekt przestrzenny
+```
+
+-   `std_dev_ellipse()` - elipsa odchylenia standardowego
+
+```{r}
+#| message: false
+library(pracma)
+library(sfdep)
+
+# funkcja std_dev_ellipse zwraca parametry elipsy, st_ellipse tworzy na ich podstawie obiekt liniowy 
+p2019_e = std_dev_ellipse(p2019)
+p2019_e = st_ellipse(p2019_e, sx = p2019_e$sx, sy = p2019_e$sy)
+```
+
+### Wizualizacja statystyk centrograficznych
+
+```{r}
+#| message: false
+#| fig-cap: "Statystyki centrograficzne - średnia centralna (czerwony), odległość standardowa (czerwona linia), elipsa odchylenia standardowego (zielony)"
+
+tm_shape(pzn) + 
+    tm_borders() +
+    tm_shape(p2019) +
+    tm_dots() +
+    tm_shape(mc_point) +
+    tm_dots(fill = "red", size = 2) +
+    tm_shape(sd2_buffer) +
+    tm_borders(col = "red", lwd = 3) + 
+    tm_shape(p2019_e) +
+    tm_lines(col = "darkgreen", lwd = 3)
+```
+
+## Przykład 2: Rozkład przestrzenny szkół w Poznaniu
+
+### Dane
+
+W drugim przykładzie wykorzystano dane pozyskane z BDOT10k z warstwy przedstawiającej budynki (*OT_BUBD_A*) oraz granice administracyjne (*OT_ADJA_A*) do przeanalizowania rozkładu przestrzennego szkół podstawowych w Poznaniu.
+
+Granica miasta Pozania została pozyskana z warstwy *OT_ADJA_A*.
+
+```{r}
+granica = read_sf("data/bdot10k/PL.PZGiK.308.BDOT10k.3064__OT_ADJA_A.gpkg")
+granica = granica[granica$RODZAJ == "powiat", "geometria"]
+```
+
+Warstwa *OT_BUBD_A* jest warstwą poligonową zawierającą różne typy budynków.
+
+```{r}
+budynki <- read_sf("data/bdot10k/PL.PZGiK.308.BDOT10k.3064__OT_BUBD_A.gpkg")
+```
+
+```{r}
+head(budynki)
+```
+
+Informacje o typach budynków zapisane są w dwóch kolumnach: *FUNKCJAOGOLNABUDYNKU* oraz *PRZEWAZAJACAFUNKCJABUDYNKU*.
+
+```{r}
+unique(budynki$FUNKCJAOGOLNABUDYNKU)
+```
+
+```{r}
+funcja_szczegolowa_budynku = unique(budynki$PRZEWAZAJACAFUNKCJABUDYNKU)
+```
+
+#### Przygotowanie danych do analizy
+
+#### Selekcja budynków w kategorii szkoła podstawowa {.unnumbered}
+
+Szkoły podstawowe to kategoria określona jako przeważająca funkcja budynku (kolumna PRZEWAZAJACAFUNKCJABUDYNKU).
+
+```{r}
+szkoly_podstawowe = budynki[budynki$PRZEWAZAJACAFUNKCJABUDYNKU%in%c("szkoła podstawowa"),]
+```
+
+#### Konwersja warstwy poligonowej na punktową {.unnumbered}
+
+Warstwa BUBD_A jest warstwą poligonową. Aby zamienić budynki (poligony) na punkty należy użyć funkcji `st_centroid()` z pakietu `sf`.
+
+```{r}
+szkoly_pkt = st_centroid(szkoly_podstawowe[, "geometria"])
+```
+
+#### Zapisanie warstw {.unnumbered}
+
+```{r}
+st_write(szkoly_pkt, dsn = "data/out_poznan_szkoly.gpkg", layer = "szkoly", delete_dsn = TRUE)
+st_write(granica, dsn = "data/out_poznan_szkoly.gpkg", layer = "granica")
+```
+
+#### Lokalizacja szkół podstawowych w mieście Poznań.
+
+Do wizualizacji lokalizacji szkół podstawowych w mieście Poznań wykorzystano pakiet `tmap()`.
+
+```{r}
+#| message: false
+library(tmap)
+tm_shape(granica) + 
+  tm_borders(col = "black") + 
+  tm_shape(szkoly_pkt) + 
+  tm_dots(col = "black", size = 0.7)
+```
+
+### Statystyki centrograficzne
+
+Wykorzystując funkcje z pakietu `sfdep` zostały obliczone statystyki centrograficzne: średnia centralna (funkcja `center_mean()`), odległość standardowa (funkcja `std_distance()`), elipsa odchylenia standardowego (`std_dev_ellipse()`).
+
+```{r}
+#| message: false
+library(pracma)
+library(sfdep)
+
+#srednia centralna
+mc_point2 = center_mean(szkoly_pkt)
+
+# odległość standardowa 
+sd2 = std_distance(szkoly_pkt) #zwraca wartość z odległością
+sd2_buffer = st_buffer(mc_point2, sd2) #zwraca obiekt przestrzenny
+
+# funkcja std_dev_ellipse zwraca parametry elipsy, st_ellipse tworzy na ich podstawie obiekt liniowy 
+szkoly_pkt_e = std_dev_ellipse(szkoly_pkt)
+szkoly_pkt_e = st_ellipse(szkoly_pkt_e, sx = szkoly_pkt_e$sx, sy = szkoly_pkt_e$sy)
+```
+
+### Wizualizacja statystyk centrograficznych
+
+```{r}
+#| message: false
+#| fig-cap: "Statystyki centrograficzne - średnia centralna (czerwony), odległość standardowa (czerwona linia), elipsa odchylenia standardowego (zielony)"
+
+tm_shape(granica) + 
+  tm_borders(col = "black") + 
+  tm_shape(szkoly_pkt) + 
+  tm_dots(fill = "black", size = 0.7) + 
+  tm_shape(mc_point2) +
+  tm_dots(fill = "red", size = 2) +
+  tm_shape(sd2_buffer) +
+  tm_borders(col = "red", lwd = 3) + 
+  tm_shape(szkoly_pkt_e) +
+  tm_lines(col = "darkgreen", lwd = 3)
+```

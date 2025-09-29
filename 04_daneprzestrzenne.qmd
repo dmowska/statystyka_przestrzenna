@@ -1,0 +1,670 @@
+# Dane przestrzenne w R
+<!-- reading, writing, visualizing, and any processing related to the other chapters -->
+
+<!-- https://bookdown.org/nowosad/geostatystyka/r-a-dane-przestrzenne.html -->
+
+<!-- trzeba dodac inne kwestie techniczne, które są używane w kolejnych rozdziałach-->
+
+<!-- np. konwertowanie obiektów sf do spatstat, itd. -->
+
+<!-- maybe another chapter for viz: maps for detecting patterns, trends, and outliers, ... -->
+
+R jest językiem programowania oraz środowiskiem obliczeniowym pozwalającym na analizę statystyczną danych oraz wizualizację danych. R dostarcza także wielu funkcji do pracy z danymi przestrzennymi. Poniżej przedstawione zostały podstawowe informacje dotyczące pracy z danymi przestrzennymi w R. Więcej informacji znajduje się w książce <https://r.geocompx.org/>
+
+## Dane przestrzenne - pakiety
+
+R zawiera wiele funkcji pozwalających na **przetwarzanie, wizualizację i analizowanie** danych przestrzennych. Funkcje te zawarte są w pakietach:
+
+-   obsługa danych przestrzennych: **sf, terra, stars, rastrer, sp**
+
+-   wizualizacja danych przestrzennych: **tmap**
+
+-   statystyka przestrzenna
+
+    -   statystyka punktów: **spatstat, sfdep**
+    -   statystyka sieci: **sfnetworks, tidygraph**
+    -   statystyka powierzchni (dane poligonowe): **sfdep**
+    -   geostatystyka: **gstat**
+
+Więcej szczegółów na temat pakietów R służących do analizy przestrzennej można znaleźć pod adresem <https://cran.r-project.org/view=Spatial>.
+
+### Pakiet sf
+
+-   oparty jest o standard OGC o nazwie *Simple Features* (<https://r-spatial.github.io/sf/articles/sf1.html>);
+
+-   definiuje klasę obiektów *sf*, która jest sposobem reprezentacji przestrzennych danych wektorowych. Pozwala on na stosowanie dodatkowych typów danych wektorowych (np. poligon i multipoligon to dwie oddzielne klasy), łatwiejsze przetwarzanie danych, oraz obsługę przestrzennych baz danych takich jak PostGIS;
+
+-   jest używany przez kilkadziesiąt dodatkowych pakietów R;
+
+-   większość funkcji zawartych w pakiecie zaczyna się od prefiksu `st_`;
+
+-   więcej informacji:
+
+    -   <https://cran.r-project.org/web/packages/sf/index.html>
+    -   <https://r-spatial.github.io/sf/>
+
+### Pakiet terra
+
+-   dostarcza funkcji do analizy danych przestrzennych w formacie rastrowym oraz wektorowym;
+
+-   metody dla danych wektorowych obejmują operacje geometryczne, takie jak *intersect* i *buffer*;
+
+-   metody analizy danych rastrowych obejmują funkcje lokalne, sąsiedztwa, globalne, strefowe oraz operacje geometryczne;
+
+-   więcej informacji:
+
+    -   <https://github.com/rspatial/terra>
+    -   <https://rspatial.org/pkg/index.html>
+    -   <https://cran.r-project.org/web/packages/terra/index.html>
+
+### Pakiet tmap
+
+-   pakiet do wizualizacji danych przestrzennych;
+
+-   sposób tworzenia map jest podobny do składni stosowanej w pakiecie `ggplot2`, została jednak dostosowana do tworzenia map a nie wykresów;
+
+-   więcej informacji:
+
+    -   <https://r-tmap.github.io/tmap/index.html>
+    -   <https://r-tmap.github.io/tmap/articles/tmap-getstarted.html>
+    -   <https://github.com/r-tmap/tmap>
+    -   <https://cran.r-project.org/web/packages/tmap/>
+
+### Biblioteki zewnętrzne
+
+-   **GDAL/OGR**
+
+    -   GDAL to biblioteka zawierająca funkcje służące do odczytywania i zapisywania danych w formatach rastrowych.
+    -   OGR to biblioteka służąca to odczytywania i zapisywania danych w formatach wektorowych.
+    -   Wykorzytywana przez pakiety R do wczytywania i zapisywania danych przestrzennych.
+
+-   **GEOS**
+
+    -   Biblioteka GEOS jest używana przez pakiety R (np. `sf`) do wykonywania operacji przestrzennych.
+    -   Przykładowe funkcje tej biblioteki to tworzenie buforów, wyliczanie centroidów, określanie relacji topologicznych (np. przecina, zawiera, etc.) i wiele innych.
+
+-   **PROJ**
+
+    -   Biblioteka PROJ jest używana w R do określania i konwersji układów współrzędnych.
+    -   Bardzo popularnym zapisem układu współrzędnych jest wykorzytanie systemu kodów EPSG (ang. *European Petroleum Survey Group*), który pozwala on na łatwe identyfikowanie układów współrzędnych. Przykładowo, układ PL 1992 może być określony jako "EPSG:2180".
+    -   Dane przestrzenne moga też przechowywać opis układu współrzędnych w bardziej złożonej formie - tzw. WKT2.
+    -   Strona <https://epsg.org/> zawiera bazę danych układów współrzędnych.
+
+## Reprezentacja danych przestrzennych w R
+
+Dane przestrzenne mogą być reprezentowane w R poprzez wiele różnych klas obiektów z użyciem różnych pakietów R:
+
+-   dane wektorowe:
+
+    -   pakiet sf: klasy sf
+    -   pakiet terra: klasa `spatVector`
+
+-   dane rastrowe:
+
+    -   pakiet terra: klasa `spatRaster`
+
+## Import i eksport danych
+
+R pozwala na odczytywanie danych przestrzennych z wielu formatów. Do najpopularniejszych należą:
+
+-   dane tekstowe z plików o rozszerzeniu *.csv*,
+-   dane wektorowe z plików *.shp*,
+-   dane rastrowe z plików w formacie *GeoTIFF*,
+-   bazy danych przestrzennych z plików rozszerzeniu *.gpkg*. Geopaczka (*geopackage*) może przechowywać zarówno pliki tekstowe, wektorowe oraz rastrowe.
+
+### Format .csv (dane punktowe)
+
+Dane z plików tekstowych (np. rozszerzenie *.csv*) można odczytać za pomocą uogólnionej funkcji `read.table()` lub też funkcji szczegółowych - `read.csv()` lub `read.csv2()`.
+
+```{r}
+punkty = read.csv("data/punkty.csv")
+```
+
+```{r}
+head(punkty)
+```
+
+Po wczytaniu pliku tekstowego za pomocą funkcji `read.csv()`, nowy obiekt (np. *punkty*) jest reprezentowany za pomocą klasy nieprzestrzennej `data.frame`. Aby obiekt został przetworzony do klasy przestrzennej, konieczne jest określenie które kolumny zawierają informacje o współrzędnych (w tym przykładzie są to kolumny *x* oraz *y*).\
+Do przekształcenia obiektu typu `data.frame` do obiektu przestrzennego klasy `sf` wykorzystuje się funkcję `st_as_sf()` z pakietu `sf`. Funkcja `st_as_sf()` wymaga zdefniowania obiektu zawierającego dane (w tym wypadku *punkty*), nazw kolumn zawierających współrzędne x oraz y (*coords = c("x", "y")*). Warto także na tym etapie zdefiniować układ współrzędnych (*crs = "EPSG:2180"*).
+
+```{r}
+library(sf)
+punkty_sf = st_as_sf(punkty, coords = c("x", "y"), crs = "EPSG:2180")
+punkty_sf
+```
+
+Należy zwrócić uwagę, że po przekształceniu danych wczytanych z pliku tekstowego (*punkty.csv*) na obiekt przestrzenny (*punkty_sf*) w tabeli atrybutów nie ma już kolumn *"x"* oraz *"y"*. Obiekt przestrzenny zawiera natomiast kolumnę `geometry` z informacją o współrzędnych punktów. Ponadto po wyświetleniu obiektu `punkty_sf` w nagłówku mamy podane informacje o układzie współrzędnych, zasięgu danych (obwiedni, *bounding box*).
+
+Prostą wizualizacje danych klasy przestrzennej można uzyskać za pomocą funkcji `plot()`.
+
+```{r}
+plot(punkty_sf)
+```
+
+Funkcja `plot()` wyświetli wszystkie zmienne. Wyświetlenie wybranej zmiennej wymaga zdefiniowania jej nazwy.
+
+```{r}
+plot(punkty_sf["temp"])
+```
+
+### Import i eksport danych wektorowych
+
+Dane przestrzenne zapisane w pliku (*.gpkg, .shp*) można wczytać do R wykorzystując funkcje `read_sf()` z pakietu `sf`.
+
+```{r}
+#| warning: false
+#| message: false
+library(sf)
+powiaty_wlkp = read_sf("data/wlkp_powiaty.gpkg")
+```
+
+Jeśli geopaczka zawiera kilka warstw na etapie wczytywania pliku można podać także nazwę warstwy.
+
+```{r}
+#| warning: false
+#| message: false
+library(sf)
+powiaty_wlkp = read_sf("data/wlkp_powiaty.gpkg", layer = "powiaty")
+```
+
+Dane przestrzenne można zapisać do pliku wykorzystując funkcję `write_sf()` z pakietu `sf` (funkcja ta nadpisuje plik). Dane mogą być zapisane do różnych formatów (np. geopaczka lub plik ESRI Shapefile).
+
+```{r}
+#| warning: false
+#| message: false
+
+#create output directory out 
+dir.create("out")
+write_sf(powiaty_wlkp, dsn = "out/out_powiaty_wlkp.shp")
+```
+
+R pozwala także na zapisanie kilku warstw do istniejącej geopaczki. Użyjemy w tym celu funkcji `st_write()`, która automatycznie nie nadpisuje pliku. W przypadku, gdy chcemy stworzyć geopaczkę składająca się z kilku warstw na etapie zapisu należy podać także nazwę warstwy (argument *layer*). Argument *delete_dsn = TRUE* usuwa istniejący wcześniej plik.
+
+```{r}
+#| warning: false
+#| message: false
+st_write(powiaty_wlkp, dsn = "out/out_powiaty_wlkp.gpkg", layer = "powiaty2", delete_dsn = TRUE)
+st_write(powiaty_wlkp, dsn = "out/out_powiaty_wlkp.gpkg", layer = "powiaty3")
+```
+
+Aby dowiedzieć się, jakie warstwy są zapisane w geopaczce można użyć funkcji `st_layers()`.
+
+```{r}
+st_layers("out/out_powiaty_wlkp.gpkg")
+```
+
+### Import i eksport danych rastrowych
+
+Do obsługi danych rastrowych zostanie wykorzystany pakiet `terra`. Funkcja `rast()` pozwala na wczytanie danych rastrowych do klasy `SpatRaster`. Funkcja ta obsługuje zarówno jednokanałowe jak i wielokanałowe (wielowarstwowe) pliki rastrowe. Przykładem pliku rastrowego, w którym zostało zapisanych kilka kanałów - warstw jest plik *siatka-all.tif*.
+
+```{r}
+#| message: false
+#| warning: false
+library(terra)
+srtm = rast("data/srtm.tif")
+srtm
+```
+
+```{r}
+siatka_all = rast("data/siatka-all.tif")
+siatka_all
+```
+
+Prostą wizualizację danych rastrowych można uzyskać za pomocą funkcji `plot()`.
+
+```{r}
+plot(srtm)
+```
+
+```{r}
+plot(siatka_all)
+```
+
+```{r}
+plot(siatka_all["siatka-all_2"])
+```
+
+Dane można zapisać do pliku używając funkcji `writeRaster()` z pakietu `terra`.
+
+```{r}
+writeRaster(srtm, "out/out_srtm.tif", overwrite = TRUE)
+```
+
+```{r}
+writeRaster(siatka_all, "out/out_siatka_all.tif", overwrite = TRUE)
+```
+
+```{r}
+writeRaster(siatka_all["siatka-all_2"], "out/out_clc.tif", overwrite = TRUE)
+```
+
+## Struktura danych przestrzennych w R
+
+### Dane wektorowe
+
+Podstawowe informacje o obiekcie można uzyskać poprzez wpisanie jego nazwy:
+
+```{r}
+punkty_sf
+```
+
+Obiekty klasy `sf()` są zbudowane z tabeli (*data frame*) wraz z dodatkową kolumną zawierającą geometrię (często nazywaną `geometry` lub `geom`) oraz szeregu atrybutów przestrzennych.
+
+Strukturę obiektu `sf` można też sprawdzić za pomocą funkcji `str()`:
+
+```{r}
+str(punkty_sf)
+```
+
+#### Konwersja danych przestrzennych do danych nieprzestrzennych
+
+Obiekt klasy `sf` można przetworzyć na obiekt nieprzestrzenny klasy `data.frame` używając funkcji `st_drop_geometry()`. Funkcja `st_drop_geometry()` pozwala na pozbycie się informacji przestrzennych z obiektu klasy `sf` i uzyskanie jedynie obiektu klasy `data.frame` zawierającego nieprzestrzenne informacje o kolejnych punktach w tym zbiorze.
+
+```{r}
+punkty_df = st_drop_geometry(punkty_sf)
+head(punkty_df)
+```
+
+Proszę zwrócić uwagę, że powyższy obiekt nie zawiera już informacji o współrzęnych (kolumn *x* oraz *y*).
+
+#### Współrzędne
+
+Funkcja `st_coordinates()` pozwala na wydobycie współrzędnych z obiektu punktowego klasy `sf`.
+
+```{r}
+xy = st_coordinates(punkty_sf)
+head(xy)
+```
+
+Informację o współrzędnych można dołączyć do ramki danych nieprzestrzennych.
+
+```{r}
+punkty_df2 = cbind(punkty_df, xy)
+head(punkty_df2)
+```
+
+#### Obwiednia
+
+Funkcja `st_bbox()` określa zasięg przestrzenny danych w jednostkach mapy.
+
+```{r}
+st_bbox(punkty_sf)
+```
+
+#### Układ współrzędnych
+
+Funkcja `st_crs()` wyświetla definicję układu współrzędnych w formacie WKT2.
+
+```{r}
+st_crs(punkty_sf)
+```
+
+### Dane rastrowe
+
+Po wczytaniu danych rastrowych do R otrzymamy następujące informacje: wielkość rastra zdefiniowaną liczbą wierszy i kolumn (*dimensions*), rozdzielczość danych (*resolution*), zasięg warstwy (*extent*), informację o układzie współrzędnych warstwy (*coord. ref.*), nazwę pliku źródłowego wczytanego do R (*source*) oraz nazwę warstwy (*name*).
+
+```{r}
+srtm
+```
+
+W przypadku pliku rastrowego zawierającego kilka kanałów (*bands*) zostaną podane nazwy (*names*) wszystkich kanałów.
+
+```{r}
+siatka_all
+```
+
+Przetworzenie obiektu klasy `SpatRaster` na `data.frame` odbywa się natomiast używając funkcji `as.data.frame()`.
+
+```{r}
+srtm_df = as.data.frame(srtm)
+```
+
+Funkcje `st_bbox()` oraz `st_crs()` można także zastsować do obiektu klasy `SpatRaster`.
+
+```{r}
+st_bbox(srtm)
+```
+
+```{r}
+#| eval: false
+st_crs(siatka_all)
+```
+
+## Przetwarzanie danych wektorowych w R
+
+### Łączenie danych przestrzennych i atrybutowych
+
+Plik *wlkp_powiaty.gpkg* zawiera granice powiatów województwa wielkopolskiego, a plik *bezrobocie_wlkp.csv* zawiera informacje o stopie bezrobocia w powiatach województwa wielkopolskiego w 2004, 2010 oraz 2023 roku.
+
+```{r}
+library(sf)
+powiaty_wlkp = read_sf("data/wlkp_powiaty.gpkg")
+head(powiaty_wlkp)
+```
+
+```{r}
+bezrobocie_wlkp = read.csv("data/bezrobocie_wlkp.csv", sep = ";", dec = ",")
+head(bezrobocie_wlkp)
+```
+
+Aby połączyć dane przestrzenne z informacją o stopie bezrobocia wykorzystane zostaną pola TERYT oraz Kod. Kolumna TERYT w pliku *wlkp_powiaty.gpkg* zawiera identyfikator powiatu w postaci 4 cyfr. Do pola TERYT trzeba dodać "000", aby identyfikator powiatu w obu obiektach był taki sam.
+
+```{r}
+powiaty_wlkp$TERYT = paste(powiaty_wlkp$TERYT, "000", sep="")
+```
+
+Do połączenia danych przestrzennych i nieprzestrzennych zostanie wykorzystana funkcja `merge()`. *Funkcja ta nie będzie działać, jeśli będziemy chcieli połączyć dwa obiekty klasy przestrzennej.*
+
+```{r}
+powiaty_wlkp_attr = merge(powiaty_wlkp, bezrobocie_wlkp[, -2], by.x = "TERYT", by.y = "Kod")
+head(powiaty_wlkp_attr)
+```
+
+### Tworzenie obiektów wektorowych
+
+Funkcja `st_point()` z pakietu `sf` tworzy obiekt punktowy *Simple Feautures* na podstawie wektora, listy lub macierzy zawierającej współrzędne x oraz y.
+
+```{r}
+st_point(c(16.941820, 52.464279))
+```
+
+Funkcja `st_sfc()` z pakietu `sf` tworzy kolumnę z geometrią oraz dodaje informację o układzie współrzędnych dla obiektu typu *Simple Feautures*.
+
+```{r}
+p1 = st_sfc(st_point(c(16.941820, 52.464279)), crs = 4326)
+p1
+```
+
+```{r}
+plot(p1)
+```
+
+Do utworzenia obiektu punktowego klasy `sf` na podstawie ramki danych (*data.frame*) używa się funkcji `st_as_sf()`.
+
+### Zmiana układu współrzędnych
+
+Obiekt `p1` został utworzony podając współrzędne w układzie WGS84 (EPSG: 4326). Do zmiany układu współrzędnych służy funkcja `st_transform()`. Poniżej zmienimy układ na PUWG1992 (EPSG: 2180).
+
+```{r}
+p1a = st_transform(p1, 2180)
+p1a
+```
+
+### Strefa buforowa
+
+Funkcja `st_buffer()` pozwala na wyznaczenie strefy bufforowej (otoczki) o zadanej odległości w jednostkach układu współrzędnych (w tym wypadku 50000 metrów).
+
+```{r}
+bfr = st_buffer(p1a, dist = 50000)
+bfr
+```
+
+```{r}
+plot(bfr)
+```
+
+### Centroidy poligonów
+
+Funkcja `st_centroid()` wyznacza centroidy poligonów.
+
+```{r}
+powiaty_centroidy = st_centroid(powiaty_wlkp)
+head(powiaty_centroidy)
+```
+
+```{r}
+plot(powiaty_centroidy["geom"])
+```
+
+```{r}
+centroidy_attr = st_centroid(powiaty_wlkp_attr)
+centroidy_attr
+```
+
+### Selekcja na podstawie lokalizacji
+
+Używając indeksowania można w R wykonywać selekcje na podstawie lokalizacji. Poniżej wybrano wszystkie centroidy przecinające się z obiektem *bfr*. Możliwe jest stosowanie także innych metod opisujących relacje przestrzenne.
+
+```{r}
+centroidy_bfr = powiaty_centroidy[bfr, ]
+```
+
+```{r}
+centroidy_bfr
+```
+
+```{r}
+plot(centroidy_bfr["geom"])
+```
+
+```{r}
+#| eval: false
+powiaty_centroidy[bfr, , op = st_within]
+```
+
+### Selekcja na podstawie atrybutów
+
+Obiekty klasy `sf()` są zbudowane z tabeli (*data frame*) zawierajacej szereg atrybutów oraz dodatkową kolumnę zawierającą geometrie (często nazywaną `geometry` lub `geom`). Tabelę atrybutów można przeszukiwać używając dowolnych nprzeznaczonych do danych nieprzestrzennych (np. indeksowania).
+
+```{r}
+poznan = powiaty_wlkp[powiaty_wlkp$Nazwa == "Poznań",]
+plot(st_geometry(poznan))
+```
+
+### Tworzenie siatki - obiekt wektorowy
+
+Tworzenie siatki składa się z 3 kroków:
+
+1.  Utworzenie poligonu o zasięgu warstwy (w przykładzie poligon o zasięgu warstwy powiaty_wlkp).
+
+```{r}
+wlkp_bb = st_sf(geom = st_as_sfc(st_bbox(powiaty_wlkp)))
+plot(wlkp_bb)
+```
+
+2.  Utworzenie siatki używając funkcji `st_make_grid()`. Pierwszym argumentem jest obiekt definiujący zasięg siatki, a drugi (*n*) definiuje liczbę kolumn oraz wierszy. W przykładzie zostanie utworzona siatka o wymiarach 10x10.
+
+```{r}
+wlkp_grid = st_make_grid(wlkp_bb, n = 10)
+wlkp_grid
+```
+
+```{r}
+plot(wlkp_grid)
+```
+
+Funkcja `st_sf()` przekształca utworzoną siatkę na obiekt klasy `sf` składający się z ramki danych (*data.frame*) oraz kolumny zawierającej geometrię.
+
+```{r}
+wlkp_grid_sf = st_sf(geometry = wlkp_grid)
+wlkp_grid_sf
+```
+
+Podsumowując, do utworzenia siatki potrzebne jest wykonanie 3 poniższych kroków.
+
+```{r}
+#| eval: false
+wlkp_bb = st_sf(geom = st_as_sfc(st_bbox(powiaty_wlkp)))
+wlkp_grid = st_make_grid(wlkp_bb, n = 10)
+wlkp_grid_sf = st_sf(geometry = wlkp_grid)
+```
+
+## Przetwarzanie danych rastrowych w R
+
+### Tworzenie siatki rastrowej
+
+Funkcja `rast()` z pakietu `terra` pozwala na wczytanie danych rastrowych zapisanych w zewnętrznym pliku lub na utworzenie obiektu rastrowego o zadanym zasięgu, rozdzielczości oraz układzie współrzędnych.
+
+```{r}
+library(terra)
+moja_siatka = rast(ext = poznan, res = 90, crs = crs(poznan))
+moja_siatka
+```
+
+```{r}
+moja_siatka2 = rast(xmin = 345943.2, ymin = 493660, 
+                    xmax = 368893.2, ymax = 517870, 
+                    res = 90, crs = crs(poznan))
+moja_siatka2
+```
+
+Do utworzonego obiektu rastrowego należy przypisać wartości.
+
+```{r}
+moja_siatka <- setValues(moja_siatka, 1:ncell(moja_siatka))
+```
+
+```{r}
+plot(moja_siatka)
+```
+
+```{r}
+#| eval: false
+writeRaster(moja_siatka, "out/out_moja_siatka.tif")
+```
+
+### Przycięcie danych rastrowych do zasięgu warstwy
+
+Funkcja `crop()` pozwala na przycięcie warstwy rastrowej do granic wyznaczonych przez warstwę wektorową.
+
+```{r}
+poznan_rst = crop(moja_siatka, poznan, mask = TRUE)
+```
+
+```{r}
+plot(poznan_rst)
+```
+
+### Zmiana rozdzielczości
+
+Funkcja `aggregate()` pozwala na agregację warstwy rastrowej. Warstwa rastrowa *poznan_rst* ma rozdzielczość 90m. Argument `fact = 2` agreguję warstwę dwukrotnie zmniejszając rozdzielczość, po agregacji warstwa będzie miała rozdzielczość 180m. Argument `fun` oznacza funkcję jaka ma być wykorzystana do agregacji danych (np. suma, wartość minimalna lub maksymalna, średnia, itp.). W przykładzie nowa warstwa rastrowa będzie miała rozdzielczość 180m, a wartość komórek będzie sumą wartości z komórek 90m.
+
+```{r}
+poznan_rst_agg = aggregate(poznan_rst, fact = 2, fun = "sum")
+poznan_rst_agg
+```
+
+> Zagreguj warstwę rastrową srtm do rozdzielczości 360m. Jaką wartość musi przyjąć argument *fact*? Warstwa rastrowa srtm to cyfrowy model wysokościowy (DEM) zawierający w komórkach wartości wysokości n.p.m. Jaką funkcję należy użyć do aggregacji tych danych?
+
+## Wizualizacja danych przestrzennych w R
+
+Istnieje wiele pakietów pozwalajacych na wizualizację danych przestrzennych. Poniżej pokazane są przykłady użycia pakietu `tmap`.
+
+Główna idea stojąca za pakietem `tmap` mówi o łączeniu kolejnych linii kodu znakiem `+`, i te kolejne elementy będą wyświetlane po sobie. Złożona wizualizacja danych przestrzennych składa się z następujących elementów:
+
+-   `tm_shape()` - podstawowa funkcja pakietu,która pozwala na zdefiniowanie jaki obiekt przestrzenny chcemy zwizualizować.
+
+-   Elementy odnoszące się do typów obiektów (np. dane punktowe, poligonowe, rastrowe, itp.)
+
+    -   `tm_dots()`, `tm_symbols()` - dane punktowe
+    -   `tm_polygons()`, `tm_borders()` - dane poligonowe
+    -   `tm_raster()` - dane rastrowe.
+
+-   Dodatkowe elementy kompozycji mapy:
+
+    -   tm_scale_bar() - podziałka liniowa
+    -   tm_compass() - strzałka północy
+
+Każda z powyższych składowych funkcji jest też łatwo modyfikowalna, pozwalając na wybranie zmiennej do przestawienia na mapie, stylu legendy, jej tytułu, itd.
+
+### Dane poligonowe
+
+Podstawowa wizualizacja danych poligonowych składa się z dwóch elementów: `tm_shape()` oraz `tm_polygons()` (lub `tm_borders()`).
+
+```{r}
+#| message: false
+library(tmap)
+tm_shape(powiaty_wlkp) +
+    tm_polygons()
+```
+
+```{r}
+#| message: false
+tm_shape(powiaty_wlkp) +
+	tm_borders(lwd = 2)
+```
+
+Następnie możemy definiować dodatkowe elementy: wizualizowana zmienna, wykorzystana paleta itp.
+
+```{r}
+#| message: false
+library(tmap)
+tm_shape(powiaty_wlkp_attr) +
+    tm_polygons(fill = "sb2023", palette = "YlOrBr", title = "Stopa bezrobocia [%]")
+```
+
+### Dane punktowe
+
+Podstawowa wizualizacja danych punktowych składa się z dwóch elementów: `tm_shape()` oraz `tm_dots()`.
+
+```{r}
+tm_shape(centroidy_attr) +
+    tm_dots()
+```
+
+```{r}
+tm_shape(centroidy_attr) + 
+    tm_dots(fill = "sb2023")
+```
+
+```{r}
+tm_shape(centroidy_attr) + 
+    tm_dots(fill = "sb2023", 
+            fill.scale = tm_scale_continuous(values = "viridis", label.na = "Brak danych"),
+            fill.legend = tm_legend(title = "Stopa bezrobocia"),
+            size = 1)
+```
+
+### Dane rastrowe
+
+Podstawowa wizualizacja danych rastrowych składa się z dwóch elementów: `tm_shape()` oraz `tm_raster()`.
+
+```{r}
+tm_shape(siatka_all) +
+    tm_raster("siatka-all_1") +
+    tm_scalebar() +
+    tm_compass(position = c("left", "top"))
+```
+
+```{r}
+tm_shape(siatka_all) +
+    tm_raster(col = "siatka-all_1",
+              col.scale = tm_scale_continuous(values = "Spectral"),
+              col.legend = tm_legend(title = "m npm")) 
+```
+
+### Łączenie warstw
+
+Pakiet `tmap` pozwala także na tworzenie złożonych wizualizacji, łącząc obiekty różnego typu (np. dane poligonowe oraz punktowe lub dane rastrowe i wektorowe).
+
+```{r}
+#| message: false
+library(tmap)
+tm_shape(powiaty_wlkp_attr) +
+    tm_polygons(fill = "sb2023", palette = "YlOrBr") + 
+tm_shape(centroidy_attr) + 
+  tm_dots(size = 0.7)
+```
+
+```{r}
+tm_shape(siatka_all) +
+    tm_raster(col = "siatka-all_1",
+              col.scale = tm_scale_continuous(values = "Spectral"),
+              col.legend = tm_legend(title = "m npm")) + 
+    tm_shape(punkty_sf) + 
+    tm_symbols(fill = "temp", 
+            fill.scale = tm_scale_continuous(values = "viridis", label.na = "Brak danych"),
+            fill.legend = tm_legend(title = "Temperatura [*C]"),
+            col = "white",
+            size = 0.75) +
+    tm_scalebar()
+```
+
+### Zapisywanie map
+
+```{r}
+#| eval: false
+tm = tm_shape(powiaty_wlkp) +
+    tm_polygons()
+tmap_save(tm, "out/mapa.png", width = 600, height = 600)
+```

@@ -1,0 +1,21 @@
+# WSTĘP
+
+Termin ***statystyka przestrzenna*** odnosi się do stosowania pojęć i metod statystycznych do danych, które mają wyraźną strukturę przestrzenną, *która jest ważna dla zrozumienia tych danych* (<https://www.spatialanalysisonline.com/>). Statystyka przestrzenna dostarcza narzędzi badawczych oraz podstaw teoretycznych związanych ze zbieraniem danych, analizą danych, oraz wnioskowaniem statystycznym **dla danych przestrzennych** (Suchecka 2014).
+
+![Główne nurty statystyki przestrzennej ze względu na rodzaj analizowanych danych](figs/nurty_statystyka.png)
+
+Ze względu na możliwości zastosowania metod statystycznych można wyróżnić **trzy rodzaje danych przestrzennych** (Cressie, 1993):
+
+-   **dane punktowe** (*point data*) - reprezentują wartości zmiennych mające charakter punktów w przestrzeni geograficznej;
+-   **dane obszarowe** (*area data*) - powstają poprzez podzielenie obszaru badań na jednostki przestrzenne, w których agregowane są wyniki, np. podział na jednostki administracyjne;
+-   **dane powierzchniowe ciągłe przestrzennie** (*surface data, spatially continous data*) - określane poprzez ciągłą zmienność na podstawie funkcji odległości (np. temperatura powietrza, opady atmosferyczne, występowanie złóż surowców naturalnych).
+
+Ze względu na rodzaj analizowanych danych w statystyce przestrzennej można wyróżnić **trzy główne nurty** (Suchecka 2014):
+
+-   **analizę danych punktowych** (ang. *point pattern analysis*) - stosuje się do określenia, w jaki sposób dane obiekty (zdarzenia) są rozmieszczone w przestrzeni (losowo, regularnie, skupione w klastry).
+
+-   **metody analizy danych obszarowych** - stosuje się do oceny autokorelacji przestrzennej i sprawdzenia, czy obszary bliskie mają podobne, czy różne wartości.
+
+-   **geostatystykę** - stosuje się do zrozumienie zmienności przestrzennej lub czasowej zjawisk ciągłych przestrzennie (np. rozkład opadów atmosferycznych, zanieczyszczeń powietrza).
+
+W kolejnych rozdziałach omówione zostaną metody wchodzące w skład w/w nurtów statystyki przestrzennej.

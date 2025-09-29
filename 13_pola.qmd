@@ -1,0 +1,18 @@
+# DANE POWIERZCHNIOWE CIĄGŁE PRZESTRZENNIE
+
+**Dane powierzchniowe ciągłe przestrzennie** (*surface data, spatially continous data*) zwane też geostatystycznymi, są gromadzone w sposób ciągły w przestrzeni dwuwymiarowej (np. temperatura powietrza, opady atmosferyczne, występowanie złóż surowców naturalnych). W przypadku danych powierzchniowych ciągłych przestrzennie pomiaru atrybutów dokonuje się w wybranym zbiorze lokalizacji. Następnie wykorzystuje się metody geostatystyczne, które pozwalają na analizę zmienności przestrzennej lub szacowanie wartości zmierzonej zmiennej w nieznanych lokalizacjach.
+
+## Analiza danych ciągłych przestrzennie w R
+
+### Pakiet terra 
+
+Pakiet `terra` dostarcza funkcji do pracy z danymi wektorowymi oraz rastrowymi, m.in w zakresie tworzenia siatek interpolacyjnych (funkcja `rast()`) oraz interpolacji przestrzennej (`interpolate()`, `voronoi()`)
+
+### Pakiet gstat
+
+Pakiet `gstat` dostarcza funkcji do geostatystycznej analizy danych:
+
+- funkcja `variogram()` - tworzenie semiwariogramów 
+- funkcje `vgm()` oraz `fit.variogram()` - modelowanie semiwariogramów 
+- funkcja `gstat()` - tworzenie interpolacji przestrzennej jedną z metod krigingu lub metodą IDW. 
+

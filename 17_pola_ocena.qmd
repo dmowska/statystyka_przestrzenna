@@ -1,0 +1,385 @@
+# Ocena jakości estymacji
+
+Na jakość estymacji wykonywanych metodą krigingu wpływa dopasowanie modelu oraz wybór metody estymacji. W celu wybrania najbardziej optymalnego modelu do analizy lub porównania wyników estymacji otrzymanych różnymi metodami (np. kriging prosty vs. kriging zwykły) stosuje się jedną z dwóch metod **walidacji wyników estymacji:**
+
+-   walidacja podzbiorem (ang. jackknifing)
+-   kroswalidacja (ang. crossvalidation)
+
+Obie metody pozwalają na uzyskanie dla wybranych lokalizacji dwóch wartości analizowanej zmiennej: ***wartości obserwowanej oraz wartości estymowanej***. Porównując wartość oberwowaną oraz estymowaną możemy obliczyć **błąd estymacji**. **Błąd estymacji** jest najprostszą formą oceny jakości estymacji obliczaną jako różnica między wartością obserwowaną oraz wartością estymacji. Błąd estymacji można analizować za pomocą mapy lub wykresów.
+
+```{r}
+#| eval: false
+#| echo: true
+blad_estymacji = obserwowane - estymacja
+```
+
+Do porównania wartości obserowanych oraz estymowanych można także wykorzystać szereg **statystyk jakości estymacji**. Do podstawowych statystyk ocen jakości estymacji należą:
+
+-   Średni błąd estymacji (MPE, ang. *mean prediction error*).
+-   Pierwiastek błędu średniokwadratowego (RMSE, ang. *root mean square error*).
+-   Współczynnik determinacji (R2, ang. *coefficient of determination*).
+
+## Walidacja podzbiorem
+
+Walidacja podzbiorem polega na podziale zbioru danych na dwa podzbiory:
+
+-   **treningowy** - wykorzystywany do stworzenia semiwariogramu empirycznego, zbudowania modelu (zawiera więcej obserwacji)
+-   **testowy** - estymację wykonuje się dla punktów ze zbioru testowego, a następnie porównuje się wynik estymowany oraz rzeczywisty (zawiera mniej obserwacji).
+
+Zaletą tego podejścia jest stosowanie danych niezależnych od estymacji do oceny jakości modelu. Wadą natomiast jest konieczność posiadania (relatywnie) dużego zbioru danych.
+
+Walidacja podzbiorem składa się z kilku kroków:
+
+-   Podział zbioru danych na zbiór treningowy oraz testowy.
+-   Stworzenie semiwariogramu oraz dopasowanie modelu na podstawie punktów ze zbioru treningowego.
+-   Wykonanie estymacji dla punktów ze zbioru testowego.
+
+### Podział zbioru danych na zbiór treningowy oraz testowy.
+
+```{r}
+library(sf)
+punkty = read.csv("data/punkty.csv")
+punkty = st_as_sf(punkty, coords = c("x", "y"), crs = "EPSG:2180")
+punkty = na.omit(punkty)
+```
+
+Na poniższym przykładzie zbiór danych dzielony jest używając funkcji `initial_split()` z pakietu `rsample`. Zap pomocą tej funkcji zostanie utworzony obiekt zawierający wydzielony podzbiór treningowy i testowy. Ważną zaletą funkcji `initial_split()` jest to, iż w zbiorze treningowym i testowym zachowane są podobne rozkłady wartości. W przykładzie użyto argumentu *prop = 0.75*, który oznacza, że 75% danych będzie należało do zbioru treningowego, a 25% do zbioru testowego. Następnie, korzystając ze stworzonego obiektu, budowane są dwa zbiory danych - treningowy (train) oraz testowy (test).
+
+```{r}
+library(rsample)
+set.seed(224)
+punkty_podzial = initial_split(punkty, prop = 0.75, strata = temp)
+train = training(punkty_podzial)
+test = testing(punkty_podzial)
+```
+
+Na poniższej mapie kolorem niebieskim zaznaczono 75% obserwacji tworzących zbiór treningowy, a kolorem czerwonym 25% obserwacji tworzących zbiór testowy.
+
+```{r}
+#| message: false
+#| echo: true
+
+library(tmap)
+tm_shape(train) + 
+  tm_symbols(fill = "blue") +
+tm_shape(test) + 
+  tm_symbols(fill = "red") +
+tm_layout(legend.outside = TRUE)
+```
+
+### Stworzenie semiwariogramu oraz dopasowanie modelu na podstawie punktów ze zbioru treningowego.
+
+W kolejnym kroku **zbiór treningowy** (*train*) zostanie wykorzystany do utworzenia semiwariogramu empirycznego oraz dopasowania modelu. Semiwariogram empiryczny tworzony jest z wykorzystaniem funkcji `variogram()` z pakietu `gstat`. Do określenia typu modelu oraz jego podstawowych parametrów używa się funkcji `vgm()` z pakietu `gstat`. Funkcja `fit.variogram()` pozwala na automatyczne dopasowanie modelu w oparciu o wstępnie podane parametry.
+
+```{r}
+#| message: false
+library(gstat)
+vario = variogram(temp ~ 1, data = train)
+model = vgm(10, model = "Sph", range = 4000, nugget = 0.5)
+fitted = fit.variogram(vario, model)
+plot(vario, fitted)
+```
+
+### Wykonanie estymacji dla punktów ze zbioru testowego.
+
+Kolejnym krokiem jest wykonanie estymacji dla punktów ze **zbioru testowego (*test*)** używając modelu zbudowanego na podstawie punktów ze zbioru treningowego. W przykładzie wykorzystamy metodę krigingu zwykłego (*oridinary kriging*).
+
+W pierwszym etapie zostanie utworzony obiekt klasy `gstat` zawierający parametry krigingu. Jako argument *locations* podajemy zbiór treningowy (*train*) - tj. zbiór danych na podstawie, którego tworzony był model.
+
+```{r}
+library(gstat)
+ok_param = gstat(formula = temp ~ 1, 
+            locations = train,
+            model = fitted,
+            nmax = 30)
+```
+
+Do wykonania predykcji dla punktów ze zbioru testowego wykorzystuje się funkcję `predict()`. Funkcja `predict()` wymaga zdefiniowania dwóch argumentów: obiektu klasy `gstat` zawierającego parametry krigingu (w przykładzie obiekt *ok_param*) oraz nazwy zbioru danych zawierającego nowe lokalizacje, dla których ma być wykonana estymacja (w przykładzie obiekt *test* zawierający lokalizacje punktów w zbiorze testowym).
+
+```{r}
+ok_test = predict(ok_param, test)
+```
+
+Obiekt `ok_test` zawiera wyniki estymacji dla punktów ze zbioru testowego.
+
+```{r}
+ok_test
+```
+
+### Błąd estymacji
+
+W celu obliczenia błędów estymacji do obiektu *ok_test* dodamy wartość obserwowaną temperatury.
+
+```{r}
+ok_test$temp_obs = test$temp
+head(ok_test)
+```
+
+Błąd estymacji obliczamy poprzez odjęcie od wartości obserwowanej (zmienna *temp_obs*) wartości estymowanej (zmienna *var1.pred* w obiekcie *ok_test*).
+
+```{r}
+ok_test$blad_est_ok = ok_test$temp_obs - ok_test$var1.pred
+```
+
+Wartości błędu estymacji można zwizualizować na mapie lub na wykresach.
+
+#### Rozkład przestrzenny błędu estymacji
+
+```{r}
+#| message: false
+#| warning: false
+cuts = c(-5, -3, -1, 1, 3, 5)
+tm_shape(ok_test) +
+        tm_symbols(col = "blad_est_ok", breaks = cuts, title.col = "", palette = "-RdBu", size = 1.5) +
+        tm_layout(main.title = "Błąd estymacji", legend.outside = TRUE)
+```
+
+> Co oznacza ujemny, a co dodatni błąd estymacji?
+
+#### Histogram: rozkład wartości błędu estymacji
+
+```{r}
+library(ggplot2)
+ggplot(ok_test, aes(blad_est_ok)) +
+    geom_histogram() + 
+    xlab("Błąd estymacji") + 
+    ylab("Liczebność") +
+  theme_bw()
+```
+
+#### Wykres rozrzutu wartości obserwowanych oraz estymowanych
+
+```{r}
+ggplot(ok_test, aes(var1.pred, temp_obs)) +
+    geom_point(size = 1.5) +
+    xlab("Estymacja") +
+    ylab("Obserwacja") + 
+  xlim(5, 25) + ylim(5,25) + 
+  coord_fixed() + 
+  theme_bw()
+```
+
+### Statystyki jakości estymacji
+
+#### Średni błąd estymacji
+
+Średni błąd estymacji (MPE) można wyliczyć korzystając z poniższego wzoru:
+
+$$ MPE=\frac{\sum_{i=1}^{n}(v_i - \hat{v}_i)}{n} $$\
+gdzie $v_i$ to wartość obserwowana a $\hat{v}_i$ to wartość estymowana.
+
+**Optymalnie wartość średniego błędu estymacji powinna być jak najbliżej 0.**
+
+W R do obliczenia średniego błędu estymacji służy funkcja `mean()`
+
+```{r}
+MPE = mean(ok_test$blad_est_ok)
+MPE
+```
+
+#### Pierwiastek błędu średniokwadratowego
+
+Pierwiastek błędu średniokwadratowego (RMSE) jest możliwy do wyliczenia poprzez wzór:
+
+$$ RMSE=\sqrt{\frac{\sum_{i=1}^{n}(v_i-\hat{v}_i)^2}{n}} $$\
+gdzie $v_i$ to wartość obserwowana a $\hat{v}_i$ to wartość estymowana.
+
+**Optymalnie wartość pierwiastka błędu średniokwadratowego powinna być jak najmniejsza.**
+
+```{r}
+RMSE = sqrt(mean((ok_test$temp_obs - ok_test$var1.pred) ^ 2))
+RMSE
+```
+
+#### Współczynnik determinacji
+
+Współczynnik determinacji (R^2^) jest możliwy do wyliczenia poprzez wzór:
+
+$$ R^2 = 1 - \frac{\sum_{i=1}^{n} (\hat v_i - v_i)^2}{\sum_{i=1}^{n} (v_i - \overline{v_i})^2} $$
+
+gdzie $v_i$ to wartość obserwowana, $\hat{v}_i$ to wartość estymowana, a $\overline{v}$ średnia arytmetyczna wartości obserwowanych.
+
+**Współczynnik determinacji przyjmuje wartości od 0 do 1, gdzie model jest lepszy im wartość tego współczynnika jest bliższa jedności.**
+
+W współczynnik determinacji możemy obliczyć obliczenie współczynnika korelacji liniowej Pearsona używając funkcji `cor()` oraz podsienienie wyniku do kwadratu.
+
+```{r}
+R2 = cor(ok_test$temp_obs, ok_test$var1.pred) ^ 2
+R2
+```
+
+### Estymacja w siatce
+
+W sytuacji, gdy uzyskany model jest wystarczająco dobry, możemy również uzyskać estymację dla całego obszaru z użyciem funkcji `interpolate()`.
+
+```{r}
+library(terra)
+granica = vect("data/granica.gpkg")
+siatka = rast(ext = granica, res = 50, crs = crs(granica))
+siatka
+```
+
+```{r}
+interpolate_gstat = function(model, x, ...) {
+  v = st_as_sf(x, coords = c("x", "y"), crs = st_crs(model$data[[1]]$data))
+  p = predict(model, v, ...)
+  st_drop_geometry(p)
+}
+```
+
+```{r}
+ok = interpolate(siatka, ok_param, fun = interpolate_gstat)
+```
+
+```{r}
+ok_crop = crop(ok, granica, mask=TRUE)
+```
+
+```{r}
+#| message: false
+tm_shape(ok_crop) +
+  tm_raster(col = c("var1.pred"), style = "cont", palette = "-Spectral")
+```
+
+## Kroswalidacja
+
+W przypadku kroswalidacji te same dane wykorzystywane są do budowy modelu, estymacji, a następnie do oceny prognozy. Procedura kroswalidacji LOO (ang. *leave-one-out cross-validation*) składa się z poniższych kroków:
+
+1 Zbudowanie matematycznego modelu z dostępnych obserwacji. 2. Dla każdej znanej obserwacji następuje:
+
+-   Usunięcie jej ze zbioru danych.
+-   Użycie modelu do wykonania estymacji w miejscu tej obserwacji.
+-   Wyliczenie reszty (ang. residual), czyli różnicy pomiędzy znaną wartością a estymacją.
+
+3.  Podsumowanie otrzymanych wyników.
+
+W pierwszej kolejności używając wszystkich danych budowany jest semiwariogram empiryczny oraz dopasowywany jest model.
+
+```{r}
+vario = variogram(temp ~ 1, data = punkty)
+model = vgm(model = "Sph", nugget = 0.5)
+fitted = fit.variogram(vario, model)
+plot(vario, model = fitted)
+```
+
+Do wykonania kroswalidacji w R służy funkcja `krige.cv()` z pakietu `gstat`.
+
+```{r}
+cv_ok = krige.cv(temp ~ 1,
+                 locations = punkty,
+                 model = fitted,
+                 nmax = 30)
+```
+
+W wyniku krowalidacji otrzymujemy obiekt zawierający wartości estymacji (*var1.pred*), wariancji krigingowej (*var1.var*), wartości obserwowane (*observed*), wartość błędu estymacji (*residuals*).
+
+```{r}
+head(cv_ok)
+```
+
+Podstawowe statystyki dla wartości obserwowanych, estymowanych oraz błędu estymacji.
+
+```{r}
+summary(cv_ok)
+```
+
+### Statystyki jakości estymacji
+
+Wykorzystując wyniki kroswalidacji można obliczyć statystyki jakości estymacji.
+
+-   średni błąd kwadratowy
+
+```{r}
+MPE = mean(cv_ok$residual)
+MPE
+```
+
+-   pierwiastek średniego błędu kwadratowego
+
+```{r}
+RMSE = sqrt(mean((cv_ok$residual) ^ 2))
+RMSE
+```
+
+-   współczynnik determinacji
+
+```{r}
+R2 = cor(cv_ok$observed, cv_ok$var1.pred) ^ 2
+R2
+```
+
+### Rozkład przestrzenny błędu estymacji
+
+Można także przeanalizować rozkład przestrzenny błędu estymacji.
+
+```{r}
+#| message: false
+#| warning: false
+cuts = c(-5, -3, -1, 1, 3, 5)
+tm_shape(cv_ok) +
+        tm_symbols(col = "residual", breaks = cuts, title.col = "", palette = "-RdBu", size = 1) +
+        tm_layout(main.title = "Błąd estymacji", legend.outside = TRUE)
+```
+
+### Rozkład wartości błędu estymacji
+
+```{r}
+library(ggplot2)
+ggplot(cv_ok, aes(residual)) +
+    geom_histogram() + 
+    xlab("Błąd estymacji") + 
+    ylab("Liczebność") +
+  theme_bw()
+```
+
+> Jaki rozkład ma błąd estymacji?
+
+### Wykres rozrzutu
+
+```{r}
+ggplot(cv_ok, aes(var1.pred, observed)) +
+    geom_point() +
+    xlab("Estymacja") +
+    ylab("Obserwacja") + 
+  theme_bw()
+```
+
+### Estymacja w siatce
+
+Podobnie jak w walidacji podzbiorem, gdy uzyskany model jest wystarczająco dobry, estymację dla całego obszaru uzyskuje się z użyciem funkcji `interpolate()`
+
+```{r}
+library(terra)
+granica = vect("data/granica.gpkg")
+siatka = rast(ext = granica, res = 50, crs = crs(granica))
+siatka
+```
+
+```{r}
+interpolate_gstat = function(model, x, ...) {
+  v = st_as_sf(x, coords = c("x", "y"), crs = st_crs(model$data[[1]]$data))
+  p = predict(model, v, ...)
+  st_drop_geometry(p)
+}
+```
+
+```{r}
+ok_param = gstat(formula = temp ~ 1, 
+            locations = punkty,
+            model = fitted,
+            nmax = 30)
+```
+
+```{r}
+ok = interpolate(siatka, ok_param, fun = interpolate_gstat)
+```
+
+```{r}
+ok_crop = crop(ok, granica, mask=TRUE)
+```
+
+```{r}
+#| message: false
+tm_shape(ok_crop) +
+  tm_raster(col = c("var1.pred"), style = "cont", palette = "-Spectral")
+```

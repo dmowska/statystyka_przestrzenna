@@ -1,0 +1,30 @@
+# O skrypcie {.unnumbered}
+
+## Struktura skryptu {.unnumbered}
+Skrypt zawiera materiały do ćwiczeń z przedmiotu “Statystyka przestrzenna”
+prowadzonego na III roku studiów inżynierskich Geoinformacja na Wydziale Nauk Geograficznych i Geologicznych UAM.
+
+Skrypt składa się z kilku części dotyczących:
+
+- pracy z danymi przestrzennymi w R 
+- eksploracyjnej analizy danych 
+- analizy przestrzennego rozkładu danych punktowych 
+- analizy danych obszarowych 
+- analizy danych ciągłych (geostatystyka)
+
+## Dane wykorzystywane w skrypcie {.unnumbered}
+
+Dane wykorzystywane w skrypcie można pobrać TUTAJ
+
+## Zadania samodzielne {.unnumbered}
+
+Rozdział 14 w części ZADANIA zawiera zestawienie zadań do samodzielnego rozwiązania. Zadania te będą rozwiązywane na kolejnych ćwiczeniach.
+
+Rozdział 15 zawiera opis projektu zaliczeniowego obejmującego materiał dotyczący eksploracyjnej analizy danych, analizy przestrzennego rozkładu danych punktowych oraz analizy danych obszarowych. 
+
+## Wykorzystanie skryptu na ćwiczeniach {.unnumbered}
+
+- Przed zajęciami należy zapoznać się z materiałem zamieszczonym w rozdziale zadanym na kolejne ćwiczenia.
+
+- Na ćwiczeniach samodzielnie rozwiązywane będą zadania z rozdziału 14 odnoszące się do zadanej części materiału.
+

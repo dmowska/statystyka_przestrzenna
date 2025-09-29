@@ -1,0 +1,356 @@
+# Metody oparte na odległości
+<!--    W4, U3  Wykład, Ćwiczenia w salach komputerowych-->
+
+<!-- compare two groups? -->
+
+```{r}
+#| message: false
+library(spatstat)
+library(sf)
+```
+
+
+Metody oparte na odległości wykorzystują informację o odległości między każdą lokalizacją pomiaru/obserwacji, a najbliższym innym pomiarem/obserwacją.
+
+## Statystyki najbliższego sąsiada
+
+Statystyki najbliższego sąsiada wykorzystywane są do określenia rozkładu odległości pomiędzy każdą lokalizacją pomiaru/obserwacji, a najbliższym innym pomiarem/obserwacją.
+
+## Wskaźnik Clarka-Evansa
+
+Wskaźnik Clarka-Evansa (1954) określa stosunek między rzeczywistą średnią odległością od najbliższego sąsiada, a oczekiwaną dla rozkładu losowego.
+
+-   Wartości niższe od 1 wskazują na występowanie skupień punktów
+-   Wartość równa 1 wskazuje na losowy rozkład punktów
+-   Wartości wyższe od 1 wskazują na bardziej regularny ich rozkład (np., dla regularnej siatki heksagonalnej wartość wskaźnika wynosi 2,15)
+
+## Funkcje podsumowujące G, K Ripley'a
+
+-   **funkcja G** - podsumowuje rozkład odległości do najbliższego sąsiada w postaci dystrybuanty, wykorzystywana do porównania odległości teoretycznych wynikających z losowego rozkładu punktów z odległościami empirycznymi obliczonymi na podstawie danych.
+
+-   **funkcja K Ripley’a** - wykorzystywana do porównania odległości teoretycznych wynikających z losowego rozkładu punktów z odległościami empirycznymi obliczonymi na podstawie danych.
+
+## Metody oparte na odległości w R
+
+Pakiet `spatstat()` dostarcza kilku funkcji pozwalających na wykorzystanie metod opartych na odległości do analizy rozkładu przestrzennego punktów.
+
+-   `pairdist()` - zwraca macierz z odległościami między wszystkimi parami punktów w zbiorze danych
+-   `nndist()` - zwraca wektor odległości od punktu do najbliżego sąsiada; odległości te są uzyskiwane przez sortowanie odległości między parami punktów i wybierana jest minimalna wartości dla każdego punktu
+-   `distmap()` - oblicza odległość od każdej komórki do najbliższego punktu i zwraca mapę rastrową.
+-   `clarkevans()` - obliczenie wskaźnika Clarka-Evansa
+-   `Gest()` - obliczenie funkcji G
+-   `Kest()` - obliczenie funkcji K
+-   `envelope()` - estowania hipotezy zerowej dla funkcji G, K
+
+Wykorzystanie funkcji z pakietu `spatstat` wymaga najpierw przekształcenia danych do obiektu klasy *ppp* (**p**lannar **p**oint **p**attern).
+
+-   funkcja `ppp()` jest używana do tworzenia obiektu punktowego klasy *ppp* na podstawie ramki danych zawierającej współrzędne x oraz y.
+-   funkcja `as.ppp()` pozwala na przekształcenie obiektu przestrzennego do klasy *ppp*
+
+## Przykład 1: Przestępczość w Poznaniu
+
+W przykładzie 1 wykorzystano dane dotyczące przestępczości w Poznaniu (plik *przestepstwa_2019.gpkg*) wraz z granicą miasta Poznania (plik *pzn_borders.gpkg*). Do podsumowania rozkładu przestępczości wykorzystano statystyki centrograficzne. Plik `przestepstwa_2019.gpkg` zawiera tylko kolumnę *geom* bez dodatkowych atrybutów.
+
+```{r}
+library(sf)
+# dane punktowe
+p2019 = read_sf("data/przestepstwa_2019.gpkg")
+#granica miasta Poznań
+pzn = read_sf("data/pzn_borders.gpkg")
+```
+
+```{r}
+#| message: false
+
+library(tmap)
+tm_shape(pzn) + 
+    tm_borders() +
+    tm_shape(p2019) +
+    tm_dots()
+```
+
+Wykorzystanie funkcji z pakietu `spatstat` wymaga najpierw przekształcenia danych do obiektu klasy *ppp*. W tym celu wykorzystuje się funkcję `as.ppp()`, która pozwala na przekształcenie obiektu przestrzennego do klasy *ppp*.
+
+```{r}
+#| message: false
+#| warning: false
+library(spatstat)
+p2019_ppp = as.ppp(st_geometry(p2019))
+```
+
+### Statystyki najbliższego sąsiada
+
+#### Obliczenie odległości między punktami
+
+Wyliczenie statystyk najbliższego sąsiada wymaga obliczenia odległości między punktami. Pakiet `spatstat` dostarcza 3 funkcje do obliczania odległości euklidesowych:
+
+-   `pairdist()`: zwraca macierz z odległościami między wszystkimi parami punktów w zbiorze danych.
+
+```{r}
+p2019_pair = pairdist(p2019_ppp)
+p2019_pair[1:5, 1:5]
+```
+
+W macierzy wyznaczonej za pomocą funkcji `pairdist()` pierwszy wiersz zawiera odległości między punktem id = 1 a wszystkimi innymi. Jeśli posortujemy te wartości otrzymamy ciąg od 0 (odległość między punktem 1 i 1 jest równa 0). Druga wartość w tym posortowanym wektorze to odległość do najbliższego sąsiada.
+
+```{r}
+sort(p2019_pair[1,])[1:5]
+```
+
+-   `nndist()`: zwraca wektor odległości od punktu do najbliżego sąsiada; odległości te są uzyskiwane przez sortowanie odległości między parami punktów i wybierana jest minimalna wartości dla każdego punktu
+
+```{r}
+p2019_nn1 = nndist(p2019_ppp)
+p2019_nn1[1:5]
+```
+
+**Wektor ten można następnie podsumować za pomocą statystyk opisowych otrzymując wartości statystyk najbliższego sąsiada**.
+
+-   `distmap()` - oblicza odległość od każdej komórki do najbliższego punktu i zwraca mapę rastrową.
+
+```{r}
+plot(distmap(p2019_ppp))
+```
+
+#### Analiza statystyk najbliższego sąsiada
+
+Funkcja `nndist()` dla każdego punktu zwraca odległość do najbliższego punktu - sąsiada. Na tej podstawie możemy obliczyć statystyki opisowe oraz przeanalizować jak rozkładają się te odległości w analizowanym zbiorze danych.
+
+```{r}
+p2019_nn1 = nndist(p2019_ppp)
+#przekształcenie na ramkę danych jest potrzebne do wizualizacji wyników z wykorzystaniem pakietu ggplot2
+p2019_nn1_df = data.frame(shortest_distance = p2019_nn1)
+head(p2019_nn1_df)
+```
+
+```{r}
+summary(p2019_nn1)
+```
+
+```{r}
+round(quantile(p2019_nn1, probs = seq(0, 1, 0.1)), 2)
+```
+
+**Podsumowanie wyników dotyczących statystyk najbliższego sąsiada**
+
+-   50% punktów znajduje się w odległości mniejszej lub równiej ok. `r round(median(p2019_nn1), 0)` m od najbliższej próbki
+-   90% punktów w odległości mniejszej lub równiej ok. `r round(quantile(p2019_nn1, 0.9), 0)` m od najbliższej próbki
+
+Odległości między najbliższymi punktami:
+
+-   Minimalna: `r round(min(p2019_nn1), 0)` m
+-   Maksymalna: `r round(max(p2019_nn1), 0)` m
+-   Średnia: `r round(mean(p2019_nn1), 0)` m
+
+Rozkład wartości odległości można także przeanalizować za pomocą histogramu.
+
+```{r}
+#| message: false
+library(ggplot2)
+ggplot(p2019_nn1_df, aes(x = shortest_distance)) + 
+  geom_histogram(binwidth = 100) + 
+  labs(x = "Odległość do najbliższego sąsiada [m]") + 
+  theme_bw()
+```
+
+Odległości do najbliższego sąsiada można także przedstawić w postaci dystrybuanty (CDF, *cumulative distribution function*). Na osi x przedstawiona jest odległość, a na osi y procentowy udział punktów w zbiorze danych. Z wykresu można odczytać, jaki procent punktów ma najbliższego sąsiada w odległości mniejszej lub równej podanej wartości.
+
+```{r}
+# cumulative distribution funcion 
+## stat_ecdf - oblicza cdf (cumulative distribution funcion)
+ggplot(p2019_nn1_df, aes(shortest_distance)) + 
+  stat_ecdf(aes(ymin = 0, ymax = after_stat(y)), geom = "ribbon", fill = "grey95")+
+  stat_ecdf() +
+  labs(x = "Odległość do najbliższego sąsiada (m)",
+       y = "Udział punktów w zbiorze danyh (%)") +
+  scale_y_continuous(labels = scales::percent) + 
+  theme_bw()
+```
+
+### Funkcje podsumowujące G oraz K Ripley'a
+
+#### Funkcja G
+
+Funkcje G podsumowuje rozkład odległości do najbliższego sąsiada w postaci dystrybuanty (CDF, *cumulative distribution function*). Wykorzystywana jest do porównania odległości teoretycznych ($G_t$) wynikających z losowego rozkładu punktów z odległościami empirycznymi ($G_{emp}$) obliczonymi na podstawie danych.
+
+Funkcja G obliczana jest z wykorzystaniem funkcji `Gest()` z pakietu `spatstat`. Wykres pokazuje empiryczną funkcję G ($\hat{G}_{raw}$) obliczoną na podstawie danych (czarna linia) oraz teoretyczną wygenerowaną na podstawie rozkładu Poissona ($G_{pois}$, odpowiadająca losowemu rozkładowi punktów, czerwona przerywana linia).
+
+-   $\hat{G}_{raw} > G_{pois}$ - punkty zlokalizowane bliżej niż to wynika z rozkładu losowego (może wskazywać na istnienie klastrów)
+-   $\hat{G}_{raw} < G_{pois}$ - punkty zlokalizowane dalej niż to wynika z rozkładu losowego (może wskazywać na rozkład regularny lub rozproszony)
+
+```{r}
+p2019_g = Gest(p2019_ppp, correction = "none")
+plot(p2019_g)
+```
+
+W przykładzie funkcja empiryczna ($\hat{G}_{raw}$) przyjmuje wyższe wartości niż funkcja teoretyczna (czarna linia znajduje się powyżej czerwonej) - wskazuje to, że punkty zlokalizowane są bliżej siebie niż to wynika z rozkładu losowego (może wskazywać na istnienie klastrów w danych).
+
+#### Funkcja K Ripley’a
+
+Funkcja K Ripley’a wykorzystywana jest do porównania odległości teoretycznych wynikających z losowego rozkładu punktów z odległościami empirycznymi obliczonymi na podstawie danych. Funkcja K Ripley’a obliczana jest z wykorzystaniem funkcji `Kest()` z pakietu `spatstat`. Wykres pokazuje empiryczną funkcję K Ripley'a ($\hat{K}_{un}$) obliczoną na podstawie danych (czarna linia) oraz teoretyczną wygenerowaną na podstawie rozkładu Poissona ($K_{pois}$; odpowiadająca losowemu rozkładowi punktów). $\hat{K}_{un} < K_{pois}$ wskazuje na rozrzut punktów, punkty są otoczone przez mniejszą liczbę punktów niż można by oczekiwać w porównaniu do rozkładu losowego.
+
+W poniższym przykładzie funkcja empiryczna ($\hat{K}_{un}$) przyjmuje wyższe wartości niż funkcja teoretyczna (czarna linia znajduje się powyżej czerwonej) - wskazuje to, że punkty zlokalizowane są bliżej siebie niż to wynika z rozkładu losowego (może wskazywać na istnienie klastrów w danych).
+
+```{r}
+p2019_k = Kest(p2019_ppp, correction = "none")
+plot(p2019_k)
+```
+
+#### Testowanie istotności hipotezy dotyczącej rozkładu
+
+W przypadku przestrzennej analizy rozkładów punktów istotne jest przetestowanie hipotezy dotyczącej rozkładu danych.
+
+-   Hipoteza zerowa zakłada, że zdarzenia są rozłożone losowo - tj. wykazują przestrzenną przypadkowość (*spatial randomeness -\> absence of pattern*).
+-   Odrzucenie hipotezy zerowej wskazuje na istnienie jakiś struktur/wzroców przestrzennych (np. skupienia punktów).
+
+Dla funkcji G oraz K Ripley'a nie ma formalnego schematu testowania. Wykorzystuje się w tym celu obwiednię (ang. *envelope*). Stosując symulacje konstruuje się obszar "nieodrzucania hipotezy zerowej", a następnie sprawdza się czy krzywa empiryczna mieści się w tym przedziale (nazywanym obwiednią). Jeśli krzywa empiryczna znajduje się poza obwiednią, oznacza to, że dane nie wykazują rozkładu losowego.
+
+Funkcja `envelope()` z pakietu `spatstat` tworzy obwiednie dla funkcji G oraz K Ripley'a. Funkcja ta wymaga zdefiniowania:
+
+-   obiektu klasy ppp (w przykładzie p2019_ppp);
+-   funkcji dla której ma być wyznaczona obwiednia (np. Gest);
+-   liczby symulacji *nsim* (domyślnie 99);
+-   dodatkowych argumentów funkcji.
+
+W poniższym przykładzie krzywa empiryczna (czarna linia) znajduje się poza zakresem obwiedni (szary kolor), zatem odrzucamy hipotezę o rozkładzie losowym.
+
+```{r}
+#| message: false
+#| results: "hide"
+p2019_env2 = envelope(p2019_ppp, Gest, nsim = 99, 
+                      funargs = list(correction = "none"))
+plot(p2019_env2)
+```
+
+```{r}
+#| message: false
+#| results: "hide"
+p2019_env1 = envelope(p2019_ppp, Kest, nsim = 99, 
+                      funargs = list(correction = "none"))
+plot(p2019_env1)
+```
+
+### Wskaźnik Clarka-Evansa
+
+Wskaźnik Clarka-Evansa *R* (1954) określa stosunek między rzeczywistą średnią odległością od najbliższego sąsiada, a oczekiwaną dla rozkładu losowego.
+
+-   Wartości niższe od 1 wskazują na występowanie skupień punktów
+-   Wartość równa 1 wskazuje na losowy rozkład punktów
+-   Wartości wyższe od 1 wskazują na bardziej regularny ich rozkład (np., dla regularnej siatki heksagonalnej wartość wskaźnika wynosi 2,15)
+
+Wskaźnik Clarka-Evansa (1954) obliczany jest wykorzystując funkcję `clarkevans()` z pakietu `spatstat()`. W wyniku otrzymuje się 3 wartości w zależności czy została zastosowana 
+
+```{r}
+clarkevans(p2019_ppp)[[1]]
+```
+
+Wartość wskaźnika wskazuje na występowanie skupień punktów.
+
+Funkcja `clarkevans.test()` z pakietu `spatstat()` pozwala na przeprowadzenie testu dotyczącego agregacji danych w oparciu o wskaźnik Clarka-Evansa. 
+
+- Hipoteza zerowa zakłada, że zdarzenia są rozłożone losowo - tj. wykazują przestrzenną przypadkowość (*spatial randomeness -\> absence of pattern*).
+
+- Hipoteza alternatywna (określana przez argument *alternative*) zakłada: 
+
+    - alternative="less" lub alternative="clustered":  hipozeta alternatywna zakłada, że wartość wskaźnika Clarka-Evansa jest mniejsza od 1 (R<1) co wskazuje na występowanie skupień punktów 
+
+    - alternative="greater" lub alternative="regular": hipozeta alternatywna zakłada, że wartość wskaźnika Clarka-Evansa jest większa od 1 (R>1) co wskazuje na regularny rozkład punktów. 
+    
+    - alternative="two.sided": hipoteza alternatywna zakłada, że wartość wskaźnika Clarka-Evansa jest różna od 1 co wskazuje, że rozkład nie jest losowy (może być skupiony lub regularny). 
+
+W poniższym przykładzie założono hipotezę altenatywną (alternative = "two.sided"), zakładającą, że rozkład punktów nie jest losowy. Wynik testu Clarka-Evansa wskazuje na wartość wskaźnika (R) równą 0.51. Wartość p-value (p-value < 2.2e-16) wskazuje na możliwość odrzucenia hipotezy zerowej (rozkład losowy) - punkty nie mają rozkładu losowego. 
+
+```{r}
+clarkevans.test(p2019_ppp, alternative = "two.sided")
+```
+
+W poniższym przykładzie założono hipotezę altenatywną (alternative = "clustered"), zakładającą, że rozkład punktów jest skupiony. W tym przypadku wynik testu Clarka-Evansa wskazuje na wartość wskaźnika (R) równą 0.51. Wartość p-value (p-value < 2.2e-16) wskazuje na możliwość odrzucenia hipotezy zerowej (rozkład losowy), na rzecz hipotezy alternatywnej - skupiony rozkład punktów. 
+
+```{r}
+clarkevans.test(p2019_ppp, alternative = "clustered")
+```
+
+W poniższym przykładzie założono hipotezę altenatywną (alternative = "clustered"), zakładającą, że rozkład punktów jest regularny. W tym przypadku wynik testu Clarka-Evansa wskazuje na wartość wskaźnika (R) równą 0.51. Wartość p-value (p-value  = 1) wskazuje na brak podstaw do odrzucena hipotezy zerowej. Innymi słowy, nie możemy przyjąć hipotezy alternatywnej wskazującej na regularny rozkładu punktów. 
+
+```{r}
+clarkevans.test(p2019_ppp, alternative = "regular")
+```
+    
+## Przykład 2: Rozkład przestrzenny szkół w Poznaniu
+
+W poniższym przykładzie przeanalizowano przestrzenny rozkład szkół podstawowych w Poznaniu wykorzystując metody oparte na odległości:
+
+-   statystyki najbliższego sąsiada
+-   funkcje podsumowujące G, K Ripley'a
+-   wskaźnik Clarka-Evansa
+
+```{r}
+library(sf)
+library(spatstat)
+#wczytanie danych przestrzennych. Granica jest wykorzystywana wyłącznie do wizualizacji danych. 
+szkoly = read_sf("data/out_poznan_szkoly.gpkg", layer = "szkoly")
+granica = read_sf("data/out_poznan_szkoly.gpkg", layer = "granica")
+
+#konwersja do obiektu klasy ppp 
+szkoly_ppp = as.ppp(szkoly)
+```
+
+### Statystyki najbliższego sąsiada
+
+Wykorzystując funkcję `nndist` tworzony jest wektor wartości zawierający odległość do najbliższego sąsiada. Wektor ten następnie podsumowywany jest za pomocą statystyk opisowych oraz wykresów (histogramu, dystrybuanty).
+
+```{r}
+# obliczenie odległości do najbliższego sąsiada 
+szkoly_nn = nndist(szkoly_ppp)
+szkoly_nn_df = data.frame(shortest_distance = szkoly_nn)
+summary(szkoly_nn)
+```
+
+```{r}
+#| message: false
+library(ggplot2)
+ggplot(szkoly_nn_df, aes(x = shortest_distance)) + 
+  geom_histogram() + 
+  labs(x = "Odległość do najbliższego sąsiada [km]") + 
+  theme_bw()
+```
+
+```{r}
+# cumulative distribution funcion 
+## stat_ecdf - oblicza cdf (cumulative distribution funcion)
+ggplot(szkoly_nn_df, aes(shortest_distance)) + 
+  stat_ecdf(aes(ymin = 0, ymax = after_stat(y)), geom = "ribbon", fill = "grey95")+
+  stat_ecdf() +
+  labs(x = "Odległość do najbliższego sąsiada (km)",
+       y = "Udział punktów w zbiorze danyh (%)") +
+  scale_y_continuous(labels = scales::percent) + 
+  theme_bw()
+```
+
+### Funkcje podsumowujące G, K Ripley'a
+
+Wykorzystując funkcje `Gest()`, `Kest()` oraz `envelope()` obliczane są funkcje podsumowujące G oraz K Ripley'a oraz testowana jest dla nich hipoteza dotycząca rozkładu przestrzennego punktów.
+
+```{r}
+#| message: false
+#| results: "hide"
+szkoly_env_g = envelope(szkoly_ppp, Gest, nsim = 99, 
+                      funargs = list(correction = "none"))
+plot(szkoly_env_g)
+```
+
+```{r}
+#| message: false
+#| results: "hide"
+szkoly_env_k = envelope(szkoly_ppp, Kest, nsim = 99, 
+                      funargs = list(correction = "none"))
+plot(szkoly_env_k)
+```
+
+### Wskaźnik Clarka-Evansa
+
+```{r}
+clarkevans(szkoly_ppp)[[1]]
+```
+
+> Jaki jest rozkład szkół w Poznaniu? Zintepretuj powyższe wyniki.

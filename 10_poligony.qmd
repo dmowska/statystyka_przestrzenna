@@ -1,0 +1,5 @@
+# DANE OBSZAROWE
+
+Dane obszarowe (ang. *areal data*) powstają poprzez podzielenie obszaru badań na jednostki przestrzenne, w których agregowane są wyniki, np. podział na jednostki administracyjne (gminy, powiaty). Dane obszarowe charakteryzują się skokową zmiennością wartości. Przykładami danych obszarowych są np. dane społeczno-ekonomiczne udostępniane w ramach spisów ludności (np. poziom bezrobocia wg powiatów).
+
+Eksploracja danych obszarowych ma na celu ocenę autokorelacji przestrzennej i sprawdzenia, czy obszary bliskie mają podobne, czy różne wartości. W tym celu stosuje się rożne miary autokorelacji przestrzennej.

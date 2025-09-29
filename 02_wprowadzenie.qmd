@@ -1,0 +1,169 @@
+# Wprowadzenie
+
+## Podstawowe pojęcia
+
+### Statystyka przestrzenna
+
+-   Termin ***statystyka przestrzenna*** odnosi się do stosowania pojęć i metod statystycznych do danych, które mają wyraźną strukturę przestrzenną, *która jest ważna dla zrozumienia tych danych* (<https://www.spatialanalysisonline.com/>)
+
+-   Statystyka przestrzenna dostarcza narzędzi badawczych oraz podstaw teoretycznych związanych ze zbieraniem danych, analizą danych, oraz wnioskowaniem danych **dla danych przestrzennych** (Suchecka 2014).
+
+### Zależność przestrzenna
+
+-   podstawowa koncepcja analiz przestrzennych
+
+-   pojęcie zależności przestrzennej (ang. *spatial dependence*) zostało ujęte przez Toblera (1970): **"Wszystkie rzeczy są ze sobą powiązane, ale rzeczy bliskie są bardziej powiązane niż rzeczy odległe".**
+
+-   sformułowanie Toblera jest znane jako "Pierwsze prawo geografii" (ang. *First Law of Geography*)
+
+-   "wielkość" zależności przestrzenej może być mierzona za pomocą statystyk autokorelacji przestrzennej.
+
+-   zależność przestrzenna stanowi także podstawę metod stosowanych w ramach geostatystyki, która opisuje zmienność przestrzenną za pomocą funkcji pokazującej, jak autokorelacja przestrzenna maleje wraz ze wzrostem odległości.
+
+<!-- https://www.spatialanalysisonline.com/HTML/index.html?spatial_dependence.htm-->
+
+<!-- https://www.spatialanalysisonline.com/HTML/index.html?spatial_relationships.htm-->
+
+### Autokorelacja przestrzenna
+
+![](figs/spatial_auto_mgimond.png)
+
+*Źródło:* <https://mgimond.github.io/Spatial/spatial-autocorrelation.html>
+
+-   określana jako sytuacja, w której **wystepowanie jednego zjawiska w jednej jednostce przestrzennej powoduje zmniejszenie lub zwiększenie się tego zjawiska w jednostkach sąsiednich** (Bivand, 1980)
+
+-   może być obserowana jako klastry podobnych wartości lub systematyczny wzorzec przestrzenny (spatial pattern)
+
+-   jest to konsekwencja występowania zależności przestrzennych - oznacza, że bliskie geograficznie obserwacje są bardziej do siebie podobne niż te odległe
+
+-   pojęcie poraz pierwszy wprowadzone w 1968 roku przez Cliffa i Orda. Do tego czasu używano pojęć: zależność przestrzenna (spatial dependency), interakcje przestrzenne (spatial interactions), związek przestrzenny (spatial association)
+
+-   pierwsze miary autokorelacji przestrzennej wprowadzone zostały w latach 50. XX w. w pracach Morana (1950) oraz Gearyego (1954), a następnie rozszerzone o miary lokalne w latach 90.
+
+## Rozwój metod statystyki przestrzennej
+
+-   **lata 30. XX w.**
+
+    -   zastosowanie teorii procesów punktowych w ramach analiz przestrzennych do analizy przestrzennego rozmieszczenia zjawisk (pierwsze zastosowanie: ekologia - badanie rozkładu gatunków drzew w przestrzeni)
+
+    -   praca Stephana (1934): *dane geograficzne są ze sobą powiązane jak kiście winogron, a nie oddzielne jak kule w urnie*
+
+    -   eksperyment Fishera (1935): wyniki eksperymentu pokazały zbliżone poziomy wydajności z upraw pól leżących obok siebie.
+
+<!-- -->
+
+-   **lata 50. XX w.** (Moran, 1950, Geary 1954) -
+
+    -   opracowanie obecnie stosowanych testów statystycznych do weryfikacji istotności autokorelacji przestrzennej wartości atrybutów dla regularnych obiektów obszarowych (regular lattice system). Testy te służą do weryfikacji hipotezy zerowej o braku autokorelacji przestrzennej (braku struktury przestrzennej), wobec nieokreślonej hipotezy alternatywnej
+
+    -   wyprowadzone statystyki autokorelacji przestrzennej były określane miernikami sąsiedztwa
+
+<!-- -->
+
+-   **lata 70. XX w.**
+
+    -   dynamiczny rozwój metod statytyki przestrzennej
+    -   dwa kierunki badań:
+        -   rozwój podstaw teorii statystyki dla danych przestrzennych
+        -   rozwój nowych metod i technik badawczych związanych głównie z pojawieniem się nowych technik komputerowych
+    -   wprowadzenie terminu autokorelacji przestrzennej przez Cliffa i Orda (Monografia Spatial autocorrelation, 1973)
+
+<!-- -->
+
+-   **lata 90. XX w**
+
+    -   poszerzenie globalnych miar autokorelacji przestrzennej o miary lokalne które wyznacza się oddzielnie dla każdego obszaru (statystykę G Getisa \[Getis, Ord, 1992\], statystykę LISA (Local Indicator of Spatial Autocorrelation) \[Anselin, 1994\] oraz statystykę Ci Geary’ego.)
+
+## Statystyka przestrzenna a inne dyscypliny
+
+Statystyka przestrzenna jest odrębną dyscypliną wywodzącą się z analiz przestrzennych oraz ściśle związaną z tradycyjnymi metodami statystycznymi i nowocześniejszą statystyką obliczeniową (ang. *computational statistics*).
+
+Statystyka przestrzenna dostarcza formalnych narzędzi statystycznych w ramach szerszego procesu badania danych przestrzennych.
+
+Metody statystyki przestrzennej są także implementowane w ramach oprogramowania GIS:
+
+-   QGIS: <https://docs.qgis.org/3.34/en/docs/training_manual/vector_analysis/spatial_statistics.html>
+
+-   ArcGIS: <https://pro.arcgis.com/en/pro-app/latest/tool-reference/spatial-statistics/an-overview-of-the-spatial-statistics-toolbox.htm>
+
+### Statystyka przestrzenna a analizy przestrzenne i GIS
+
+![](figs/statystyka_przestrzenna_a_gis.png)
+
++----------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|                                        | Opis                                                                                                                                                                                                                                                                              |
++========================================+===================================================================================================================================================================================================================================================================================+
+| Systemy Informacji Geograficznej (GIS) | -   System/platforma do tworzenia, gromadzenia, zarządzania, analizowania i wizualizacji różnych typów danych                                                                                                                                                                     |
+|                                        |                                                                                                                                                                                                                                                                                   |
+|                                        | -   Dostarcza podstawowych narzędzi i technologii do pracy z danymi przestrzennymi, w tym do ich tworzenia, edycji i przechowywania.                                                                                                                                              |
++----------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Analizy przestrzenne                   | -   Dziedzina obejmująca szeroki zestaw technik wykorzystywanych do wizualizacji, przetwarzania i analizy danych przestrzennych.                                                                                                                                                  |
+|                                        |                                                                                                                                                                                                                                                                                   |
+|                                        | -   Proces wykorzystywania narzędzi i technologii GIS do rozwiązywania problemów przestrzennych i zrozumienia danych przestrzennych.                                                                                                                                              |
+|                                        |                                                                                                                                                                                                                                                                                   |
+|                                        | -   Obejmuje wiele metod i narzędzi, takich jak nakładanie, selekcja obiektów na podstawie atrybutów, buforowanie, agregacja danych, obliczanie odległości, algebra map.                                                                                                          |
+|                                        |                                                                                                                                                                                                                                                                                   |
+|                                        | Zastosowanie:                                                                                                                                                                                                                                                                     |
+|                                        |                                                                                                                                                                                                                                                                                   |
+|                                        | -   określania relacji przestrzennych (bliskość, przecięcie, nakładanie się, dostępność)                                                                                                                                                                                          |
+|                                        |                                                                                                                                                                                                                                                                                   |
+|                                        | -   analizy sieciowe: znajdowania najkrótszej/najszybszej drogi                                                                                                                                                                                                                   |
+|                                        |                                                                                                                                                                                                                                                                                   |
+|                                        | -   znajdowania najlepszych lokalizacji (na podstawie dowolnego zestawu kryteriów opartych o atrybuty danych przestrzennych lub wykorzystując unikalne właściwości danych przestrzennych, takie jak odległość lub relacje z innymi miejscami.)                                    |
++----------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Statystyka przestrzenna                | -   Wyspecjalizowany podzbiór metod analizy przestrzennej, który koncentruje się na stosowaniu pojęć i metod statystycznych do danych przestrzennych.                                                                                                                             |
+|                                        |                                                                                                                                                                                                                                                                                   |
+|                                        | -   Uwzględnia ona zależności przestrzenne, heterogeniczność przestrzenną oraz położenie geograficzne obserwacji w celu modelowania wzorców i relacji za pomocą narzędzi takich jak autokorelacja przestrzenna, interpolacja przestrzenna, geostatystyka i regresja przestrzenna. |
+|                                        |                                                                                                                                                                                                                                                                                   |
+|                                        | -   Metody statystyki przestrzennej mogą być zaimplementowane jako rozszerzenia oprogramownia GIS.                                                                                                                                                                                |
+|                                        |                                                                                                                                                                                                                                                                                   |
+|                                        | Zastosowanie:                                                                                                                                                                                                                                                                     |
+|                                        |                                                                                                                                                                                                                                                                                   |
+|                                        | -   wykrywanie i kwantyfikacja wzorców w rozkładzie przestrzennym danych,                                                                                                                                                                                                         |
+|                                        |                                                                                                                                                                                                                                                                                   |
+|                                        | -   wykrywanie obszarów koncentracjia zjawisk poprzez wyszukanie statystycznie istotnych skupisk wysokich lub niskich wartości)                                                                                                                                                   |
+|                                        |                                                                                                                                                                                                                                                                                   |
+|                                        | -   prognozowania - szacowanie wartości dla całego obszaru (dane ciągłe) na podstawie danych punktowych                                                                                                                                                                           |
++----------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+### Statystyka przestrzenna a statystyka
+
+-   Statystyka przestrzenna w odróżnieniu od klasycznej statystyki umożliwia analizę danych geograficzny oraz informacji zlokalizowanych w przestrzeni.
+
+-   Statystyka przestrzenna i klasyczna statystyka różnią się jednym zasadniczym założeniem:
+
+    -   **Klasyczna statystyka:** zakłada niezależność obserwacji, tzn. elementy próby sa dobierane niezależnie od siebie (tj. losowo)
+
+    -   **Statystyka przestrzenna:** założenie o niezależności obserwacji nie jest spełnione. Zgodnie z regułą Toblera (nazywaną też pierwszym prawem geografii) obieky sąsiadające w przestrzeni/czasie są do siebie bardziej podobne niż obiekty dalej od siebie położone. Oznacza to, że próbkowanie w przestrzeni/czasie może nie mieć charakteru losowego.
+
+#### Analogie między statystyką a statystyką przestrzenną
+
+Metodologia badań statystyki przestrzennej w większości powstała na podstawie metod statystyki klasycznej. W ramach statystyki przestrzennej także wyróżnia się statystykę opisową oraz wnioskowanie statystyczne.
+
++------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Klasyczna statystyka   | Statystyka przestrzenna                                                                                                                                             |
++========================+=====================================================================================================================================================================+
+| **Statystyka opisowa** | **Przestrzenne statystyki opisowe**: *średnia centralna, mediana centralna, odległość standardowa, względna odległość*                                              |
++------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **Korelacja**          | **Autokorelacja przestrzenna:** *statystyki join-count, Morana I, Geary'ego C, Getisa-Orda*                                                                         |
++------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **Predykcja liniowa**  | **Interpolacja przestrzenna:** np. IDW, kriging                                                                                                                     |
++------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **Procesy punktowe**   | **Analiza przestrzennych danych punktowych (SPPA):** model kompletnej losowości przestrzennej CSR, metoda najbliższego sąsiada, metoda funkcji K, estymacja jądrowa |
++------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+: Źródło: Suchecka (2014)
+
+### Statystyka przestrzenna a ekonometria przestrzenna
+
++---------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------+
+| Statystyka przestrzenna                                                                                                         | Ekonometria przestrzenna                                                                                                 |
++=================================================================================================================================+==========================================================================================================================+
+| opiera się na analizie danych odnoszących się do różnych dyscyplin                                                              | opiera się na modelowaniu, zajmuje się specyfikacją, estymacją i weryfikacją modeli uwzględniajacych aspekt przestrzenny |
++---------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------+
+| większość opracowań z zakresu statystyki przestrzennej dotyczy zjawisk w dziedzinie biologii, ekologii, epidemiologii, geologii | analiza przestrzennych danych ekonomicznych oraz związanych z nimi problemów                                             |
+|                                                                                                                                 |                                                                                                                          |
+|                                                                                                                                 | opisuje przede wszystkim procesy ekonomiczne na poziomie regionalnym                                                     |
++---------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------+
+
+: Źródło: Suchecka (2014)

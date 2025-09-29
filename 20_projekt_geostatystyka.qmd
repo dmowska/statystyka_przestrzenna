@@ -1,0 +1,30 @@
+# Projekt 2: Geostatytyka
+
+Projekt ma na celu wykonanie estymacji geostatystycznych oraz ocenę ich jakości. W ćwiczeniu zostaną wykorzystane dane zapisane w pliku `punkty_pref.gpkg`. 
+
+## Zadanie 
+
+1.  Podziel obiekt *punkty_pref* w taki sposób aby 70% danych należało zbioru treningowego, a 30 % danych do zbioru testowego. Zwizualizuj oba nowe zbiory danych.
+
+2.  Stwórz optymalne model zmiennej *srtm* na podstawie punktów ze zbioru treningowego.
+
+3.  Wykorzystując zbiór testowy wykonaj estymacje 3 metodami:
+
+-   metodą kriginu prostego
+-   metodą krigingu zwykłego używając 30 najbliższych punktów,
+-   metodą krigingu zwykłego używając punktów położonych w odległości do 2km.
+
+4.  Porównaj wyniki estymacji dla 3 metod korzystając ze statystyk jakości estymacji oraz wizualizacji jakości estymacji. Który ze stworzonych modeli można uznać za najlepszy? **Dlaczego?**
+
+5.  Wybierz najlepszą metodę estymacji oraz wykonaj tą metodą estymację dla siatki obejmującej obszar analizy w rozdzielczości 50m.
+
+## Rozwiązanie
+
+Jako rozwiązanie zadania należy oddać:
+
+-   plik qmd zawierający rozwiązanie. Plik powinien składać się z następujących sekcji:
+
+    -   rozwiązanie zadania (wraz z kodem) zawierające odpowiednie zestawienia numeryczne i graficzne
+    -   podsumowanie zawierające interpretację wyników
+
+-   plik html z wygenerowanym raportem zawierającym zestawienia numeryczne, mapy, wykresy wraz z krótkim komentarzem uzyskanych wyników (zawierający także kod).

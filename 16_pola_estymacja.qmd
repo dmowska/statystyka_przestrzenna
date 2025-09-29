@@ -1,0 +1,431 @@
+# Geostatystyczne metody estymacji
+
+Odtworzenie obliczeń z tego rozdziału wymaga załączenia poniższych pakietów oraz wczytania poniższych danych:
+
+```{r}
+#| message: false
+library(sf)
+library(gstat)
+library(tmap)
+library(terra)
+```
+
+<!--    W5, W6, U4  Wykład, Ćwiczenia w salach komputerowych-->
+
+```{=html}
+<!-- q:
+(a) interpolacja, estymacja, symulacja, ocena
+(b) interpolacja, estymacja, ocena, symulacja
+jak ocena odnosi się do interpolacji deterministycznej? -->
+```
+
+## Estymacje geostatystyczne
+
+Jednym z celów geostatystycznej analizy danych jest **estymacja** - tj. szacowanie wartości zmiennej w nieznanych punktach na podstawie danych z próbkowania. W geostatystyce wykorzystuje się grupę metod estymacji (interpolacji) określanych jako **kriging**. Kriging zakłada, że wartość zmiennej w danej lokalizacji jest zależna od obokległych obserwacji, którym nadawane są odpowiednie wagi na podstawie stopnia przestrzennej korelacji.
+
+Istnieje szereg metod krigingu Do trzech podstawowych metod zalicza się:
+
+-   **Kriging prosty (ang. *Simple kriging*)** - zakłada, że średnia jest znana i stała na całym obszarze.
+-   **Kriging zwykły (ang. *Ordinary kriging*)** - wykorzystuje do estymacji tylko najbliższe obserwacje, które można określić poprzez podanie liczby punktów, które mają być uwzględnione lub maksymalnej odległości z której mają być uwzględniane punkty.
+-   **Kriging z trendem (ang. *Kriging with a trend*)** - wykorzystuje do estymacji (oprócz zmienności wartości wraz z odległością) położenie analizowanych punktów (tj. ich współrzędne x,y).
+
+Kriging można zastosować do oszacowania wartość dla wybranych punktów lub dla siatki o określonej rozdzielczości.
+
+<!-- https://bookdown.org/nowosad/geostatystyka/estymacje-jednozmienne.html#kriging -->
+
+<!-- kriging prosty: https://bookdown.org/nowosad/geostatystyka/estymacje-jednozmienne.html#kriging-prosty -->
+
+<!-- kriging zwykły: https://bookdown.org/nowosad/geostatystyka/estymacje-jednozmienne.html#kriging-zwykly -->
+
+<!-- kriging uniwersalny:  -->
+
+<!-- https://bookdown.org/nowosad/geostatystyka/wykorzystanie-do-estymacji-danych-uzupeniajacych.html#kriging-uniwersalny -->
+
+<!-- tabela z innymi metodami krigingu -->
+
+<!-- https://bookdown.org/nowosad/geostatystyka/estymacje-jednozmienne.html#kriging -->
+
+## Kriging w R
+
+### Pakiet gstat
+
+Pakiet `gstat` dostarcza funkcji do geostatystycznej analizy danych, w tym tworzenia semiwariogramów (funkcja `variogram()`), modelowania semiwariogramów (funkcje `vgm()` oraz `fit.variogram()`) oraz przeprowadzenia krigingu oraz symulacji.
+
+Do wykonania interpolacji jedną z metod krigingu zostanie wykorzystana funkcja `gstat()` z pakietu `gstat`. Funkcja `gstat()` tworzy obiekt klasy `gstat`, który zawiera wszystkie informacje potrzebne do wykonania krigingu. Funkcja ta wymaga zdefiniowania następujących argumentów:
+
+-   *formula* - zmienna dla której będzie wykonywana estymacja (w przykładzie jest to *temp\~1*)
+-   *locations* - dane wejściowe zawierające zmierzone wartości zmiennej (w przykładzie *punkty*)
+-   *model* - parametrów modelu dopasowanego do semiwariogramu empirycznego (wynik działania funkcji `vgm()` lub `fit.variogram()`)
+
+Dodatkowo w zależności od wybranej metody należy zdefniować argument:
+
+-   *beta* - średnia wartość stosowana przy krigingu prostym
+-   *nmax* - liczba najbliższych punktów uwzględnianych w krigingu zwykłym
+-   *maxdist* - maksymalna odległość, z której mają być uwzględniane punkty w krigingu zwykłym.
+
+### Estymacja dla wybranych lokalizacji
+
+Estymacja dla wybranych lokalizacji punktowych wymaga:
+
+-   stworzenia obiektu klasy `gstat` wykorzystując funkcje `gstat()` z parametrami krigingu;
+-   wykonania predykcji dla lokalizacji zapisanych w zbiorze danych punktowych wykorzystując funkcję `predict()`.
+
+### Estymacja w siatce
+
+Estymacja w siatce wymaga:
+
+-   stworzenia siatki wykorzystując funkcję `rast()` z pakietu `terra` (utworzony zostanie obiekt klasy `SpatRaster`);
+
+-   stworzenia obiektu klasy `gstat` wykorzystując funkcję `gstat()` z parametrami krigingu;
+
+-   wykonanie interpolacji w siatce wykorzystując funkcję `interpolate()` z pakietu `terra`.
+
+    -   w funkcji `interpolate()` trzeba podać 3 argumenty: siatkę, obiekt klasy `gstat` z parametrami krigingu oraz funkcję pozwalająca na wykonanie interpolacji w oparciu obiekt `gstat` (funkcja `interpolate_gstat()`). Należy pamiętać, aby każdorazowo wykonując kriging wczytać poniższą funkcję.
+
+```{r}
+interpolate_gstat = function(model, x, ...) {
+  v = st_as_sf(x, coords = c("x", "y"), crs = st_crs(model$data[[1]]$data))
+  p = predict(model, v, ...)
+  st_drop_geometry(p)
+}
+```
+
+## Przykład 1: Estymacja dla wybranych lokalizacji
+
+W poniższym przykładzie zastosujemy kriging prosty (ang. *simple kriging*) do oszacowania wartości w wybranych lokalizacjach.
+
+### Dane
+
+```{r}
+#| message: false
+#| warning: false
+library(sf)
+granica = read_sf("data/granica.gpkg")
+punkty = read.csv("data/punkty.csv")
+punkty = st_as_sf(punkty, coords = c("x", "y"), crs = "EPSG:2180")
+punkty = punkty[!is.na(punkty$temp), ]
+```
+
+Do wygenerowania nowych lokalizacji użyjemy funkcji `st_sample()` z pakietu `sf`. Funkcja ta wymaga podania zasięgu obszaru, w którym mają być wygenerowane punkty, liczby punktów oraz typu próbkowania. W poniższym przykładzie wygenerowano lokalizacje 100 punktów losowo rozmieszczonych w granicy analizowanego obszaru.
+
+```{r}
+#utworzenie zbioru punktowego z nowymi lokalizacjami, w których ma być wykonana estymacja. 
+set.seed(12)
+nowe_punkty = st_sample(granica, 100, type = "random")
+```
+
+```{r}
+#| message: false 
+#| warning: false
+#| fig-cap: "Lokalizacja punktów pomiarowych (zielony) oraz punktów o nieznanych wartościach zmiennej, dla których będzie wykonana estymacja (czarny)"
+library(tmap)
+tm_shape(granica) + 
+  tm_polygons(col = "grey") + 
+tm_shape(punkty) + 
+  tm_dots(fill = "darkgreen", size = 0.7) + 
+tm_shape(nowe_punkty) + 
+  tm_dots(fill = "black", size = 0.7)
+```
+
+### Analiza i modelowanie semiwariogramu
+
+Estymacja z wykorzystaniem jednej z metod krigingu musi być poprzedzona analizą oraz modelowaniem semiwariogramu. Estymacja wymaga wykonania najpierw kilku kroków:
+
+**1. Stworzenie i wyświetlenie semiwariogram empiryczny analizowanej zmiennej z użyciem funkcji `variogram()` oraz `plot()`**.
+
+```{r}
+library(gstat)
+v = variogram(temp~1, punkty, cutoff = 5000)
+plot(v)
+```
+
+**2. Zdefiniowanie wejściowych parametrów semiwariogramu używając funkcji `vgm()` (typ modelu, nugget, wariancja progowa, zasięg).**
+
+W poniższym przykładzie po stworzeniu semiwariogramu empirycznego, dopasowano model semiwariogramu składający się z funkcji sferycznej o zasięgu 4000 metrów i wartości nuggetu równej 0,5.
+
+```{r}
+model_sph = vgm(psill = 10, model = "Sph", range = 4000, nugget =0.5)
+plot(v, model_sph)
+```
+
+**3. Dopasowanie parametrów modelu używając funkcji `fit.variogram()`.**
+
+```{r}
+model = fit.variogram(v, model_sph)
+plot(v, model = model)
+```
+
+### Estymacja
+
+W przykładzie wykorzystamy kriging prosty (*simple kriging*), który zakłada, że średnia jest znana i stała na całym obszarze. Jako średnią podamy średnią wartość zmiennej *temp*.
+
+```{r}
+mean(punkty$temp)
+```
+
+W pierwszym etapie zostanie utworzony obiekt klasy `gstat` zawierający parametry krigingu. Obiekt klasy `gstat` składa się z kilku list zawierających:
+
+-   formułę (w przykładzie *temp\~1*),
+-   ramkę danych z danymi wejściowymi zawierającymi wartości estymowanej zmiennej (w przykładzie obiekt *punkty*),
+-   listę zawierającą parametry modelu (obiekt *model* będący wynikiem działania funkcji `fit.variogram()`),
+-   inne parametry krigingu (np. parametr *beta* określający średnią wartość zmiennej w analizowanym obszarze).
+
+```{r}
+sk_param = gstat(formula = temp ~ 1, 
+            locations = punkty,
+            model = model,
+            beta = 15)
+```
+
+Po wyświetleniu obiektu **sk_param** otrzymamy następujące informacje:
+
+-   formuła
+-   wielkość zbioru danych wejściowych (liczba kolumn i wierszy w zbiorze danych punkty)
+-   parametry modelu
+
+```{r}
+sk_param
+```
+
+Kolejnym krokiem jest wykonanie predykcji wykorzystując funkcję `predict()`. Funkcja `predict()` wymaga zdefiniowania dwóch argumentów: obiektu klasy `gstat` zawierającego parametry krigingu (w przykładzie obiekt *sk_param*) oraz nazwy zbioru danych zawierającego nowe lokalizacje, dla których ma być wykonana estymacja (w przykładzie obiekt *nowe punkty*).
+
+```{r}
+sk_punkty = predict(sk_param, nowe_punkty)
+```
+
+Wynik krigingu prostego (oraz innych metod krigingu dostępnych w pakiecie `gstat`), można podejrzeć wpisując nazwę wynikowego obiektu. Szczególnie ważne są dwie, nowe zmienne:
+
+-   *var1.pred* - to wartość estymowana dla każdego punktu (lub oczka siatki)
+-   *var1.var* - informuje o wariancji estymacji.
+
+```{r}
+sk_punkty
+```
+
+Obie uzyskane zmienne można wyświetlić z użyciem pakietu tmap.
+
+```{r}
+#| message: false
+#| warning: false
+
+library(tmap)
+
+tm_shape(sk_punkty) +
+        tm_dots(col = c("var1.pred", "var1.var"),
+                size = 1, 
+                style = "cont", 
+                palette = list("-Spectral")) +
+        tm_layout(legend.frame = TRUE)
+```
+
+## Przykład 2: Estymacja w siatce
+
+### Dane
+
+```{r}
+library(terra)
+#punkty przekształcone do warstwy geoprzestrzennej typu sf
+punkty = read.csv("data/punkty.csv")
+punkty = st_as_sf(punkty, coords = c("x", "y"), crs = "EPSG:2180", remove = FALSE)
+punkty = punkty[!is.na(punkty$temp), ]
+
+#granica obszaru wczytana jako obiekt klasy SpatVector z pakietu terra 
+granica = vect("data/granica.gpkg")
+```
+
+### Tworzenie siatki
+
+Do stworzenia siatki można wykorzystać funkcję `rast()` z pakietu `terra`, która tworzy nowy obiekt rastrowy klasy `SpatRaster` o zdefiniowanym zasięgu oraz rozdzielczości. W poniższym przykładzie utworzono siatkę dla zasięgu zdefiniowanego przez obwiednię (zasięg) warstwy wektorowej granica oraz o rozdzielczości 50m.
+
+```{r}
+siatka = rast(ext = granica, res = 50, crs = crs(granica))
+siatka
+```
+
+### Analiza i modelowanie semiwariogramu
+
+Wykonanie krigingu wymaga kilku kroków, w których zostanie stworzony semiwariogram empiryczny oraz dopasowany do niego model:
+
+```{r}
+#| message: false
+#| warning: false
+v = variogram(temp~1, punkty, cutoff = 5000)
+model_sph = vgm(psill = 10, model = "Sph", range = 4000, nugget =0.5)
+model = fit.variogram(v, model_sph)
+```
+
+### Estymacja: Kriging prosty
+
+Wykonanie interpolacji w siatce wymaga stworzenia obiektu klasy `gstat` z parametrami krigingu. Obiekt ten tworzony jest wykorzystując funkcję `gstat()`.
+
+```{r}
+sk_param = gstat(formula = temp ~ 1, 
+            locations = punkty,
+            model = model,
+            beta = 15)
+```
+
+```{r}
+sk_param
+```
+
+W drugim kroku należy wykonać interpolację w siatce wykorzystując funkcję `interpolate()`. Funkcja `interpolate()` wymaga podania 3 argumentów:
+
+-   obiekt siatki (w przykładzie *siatka*)
+-   obiekt klasy `gstat` z parametrami krigingu (w przykładzie *sk_param*)
+-   funkcję pozwalająca na wykonanie interpolacji w oparciu o obiekt klasy `gstat` (funkcja `interpolate_gstat()`)
+
+```{r}
+interpolate_gstat = function(model, x, ...) {
+  v = st_as_sf(x, coords = c("x", "y"), crs = st_crs(model$data[[1]]$data))
+  p = predict(model, v, ...)
+  st_drop_geometry(p)
+}
+```
+
+```{r}
+sk = interpolate(siatka, sk_param, fun = interpolate_gstat)
+```
+
+Wyniki estymacji można wyświetlić podając nazwę wynikowego obiektu.
+
+```{r}
+sk
+```
+
+Do wyświetlenia wyników krigingu można uzyć funkcji podstawowej `plot()`. Funkcja `mask()` przycina obszar tylko do granicy obszaru analizy.
+
+```{r}
+plot(mask(sk, granica))
+```
+
+Do wizualizacji wyników estymacji można wykorzystać także pakiet `tmap`. Obiekt zawierający wyniki estymacji można wyświetlić używając funkcji `tm_shape()` and `tm_raster()`.
+
+```{r}
+#| message: false
+tm_shape(sk) +
+  tm_raster(col = c("var1.pred"), style = "cont", palette = "-Spectral")
+```
+
+```{r}
+#| message: false
+tm_shape(sk) +
+ tm_raster(col = c("var1.var"), style = "cont", palette = "viridis") 
+```
+
+Zwróć uwagę, że siatka została utworzona używając zasięgu (*bounding box*) warstwy wektorowej granica. Obiekt można przyciąć do granic obszaru używając funkcji `crop()` z pakietu `terra`.
+
+```{r}
+sk_crop = crop(sk, granica, mask=TRUE)
+```
+
+```{r}
+#| message: false
+tm_shape(sk_crop) +
+  tm_raster(col = c("var1.pred"), style = "cont", palette = "-Spectral")
+```
+
+### Kriging zwykły
+
+W krigingu zwykłym średnia traktowana jest jako wartość nieznana. Metoda ta uwzględnia lokalne fluktuacje średniej poprzez stosowanie ruchomego okna. Parametry ruchomego okna można określić za pomocą jednego z dwóch argumentów:
+
+-   **nmax** - użyta zostanie określona liczba najbliższych obserwacji.
+-   **maxdist** - użyte zostaną jedynie obserwacje w zadanej odległości.
+
+Tak jak w przypadku krigingu prostego wykonanie krigingu zwykłego składa się z dwóch etapów: stworzenia obiektu klasy `gstat` zawierającego parametry krigingu oraz wykonanie interpolacji wykorzystując funkcję `interpolate()`. W poniższym przykładzie do obliczenia średniej w ruchomym oknie zostanie wykorzystanych 30 najbliższych punktów (argument *nmax = 30*).
+
+```{r}
+ok_param = gstat(formula = temp ~ 1, 
+            locations = punkty,
+            model = model,
+            nmax = 30)
+```
+
+```{r}
+ok = interpolate(siatka, ok_param, fun = interpolate_gstat)
+```
+
+```{r}
+ok_crop = crop(ok, granica, mask=TRUE)
+```
+
+Podobnie jak w przypadku krigingu prostego, można przyjrzeć się wynikom estymacji podając nazwę wynikowego obiektu oraz wyświetlić je używając funkcji `tm_shape()` and `tm_raster()`.
+
+```{r}
+#| message: false
+tm_shape(ok_crop) +
+  tm_raster(col = c("var1.pred"), style = "cont", palette = "-Spectral") 
+```
+
+```{r}
+#| message: false
+tm_shape(ok_crop) +
+  tm_raster(col = c("var1.var"), style = "cont", palette = "viridis") 
+```
+
+> Wykonaj kriging zwykły wykorzystując jedynie punkty położone w odległości do 1500m (podpowiedź: tworząc obiekt klasy gstat należy wykorzystać parametr maxdist, zamiast nmax). Dotnij wynik do granicy obszaru. Zwizualizuj wyniki.
+
+### Kriging z trendem
+
+Kriging z trendem, określany również jako kriging z wewnętrznym trendem, do estymacji wykorzystuje (oprócz zmienności wartości wraz z odległością) położenie analizowanych punktów.
+
+#### Przygotowanie danych
+
+Przy wykonaniu krigingu z trendem istotne są także współrzędne punktów. Wykorzystamy w tym celu obiekt *punkty_df*, który zawiera wczytane z pliku tekstowego dane.
+
+```{r}
+punkty_df = read.csv("data/punkty.csv")
+punkty_df = punkty_df[!is.na(punkty_df$temp), ]
+head(punkty_df)
+```
+
+Drugim plikiem potrzebnym do wykonania analizy będzie granica obszaru wczytana jako obiekt klasy `SpatVect` używając biblioteki `terra`.
+
+```{r}
+granica = vect("data/granica.gpkg")
+```
+
+Wykonanie estymacji metodą krigingu wymaga także utworzenia siatki. Siatkę utworzymy używając funkcji `rast()` z pakietu `terra`.
+
+```{r}
+siatka = rast(ext = granica, res = 50, crs = crs(granica))
+```
+
+#### Analiza i modelowanie struktury przestrzennej
+
+W funkcji `variogram()` pierwszy argument musi przyjąć postać *temp \~ x + y*, co oznacza, że uwzględniamy liniowy trend zależny od współrzędnej x oraz y. Argument *data* pozwala na podanie ramki danych zawierającej wartość zmiennej oraz współrzędne, argument *locations* definiuje, które zmienne zawierają współrzędne punktów.
+
+```{r}
+library(gstat)
+vario_kzt = variogram(temp ~ x + y, data = punkty_df, locations = ~x + y)
+```
+
+Następnym etapem jest dopasowanie modelu do semiwariogramu empirycznego.
+
+```{r}
+fitted_kzt = fit.variogram(vario_kzt, vgm(model = "Sph", nugget = 1))
+fitted_kzt
+```
+
+Kolejnym etapem jest wykonanie estymacji. W tym celu należy utworzyć obiekt klasy `gstat` zawierający parametry krigingu oraz wykonać interpolacji wykorzystując funkcję `interpolate()`. Należy tutaj pamiętać, aby formuła (w przykładzie *temp \~ x + y*) był taki sam podczas budowania semiwariogramu, jak i estymacji.
+
+```{r}
+kt_param = gstat(formula = temp ~ x + y, 
+                 data = punkty_df,
+                 locations = ~ x+ y,
+                 model = fitted_kzt)
+```
+
+```{r}
+kt = interpolate(siatka, kt_param)
+```
+
+```{r}
+kt
+```
+
+Do wyświetlenia wyników krigingu można także uzyć funkcji podstawowej `plot()`. Funkcja `mask()` przycina obszar tylko do granicy obszaru analizy.
+
+```{r}
+plot(mask(kt, granica))
+```

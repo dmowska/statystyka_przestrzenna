@@ -1,0 +1,376 @@
+# Zadania samodzielne
+
+## Dane przestrzenne w R
+
+Proszę zapoznać się z treścią rozdziału 3 oraz rozwiązać poniższe zadania.
+
+### Zadanie 1 {.unnumbered}
+
+1.  Wykorzystując aplikację Google Maps zczytaj współrzędne swojego miejsca zamieszkania (zaokrąglij je do 6 miejsc po przecinku).
+
+2.  Na podstawie współrzędnych utwórz obiekt wektorowy punktowy i nadaj mu układ współrzędnych WGS84 (EPSG: 4326).
+
+3.  Utwórz w R obiekt `p2` poprzez przekształcenie utworzonego punktu do PUWG1992 (EPSG: 2180).
+
+4.  Wyznacz 1km strefę bufforową wokół wyznaczonego punktu `p2`.
+
+5.  Zwizualizuj punkt oraz strefę bufforową używając pakietu `tmap`. Zapisz mapę do pliku png.
+
+### Zadanie 2 {.unnumbered}
+
+1.  Wczytaj dane z pliku `punkty.csv` oraz wyselekcjonuj tylko punkty z temperaturą powyżej 20C (obiekt `punkty_sel`).
+
+2.  Przetwórz obiekt `punkty_sel` do postaci obiektu przestrzennego `punkty20`.
+
+3.  Wyznacz obwiednię (*bounding box*) dla obiektu `punkty20` i przypisz ją do obiektu `punkty20_bb`.
+
+4.  Wczytaj dane z pliku `clc.tif` do R jako obiekt `clc`.
+
+5.  Utwórz obiekt `clc20` poprzez przycięcie obiektu `clc` do granic obiektu `punkty20_bb`. Zapisz obiekt `clc20` do pliku.
+
+-   Jakiego rodzaju jest wynikowy obiekt?
+-   Jaki typ danych on przechowuje? Jakie ma wymiary?
+-   Ile ma on atrybutów (zmiennych)?
+-   Jaki ma on układ współrzędnych?
+
+6.  Stwórz mapę pokazującą punkty z obiektu `punkty20`. W tle tej mapy przedstaw obiekt `clc20`. Zapisz mapę w pliku png.
+
+## Eksploracyjna analiza danych
+
+Proszę zapoznać się z treścią rozdziału 4 oraz rozwiązać poniższe zadania.
+
+### Dane {.unnumbered}
+
+W ćwiczeniu zostaną wykorzystane dane dotyczące stopy bezrobocia w powiatach w Polsce w 2023 roku. Dane zostały pobrane z Banku Danych Lokalnych.
+
+-   Plik `bezrobocie_pl.csv` zawiera identyfikator powiatu, nazwę powiatu oraz dane dotyczące stopy bezrobocia dla lat 2004, 2010, 2021, 2023 (odpowiednio SB2004, SB2010, SB2021, SB2023).
+-   Plik `powiaty_klasyfikacje.csv` zawiera informacje o przynależności powiatów do regionów NUTS3, makroregionów wg klasyfikacji NUTS1 oraz typologi miejsko-wiejskiej. W przypadku typologii miejsko-wiejskiej kod 1 to regiony regiony przeważająco miejskie (80% ludności mieszka w klastrach miejskich), 2 oznacza regiony pośrednie (od 50 % do 80 % ludności mieszka w „klastrach miejskich”), a 3 oznacza regiony przeważająco wiejskie (co najmniej 50 % ludności mieszka w „komórkach siatki obszarów wiejskich”).
+-   Plik `powiaty_pl.gpkg` zawiera granice powiatów w Polsce.
+-   Plik `wojewodztwa.gpkg` zawiera granice województw.
+
+### Przygotowanie danych {.unnumbered}
+
+1.  Utworzyć obiekt `bezrobocie` na podstawie pliku `bezrobocie_pl.csv`
+2.  Utwórz obiekt `klasyfikacje` na podstawie pliku `powiaty_klasyfikacje.csv`. Zmodyfikuj pole **TERYT** poprzez dodanie '000' na końcu.
+3.  Utwórz obiekt `powiaty_attr` poprzez połączenie informacji znajdujących się w obiektach `bezrobocie` oraz `klasyfikacje`.
+4.  Utworzyć obiekt `powiaty_granica` na podstawie pliku `powiaty_pl.gpkg`. Dodaj pole **"Kod"**, które będzie miało przypisane ID powiatu w takiej samej postaci w jakiej jest zapisane w kolumnie **Kod** w obiekcie `powiaty_attr`.
+5.  Utworzyć obiekt `woj_granica` na podstawie pliku `wojewodztwa.gpkg`.
+6.  Utwórz obiekt `powiaty` poprzez dołączenie danych z obiektu `powiaty_attr` do obiektu `powiaty_granica`.
+7.  Zapisz obiekt `powiaty` do geopaczki `powiaty_attr.gpkg`
+
+### Zadanie {.unnumbered}
+
+Celem ćwiczenia jest wykonanie eksploracyjnej nieprzestrzennej analizy danych.
+
+1.  Oblicz podstawowe statystyki dla zmiennej **SB2023**. Scharakteryzuj na ich podstawie wartość stopy bezrobocia w 2023 roku.
+
+2.  Jaki jest rozkład zmiennej **SB2023**? Czy w zbiorze danych istnieją wartości globalnie odstające. Jeśli tak - zidentyfikuj nazwy powiatów, dla których takie wartości występują.
+
+3.  Czy stopa bezrobocia różni się między makroregionami NUTS1 (zmienna MAKROREGION).
+
+-   Oblicz statystyki opisowe (średnią, medianę, wartość minimalmną i maksymalną) zmiennej **SB2023** dla makroregionów.
+-   Wykonaj wykres pudełkowy.
+-   Wykonaj odpowiedni test określający czy istnieją statystycznie istotne różnice wartości stopy bezrobocia w 2023 roku między makroregionami. Określ także między, którymi regionami istnieją statystycznie istotne różnice.
+
+4.  Czy stopa bezrobocia różni się między obszarami sklasyfikownami jako regiony przeważająco miejskie, pośrednie, przeważająco wiejskie (zmienna URBN_TYPE)?
+
+-   Oblicz statystyki opisowe (średnią, medianę, wartość minimalmną i maksymalną) zmiennej **SB2023** dla poszczególnych typów regionów
+-   Wykonaj wykres pudełkowy.
+-   Wykonaj odpowiedni test określający czy istnieją statystycznie istotne różnice wartości stopy bezrobocia w 2023 roku między różnymi typami regionów.
+
+5.  Stwórz mapę pokazującą rozkład przestrzenny zmiennej SB2023 w powiatach w Polsce. Dodaj także granice województw. Zapisz mapę do pliku png.
+
+6.  Stwórz mapę pokazującą rozkład przestrzenny zmiennej SB2023 w powiatach w Polsce. Dodaj także granice województw. Dodatkowo zaznacz punktami (kolor czerwony, wielkość punktu 1) 5% powiatów o najwyższej stopie bezrobocia w Polsce w 2023 roku. Zapisz mapę do pliku png.
+
+7.  Stwórz mapę pokazującą rozkład przestrzenny zmiennej URBN_TYPE. Przypisz następujące kolory: klasa 1 (obszary przeważająco miejskie) - czerwony, klasa 2 (regiony pośrednie) - pomarańczowy, klasa 3 (obszary przeważająco wiejskie) - zielony. Zapisz mapę do pliku png.
+
+8.  Stwórz mapę zmian pokazująca jak zmieniła się stopa bezrobocia między 2004 a 2023 rokiem. Jaką paletę wybierzesz do przedstawienia zmian? Zapisz mapę do pliku png.
+
+### Rozwiązanie {.unnumbered}
+
+Jako rozwiązanie należy przedstawić:
+
+-   raport składający się z uzyksanych wykresów, map oraz krótkiego (pół strony) opisu oraz podsumowania wyników. Raport zapisz w pliku *bezrobocie_eksploracja.html*
+-   plik *.qmd* zawierający kod z rozwiązaniem zadania
+-   utworzone geopaczki
+-   utworzone pliki png zawierające mapy.
+
+## Analiza rozkładu przestrzennego danych punktowych
+
+Proszę zapoznać się z treścią rozdziałów 5-7 oraz rozwiązać poniższe zadania.
+
+### Cel {.unnumbered}
+
+Analiza rozkładu przestrzennego szpitali, przedszkoli oraz kościołów w obszarze miasta Poznania.
+
+-   Jaki jest rozkład przestrzenny analizowanych danych? (czy wyniki wskazują na rozkład losowy, istnienie skupień w danych itp.)
+-   Czym się te rozkłady różnią?
+
+### Dane {.unnumbered}
+
+Geopaczka ***poznan_budynki.gpkg*** zawiera 4 warstwy w PUWG1992:
+
+-   warstwę poligonową z lokalizacją budynków przedszkoli (nazwa warstwy: *przedszkole*),
+-   warstwę poligonową z lokalizacją budynków kościołów (nazwa warstwy: *kosciol*),
+-   warstwę poligonową z lokalizacją budynków szpitali (nazwa warstwy: *szpital*),
+-   warstwę poligonową z granicą miasta Poznania (nazwa warstwy: *poznan*),.
+
+### Przygotowanie danych {.unnumbered}
+
+-   Wczytać warstwy poligonowe do R. Aby wczytać jedną wartswę w geopaczki należy użyć argumentu `layer`.
+
+```{r}
+#| eval: false
+library(sf)
+pzn = read_sf("data/poznan_budynki.gpkg", layer = 'poznan')
+```
+
+```{r}
+#| eval: false
+library(sf)
+koscioly = read_sf("data/poznan_budynki.gpkg", layer = 'kosciol')
+```
+
+-   Proszę zamienić warstwy poligonowe z lokalizacją przedszkoli oraz kościołów na warstwę punktową poprzez wyznaczenie centroidów budynków.
+
+```{r}
+#| eval: false
+koscioly_punkty = st_centroid(koscioly)
+```
+
+-   Zapisać warstwy punktowe (koscioly_punkty, szpitale_punkty oraz przedszkola_punkty) w geopaczce `punkty_poznan`.
+
+```{r}
+#| eval: false
+write_sf(koscioly_punkty, "data/punkty_poznan.gpkg", layer = 'kosciol4')
+```
+
+-   Dla każdego typu obiektów proszę utworzyć obiekt klasy `ppp`. Jako obszar analizy proszę wskazać granicę miasta Poznania.
+
+```{r}
+#| eval: false
+library(spatstat)
+#przekształcenie obiektu sf na obiekt owin definiujący okno (obszar analizy) dla obiektów ppp
+pzn_owin = as.owin(pzn)
+#przekształcenie daych punktowych na obiekt ppp. 
+koscioly_ppp = as.ppp(st_geometry(koscioly_punkty), W = pzn_owin)
+```
+
+### Zadanie 1: Statystyki centrograficzne {.unnumbered}
+
+Dla każdego z typów obiektów (przedszkola, kościoły, szpitale):
+
+-   Oblicz statystyki centrograficzne (średnią centralną, odległość standardową, elipsę odchylenia standardowego).
+-   Zwizualizuj statystyki centrograficzne i lokalizacje obiektów punktowych na mapie.
+
+### Zadanie 2: Metody oparte na odległości {.unnumbered}
+
+Dla każdego z typów obiektów (przedszkola, kościoły, szpitale):
+
+-   Oblicz statystyki opisowe do najbliższego sąsiada. Przedstaw odległości na wykresie w postaci dystrybuanty. Zintrepretuj wyniki.
+-   Oblicz wskaźnik Clarka - Evansa. Zinterpretuj wynik.
+-   Wykorzystaj funkcję G do testowania istotności hipotezy dotyczącej rozkładu punktów. Przedstaw wyniki na wykresie. Zinterpretuj wyniki.
+
+### Zadanie 3: Metody oparte na analizie intensywności {.unnumbered}
+
+Dla każdego z typów obiektów (przedszkola, kościoły, szpitale):
+
+-   Oblicz średnią intensywność występowania każdego z typów obiektów na km2. Jako pole odniesienia (window) wykorzystaj granicę miasta Poznania.
+
+    -   Podpowiedź: Dane są w PUWG1992. Aby obliczyć średnią intensywność na km2 obiekt klasy ppp należy przeskalować z m na km
+
+```{r}
+#| eval: false
+konscioly_ppp2 = rescale(koscioly_ppp, 1000)
+```
+
+-   Wykorzystaj test zliczania w kwadratach do sprawdzenia hipotezy, czy lokalizacje mają rozkład losowy. Zintrepretuj wyniki testu.
+-   Przedstaw na mapie w jaki sposób zmienia się intensywność lokalizacji punktów. Wykorzystaj taką samą liczbę kwadratów jak w teście zliczania w kwadratach.
+
+## Dane obszarowe
+
+Proszę zapoznać się z treścią rozdziału 8 i 9 oraz rozwiązać poniższe zadania.
+
+### Cel {.unnumbered}
+
+Wykorzystanie miar autokorelacji do analizy wyników wyborów prezydenckich z 2015 roku.
+
+### Dane {.unnumbered}
+
+Do poniższych zadań zostanie użyty zbiór danych `pol_pres15` z pakietu **spDataLarge**. Dane `pol_pres15` zawierają wyniki wyborów prezydenckich z 2015 roku na poziomie gmin.
+
+```{r}
+#| echo: true
+#| eval: false 
+#instalacja pakietu spDataLarge
+install.packages("spDataLarge", repos = "https://geocompr.r-universe.dev")
+```
+
+```{r}
+library(spDataLarge)
+data(pol_pres15, package = "spDataLarge")
+?pol_pres15
+```
+
+### Zadanie {.unnumbered}
+
+**Przed wykonaniem zadania ustaw set.seed(1111)**
+
+1.  Stwórz obiekt przestrzenny o nazwie wybory, zawierający zmienną `name`, `II_turnout`, oraz `geometry`. W dalszej części ćwiczenia dodaj do tego obiektu lokalne miary autokorelacji przestrzennej obliczone dla poszczególnych gmin. Wynikowy obiekt zapisz jako `wybory.gpkg`
+2.  Kolumna `II_turnout` zawiera informacje o frekwencji wyborczej w II turze wyborów prezydenckich w 2015 roku. Stwórz mapę przedstawiającą wartości tej zmiennej.
+3.  Stwórz obiekt `pol_pres15_lw` klasy `"listw"` zawierający listę sąsiedztwa z wagami przestrzennymi **używając sąsiedztwa queen i binarnych wag**.
+4.  Określ czy tą zmienną charakteryzuje autokorelacja przestrzenna. Zastosuj do tego globalny test I Morana oraz test C Geary'ego.
+5.  Zlokalizuj hot i cold spoty zmiennej `II_turnout` wykorzystując w tym celu lokalną statystyke G Getisa & Orda. Zwizualizuj i zinterpretuj wyniki.
+6.  Zlokalizuj przestrzenne zgrupowania podobnych wartości zmiennej `II_turnout` wykorzystując w tym celu lokalny test Morana. Zwizualizuj wartości lokalnej statystyki Morana i zinterpretuj wyniki.
+7.  Używając wyników z poprzedniego zadania określ klastry "niskie-niskie", "niskie-wysokie", "wysokie-niskie", oraz "wysokie-wysokie". Zwizualizuj i zinterpretuj wyniki.
+
+## Metody interpolacji
+
+Proszę zapoznać się z treścią rozdziału 10 oraz rozwiązać poniższe zadania.
+
+### Dane {.unnumbered}
+
+W zadaniu zostaną wykorzystane dane z pliku `punkty.csv`.
+
+### Zadanie 1 {.unnumbered}
+
+Tabela zawiera zestawienie wartości punktów pomiarowych oraz odległości punktu od nieznanej lokalizacji.
+
+| Odleglość d | Wartość zi |
+|-------------|------------|
+| 100         | 10         |
+| 150         | 15         |
+| 300         | 15         |
+| 400         | 20         |
+| 500         | 10         |
+| 600         | 20         |
+| 1000        | 10         |
+
+
+Wykorzystując poniższą funkcję oblicz wartość komórki na podstawie wartości punktów pomiarowy zestawionych w tabeli:
+
+-   Wykorzystując 3 najbliższe punkty i stosując wykładnik potęgowy p = 0
+
+-   Wykorzystując 3 najbliższe punkty i stosując wykładnik potęgowy p = 1
+
+-   Wykorzystując 3 najbliższe punkty i stosując wykładnik potęgowy p = 2
+
+-   Wykorzystując 5 najbliższych punktów i stosując wykładnik potęgowy p = 0
+
+-   Wykorzystując 5 najbliższych punktów i stosując wykładnik potęgowy p = 1
+
+-   Wykorzystując 5 najbliższych punktów i stosując wykładnik potęgowy p = 2
+
+```{r}
+#| eval: false
+idw <- function(wartosc, d, power = 2) {
+
+  # Obliczanie wag
+  wagi <- 1 / (d^power)
+  # Obliczanie wartości z
+  estymowana_wartosc <- sum(wagi * wartosc) / sum(wagi)
+
+  return(estymowana_wartosc)
+}
+```
+
+### Zadanie 2 {.unnumbered}
+
+1.  Stwórz siatkę interpolacyjną o rozdzielczości 200 metrów dla obszaru Suwalskiego Parku Krajobrazowego.
+2.  Korzystając z danych `punkty` wykonaj interpolację zmiennej *srtm* używając:
+
+-   Poligonów Woronoja
+-   Metody IDW
+-   Funkcji wielomianowych
+-   Funkcji sklejanych
+
+3.  Porównaj uzyskane wyniki poprzez ich wizualizację. Czym różnią się powyższe metody?
+4.  Wykonaj interpolację zmiennej *temp* metodą IDW sprawdzając różne parametry argumentu *idp*. W jaki sposób wpływa on na uzyskaną interpolację?
+
+## Geostatystyka: Analiza i modelowanie autokorelacji przestrzennej
+
+Proszę zapoznać się z treścią rozdziału 11 oraz rozwiązać poniższe zadania.
+
+### Cel analizy {.unnumbered}
+
+Celem ćwiczenia jest wykonanie analizy i modelowania struktury przestrzennej zmiennej *srtm*.
+
+### Dane {.unnumbered}
+
+W ćwiczeniu zostaną wykorzystane dane z pliku `punkty_pref.gpkg`
+
+### Część 1: Analiza struktury przestrzennej {.unnumbered}
+
+1.  Stwórz wykres rozrzutu z przesunięciem dla zmiennej *srtm* dla odstępów od 0 do 5000 metrów co 625 metry. Co można odczytać z otrzymanego wykresu?
+
+2.  Wylicz odległość oraz wartość semiwariancji dla zmiennej *srtm* pomiędzy pierwszym i drugim, pierwszym i trzecim, oraz drugim i trzecim punktem. Zwizualizuj te trzy punkty. W jaki sposób można zinterpretować otrzymane wyniki wartości semiwariancji?
+
+3.  Stwórz chmurę semiwariogramu dla zmiennej *srtm*. W jaki sposób można zaobserwować na niej wartości odstające? Co one oznaczają?
+
+4.  Jaka jest liczba par obserwacji, średnia powierzchnia zajmowana przez jedną próbkę (w km2) oraz średnia odległość między punktami (w km)?
+
+5.  Stwórz semiwariogram zmiennej *srtm*. Ile par punktów posłużyło do wyliczenia pierwszego odstępu?
+
+6.  Zmodyfikuj powyższy semiwariogram, żeby jego maksymalny zasięg wynosił 3,5 kilometra.
+
+### Część 2: Modelowanie struktury przestrzennej {.unnumbered}
+
+1.  Zbuduj modele semiwariogramu zmiennej *srtm* wykorzystując model sferyczny. Dopasuj model używając zarówno ręcznie ustalonych parametrów oraz funkcji `fit.variogram()`. Porównaj graficznie uzyskane modele.
+
+2.  Zbuduj modele semiwariogramu zmiennej *srtm* używając modelu nuggetowego, sferycznego, wykładniczego, gausowskiego i potęgowego. Porównaj graficznie uzyskane modele.
+
+3.  Stwórz złożony model semiwariogramu zmiennej *srtm* używając modelu nuggetowego i sferycznego.
+
+## Geostatytyka: Estymacja
+
+Proszę zapoznać się z treścią rozdziału 12 oraz rozwiązać poniższe zadania.
+
+### Dane {.unnumbered}
+
+W ćwiczeniu zostaną wykorzystane dane zapisane w pliku `punkty_pref.gpkg`.
+
+Na podstawie pliku **punkty_pref** stwórz trzy obiekty
+
+-   ***punkty_pref1*** zawierający wszystkie punkty,
+-   ***punkty_pref2*** zawierający losowe 100 punktów,
+-   ***punkty_pref3*** zawierający losowe 30 punktów.
+
+Uwaga! Ustaw `set.seed(123)`
+
+```{r}
+#| eval: false
+#| echo: true
+library(sf)
+set.seed(123)
+punkty_pref = read_sf("data/punkty_pref.gpkg")
+punkty_pref1 = punkty_pref
+punkty_pref2 = punkty_pref[sample(nrow(punkty_pref), 100), ]
+punkty_pref3 = punkty_pref[sample(nrow(punkty_pref), 30), ]
+```
+
+### Zadanie {.unnumbered}
+
+1.  Zbuduj optymalne modele semiwariogramu zmiennej *srtm* wykorzystując model sferyczny oraz nuggetowy dla trzech zbiorów danych - `punkty_pref1`, `punkty_pref2`, `punkty_pref3`. Porównaj graficznie uzyskane modele.
+
+2.  Stwórz siatkę interpolacyjną o rozdzielczości 200 metrów dla obszaru Suwalskiego Parku Krajobrazowego.
+
+3.  Wykorzystaj utworzoną siatkę interpolacyjną oraz modele semiwariogramu uzyskane na podstawie zbiorów danych `punkty_pref1`, `punkty_pref2`, `punkty_pref3` do wykonania estymacji metodą **krigingu prostego** zmiennej *srtm*. Porównaj graficznie zarówno mapy estymacji jak i mapy wariancji. Opisz zaobserwowane różnice.
+
+4.  Wykorzystaj utworzoną siatkę interpolacyjną oraz model semiwariogramu uzyskany na podstawie zbioru danych `punkty_pref1` do wykonania estymacji metodą **krigingu zwykłego** zmiennej *srtm*. Sprawdź jak wygląda wynik estymacji uwzględniając:
+
+-   10 najbliższych obserwacji,
+-   30 najbliższych obserwacji,
+-   obserwacje w odległości do 2 km.
+
+5.  Porównaj graficznie zarówno mapy estymacji jak i mapy wariancji dla krigingu prostego oraz zwykłego dla danych `punkty_pref1`. Jakie można zauważyć podobieństwa a jakie różnice?
+
+### Rozwiązanie {.unnumbered}
+
+Jako rozwiązanie zadania należy oddać:
+
+-   plik qmd zawierający rozwiązanie. Plik powinien składać się z następujących sekcji:
+
+    -   rozwiązanie zadania (wraz z kodem) zawierające odpowiednie zestawienia numeryczne i graficzne
+    -   podsumowanie zawierające interpretację wyników
+
+-   plik html z wygenerowanym raportem zawierającym zestawienia numeryczne, mapy, wykresy wraz z krótkim komentarzem uzyskanych wyników (zawierający także kod).
