@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>11&nbsp; Geostatystyka: Analiza i modelowanie autokorelacji przestrzennej – Statystyka przestrzenna</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./16_pola_estymacja.html" rel="next">
+<link href="./14_pola_interpolacja.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-c852b7e71cc1c09f55f367b2512aabbd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="site_libs/d3-3.3.8/d3.min.js"></script>
+<script src="site_libs/dagre-0.4.0/dagre-d3.min.js"></script>
+<link href="site_libs/mermaid-0.3.0/dist/mermaid.css" rel="stylesheet">
+<script src="site_libs/mermaid-0.3.0/dist/mermaid.slim.min.js"></script>
+<link href="site_libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet">
+<script src="site_libs/chromatography-0.1/chromatography.js"></script>
+<script src="site_libs/DiagrammeR-binding-1.0.11/DiagrammeR.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./13_pola.html">DANE POWIERZCHNIOWE CIĄGŁE PRZESTRZENNIE</a></li><li class="breadcrumb-item"><a href="./15_pola_modelowanie.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Geostatystyka: Analiza i modelowanie autokorelacji przestrzennej</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Statystyka przestrzenna</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">O skrypcie</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./01_wstep.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">WSTĘP</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_wprowadzenie.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Wprowadzenie</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_zastosowanie.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Zastosowania statystyki przestrzennej</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_daneprzestrzenne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Dane przestrzenne w R</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_eksploracja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Eksploracyjna analiza danych przestrzennych</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./06_punkty.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE PUNKTOWE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_punkty_centrograficzne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Statystyki centrograficzne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_punkty_odleglosc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Metody oparte na odległości</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09_punkty_intensywnosc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Metody oparte na analizie intensywności</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./10_poligony.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE OBSZAROWE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_poligony_sasiedztwo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Określanie sąsiedztwa danych obszarowych</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12_poligony_autokorelacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Miary autokorelacji danych obszarowych</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./13_pola.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE POWIERZCHNIOWE CIĄGŁE PRZESTRZENNIE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14_pola_interpolacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Metody interpolacji</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15_pola_modelowanie.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Geostatystyka: Analiza i modelowanie autokorelacji przestrzennej</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_pola_estymacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Geostatystyczne metody estymacji</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_pola_ocena.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Ocena jakości estymacji</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">ZADANIA</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18_zadania_samodzielne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Zadania samodzielne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19_projekt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Projekt</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20_projekt_geostatystyka.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Projekt 2: Geostatytyka</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#geostatystyczna-analiza-danych" id="toc-geostatystyczna-analiza-danych" class="nav-link active" data-scroll-target="#geostatystyczna-analiza-danych"><span class="header-section-number">11.1</span> Geostatystyczna analiza danych</a>
+  <ul class="collapse">
+  <li><a href="#etap-1-pozyskanie-i-wstępna-weryfikacja-danych" id="toc-etap-1-pozyskanie-i-wstępna-weryfikacja-danych" class="nav-link" data-scroll-target="#etap-1-pozyskanie-i-wstępna-weryfikacja-danych">Etap 1: Pozyskanie i wstępna weryfikacja danych</a></li>
+  <li><a href="#etap-2-nieprzestrzenna-i-przestrzenna-eksploracja-danych" id="toc-etap-2-nieprzestrzenna-i-przestrzenna-eksploracja-danych" class="nav-link" data-scroll-target="#etap-2-nieprzestrzenna-i-przestrzenna-eksploracja-danych">Etap 2: Nieprzestrzenna i przestrzenna eksploracja danych</a></li>
+  <li><a href="#etap-3-analiza-i-interpretacja-struktury-przestrzennej" id="toc-etap-3-analiza-i-interpretacja-struktury-przestrzennej" class="nav-link" data-scroll-target="#etap-3-analiza-i-interpretacja-struktury-przestrzennej">Etap 3: Analiza i interpretacja struktury przestrzennej</a></li>
+  <li><a href="#etap-4-modelowanie-matematyczne-struktury-przestrzennej-autokorelacji-przestrzennej" id="toc-etap-4-modelowanie-matematyczne-struktury-przestrzennej-autokorelacji-przestrzennej" class="nav-link" data-scroll-target="#etap-4-modelowanie-matematyczne-struktury-przestrzennej-autokorelacji-przestrzennej">Etap 4: Modelowanie matematyczne struktury przestrzennej (autokorelacji przestrzennej)</a></li>
+  <li><a href="#etap-5-estymacja-lub-symulacja" id="toc-etap-5-estymacja-lub-symulacja" class="nav-link" data-scroll-target="#etap-5-estymacja-lub-symulacja"><span class="header-section-number">11.1.1</span> Etap 5: Estymacja lub symulacja</a></li>
+  </ul></li>
+  <li><a href="#wykres-rozrzutu-z-przesunięciem" id="toc-wykres-rozrzutu-z-przesunięciem" class="nav-link" data-scroll-target="#wykres-rozrzutu-z-przesunięciem"><span class="header-section-number">11.2</span> Wykres rozrzutu z przesunięciem</a></li>
+  <li><a href="#semiwariancja" id="toc-semiwariancja" class="nav-link" data-scroll-target="#semiwariancja"><span class="header-section-number">11.3</span> Semiwariancja</a>
+  <ul class="collapse">
+  <li><a href="#obliczenie-semiwariancji-między-dwoma-punktami" id="toc-obliczenie-semiwariancji-między-dwoma-punktami" class="nav-link" data-scroll-target="#obliczenie-semiwariancji-między-dwoma-punktami"><span class="header-section-number">11.3.1</span> Obliczenie semiwariancji między dwoma punktami</a></li>
+  <li><a href="#chmura-semiwariogramu" id="toc-chmura-semiwariogramu" class="nav-link" data-scroll-target="#chmura-semiwariogramu"><span class="header-section-number">11.3.2</span> Chmura semiwariogramu</a></li>
+  </ul></li>
+  <li><a href="#semiwariogram-charakterystyka-struktury-przestrzennej" id="toc-semiwariogram-charakterystyka-struktury-przestrzennej" class="nav-link" data-scroll-target="#semiwariogram-charakterystyka-struktury-przestrzennej"><span class="header-section-number">11.4</span> Semiwariogram: charakterystyka struktury przestrzennej</a>
+  <ul class="collapse">
+  <li><a href="#tworzenie-semiwariogramu" id="toc-tworzenie-semiwariogramu" class="nav-link" data-scroll-target="#tworzenie-semiwariogramu"><span class="header-section-number">11.4.1</span> Tworzenie semiwariogramu</a></li>
+  <li><a href="#parametry-semiwariogramu" id="toc-parametry-semiwariogramu" class="nav-link" data-scroll-target="#parametry-semiwariogramu"><span class="header-section-number">11.4.2</span> Parametry semiwariogramu</a></li>
+  <li><a href="#obliczenia-pomocnicze" id="toc-obliczenia-pomocnicze" class="nav-link" data-scroll-target="#obliczenia-pomocnicze"><span class="header-section-number">11.4.3</span> Obliczenia pomocnicze</a></li>
+  <li><a href="#modyfikacja-semiwariogramu" id="toc-modyfikacja-semiwariogramu" class="nav-link" data-scroll-target="#modyfikacja-semiwariogramu"><span class="header-section-number">11.4.4</span> Modyfikacja semiwariogramu</a></li>
+  </ul></li>
+  <li><a href="#modelowanie-autokorelacji-przestrzennej" id="toc-modelowanie-autokorelacji-przestrzennej" class="nav-link" data-scroll-target="#modelowanie-autokorelacji-przestrzennej"><span class="header-section-number">11.5</span> Modelowanie autokorelacji przestrzennej</a>
+  <ul class="collapse">
+  <li><a href="#model-semiwariogramu" id="toc-model-semiwariogramu" class="nav-link" data-scroll-target="#model-semiwariogramu"><span class="header-section-number">11.5.1</span> Model semiwariogramu</a></li>
+  <li><a href="#przykład-analiza-i-modelowanie-struktury-przestrzennej-zmiennej-temperatura" id="toc-przykład-analiza-i-modelowanie-struktury-przestrzennej-zmiennej-temperatura" class="nav-link" data-scroll-target="#przykład-analiza-i-modelowanie-struktury-przestrzennej-zmiennej-temperatura"><span class="header-section-number">11.5.2</span> Przykład: Analiza i modelowanie struktury przestrzennej zmiennej temperatura</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./13_pola.html">DANE POWIERZCHNIOWE CIĄGŁE PRZESTRZENNIE</a></li><li class="breadcrumb-item"><a href="./15_pola_modelowanie.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Geostatystyka: Analiza i modelowanie autokorelacji przestrzennej</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Geostatystyka: Analiza i modelowanie autokorelacji przestrzennej</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstat)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>W poniższych przykładach wykorzystamy dane zapisane w pliku <code>punkty.csv</code> oraz przestrzenny zasięg granicy obszaru (<code>granica.gpkg</code>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>punkty <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"data/punkty.csv"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>punkty <span class="ot">=</span> <span class="fu">st_as_sf</span>(punkty, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="st">"EPSG:2180"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>punkty <span class="ot">=</span> punkty[<span class="sc">!</span><span class="fu">is.na</span>(punkty<span class="sc">$</span>temp), ]</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>granica <span class="ot">=</span> <span class="fu">read_sf</span>(<span class="st">"data/granica.gpkg"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="geostatystyczna-analiza-danych" class="level2" data-number="11.1">
+<h2 data-number="11.1" class="anchored" data-anchor-id="geostatystyczna-analiza-danych"><span class="header-section-number">11.1</span> Geostatystyczna analiza danych</h2>
+<p>Geostatystyka to gałąź statystyki skupiająca się na przestrzennych lub czasoprzestrzennych zbiorach danych.</p>
+<p>Celem geostatystyki może być:</p>
+<ul>
+<li>zrozumienie zmienności przestrzennej lub czasowej zjawiska,</li>
+<li>interpolacja (estymacja przestrzenna),</li>
+<li>symulowanie wartości,</li>
+<li>optymalizacja sieci pomiarowej.</li>
+</ul>
+<p>Geostatystyczna analiza danych może przyjmować różną postać w zależności od postawionego celu analizy. Poniższy schemat przedstawia uproszczoną ścieżkę postępowania geostatystycznego.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="DiagrammeR html-widget html-fill-item" id="htmlwidget-02e7549e662e4ea55ea4" style="width:672px;height:20cm;"></div>
+<script type="application/json" data-for="htmlwidget-02e7549e662e4ea55ea4">{"x":{"diagram":"\n                graph TB;\n                Pozyskanie[<center>Pozyskanie <br>i wstępna weryfikacja danych<\/center>];\n                Pozyskanie-->Eksploracja[<center>Nieprzestrzenna i przestrzenna <br>eksploracja danych<\/center>];\n                Eksploracja-->Analiza[<center>Analiza <br>i interpretacja <br>struktury przestrzennej<\/center>];\n                Analiza -->Modelowanie[\"<center>Modelowanie matematyczne <br>struktury przestrzennej (autokorelacji przestrzennej) <\/center>\"];\n                \n                Modelowanie -->Estymacja;\n                Modelowanie -->Optymalizacja;\n                Estymacja -->Symulacja;\n                \n                Modelowanie -->Symulacja;\n                Estymacja -->Optymalizacja;\n                Symulacja -->Optymalizacja;\n                Optymalizacja -->Pozyskanie;\n                "},"evals":[],"jsHooks":[]}</script>
+<p>Uproszczona ścieżka postępowania geostatystycznego.</p>
+</div>
+</div>
+<section id="etap-1-pozyskanie-i-wstępna-weryfikacja-danych" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="etap-1-pozyskanie-i-wstępna-weryfikacja-danych">Etap 1: Pozyskanie i wstępna weryfikacja danych</h3>
+<p>Punktem wyjścia analizy geostatystycznej jest posiadanie danych przestrzennych opisujących badane zjawisko, np. w <strong>postaci punktowej</strong>. Przykładem takiego zjawiska są punktowo wykonane pomiary temperatury.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="15_pola_modelowanie_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Rozkład wartości temperatury powietrza w analizowanym obszarze.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="etap-2-nieprzestrzenna-i-przestrzenna-eksploracja-danych" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="etap-2-nieprzestrzenna-i-przestrzenna-eksploracja-danych">Etap 2: Nieprzestrzenna i przestrzenna eksploracja danych</h3>
+<p>Dane należy poddać eksploracji w celu ich lepszego poznania, wyszukania relacji między zmiennymi, czy znalezienia potencjalnych błędów.</p>
+<p>Eksploracyjna analiza danych obejmuje:</p>
+<ul>
+<li>Charakterystykę statystyczną danych.</li>
+<li>Sprawdzenie poprawności współrzędnych.</li>
+<li>Sprawdzenie poprawności danych, w tym między innymi identyfikacja danych odstających lokalnie.</li>
+<li>Wgląd w tym próbkowania.</li>
+<li>Ogólny pogląd na zmienność przestrzenną, wykorzystanie prostej automatycznej procedury interpolacji.</li>
+</ul>
+</section>
+<section id="etap-3-analiza-i-interpretacja-struktury-przestrzennej" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="etap-3-analiza-i-interpretacja-struktury-przestrzennej">Etap 3: Analiza i interpretacja struktury przestrzennej</h3>
+<p>Jednym z celów geostatystycznej analizy danych jest <strong>identyfikacja i zrozumienie przestrzennej zmienności analizowanej cechy</strong>. Zmienność przestrzenna analizowanej cechy może być określona za pomocą <strong>semiwariancji</strong>, a następnie zwizualizowana za pomocą <strong>semiwariogramu</strong>.</p>
+<p>Semiwariogram empiryczny (oparty o danych) jest wykresem pokazującym relację pomiędzy odległością a semiwariancją (jedną z miar autokorelacji przestrzennej). Za jego pomocą możemy stwierdzić jak to zjawisko zmienia się w przestrzeni.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="15_pola_modelowanie_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Wykres, nazywany semiwariogramem, reprezentujący niepodobieństwo wartości wraz z odległością dla zmiennej temperatura.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="etap-4-modelowanie-matematyczne-struktury-przestrzennej-autokorelacji-przestrzennej" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="etap-4-modelowanie-matematyczne-struktury-przestrzennej-autokorelacji-przestrzennej">Etap 4: Modelowanie matematyczne struktury przestrzennej (autokorelacji przestrzennej)</h3>
+<p><strong>Modelowanie struktury przestrzennej</strong> polega na dopasowanie modelu (funkcji) do semiwariogramu empirycznego (wyliczonego z danych). Pozwala on zarówno na lepszy opis zmienności zjawiska, jak również służy do tworzenia <strong>estymacji</strong> czy też <strong>symulacji</strong>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="15_pola_modelowanie_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="etap-5-estymacja-lub-symulacja" class="level3" data-number="11.1.1">
+<h3 data-number="11.1.1" class="anchored" data-anchor-id="etap-5-estymacja-lub-symulacja"><span class="header-section-number">11.1.1</span> Etap 5: Estymacja lub symulacja</h3>
+<p><strong>Estymacja</strong> to rodzaj interpolacji przestrzennej, która oblicza najbardziej potencjalnie możliwą wartość dla wybranej lokalizacji.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="15_pola_modelowanie_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Estymacja (oszacowanie) wartości badanej zmiennej dla całego obszaru.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Rolą <strong>symulacji</strong> jest natomiast generowanie równie prawdopodobne możliwości rozkładu badanej cechy.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="15_pola_modelowanie_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Przykłady symulowanych wartości badanej zmiennej dla całego obszaru.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="wykres-rozrzutu-z-przesunięciem" class="level2" data-number="11.2">
+<h2 data-number="11.2" class="anchored" data-anchor-id="wykres-rozrzutu-z-przesunięciem"><span class="header-section-number">11.2</span> Wykres rozrzutu z przesunięciem</h2>
+<p>W klasycznej statystyce relację między dwoma zmiennymi określa się za pomocą korelacji (np. współczynnik korelacji liniowej Pearsona). W geostatystyce badamy jedną zmienną, ale pomiędzy dwoma punktami odległymi od siebie o pewien dystans (określany jako lag, <em>h</em>). Wykorzystuje się w tym celu <strong>wykres rozrzutu z przesunięciem</strong>. Wykres rozrzutu z przesunięciem pokazuje korelację pomiędzy wartościami analizowanej cechy w pewnych grupach odległości. Taki wykres można stworzyć używając funkcji <code>hscat()</code> z pakietu <code>gstat</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hscat</span>(temp<span class="sc">~</span><span class="dv">1</span>, <span class="at">data =</span> punkty, <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">4000</span>, <span class="at">by =</span> <span class="dv">500</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="15_pola_modelowanie_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Przykładowo, na powyższym wykresie widać wartość cechy temp z kolejnymi przesunięciami - od 0 do 500 metrów, od 500 metrów do 1000 metrów, itd. W pierwszym przedziale wartość cechy temp z przesunięciem wykazuje korelację na poziomie 0,876, a następnie z każdym kolejnym przedziałem (odległością) ta wartość maleje. W przedziale 3500 do 4000 metrów osiąga jedynie 0,128. Pozwala to na stwierdzenie, że cecha temp wykazuje zmienność przestrzenną - podobieństwo jej wartości zmniejsza się wraz z odległością.</p>
+</section>
+<section id="semiwariancja" class="level2" data-number="11.3">
+<h2 data-number="11.3" class="anchored" data-anchor-id="semiwariancja"><span class="header-section-number">11.3</span> Semiwariancja</h2>
+<p>Zmienność przestrzenna analizowanej cechy może być określona m.in za pomocą <strong>semiwariancji</strong> <span class="math inline">\(\gamma(h)\)</span>.</p>
+<p>Semiwariancja to połowa średniej kwadratu różnicy pomiędzy wartościami badanej zmiennej (<span class="math inline">\(z\)</span>) w dwóch lokalizacjach odległych o wektor <span class="math inline">\(h\)</span></p>
+<p><span class="math display">\[\gamma(h) = \frac{1}{2}(z(u_{\alpha}) - z(u_{\alpha} + h))^2\]</span></p>
+<section id="obliczenie-semiwariancji-między-dwoma-punktami" class="level3" data-number="11.3.1">
+<h3 data-number="11.3.1" class="anchored" data-anchor-id="obliczenie-semiwariancji-między-dwoma-punktami"><span class="header-section-number">11.3.1</span> Obliczenie semiwariancji między dwoma punktami</h3>
+<p>Przykładowo, aby wyliczyć wartość semiwariancji (<code>gamma</code>) pomiędzy dwoma punktami musimy znać:</p>
+<ul>
+<li><p>wartość pierwszego z nich (<span class="math inline">\(z(u_{\alpha})\)</span>),</p>
+<ul>
+<li>w przykładzie <span class="math inline">\(z(u_{\alpha}) = 13.85\)</span> stopni Celcjusza</li>
+</ul></li>
+<li><p>wartość drugiego z nich (<span class="math inline">\(z(u_{\alpha} + h)\)</span>,</p>
+<ul>
+<li>w przykładzie <span class="math inline">\(z(u_{\alpha} + h)=15.48\)</span> stopni Celsjusza.</li>
+</ul></li>
+</ul>
+<p>Możemy zatem obliczyć wartość semiwariancji:</p>
+<p><span class="math display">\[\gamma(h) = \frac{1}{2}(13,85 - 15,48)^2 =
+\frac{1}{2}(-1,63)^2 = \\
+\frac{1}{2} \times 2,6569 = 1,32845 \approx 1,33 \]</span></p>
+<p>Korzystając z wzoru na semiwariację otrzymujemy wartość równą ok. 1,33. Znamy również odległość między punktami (ok. 3240,89 metra), więc możemy w uproszczeniu stwierdzić, że dla tej pary punktów odległych o 3240 metrów wartość semiwariancji wynosi około 1,33.</p>
+<p>W R obliczenia wyglądałyby następująco:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#wykorzystanie funkcji st_distance do obliczenia odległości między dwoma punktami</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>odl <span class="ot">=</span> <span class="fu">st_distance</span>(punkty[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), ])[<span class="dv">2</span>]</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#obliczenie wartości semiwariancji między dwoma puntami</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>gamma <span class="ot">=</span> <span class="fl">0.5</span> <span class="sc">*</span> (punkty<span class="sc">$</span>temp[<span class="dv">1</span>] <span class="sc">-</span> punkty<span class="sc">$</span>temp[<span class="dv">2</span>]) <span class="sc">^</span> <span class="dv">2</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>gamma</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.331691</code></pre>
+</div>
+</div>
+</section>
+<section id="chmura-semiwariogramu" class="level3" data-number="11.3.2">
+<h3 data-number="11.3.2" class="anchored" data-anchor-id="chmura-semiwariogramu"><span class="header-section-number">11.3.2</span> Chmura semiwariogramu</h3>
+<p>Jeżeli w badanej próbie mamy <span class="math inline">\(n\)</span> obserwacji oznacza to, że możemy zaobserwować <span class="math inline">\(\frac{1}{2}n(n-1)\)</span> par obserwacji. Dla każdej z par obserwacji obliczana jest semiwariancja. Tę semiwariancję można zaprezentować na wykresie zwanym <strong>chmurą semiwariogramu</strong>. Lokalizacja każdego punktu na chmurze semiwariogramu określona jest przez 2 współrzędne:</p>
+<ul>
+<li><span class="math inline">\(x\)</span>: odległość między dwoma punktami</li>
+<li><span class="math inline">\(y\)</span>: wartość semiwariancji.</li>
+</ul>
+<p>Chmurę semiwariogramu w R używając funkcji <code>variogram()</code> z argumentem <code>cloud = TRUE</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>vario_cloud <span class="ot">=</span> <span class="fu">variogram</span>(temp <span class="sc">~</span> <span class="dv">1</span>, <span class="at">locations =</span> punkty, </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                         <span class="at">cloud =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(vario_cloud)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="15_pola_modelowanie_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Chmura semiwariogramu zmiennej temp.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Chmura semiwariogramu pozwala także na zauważenie par punktów, których wartości znacząco odstają.</p>
+</section>
+</section>
+<section id="semiwariogram-charakterystyka-struktury-przestrzennej" class="level2" data-number="11.4">
+<h2 data-number="11.4" class="anchored" data-anchor-id="semiwariogram-charakterystyka-struktury-przestrzennej"><span class="header-section-number">11.4</span> Semiwariogram: charakterystyka struktury przestrzennej</h2>
+<p>Semiwariogram jest wykresem pokazującym relację pomiędzy odległością a semiwariancją. Inaczej mówiąc, dla kolejnych odstępów (lagów) wartość semiwariancji jest uśredniana i przestawiania w odniesieniu do odległości.</p>
+<p><span class="math display">\[\hat{\gamma}(h) = \frac{1}{2N(h)}\sum_{\alpha=1}^{N(h)}(z(u_{\alpha}) - z(u_{\alpha}+h))^2\]</span></p>
+<p>, gdzie <span class="math inline">\(N(h)\)</span> oznacza liczbę par punktów w odstępie <span class="math inline">\(h\)</span>.</p>
+<p>W oparciu o semiwariogram empiryczny (czyli oparty na danych) możemy następnie dopasować do niego model.</p>
+<section id="tworzenie-semiwariogramu" class="level3" data-number="11.4.1">
+<h3 data-number="11.4.1" class="anchored" data-anchor-id="tworzenie-semiwariogramu"><span class="header-section-number">11.4.1</span> Tworzenie semiwariogramu</h3>
+<p>Stworzenie podstawowego semiwariogramu w pakiecie <code>gstat</code> odbywa się z użyciem funkcji <code>variogram()</code>. Należy w niej zdefiniować analizowaną zmienną (w tym przykładzie <code>temp ~ 1</code>) oraz zbiór punktowy (<code>punkty</code>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>vario_par <span class="ot">=</span> <span class="fu">variogram</span>(temp <span class="sc">~</span> <span class="dv">1</span>, <span class="at">locations =</span> punkty)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>vario_par</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     np      dist     gamma dir.hor dir.ver   id
+1   113  214.0615  1.205854       0       0 var1
+2   296  492.6029  2.664303       0       0 var1
+3   450  794.4754  4.168964       0       0 var1
+4   659 1119.4215  5.258232       0       0 var1
+5   825 1429.3537  6.330027       0       0 var1
+6   930 1747.4842  7.078197       0       0 var1
+7   960 2059.9222  7.634849       0       0 var1
+8  1126 2380.7339  8.485727       0       0 var1
+9  1244 2693.4708  9.900739       0       0 var1
+10 1179 3012.0195  9.558005       0       0 var1
+11 1294 3321.8058 11.621229       0       0 var1
+12 1336 3645.0145 11.352249       0       0 var1
+13 1349 3959.8583 11.863130       0       0 var1
+14 1400 4277.9695 14.207606       0       0 var1
+15 1458 4595.7696 15.371019       0       0 var1</code></pre>
+</div>
+</div>
+<p>Do wyświetlenia semiwariogramu służy funkcja <code>plot()</code>. Można również dodać informację o liczbie par punktów, jaka posłużyła do wyliczenia semiwariancji dla kolejnych odstępów poprzez argument <code>plot.numbers = TRUE</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(vario_par, <span class="at">plot.numbers =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="15_pola_modelowanie_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Semiwariogram empiryczny zmiennej temp wraz z zaznaczoną liczbą par dla każdego odstępu.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="parametry-semiwariogramu" class="level3" data-number="11.4.2">
+<h3 data-number="11.4.2" class="anchored" data-anchor-id="parametry-semiwariogramu"><span class="header-section-number">11.4.2</span> Parametry semiwariogramu</h3>
+<p>Przy ustalaniu parametrów semiwariogramu powinno się stosować do kilku utartych zasad (tzw. <em>rules of thumb</em>):</p>
+<ul>
+<li>W każdym odstępie powinno się znaleźć co najmniej 30 par punktów.</li>
+<li>Maksymalny zasięg semiwariogramu (ang. <em>cutoff distance</em>) to 1/2 pierwiastka z badanej powierzchni (inne źródła mówią o połowie z przekątnej badanego obszaru/jednej trzeciej).</li>
+<li>Liczba odstępów powinna nie być mniejsza niż 10.</li>
+<li>Optymalnie maksymalny zasięg semiwariogramu powinien być dłuższy o 10-15% od zasięgu zjawiska.</li>
+<li>Optymalnie odstępy powinny być jak najbliżej siebie i jednocześnie nie być chaotyczne.</li>
+<li>Warto metodą prób i błędów określić optymalne parametry semiwariogramu.</li>
+</ul>
+</section>
+<section id="obliczenia-pomocnicze" class="level3" data-number="11.4.3">
+<h3 data-number="11.4.3" class="anchored" data-anchor-id="obliczenia-pomocnicze"><span class="header-section-number">11.4.3</span> Obliczenia pomocnicze</h3>
+<section id="liczba-par-obserwacji" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="liczba-par-obserwacji">Liczba par obserwacji</h4>
+<p>W zrozumieniu danych oraz przy określaniu parametrów semiwariogramu może pomóc szereg obliczeń pomocniczych. Przykładowo, aby wyliczyć liczbę par obserwacji można użyć poniższego kodu.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.5</span> <span class="sc">*</span> <span class="fu">nrow</span>(punkty) <span class="sc">*</span> (<span class="fu">nrow</span>(punkty) <span class="sc">-</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 30381</code></pre>
+</div>
+</div>
+</section>
+<section id="średnia-odległość-między-punktami" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="średnia-odległość-między-punktami">Średnia odległość między punktami</h4>
+<p>Powierzchnia zajmowana przez jedną próbkę jest osiągana poprzez podzielenie całej badanej powierzchni poprzez liczbę punktów.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>pow_pr <span class="ot">=</span> <span class="fu">st_area</span>(granica) <span class="sc">/</span> <span class="fu">nrow</span>(punkty)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>pow_pr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>256585.6 [m^2]</code></pre>
+</div>
+</div>
+<p>Średnia odległość między punktami to wartość pierwiastka z powierzchni zajmowanej przez jedną próbkę.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(pow_pr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>506.5428 [m]</code></pre>
+</div>
+</div>
+</section>
+<section id="maksymalny-zasięg-semiwariogramu" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="maksymalny-zasięg-semiwariogramu">Maksymalny zasięg semiwariogramu</h4>
+<p>Ostatnim obliczeniem pomocniczym jest określenie połowy pierwiastka powierzchni. Może być ono następnie użyte do ustalenia maksymalnego zasięgu semiwariogramu.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>pow <span class="ot">=</span> <span class="fu">st_area</span>(granica)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fl">0.5</span> <span class="sc">*</span> <span class="fu">sqrt</span>(pow)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>3980.472 [m]</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="modyfikacja-semiwariogramu" class="level3" data-number="11.4.4">
+<h3 data-number="11.4.4" class="anchored" data-anchor-id="modyfikacja-semiwariogramu"><span class="header-section-number">11.4.4</span> Modyfikacja semiwariogramu</h3>
+<p>Maksymalny zasięg semiwariogramu (ang. <em>cutoff distance</em>) jest domyślnie wyliczany w pakiecie <strong>gstat</strong> jako 1/3 z najdłuższej przekątnej badanego obszaru. Można jednak tę wartość zmodyfikować używając argumentu <code>cutoff</code> .</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>vario_par <span class="ot">=</span> <span class="fu">variogram</span>(temp <span class="sc">~</span> <span class="dv">1</span>, <span class="at">locations =</span> punkty,</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">cutoff =</span> <span class="dv">4000</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(vario_par)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="15_pola_modelowanie_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Semiwariogram empiryczny zmiennej temp używając ręcznie ustalonej wartości maksymalnego zasięgu semiwariogramu.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Dodatkowo, domyślnie w pakiecie <code>gstat</code> odległość między przedziałami (ang. <em>interval width</em>) jest wyliczana jako maksymalny zasięg semiwariogramu podzielony przez 15. Można to oczywiście zmienić używając zarówno argumentu cutoff, jak i argumentu width mówiącego o szerokości odstępów</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>vario_par <span class="ot">=</span> <span class="fu">variogram</span>(temp <span class="sc">~</span> <span class="dv">1</span>, <span class="at">locations =</span> punkty,</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">cutoff =</span> <span class="dv">4000</span>, <span class="at">width =</span> <span class="dv">100</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(vario_par)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="15_pola_modelowanie_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Semiwariogram empiryczny zmiennej temp używając ręcznie ustalonej wartości szerokości odstępów.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="modelowanie-autokorelacji-przestrzennej" class="level2" data-number="11.5">
+<h2 data-number="11.5" class="anchored" data-anchor-id="modelowanie-autokorelacji-przestrzennej"><span class="header-section-number">11.5</span> Modelowanie autokorelacji przestrzennej</h2>
+<p>Modelowanie autokorelacji przestrzennej polega na dopasowanie modelu (funkcji) do semiwariogramu empirycznego (wyliczonego z danych). Pozwala on zarówno na lepszy opis zmienności zjawiska, jak również służy do tworzenia estymacji czy też symulacji.</p>
+<section id="model-semiwariogramu" class="level3" data-number="11.5.1">
+<h3 data-number="11.5.1" class="anchored" data-anchor-id="model-semiwariogramu"><span class="header-section-number">11.5.1</span> Model semiwariogramu</h3>
+<p>Model semiwariogramu składa się zazwyczaj z trzech podstawowych elementów:</p>
+<ul>
+<li><strong>Nugget</strong> - efekt nuggetowy - pozwala na określenie błędu w danych wejściowych oraz zmienności na dystansie krótszym niż pierwszy odstęp.</li>
+<li><strong>Sill</strong> - semiwariancja progowa - oznacza wariancję badanej zmiennej.</li>
+<li><strong>Range</strong> - zasięg - to odległość do której istnieje przestrzenna korelacja.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/variogram_text.png" class="img-fluid figure-img" style="width:12cm"></p>
+<figcaption>Podstawowe elementy modelu semiwariogramu.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<section id="modele-podstawowe" class="level4" data-number="11.5.1.1">
+<h4 data-number="11.5.1.1" class="anchored" data-anchor-id="modele-podstawowe"><span class="header-section-number">11.5.1.1</span> Modele podstawowe</h4>
+<p>Pakiet <code>gstat</code> zawiera 20 podstawowych modeli geostatystycznych, w tym najczęściej używane takie jak:</p>
+<ul>
+<li><p><strong>Nuggetowy (ang. <em>Nugget effect model</em>)</strong></p>
+<ul>
+<li>określa sytuację, w której analizowana zmienna nie wykazuje autokorelacji (niepodobieństwo jej wartości nie wzrasta wraz z odległością)</li>
+<li>nie powinien być używany samodzielnie - w większości zastosowań jest on elementem modelu złożonego. Służy on do określania, między innymi, błędu pomiarowego czy zmienności na krótkich odstępach.</li>
+</ul></li>
+<li><p><strong>Sferyczny (ang. <em>Spherical model</em>)</strong></p>
+<ul>
+<li>jeden z najczęściej stosowanych modeli</li>
+</ul></li>
+<li><p><strong>Wykładniczy (ang. <em>Exponential model</em>)</strong></p>
+<ul>
+<li>jeden z najczęściej stosowanych modeli;</li>
+<li>nie ma skończonego zasięgu,</li>
+<li>zamiast zasięgu podaje się tzw. zasięg praktyczny, tj. odległość na jakiej model osiąga 95% wartości wariancji progowej</li>
+</ul></li>
+<li><p><strong>Gaussowski (ang. <em>Gaussian model</em>)</strong></p>
+<ul>
+<li>posiada zasięg praktyczny definiowany jako 95% wartości wariancji progowej</li>
+<li>jego cechą charakterystyczną jest paraboliczny kształt na początkowym odcinku.</li>
+</ul></li>
+<li><p><strong>Potęgowy (ang. <em>Power model</em>)</strong></p>
+<ul>
+<li>przykład tzw. modelu nieograniczonego</li>
+<li>wartość modelu rośnie w nieskończoność, dlatego niemożliwe jest określenie jego zasięgu.</li>
+<li>w przypadku modelu potęgowego, parametr <em>range</em> oznacza wykładnik potęgowy.</li>
+</ul></li>
+</ul>
+<p>Do wyświetlenia listy nazw modeli i ich skrótów służy funkcja <code>vgm()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vgm</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   short                                      long
+1    Nug                              Nug (nugget)
+2    Exp                         Exp (exponential)
+3    Sph                           Sph (spherical)
+4    Gau                            Gau (gaussian)
+5    Exc        Exclass (Exponential class/stable)
+6    Mat                              Mat (Matern)
+7    Ste Mat (Matern, M. Stein's parameterization)
+8    Cir                            Cir (circular)
+9    Lin                              Lin (linear)
+10   Bes                              Bes (bessel)
+11   Pen                      Pen (pentaspherical)
+12   Per                            Per (periodic)
+13   Wav                                Wav (wave)
+14   Hol                                Hol (hole)
+15   Log                         Log (logarithmic)
+16   Pow                               Pow (power)
+17   Spl                              Spl (spline)
+18   Leg                            Leg (Legendre)
+19   Err                   Err (Measurement error)
+20   Int                           Int (Intercept)</code></pre>
+</div>
+</div>
+<p>Można się również im przyjrzeć używając funkcji <code>show.vgms()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">show.vgms</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="15_pola_modelowanie_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Istnieje możliwość wyświetlenia tylko wybranych modeli podstawowych poprzez argument <em>models</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">show.vgms</span>(<span class="at">models =</span> <span class="fu">c</span>(<span class="st">"Sph"</span>, <span class="st">"Gau"</span>, <span class="st">"Pow"</span>, <span class="st">"Exp"</span>), </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">range =</span> <span class="fl">1.4</span>, <span class="at">max =</span> <span class="fl">2.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="15_pola_modelowanie_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Dodatkowo, można je porównać na jednym wykresie poprzez argument <em>as.groups = TRUE</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">show.vgms</span>(<span class="at">models =</span> <span class="fu">c</span>(<span class="st">"Sph"</span>, <span class="st">"Gau"</span>, <span class="st">"Pow"</span>, <span class="st">"Exp"</span>), </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">range =</span> <span class="fl">1.4</span>, <span class="at">max =</span> <span class="fl">2.5</span>, <span class="at">as.groups =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="15_pola_modelowanie_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="dopasowanie-modelu-w-r" class="level4" data-number="11.5.1.2">
+<h4 data-number="11.5.1.2" class="anchored" data-anchor-id="dopasowanie-modelu-w-r"><span class="header-section-number">11.5.1.2</span> Dopasowanie modelu w R</h4>
+<p>Do zbudowania modelu semiwariogramu należy wykonać szereg kroków:</p>
+<ol type="1">
+<li><p>Stworzyć i wyświetlić semiwariogram empiryczny analizowanej zmiennej z użyciem funkcji <code>variogram()</code> oraz <code>plot()</code>.</p></li>
+<li><p>Zdefiniować wejściowe parametry semiwariogramu.</p>
+<ul>
+<li>W najprostszej sytuacji wystarczy zdefiniować używany model/e poprzez skróconą nazwę używanej funkcji (<code>model</code>).</li>
+<li>Możliwe, ale nie wymagane jest także określenie wejściowej semiwariancji cząstkowej (<code>psill</code>) oraz zasięgu modelu (<code>range</code>) w funkcji <code>vgm()</code>.</li>
+<li>Uzyskany model można przedstawić w funkcji <code>plot()</code> podając nazwę obiektu zawierającego semiwariogram empiryczny oraz obiektu zawierającego model.</li>
+</ul></li>
+<li><p>Dopasować parametry modelu używając funkcji <code>fit.variogram()</code>.</p>
+<ul>
+<li>To dopasowanie można również zwizualizować używając funkcji <code>plot()</code>.</li>
+</ul></li>
+</ol>
+</section>
+</section>
+<section id="przykład-analiza-i-modelowanie-struktury-przestrzennej-zmiennej-temperatura" class="level3" data-number="11.5.2">
+<h3 data-number="11.5.2" class="anchored" data-anchor-id="przykład-analiza-i-modelowanie-struktury-przestrzennej-zmiennej-temperatura"><span class="header-section-number">11.5.2</span> Przykład: Analiza i modelowanie struktury przestrzennej zmiennej temperatura</h3>
+<section id="dane" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="dane">Dane</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>punkty <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"data/punkty.csv"</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>punkty <span class="ot">=</span> <span class="fu">st_as_sf</span>(punkty, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="st">"EPSG:2180"</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>punkty <span class="ot">=</span> punkty[<span class="sc">!</span><span class="fu">is.na</span>(punkty<span class="sc">$</span>temp), ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="etap-1-stworzenie-i-wyświetlenie-semiwariogramu-empirycznego" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="etap-1-stworzenie-i-wyświetlenie-semiwariogramu-empirycznego">Etap 1: Stworzenie i wyświetlenie semiwariogramu empirycznego</h4>
+<p>Semiwariogram empiryczny tworzy się używając funkcji <code>variogram()</code> z pakietu <code>gstat()</code>. Należy w niej zdefiniować analizowaną zmienną (w tym przykładzie <code>temp ~ 1</code>) oraz zbiór punktowy (<code>punkty</code>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>vario <span class="ot">=</span> <span class="fu">variogram</span>(temp <span class="sc">~</span> <span class="dv">1</span>, <span class="at">locations =</span> punkty)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(vario)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="15_pola_modelowanie_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="etap-2-zdefiniowanie-podstawowych-parametrów-semiwariogramu" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="etap-2-zdefiniowanie-podstawowych-parametrów-semiwariogramu">Etap 2: Zdefiniowanie podstawowych parametrów semiwariogramu</h4>
+<p>W tym kroku należy podjąć decyzję o typie modelu (sferyczny, wykładniczy, itp.) oraz zdefiniować podstawowe parametry semiwarigramu:</p>
+<ul>
+<li><p>nugget</p>
+<ul>
+<li>zazwyczaj semiwariogram nie zaczyna się w punkcie (0,0).</li>
+<li>wartość nuggetu odczytujemy jako przesunięcie wartości na osi y</li>
+</ul></li>
+<li><p>semiwariancję progową (<em>psill</em>)</p>
+<ul>
+<li>oznacza wariancję badanej zmiennej;</li>
+<li>wartość semiwariancji progowej odczytujemy z osi y: wartość semiwaiancji po ustabilizowaniu się jej wartości (wartość ta już nie rośnie wraz z odległością)</li>
+</ul></li>
+<li><p>zasięg (<em>range</em>)</p>
+<ul>
+<li>to odległość do której istnieje przestrzenna autokorelacja;</li>
+<li>jest to wartość odczytana z osi x (odległość) do której następuje wzrost wartości semiwariancji wraz z odległością.</li>
+</ul></li>
+</ul>
+<p>W R do określenia typu modelu oraz jego podstawowych parametrów używa się funkcji <code>vgm()</code> z pakietu <code>gstat</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>model_sph <span class="ot">=</span> <span class="fu">vgm</span>(<span class="at">psill =</span> <span class="dv">10</span>, <span class="at">model =</span> <span class="st">"Sph"</span>, <span class="at">range =</span> <span class="dv">3000</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>model_sph</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  model psill range
+1   Sph    10  3000</code></pre>
+</div>
+</div>
+<p>Funkcja <code>plot()</code> pozwala na wizualizację dopasowania modelu do danych. Najważniejsze jest dobre dopasowanie modelu do semiwariogramu empirycznego (punkty na wykresie poniżej) w początkowym odcinku semiwariogramu (tam gdzie obserwujemy wzrost semiwariancji wraz z odleglością).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(vario, <span class="at">model =</span> model_sph)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="15_pola_modelowanie_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Do powyżej zdefiniowanych parametrów dodamy jeszcze wartość efektu nuggetowego:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>model_sph2 <span class="ot">=</span> <span class="fu">vgm</span>(<span class="at">psill =</span> <span class="dv">10</span>, <span class="at">model =</span> <span class="st">"Sph"</span>, <span class="at">range =</span> <span class="dv">3000</span>, <span class="at">nugget =</span><span class="fl">0.5</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>model_sph2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  model psill range
+1   Nug   0.5     0
+2   Sph  10.0  3000</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(vario, <span class="at">model =</span> model_sph)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="15_pola_modelowanie_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Możemy zaobserwować, że dodanie wartości nuggetu “nieco podniosło” linię modelu powodując, że jest ona lepiej dopasowana w początkowym odcinku semiwariogramu.</p>
+</section>
+<section id="etap-3-dopasowanie-parametrów-modelu" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="etap-3-dopasowanie-parametrów-modelu">Etap 3: Dopasowanie parametrów modelu</h4>
+<p>Funkcja <code>fit.variogram()</code> pozwala na automatyczne dopasowanie modelu w oparciu o wstępnie podane parametry.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>fitted_sph <span class="ot">=</span> <span class="fu">fit.variogram</span>(vario, model_sph2)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>fitted_sph</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  model      psill  range
+1   Nug  0.6755637    0.0
+2   Sph 13.6466875 5479.9</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(vario, <span class="at">model =</span> fitted_sph)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="15_pola_modelowanie_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<!-- model_sph4 <- fit.variogram(vario, model = vgm("Sph", "Gau", "Exp")) -->
+<!-- https://bookdown.org/nowosad/geostatystyka/geostatystyka-prolog.html#parametry-semiwariogramu -->
+<!-- https://bookdown.org/nowosad/geostatystyka/geostatystyka-prolog.html#obliczenia-pomocnicze -->
+<!-- https://bookdown.org/nowosad/geostatystyka/geostatystyka-prolog.html#modyfikacja-semiwariogramu -->
+<!-- wspomnienie: https://bookdown.org/nowosad/geostatystyka/geostatystyka-prolog.html#anizotropia -->
+<!-- wspomnienie: -->
+<!-- modele złożone -->
+<!-- modelowanie anizotropowe -->
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./14_pola_interpolacja.html" class="pagination-link" aria-label="Metody interpolacji">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Metody interpolacji</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./16_pola_estymacja.html" class="pagination-link" aria-label="Geostatystyczne metody estymacji">
+        <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Geostatystyczne metody estymacji</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

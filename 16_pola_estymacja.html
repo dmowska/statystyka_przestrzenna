@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>12&nbsp; Geostatystyczne metody estymacji – Statystyka przestrzenna</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./17_pola_ocena.html" rel="next">
+<link href="./15_pola_modelowanie.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-c852b7e71cc1c09f55f367b2512aabbd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./13_pola.html">DANE POWIERZCHNIOWE CIĄGŁE PRZESTRZENNIE</a></li><li class="breadcrumb-item"><a href="./16_pola_estymacja.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Geostatystyczne metody estymacji</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Statystyka przestrzenna</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">O skrypcie</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./01_wstep.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">WSTĘP</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_wprowadzenie.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Wprowadzenie</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_zastosowanie.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Zastosowania statystyki przestrzennej</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_daneprzestrzenne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Dane przestrzenne w R</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_eksploracja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Eksploracyjna analiza danych przestrzennych</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./06_punkty.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE PUNKTOWE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_punkty_centrograficzne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Statystyki centrograficzne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_punkty_odleglosc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Metody oparte na odległości</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09_punkty_intensywnosc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Metody oparte na analizie intensywności</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./10_poligony.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE OBSZAROWE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_poligony_sasiedztwo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Określanie sąsiedztwa danych obszarowych</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12_poligony_autokorelacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Miary autokorelacji danych obszarowych</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./13_pola.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE POWIERZCHNIOWE CIĄGŁE PRZESTRZENNIE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14_pola_interpolacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Metody interpolacji</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15_pola_modelowanie.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Geostatystyka: Analiza i modelowanie autokorelacji przestrzennej</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_pola_estymacja.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Geostatystyczne metody estymacji</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_pola_ocena.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Ocena jakości estymacji</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">ZADANIA</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18_zadania_samodzielne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Zadania samodzielne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19_projekt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Projekt</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20_projekt_geostatystyka.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Projekt 2: Geostatytyka</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#estymacje-geostatystyczne" id="toc-estymacje-geostatystyczne" class="nav-link active" data-scroll-target="#estymacje-geostatystyczne"><span class="header-section-number">12.1</span> Estymacje geostatystyczne</a></li>
+  <li><a href="#kriging-w-r" id="toc-kriging-w-r" class="nav-link" data-scroll-target="#kriging-w-r"><span class="header-section-number">12.2</span> Kriging w R</a>
+  <ul class="collapse">
+  <li><a href="#pakiet-gstat" id="toc-pakiet-gstat" class="nav-link" data-scroll-target="#pakiet-gstat"><span class="header-section-number">12.2.1</span> Pakiet gstat</a></li>
+  <li><a href="#estymacja-dla-wybranych-lokalizacji" id="toc-estymacja-dla-wybranych-lokalizacji" class="nav-link" data-scroll-target="#estymacja-dla-wybranych-lokalizacji"><span class="header-section-number">12.2.2</span> Estymacja dla wybranych lokalizacji</a></li>
+  <li><a href="#estymacja-w-siatce" id="toc-estymacja-w-siatce" class="nav-link" data-scroll-target="#estymacja-w-siatce"><span class="header-section-number">12.2.3</span> Estymacja w siatce</a></li>
+  </ul></li>
+  <li><a href="#przykład-1-estymacja-dla-wybranych-lokalizacji" id="toc-przykład-1-estymacja-dla-wybranych-lokalizacji" class="nav-link" data-scroll-target="#przykład-1-estymacja-dla-wybranych-lokalizacji"><span class="header-section-number">12.3</span> Przykład 1: Estymacja dla wybranych lokalizacji</a>
+  <ul class="collapse">
+  <li><a href="#dane" id="toc-dane" class="nav-link" data-scroll-target="#dane"><span class="header-section-number">12.3.1</span> Dane</a></li>
+  <li><a href="#analiza-i-modelowanie-semiwariogramu" id="toc-analiza-i-modelowanie-semiwariogramu" class="nav-link" data-scroll-target="#analiza-i-modelowanie-semiwariogramu"><span class="header-section-number">12.3.2</span> Analiza i modelowanie semiwariogramu</a></li>
+  <li><a href="#estymacja" id="toc-estymacja" class="nav-link" data-scroll-target="#estymacja"><span class="header-section-number">12.3.3</span> Estymacja</a></li>
+  </ul></li>
+  <li><a href="#przykład-2-estymacja-w-siatce" id="toc-przykład-2-estymacja-w-siatce" class="nav-link" data-scroll-target="#przykład-2-estymacja-w-siatce"><span class="header-section-number">12.4</span> Przykład 2: Estymacja w siatce</a>
+  <ul class="collapse">
+  <li><a href="#dane-1" id="toc-dane-1" class="nav-link" data-scroll-target="#dane-1"><span class="header-section-number">12.4.1</span> Dane</a></li>
+  <li><a href="#tworzenie-siatki" id="toc-tworzenie-siatki" class="nav-link" data-scroll-target="#tworzenie-siatki"><span class="header-section-number">12.4.2</span> Tworzenie siatki</a></li>
+  <li><a href="#analiza-i-modelowanie-semiwariogramu-1" id="toc-analiza-i-modelowanie-semiwariogramu-1" class="nav-link" data-scroll-target="#analiza-i-modelowanie-semiwariogramu-1"><span class="header-section-number">12.4.3</span> Analiza i modelowanie semiwariogramu</a></li>
+  <li><a href="#estymacja-kriging-prosty" id="toc-estymacja-kriging-prosty" class="nav-link" data-scroll-target="#estymacja-kriging-prosty"><span class="header-section-number">12.4.4</span> Estymacja: Kriging prosty</a></li>
+  <li><a href="#kriging-zwykły" id="toc-kriging-zwykły" class="nav-link" data-scroll-target="#kriging-zwykły"><span class="header-section-number">12.4.5</span> Kriging zwykły</a></li>
+  <li><a href="#kriging-z-trendem" id="toc-kriging-z-trendem" class="nav-link" data-scroll-target="#kriging-z-trendem"><span class="header-section-number">12.4.6</span> Kriging z trendem</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./13_pola.html">DANE POWIERZCHNIOWE CIĄGŁE PRZESTRZENNIE</a></li><li class="breadcrumb-item"><a href="./16_pola_estymacja.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Geostatystyczne metody estymacji</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Geostatystyczne metody estymacji</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Odtworzenie obliczeń z tego rozdziału wymaga załączenia poniższych pakietów oraz wczytania poniższych danych:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstat)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<!--    W5, W6, U4  Wykład, Ćwiczenia w salach komputerowych-->
+<!-- q:
+(a) interpolacja, estymacja, symulacja, ocena
+(b) interpolacja, estymacja, ocena, symulacja
+jak ocena odnosi się do interpolacji deterministycznej? -->
+<section id="estymacje-geostatystyczne" class="level2" data-number="12.1">
+<h2 data-number="12.1" class="anchored" data-anchor-id="estymacje-geostatystyczne"><span class="header-section-number">12.1</span> Estymacje geostatystyczne</h2>
+<p>Jednym z celów geostatystycznej analizy danych jest <strong>estymacja</strong> - tj. szacowanie wartości zmiennej w nieznanych punktach na podstawie danych z próbkowania. W geostatystyce wykorzystuje się grupę metod estymacji (interpolacji) określanych jako <strong>kriging</strong>. Kriging zakłada, że wartość zmiennej w danej lokalizacji jest zależna od obokległych obserwacji, którym nadawane są odpowiednie wagi na podstawie stopnia przestrzennej korelacji.</p>
+<p>Istnieje szereg metod krigingu Do trzech podstawowych metod zalicza się:</p>
+<ul>
+<li><strong>Kriging prosty (ang. <em>Simple kriging</em>)</strong> - zakłada, że średnia jest znana i stała na całym obszarze.</li>
+<li><strong>Kriging zwykły (ang. <em>Ordinary kriging</em>)</strong> - wykorzystuje do estymacji tylko najbliższe obserwacje, które można określić poprzez podanie liczby punktów, które mają być uwzględnione lub maksymalnej odległości z której mają być uwzględniane punkty.</li>
+<li><strong>Kriging z trendem (ang. <em>Kriging with a trend</em>)</strong> - wykorzystuje do estymacji (oprócz zmienności wartości wraz z odległością) położenie analizowanych punktów (tj. ich współrzędne x,y).</li>
+</ul>
+<p>Kriging można zastosować do oszacowania wartość dla wybranych punktów lub dla siatki o określonej rozdzielczości.</p>
+<!-- https://bookdown.org/nowosad/geostatystyka/estymacje-jednozmienne.html#kriging -->
+<!-- kriging prosty: https://bookdown.org/nowosad/geostatystyka/estymacje-jednozmienne.html#kriging-prosty -->
+<!-- kriging zwykły: https://bookdown.org/nowosad/geostatystyka/estymacje-jednozmienne.html#kriging-zwykly -->
+<!-- kriging uniwersalny:  -->
+<!-- https://bookdown.org/nowosad/geostatystyka/wykorzystanie-do-estymacji-danych-uzupeniajacych.html#kriging-uniwersalny -->
+<!-- tabela z innymi metodami krigingu -->
+<!-- https://bookdown.org/nowosad/geostatystyka/estymacje-jednozmienne.html#kriging -->
+</section>
+<section id="kriging-w-r" class="level2" data-number="12.2">
+<h2 data-number="12.2" class="anchored" data-anchor-id="kriging-w-r"><span class="header-section-number">12.2</span> Kriging w R</h2>
+<section id="pakiet-gstat" class="level3" data-number="12.2.1">
+<h3 data-number="12.2.1" class="anchored" data-anchor-id="pakiet-gstat"><span class="header-section-number">12.2.1</span> Pakiet gstat</h3>
+<p>Pakiet <code>gstat</code> dostarcza funkcji do geostatystycznej analizy danych, w tym tworzenia semiwariogramów (funkcja <code>variogram()</code>), modelowania semiwariogramów (funkcje <code>vgm()</code> oraz <code>fit.variogram()</code>) oraz przeprowadzenia krigingu oraz symulacji.</p>
+<p>Do wykonania interpolacji jedną z metod krigingu zostanie wykorzystana funkcja <code>gstat()</code> z pakietu <code>gstat</code>. Funkcja <code>gstat()</code> tworzy obiekt klasy <code>gstat</code>, który zawiera wszystkie informacje potrzebne do wykonania krigingu. Funkcja ta wymaga zdefiniowania następujących argumentów:</p>
+<ul>
+<li><em>formula</em> - zmienna dla której będzie wykonywana estymacja (w przykładzie jest to <em>temp~1</em>)</li>
+<li><em>locations</em> - dane wejściowe zawierające zmierzone wartości zmiennej (w przykładzie <em>punkty</em>)</li>
+<li><em>model</em> - parametrów modelu dopasowanego do semiwariogramu empirycznego (wynik działania funkcji <code>vgm()</code> lub <code>fit.variogram()</code>)</li>
+</ul>
+<p>Dodatkowo w zależności od wybranej metody należy zdefniować argument:</p>
+<ul>
+<li><em>beta</em> - średnia wartość stosowana przy krigingu prostym</li>
+<li><em>nmax</em> - liczba najbliższych punktów uwzględnianych w krigingu zwykłym</li>
+<li><em>maxdist</em> - maksymalna odległość, z której mają być uwzględniane punkty w krigingu zwykłym.</li>
+</ul>
+</section>
+<section id="estymacja-dla-wybranych-lokalizacji" class="level3" data-number="12.2.2">
+<h3 data-number="12.2.2" class="anchored" data-anchor-id="estymacja-dla-wybranych-lokalizacji"><span class="header-section-number">12.2.2</span> Estymacja dla wybranych lokalizacji</h3>
+<p>Estymacja dla wybranych lokalizacji punktowych wymaga:</p>
+<ul>
+<li>stworzenia obiektu klasy <code>gstat</code> wykorzystując funkcje <code>gstat()</code> z parametrami krigingu;</li>
+<li>wykonania predykcji dla lokalizacji zapisanych w zbiorze danych punktowych wykorzystując funkcję <code>predict()</code>.</li>
+</ul>
+</section>
+<section id="estymacja-w-siatce" class="level3" data-number="12.2.3">
+<h3 data-number="12.2.3" class="anchored" data-anchor-id="estymacja-w-siatce"><span class="header-section-number">12.2.3</span> Estymacja w siatce</h3>
+<p>Estymacja w siatce wymaga:</p>
+<ul>
+<li><p>stworzenia siatki wykorzystując funkcję <code>rast()</code> z pakietu <code>terra</code> (utworzony zostanie obiekt klasy <code>SpatRaster</code>);</p></li>
+<li><p>stworzenia obiektu klasy <code>gstat</code> wykorzystując funkcję <code>gstat()</code> z parametrami krigingu;</p></li>
+<li><p>wykonanie interpolacji w siatce wykorzystując funkcję <code>interpolate()</code> z pakietu <code>terra</code>.</p>
+<ul>
+<li>w funkcji <code>interpolate()</code> trzeba podać 3 argumenty: siatkę, obiekt klasy <code>gstat</code> z parametrami krigingu oraz funkcję pozwalająca na wykonanie interpolacji w oparciu obiekt <code>gstat</code> (funkcja <code>interpolate_gstat()</code>). Należy pamiętać, aby każdorazowo wykonując kriging wczytać poniższą funkcję.</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>interpolate_gstat <span class="ot">=</span> <span class="cf">function</span>(model, x, ...) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  v <span class="ot">=</span> <span class="fu">st_as_sf</span>(x, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="fu">st_crs</span>(model<span class="sc">$</span>data[[<span class="dv">1</span>]]<span class="sc">$</span>data))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">=</span> <span class="fu">predict</span>(model, v, ...)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>(p)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="przykład-1-estymacja-dla-wybranych-lokalizacji" class="level2" data-number="12.3">
+<h2 data-number="12.3" class="anchored" data-anchor-id="przykład-1-estymacja-dla-wybranych-lokalizacji"><span class="header-section-number">12.3</span> Przykład 1: Estymacja dla wybranych lokalizacji</h2>
+<p>W poniższym przykładzie zastosujemy kriging prosty (ang. <em>simple kriging</em>) do oszacowania wartości w wybranych lokalizacjach.</p>
+<section id="dane" class="level3" data-number="12.3.1">
+<h3 data-number="12.3.1" class="anchored" data-anchor-id="dane"><span class="header-section-number">12.3.1</span> Dane</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>granica <span class="ot">=</span> <span class="fu">read_sf</span>(<span class="st">"data/granica.gpkg"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>punkty <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"data/punkty.csv"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>punkty <span class="ot">=</span> <span class="fu">st_as_sf</span>(punkty, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="st">"EPSG:2180"</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>punkty <span class="ot">=</span> punkty[<span class="sc">!</span><span class="fu">is.na</span>(punkty<span class="sc">$</span>temp), ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Do wygenerowania nowych lokalizacji użyjemy funkcji <code>st_sample()</code> z pakietu <code>sf</code>. Funkcja ta wymaga podania zasięgu obszaru, w którym mają być wygenerowane punkty, liczby punktów oraz typu próbkowania. W poniższym przykładzie wygenerowano lokalizacje 100 punktów losowo rozmieszczonych w granicy analizowanego obszaru.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#utworzenie zbioru punktowego z nowymi lokalizacjami, w których ma być wykonana estymacja. </span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>nowe_punkty <span class="ot">=</span> <span class="fu">st_sample</span>(granica, <span class="dv">100</span>, <span class="at">type =</span> <span class="st">"random"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(granica) <span class="sc">+</span> </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">col =</span> <span class="st">"grey"</span>) <span class="sc">+</span> </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(punkty) <span class="sc">+</span> </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_dots</span>(<span class="at">fill =</span> <span class="st">"darkgreen"</span>, <span class="at">size =</span> <span class="fl">0.7</span>) <span class="sc">+</span> </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(nowe_punkty) <span class="sc">+</span> </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_dots</span>(<span class="at">fill =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">0.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="16_pola_estymacja_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Lokalizacja punktów pomiarowych (zielony) oraz punktów o nieznanych wartościach zmiennej, dla których będzie wykonana estymacja (czarny)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="analiza-i-modelowanie-semiwariogramu" class="level3" data-number="12.3.2">
+<h3 data-number="12.3.2" class="anchored" data-anchor-id="analiza-i-modelowanie-semiwariogramu"><span class="header-section-number">12.3.2</span> Analiza i modelowanie semiwariogramu</h3>
+<p>Estymacja z wykorzystaniem jednej z metod krigingu musi być poprzedzona analizą oraz modelowaniem semiwariogramu. Estymacja wymaga wykonania najpierw kilku kroków:</p>
+<p><strong>1. Stworzenie i wyświetlenie semiwariogram empiryczny analizowanej zmiennej z użyciem funkcji <code>variogram()</code> oraz <code>plot()</code></strong>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstat)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>v <span class="ot">=</span> <span class="fu">variogram</span>(temp<span class="sc">~</span><span class="dv">1</span>, punkty, <span class="at">cutoff =</span> <span class="dv">5000</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(v)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="16_pola_estymacja_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>2. Zdefiniowanie wejściowych parametrów semiwariogramu używając funkcji <code>vgm()</code> (typ modelu, nugget, wariancja progowa, zasięg).</strong></p>
+<p>W poniższym przykładzie po stworzeniu semiwariogramu empirycznego, dopasowano model semiwariogramu składający się z funkcji sferycznej o zasięgu 4000 metrów i wartości nuggetu równej 0,5.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>model_sph <span class="ot">=</span> <span class="fu">vgm</span>(<span class="at">psill =</span> <span class="dv">10</span>, <span class="at">model =</span> <span class="st">"Sph"</span>, <span class="at">range =</span> <span class="dv">4000</span>, <span class="at">nugget =</span><span class="fl">0.5</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(v, model_sph)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="16_pola_estymacja_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>3. Dopasowanie parametrów modelu używając funkcji <code>fit.variogram()</code>.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">fit.variogram</span>(v, model_sph)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(v, <span class="at">model =</span> model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="16_pola_estymacja_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="estymacja" class="level3" data-number="12.3.3">
+<h3 data-number="12.3.3" class="anchored" data-anchor-id="estymacja"><span class="header-section-number">12.3.3</span> Estymacja</h3>
+<p>W przykładzie wykorzystamy kriging prosty (<em>simple kriging</em>), który zakłada, że średnia jest znana i stała na całym obszarze. Jako średnią podamy średnią wartość zmiennej <em>temp</em>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(punkty<span class="sc">$</span>temp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 15.27321</code></pre>
+</div>
+</div>
+<p>W pierwszym etapie zostanie utworzony obiekt klasy <code>gstat</code> zawierający parametry krigingu. Obiekt klasy <code>gstat</code> składa się z kilku list zawierających:</p>
+<ul>
+<li>formułę (w przykładzie <em>temp~1</em>),</li>
+<li>ramkę danych z danymi wejściowymi zawierającymi wartości estymowanej zmiennej (w przykładzie obiekt <em>punkty</em>),</li>
+<li>listę zawierającą parametry modelu (obiekt <em>model</em> będący wynikiem działania funkcji <code>fit.variogram()</code>),</li>
+<li>inne parametry krigingu (np. parametr <em>beta</em> określający średnią wartość zmiennej w analizowanym obszarze).</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>sk_param <span class="ot">=</span> <span class="fu">gstat</span>(<span class="at">formula =</span> temp <span class="sc">~</span> <span class="dv">1</span>, </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">locations =</span> punkty,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">model =</span> model,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">beta =</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Po wyświetleniu obiektu <strong>sk_param</strong> otrzymamy następujące informacje:</p>
+<ul>
+<li>formuła</li>
+<li>wielkość zbioru danych wejściowych (liczba kolumn i wierszy w zbiorze danych punkty)</li>
+<li>parametry modelu</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>sk_param</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>data:
+var1 : formula = temp`~`1 ; data dim = 247 x 5 beta = 15
+variograms:
+        model      psill    range
+var1[1]   Nug  0.6557973    0.000
+var1[2]   Sph 15.1551913 6188.152</code></pre>
+</div>
+</div>
+<p>Kolejnym krokiem jest wykonanie predykcji wykorzystując funkcję <code>predict()</code>. Funkcja <code>predict()</code> wymaga zdefiniowania dwóch argumentów: obiektu klasy <code>gstat</code> zawierającego parametry krigingu (w przykładzie obiekt <em>sk_param</em>) oraz nazwy zbioru danych zawierającego nowe lokalizacje, dla których ma być wykonana estymacja (w przykładzie obiekt <em>nowe punkty</em>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>sk_punkty <span class="ot">=</span> <span class="fu">predict</span>(sk_param, nowe_punkty)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[using simple kriging]</code></pre>
+</div>
+</div>
+<p>Wynik krigingu prostego (oraz innych metod krigingu dostępnych w pakiecie <code>gstat</code>), można podejrzeć wpisując nazwę wynikowego obiektu. Szczególnie ważne są dwie, nowe zmienne:</p>
+<ul>
+<li><em>var1.pred</em> - to wartość estymowana dla każdego punktu (lub oczka siatki)</li>
+<li><em>var1.var</em> - informuje o wariancji estymacji.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>sk_punkty</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 100 features and 2 fields
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: 745637 ymin: 712676.2 xmax: 755590.9 ymax: 720205.4
+Projected CRS: ETRF2000-PL / CS92
+First 10 features:
+   var1.pred var1.var                  geometry
+1   14.33853 2.016268 POINT (754903.3 718651.9)
+2   13.02704 3.059513 POINT (748625.5 716346.2)
+3   17.50632 2.001131 POINT (747480.4 714803.1)
+4   10.88570 1.137811 POINT (747588.4 717210.4)
+5   19.12422 2.593422 POINT (752887.2 713523.5)
+6   15.94537 2.135047 POINT (745803.6 715810.5)
+7   15.75018 3.389682   POINT (745637 716264.8)
+8   13.27067 2.204342 POINT (750037.2 717080.5)
+9   13.76263 3.044975 POINT (754858.7 720205.4)
+10  13.48186 1.332920 POINT (749901.1 716873.7)</code></pre>
+</div>
+</div>
+<p>Obie uzyskane zmienne można wyświetlić z użyciem pakietu tmap.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(sk_punkty) <span class="sc">+</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tm_dots</span>(<span class="at">col =</span> <span class="fu">c</span>(<span class="st">"var1.pred"</span>, <span class="st">"var1.var"</span>),</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">size =</span> <span class="dv">1</span>, </span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">style =</span> <span class="st">"cont"</span>, </span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">palette =</span> <span class="fu">list</span>(<span class="st">"-Spectral"</span>)) <span class="sc">+</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tm_layout</span>(<span class="at">legend.frame =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="16_pola_estymacja_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="przykład-2-estymacja-w-siatce" class="level2" data-number="12.4">
+<h2 data-number="12.4" class="anchored" data-anchor-id="przykład-2-estymacja-w-siatce"><span class="header-section-number">12.4</span> Przykład 2: Estymacja w siatce</h2>
+<section id="dane-1" class="level3" data-number="12.4.1">
+<h3 data-number="12.4.1" class="anchored" data-anchor-id="dane-1"><span class="header-section-number">12.4.1</span> Dane</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co">#punkty przekształcone do warstwy geoprzestrzennej typu sf</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>punkty <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"data/punkty.csv"</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>punkty <span class="ot">=</span> <span class="fu">st_as_sf</span>(punkty, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="st">"EPSG:2180"</span>, <span class="at">remove =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>punkty <span class="ot">=</span> punkty[<span class="sc">!</span><span class="fu">is.na</span>(punkty<span class="sc">$</span>temp), ]</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co">#granica obszaru wczytana jako obiekt klasy SpatVector z pakietu terra </span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>granica <span class="ot">=</span> <span class="fu">vect</span>(<span class="st">"data/granica.gpkg"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="tworzenie-siatki" class="level3" data-number="12.4.2">
+<h3 data-number="12.4.2" class="anchored" data-anchor-id="tworzenie-siatki"><span class="header-section-number">12.4.2</span> Tworzenie siatki</h3>
+<p>Do stworzenia siatki można wykorzystać funkcję <code>rast()</code> z pakietu <code>terra</code>, która tworzy nowy obiekt rastrowy klasy <code>SpatRaster</code> o zdefiniowanym zasięgu oraz rozdzielczości. W poniższym przykładzie utworzono siatkę dla zasięgu zdefiniowanego przez obwiednię (zasięg) warstwy wektorowej granica oraz o rozdzielczości 50m.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>siatka <span class="ot">=</span> <span class="fu">rast</span>(<span class="at">ext =</span> granica, <span class="at">res =</span> <span class="dv">50</span>, <span class="at">crs =</span> <span class="fu">crs</span>(granica))</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>siatka</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster 
+size        : 172, 229, 1  (nrow, ncol, nlyr)
+resolution  : 50, 50  (x, y)
+extent      : 745541.7, 756991.7, 712651.6, 721251.6  (xmin, xmax, ymin, ymax)
+coord. ref. : ETRF2000-PL / CS92 (EPSG:2180) </code></pre>
+</div>
+</div>
+</section>
+<section id="analiza-i-modelowanie-semiwariogramu-1" class="level3" data-number="12.4.3">
+<h3 data-number="12.4.3" class="anchored" data-anchor-id="analiza-i-modelowanie-semiwariogramu-1"><span class="header-section-number">12.4.3</span> Analiza i modelowanie semiwariogramu</h3>
+<p>Wykonanie krigingu wymaga kilku kroków, w których zostanie stworzony semiwariogram empiryczny oraz dopasowany do niego model:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>v <span class="ot">=</span> <span class="fu">variogram</span>(temp<span class="sc">~</span><span class="dv">1</span>, punkty, <span class="at">cutoff =</span> <span class="dv">5000</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>model_sph <span class="ot">=</span> <span class="fu">vgm</span>(<span class="at">psill =</span> <span class="dv">10</span>, <span class="at">model =</span> <span class="st">"Sph"</span>, <span class="at">range =</span> <span class="dv">4000</span>, <span class="at">nugget =</span><span class="fl">0.5</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">fit.variogram</span>(v, model_sph)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="estymacja-kriging-prosty" class="level3" data-number="12.4.4">
+<h3 data-number="12.4.4" class="anchored" data-anchor-id="estymacja-kriging-prosty"><span class="header-section-number">12.4.4</span> Estymacja: Kriging prosty</h3>
+<p>Wykonanie interpolacji w siatce wymaga stworzenia obiektu klasy <code>gstat</code> z parametrami krigingu. Obiekt ten tworzony jest wykorzystując funkcję <code>gstat()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>sk_param <span class="ot">=</span> <span class="fu">gstat</span>(<span class="at">formula =</span> temp <span class="sc">~</span> <span class="dv">1</span>, </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">locations =</span> punkty,</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">model =</span> model,</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">beta =</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>sk_param</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>data:
+var1 : formula = temp`~`1 ; data dim = 247 x 7 beta = 15
+variograms:
+        model      psill    range
+var1[1]   Nug  0.6557973    0.000
+var1[2]   Sph 15.1551913 6188.152</code></pre>
+</div>
+</div>
+<p>W drugim kroku należy wykonać interpolację w siatce wykorzystując funkcję <code>interpolate()</code>. Funkcja <code>interpolate()</code> wymaga podania 3 argumentów:</p>
+<ul>
+<li>obiekt siatki (w przykładzie <em>siatka</em>)</li>
+<li>obiekt klasy <code>gstat</code> z parametrami krigingu (w przykładzie <em>sk_param</em>)</li>
+<li>funkcję pozwalająca na wykonanie interpolacji w oparciu o obiekt klasy <code>gstat</code> (funkcja <code>interpolate_gstat()</code>)</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>interpolate_gstat <span class="ot">=</span> <span class="cf">function</span>(model, x, ...) {</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  v <span class="ot">=</span> <span class="fu">st_as_sf</span>(x, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="fu">st_crs</span>(model<span class="sc">$</span>data[[<span class="dv">1</span>]]<span class="sc">$</span>data))</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">=</span> <span class="fu">predict</span>(model, v, ...)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>(p)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>sk <span class="ot">=</span> <span class="fu">interpolate</span>(siatka, sk_param, <span class="at">fun =</span> interpolate_gstat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[using simple kriging]
+[using simple kriging]</code></pre>
+</div>
+</div>
+<p>Wyniki estymacji można wyświetlić podając nazwę wynikowego obiektu.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>sk</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster 
+size        : 172, 229, 2  (nrow, ncol, nlyr)
+resolution  : 50, 50  (x, y)
+extent      : 745541.7, 756991.7, 712651.6, 721251.6  (xmin, xmax, ymin, ymax)
+coord. ref. : ETRF2000-PL / CS92 (EPSG:2180) 
+source(s)   : memory
+names       : var1.pred, var1.var 
+min values  :  8.369086, 0.966972 
+max values  : 24.305490, 9.434752 </code></pre>
+</div>
+</div>
+<p>Do wyświetlenia wyników krigingu można uzyć funkcji podstawowej <code>plot()</code>. Funkcja <code>mask()</code> przycina obszar tylko do granicy obszaru analizy.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">mask</span>(sk, granica))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="16_pola_estymacja_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Do wizualizacji wyników estymacji można wykorzystać także pakiet <code>tmap</code>. Obiekt zawierający wyniki estymacji można wyświetlić używając funkcji <code>tm_shape()</code> and <code>tm_raster()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(sk) <span class="sc">+</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_raster</span>(<span class="at">col =</span> <span class="fu">c</span>(<span class="st">"var1.pred"</span>), <span class="at">style =</span> <span class="st">"cont"</span>, <span class="at">palette =</span> <span class="st">"-Spectral"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="16_pola_estymacja_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(sk) <span class="sc">+</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">tm_raster</span>(<span class="at">col =</span> <span class="fu">c</span>(<span class="st">"var1.var"</span>), <span class="at">style =</span> <span class="st">"cont"</span>, <span class="at">palette =</span> <span class="st">"viridis"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="16_pola_estymacja_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Zwróć uwagę, że siatka została utworzona używając zasięgu (<em>bounding box</em>) warstwy wektorowej granica. Obiekt można przyciąć do granic obszaru używając funkcji <code>crop()</code> z pakietu <code>terra</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>sk_crop <span class="ot">=</span> <span class="fu">crop</span>(sk, granica, <span class="at">mask=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(sk_crop) <span class="sc">+</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_raster</span>(<span class="at">col =</span> <span class="fu">c</span>(<span class="st">"var1.pred"</span>), <span class="at">style =</span> <span class="st">"cont"</span>, <span class="at">palette =</span> <span class="st">"-Spectral"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="16_pola_estymacja_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="kriging-zwykły" class="level3" data-number="12.4.5">
+<h3 data-number="12.4.5" class="anchored" data-anchor-id="kriging-zwykły"><span class="header-section-number">12.4.5</span> Kriging zwykły</h3>
+<p>W krigingu zwykłym średnia traktowana jest jako wartość nieznana. Metoda ta uwzględnia lokalne fluktuacje średniej poprzez stosowanie ruchomego okna. Parametry ruchomego okna można określić za pomocą jednego z dwóch argumentów:</p>
+<ul>
+<li><strong>nmax</strong> - użyta zostanie określona liczba najbliższych obserwacji.</li>
+<li><strong>maxdist</strong> - użyte zostaną jedynie obserwacje w zadanej odległości.</li>
+</ul>
+<p>Tak jak w przypadku krigingu prostego wykonanie krigingu zwykłego składa się z dwóch etapów: stworzenia obiektu klasy <code>gstat</code> zawierającego parametry krigingu oraz wykonanie interpolacji wykorzystując funkcję <code>interpolate()</code>. W poniższym przykładzie do obliczenia średniej w ruchomym oknie zostanie wykorzystanych 30 najbliższych punktów (argument <em>nmax = 30</em>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>ok_param <span class="ot">=</span> <span class="fu">gstat</span>(<span class="at">formula =</span> temp <span class="sc">~</span> <span class="dv">1</span>, </span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">locations =</span> punkty,</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">model =</span> model,</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">nmax =</span> <span class="dv">30</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>ok <span class="ot">=</span> <span class="fu">interpolate</span>(siatka, ok_param, <span class="at">fun =</span> interpolate_gstat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[using ordinary kriging]
+[using ordinary kriging]</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>ok_crop <span class="ot">=</span> <span class="fu">crop</span>(ok, granica, <span class="at">mask=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Podobnie jak w przypadku krigingu prostego, można przyjrzeć się wynikom estymacji podając nazwę wynikowego obiektu oraz wyświetlić je używając funkcji <code>tm_shape()</code> and <code>tm_raster()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(ok_crop) <span class="sc">+</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_raster</span>(<span class="at">col =</span> <span class="fu">c</span>(<span class="st">"var1.pred"</span>), <span class="at">style =</span> <span class="st">"cont"</span>, <span class="at">palette =</span> <span class="st">"-Spectral"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="16_pola_estymacja_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(ok_crop) <span class="sc">+</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_raster</span>(<span class="at">col =</span> <span class="fu">c</span>(<span class="st">"var1.var"</span>), <span class="at">style =</span> <span class="st">"cont"</span>, <span class="at">palette =</span> <span class="st">"viridis"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="16_pola_estymacja_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p>Wykonaj kriging zwykły wykorzystując jedynie punkty położone w odległości do 1500m (podpowiedź: tworząc obiekt klasy gstat należy wykorzystać parametr maxdist, zamiast nmax). Dotnij wynik do granicy obszaru. Zwizualizuj wyniki.</p>
+</blockquote>
+</section>
+<section id="kriging-z-trendem" class="level3" data-number="12.4.6">
+<h3 data-number="12.4.6" class="anchored" data-anchor-id="kriging-z-trendem"><span class="header-section-number">12.4.6</span> Kriging z trendem</h3>
+<p>Kriging z trendem, określany również jako kriging z wewnętrznym trendem, do estymacji wykorzystuje (oprócz zmienności wartości wraz z odległością) położenie analizowanych punktów.</p>
+<section id="przygotowanie-danych" class="level4" data-number="12.4.6.1">
+<h4 data-number="12.4.6.1" class="anchored" data-anchor-id="przygotowanie-danych"><span class="header-section-number">12.4.6.1</span> Przygotowanie danych</h4>
+<p>Przy wykonaniu krigingu z trendem istotne są także współrzędne punktów. Wykorzystamy w tym celu obiekt <em>punkty_df</em>, który zawiera wczytane z pliku tekstowego dane.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>punkty_df <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"data/punkty.csv"</span>)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>punkty_df <span class="ot">=</span> punkty_df[<span class="sc">!</span><span class="fu">is.na</span>(punkty_df<span class="sc">$</span>temp), ]</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(punkty_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      srtm clc      temp      ndvi      savi        x        y
+1 175.7430   1 13.852222 0.6158061 0.4189449 750298.0 716731.6
+2 149.8111   1 15.484209 0.5558816 0.3794864 753482.9 717331.4
+3 272.8583  NA 12.760814 0.6067462 0.3745572 747242.5 720589.0
+4 187.2777   1 14.324648 0.3756170 0.2386246 755798.9 718828.1
+5 260.1366   1 15.908549 0.4598393 0.3087599 746963.5 717533.5
+6 160.1416   2  9.941118 0.5600288 0.3453627 756801.6 720474.1</code></pre>
+</div>
+</div>
+<p>Drugim plikiem potrzebnym do wykonania analizy będzie granica obszaru wczytana jako obiekt klasy <code>SpatVect</code> używając biblioteki <code>terra</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>granica <span class="ot">=</span> <span class="fu">vect</span>(<span class="st">"data/granica.gpkg"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Wykonanie estymacji metodą krigingu wymaga także utworzenia siatki. Siatkę utworzymy używając funkcji <code>rast()</code> z pakietu <code>terra</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>siatka <span class="ot">=</span> <span class="fu">rast</span>(<span class="at">ext =</span> granica, <span class="at">res =</span> <span class="dv">50</span>, <span class="at">crs =</span> <span class="fu">crs</span>(granica))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="analiza-i-modelowanie-struktury-przestrzennej" class="level4" data-number="12.4.6.2">
+<h4 data-number="12.4.6.2" class="anchored" data-anchor-id="analiza-i-modelowanie-struktury-przestrzennej"><span class="header-section-number">12.4.6.2</span> Analiza i modelowanie struktury przestrzennej</h4>
+<p>W funkcji <code>variogram()</code> pierwszy argument musi przyjąć postać <em>temp ~ x + y</em>, co oznacza, że uwzględniamy liniowy trend zależny od współrzędnej x oraz y. Argument <em>data</em> pozwala na podanie ramki danych zawierającej wartość zmiennej oraz współrzędne, argument <em>locations</em> definiuje, które zmienne zawierają współrzędne punktów.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstat)</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>vario_kzt <span class="ot">=</span> <span class="fu">variogram</span>(temp <span class="sc">~</span> x <span class="sc">+</span> y, <span class="at">data =</span> punkty_df, <span class="at">locations =</span> <span class="sc">~</span>x <span class="sc">+</span> y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Następnym etapem jest dopasowanie modelu do semiwariogramu empirycznego.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>fitted_kzt <span class="ot">=</span> <span class="fu">fit.variogram</span>(vario_kzt, <span class="fu">vgm</span>(<span class="at">model =</span> <span class="st">"Sph"</span>, <span class="at">nugget =</span> <span class="dv">1</span>))</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>fitted_kzt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  model     psill  range
+1   Nug 0.2822454    0.0
+2   Sph 6.9271803 2193.7</code></pre>
+</div>
+</div>
+<p>Kolejnym etapem jest wykonanie estymacji. W tym celu należy utworzyć obiekt klasy <code>gstat</code> zawierający parametry krigingu oraz wykonać interpolacji wykorzystując funkcję <code>interpolate()</code>. Należy tutaj pamiętać, aby formuła (w przykładzie <em>temp ~ x + y</em>) był taki sam podczas budowania semiwariogramu, jak i estymacji.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>kt_param <span class="ot">=</span> <span class="fu">gstat</span>(<span class="at">formula =</span> temp <span class="sc">~</span> x <span class="sc">+</span> y, </span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> punkty_df,</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">locations =</span> <span class="sc">~</span> x<span class="sc">+</span> y,</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">model =</span> fitted_kzt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>kt <span class="ot">=</span> <span class="fu">interpolate</span>(siatka, kt_param)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[using universal kriging]
+[using universal kriging]</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>kt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster 
+size        : 172, 229, 2  (nrow, ncol, nlyr)
+resolution  : 50, 50  (x, y)
+extent      : 745541.7, 756991.7, 712651.6, 721251.6  (xmin, xmax, ymin, ymax)
+coord. ref. : ETRF2000-PL / CS92 (EPSG:2180) 
+source(s)   : memory
+names       : var1.pred,  var1.var 
+min values  :   8.15150, 0.5110511 
+max values  :  24.55763, 8.4636071 </code></pre>
+</div>
+</div>
+<p>Do wyświetlenia wyników krigingu można także uzyć funkcji podstawowej <code>plot()</code>. Funkcja <code>mask()</code> przycina obszar tylko do granicy obszaru analizy.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">mask</span>(kt, granica))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="16_pola_estymacja_files/figure-html/unnamed-chunk-41-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./15_pola_modelowanie.html" class="pagination-link" aria-label="Geostatystyka: Analiza i modelowanie autokorelacji przestrzennej">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Geostatystyka: Analiza i modelowanie autokorelacji przestrzennej</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./17_pola_ocena.html" class="pagination-link" aria-label="Ocena jakości estymacji">
+        <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Ocena jakości estymacji</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

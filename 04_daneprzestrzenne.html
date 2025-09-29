@@ -1,0 +1,1967 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>3&nbsp; Dane przestrzenne w R – Statystyka przestrzenna</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./05_eksploracja.html" rel="next">
+<link href="./03_zastosowanie.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-c852b7e71cc1c09f55f367b2512aabbd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_wstep.html">WSTĘP</a></li><li class="breadcrumb-item"><a href="./04_daneprzestrzenne.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Dane przestrzenne w R</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Statystyka przestrzenna</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">O skrypcie</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./01_wstep.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">WSTĘP</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_wprowadzenie.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Wprowadzenie</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_zastosowanie.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Zastosowania statystyki przestrzennej</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_daneprzestrzenne.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Dane przestrzenne w R</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_eksploracja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Eksploracyjna analiza danych przestrzennych</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./06_punkty.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE PUNKTOWE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_punkty_centrograficzne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Statystyki centrograficzne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_punkty_odleglosc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Metody oparte na odległości</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09_punkty_intensywnosc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Metody oparte na analizie intensywności</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./10_poligony.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE OBSZAROWE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_poligony_sasiedztwo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Określanie sąsiedztwa danych obszarowych</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12_poligony_autokorelacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Miary autokorelacji danych obszarowych</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./13_pola.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE POWIERZCHNIOWE CIĄGŁE PRZESTRZENNIE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14_pola_interpolacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Metody interpolacji</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15_pola_modelowanie.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Geostatystyka: Analiza i modelowanie autokorelacji przestrzennej</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_pola_estymacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Geostatystyczne metody estymacji</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_pola_ocena.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Ocena jakości estymacji</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">ZADANIA</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18_zadania_samodzielne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Zadania samodzielne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19_projekt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Projekt</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20_projekt_geostatystyka.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Projekt 2: Geostatytyka</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#dane-przestrzenne---pakiety" id="toc-dane-przestrzenne---pakiety" class="nav-link active" data-scroll-target="#dane-przestrzenne---pakiety"><span class="header-section-number">3.1</span> Dane przestrzenne - pakiety</a>
+  <ul class="collapse">
+  <li><a href="#pakiet-sf" id="toc-pakiet-sf" class="nav-link" data-scroll-target="#pakiet-sf"><span class="header-section-number">3.1.1</span> Pakiet sf</a></li>
+  <li><a href="#pakiet-terra" id="toc-pakiet-terra" class="nav-link" data-scroll-target="#pakiet-terra"><span class="header-section-number">3.1.2</span> Pakiet terra</a></li>
+  <li><a href="#pakiet-tmap" id="toc-pakiet-tmap" class="nav-link" data-scroll-target="#pakiet-tmap"><span class="header-section-number">3.1.3</span> Pakiet tmap</a></li>
+  <li><a href="#biblioteki-zewnętrzne" id="toc-biblioteki-zewnętrzne" class="nav-link" data-scroll-target="#biblioteki-zewnętrzne"><span class="header-section-number">3.1.4</span> Biblioteki zewnętrzne</a></li>
+  </ul></li>
+  <li><a href="#reprezentacja-danych-przestrzennych-w-r" id="toc-reprezentacja-danych-przestrzennych-w-r" class="nav-link" data-scroll-target="#reprezentacja-danych-przestrzennych-w-r"><span class="header-section-number">3.2</span> Reprezentacja danych przestrzennych w R</a></li>
+  <li><a href="#import-i-eksport-danych" id="toc-import-i-eksport-danych" class="nav-link" data-scroll-target="#import-i-eksport-danych"><span class="header-section-number">3.3</span> Import i eksport danych</a>
+  <ul class="collapse">
+  <li><a href="#format-.csv-dane-punktowe" id="toc-format-.csv-dane-punktowe" class="nav-link" data-scroll-target="#format-.csv-dane-punktowe"><span class="header-section-number">3.3.1</span> Format .csv (dane punktowe)</a></li>
+  <li><a href="#import-i-eksport-danych-wektorowych" id="toc-import-i-eksport-danych-wektorowych" class="nav-link" data-scroll-target="#import-i-eksport-danych-wektorowych"><span class="header-section-number">3.3.2</span> Import i eksport danych wektorowych</a></li>
+  <li><a href="#import-i-eksport-danych-rastrowych" id="toc-import-i-eksport-danych-rastrowych" class="nav-link" data-scroll-target="#import-i-eksport-danych-rastrowych"><span class="header-section-number">3.3.3</span> Import i eksport danych rastrowych</a></li>
+  </ul></li>
+  <li><a href="#struktura-danych-przestrzennych-w-r" id="toc-struktura-danych-przestrzennych-w-r" class="nav-link" data-scroll-target="#struktura-danych-przestrzennych-w-r"><span class="header-section-number">3.4</span> Struktura danych przestrzennych w R</a>
+  <ul class="collapse">
+  <li><a href="#dane-wektorowe" id="toc-dane-wektorowe" class="nav-link" data-scroll-target="#dane-wektorowe"><span class="header-section-number">3.4.1</span> Dane wektorowe</a></li>
+  <li><a href="#dane-rastrowe" id="toc-dane-rastrowe" class="nav-link" data-scroll-target="#dane-rastrowe"><span class="header-section-number">3.4.2</span> Dane rastrowe</a></li>
+  </ul></li>
+  <li><a href="#przetwarzanie-danych-wektorowych-w-r" id="toc-przetwarzanie-danych-wektorowych-w-r" class="nav-link" data-scroll-target="#przetwarzanie-danych-wektorowych-w-r"><span class="header-section-number">3.5</span> Przetwarzanie danych wektorowych w R</a>
+  <ul class="collapse">
+  <li><a href="#łączenie-danych-przestrzennych-i-atrybutowych" id="toc-łączenie-danych-przestrzennych-i-atrybutowych" class="nav-link" data-scroll-target="#łączenie-danych-przestrzennych-i-atrybutowych"><span class="header-section-number">3.5.1</span> Łączenie danych przestrzennych i atrybutowych</a></li>
+  <li><a href="#tworzenie-obiektów-wektorowych" id="toc-tworzenie-obiektów-wektorowych" class="nav-link" data-scroll-target="#tworzenie-obiektów-wektorowych"><span class="header-section-number">3.5.2</span> Tworzenie obiektów wektorowych</a></li>
+  <li><a href="#zmiana-układu-współrzędnych" id="toc-zmiana-układu-współrzędnych" class="nav-link" data-scroll-target="#zmiana-układu-współrzędnych"><span class="header-section-number">3.5.3</span> Zmiana układu współrzędnych</a></li>
+  <li><a href="#strefa-buforowa" id="toc-strefa-buforowa" class="nav-link" data-scroll-target="#strefa-buforowa"><span class="header-section-number">3.5.4</span> Strefa buforowa</a></li>
+  <li><a href="#centroidy-poligonów" id="toc-centroidy-poligonów" class="nav-link" data-scroll-target="#centroidy-poligonów"><span class="header-section-number">3.5.5</span> Centroidy poligonów</a></li>
+  <li><a href="#selekcja-na-podstawie-lokalizacji" id="toc-selekcja-na-podstawie-lokalizacji" class="nav-link" data-scroll-target="#selekcja-na-podstawie-lokalizacji"><span class="header-section-number">3.5.6</span> Selekcja na podstawie lokalizacji</a></li>
+  <li><a href="#selekcja-na-podstawie-atrybutów" id="toc-selekcja-na-podstawie-atrybutów" class="nav-link" data-scroll-target="#selekcja-na-podstawie-atrybutów"><span class="header-section-number">3.5.7</span> Selekcja na podstawie atrybutów</a></li>
+  <li><a href="#tworzenie-siatki---obiekt-wektorowy" id="toc-tworzenie-siatki---obiekt-wektorowy" class="nav-link" data-scroll-target="#tworzenie-siatki---obiekt-wektorowy"><span class="header-section-number">3.5.8</span> Tworzenie siatki - obiekt wektorowy</a></li>
+  </ul></li>
+  <li><a href="#przetwarzanie-danych-rastrowych-w-r" id="toc-przetwarzanie-danych-rastrowych-w-r" class="nav-link" data-scroll-target="#przetwarzanie-danych-rastrowych-w-r"><span class="header-section-number">3.6</span> Przetwarzanie danych rastrowych w R</a>
+  <ul class="collapse">
+  <li><a href="#tworzenie-siatki-rastrowej" id="toc-tworzenie-siatki-rastrowej" class="nav-link" data-scroll-target="#tworzenie-siatki-rastrowej"><span class="header-section-number">3.6.1</span> Tworzenie siatki rastrowej</a></li>
+  <li><a href="#przycięcie-danych-rastrowych-do-zasięgu-warstwy" id="toc-przycięcie-danych-rastrowych-do-zasięgu-warstwy" class="nav-link" data-scroll-target="#przycięcie-danych-rastrowych-do-zasięgu-warstwy"><span class="header-section-number">3.6.2</span> Przycięcie danych rastrowych do zasięgu warstwy</a></li>
+  <li><a href="#zmiana-rozdzielczości" id="toc-zmiana-rozdzielczości" class="nav-link" data-scroll-target="#zmiana-rozdzielczości"><span class="header-section-number">3.6.3</span> Zmiana rozdzielczości</a></li>
+  </ul></li>
+  <li><a href="#wizualizacja-danych-przestrzennych-w-r" id="toc-wizualizacja-danych-przestrzennych-w-r" class="nav-link" data-scroll-target="#wizualizacja-danych-przestrzennych-w-r"><span class="header-section-number">3.7</span> Wizualizacja danych przestrzennych w R</a>
+  <ul class="collapse">
+  <li><a href="#dane-poligonowe" id="toc-dane-poligonowe" class="nav-link" data-scroll-target="#dane-poligonowe"><span class="header-section-number">3.7.1</span> Dane poligonowe</a></li>
+  <li><a href="#dane-punktowe" id="toc-dane-punktowe" class="nav-link" data-scroll-target="#dane-punktowe"><span class="header-section-number">3.7.2</span> Dane punktowe</a></li>
+  <li><a href="#dane-rastrowe-1" id="toc-dane-rastrowe-1" class="nav-link" data-scroll-target="#dane-rastrowe-1"><span class="header-section-number">3.7.3</span> Dane rastrowe</a></li>
+  <li><a href="#łączenie-warstw" id="toc-łączenie-warstw" class="nav-link" data-scroll-target="#łączenie-warstw"><span class="header-section-number">3.7.4</span> Łączenie warstw</a></li>
+  <li><a href="#zapisywanie-map" id="toc-zapisywanie-map" class="nav-link" data-scroll-target="#zapisywanie-map"><span class="header-section-number">3.7.5</span> Zapisywanie map</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_wstep.html">WSTĘP</a></li><li class="breadcrumb-item"><a href="./04_daneprzestrzenne.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Dane przestrzenne w R</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Dane przestrzenne w R</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- reading, writing, visualizing, and any processing related to the other chapters -->
+<!-- https://bookdown.org/nowosad/geostatystyka/r-a-dane-przestrzenne.html -->
+<!-- trzeba dodac inne kwestie techniczne, które są używane w kolejnych rozdziałach-->
+<!-- np. konwertowanie obiektów sf do spatstat, itd. -->
+<!-- maybe another chapter for viz: maps for detecting patterns, trends, and outliers, ... -->
+<p>R jest językiem programowania oraz środowiskiem obliczeniowym pozwalającym na analizę statystyczną danych oraz wizualizację danych. R dostarcza także wielu funkcji do pracy z danymi przestrzennymi. Poniżej przedstawione zostały podstawowe informacje dotyczące pracy z danymi przestrzennymi w R. Więcej informacji znajduje się w książce <a href="https://r.geocompx.org/" class="uri">https://r.geocompx.org/</a></p>
+<section id="dane-przestrzenne---pakiety" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="dane-przestrzenne---pakiety"><span class="header-section-number">3.1</span> Dane przestrzenne - pakiety</h2>
+<p>R zawiera wiele funkcji pozwalających na <strong>przetwarzanie, wizualizację i analizowanie</strong> danych przestrzennych. Funkcje te zawarte są w pakietach:</p>
+<ul>
+<li><p>obsługa danych przestrzennych: <strong>sf, terra, stars, rastrer, sp</strong></p></li>
+<li><p>wizualizacja danych przestrzennych: <strong>tmap</strong></p></li>
+<li><p>statystyka przestrzenna</p>
+<ul>
+<li>statystyka punktów: <strong>spatstat, sfdep</strong></li>
+<li>statystyka sieci: <strong>sfnetworks, tidygraph</strong></li>
+<li>statystyka powierzchni (dane poligonowe): <strong>sfdep</strong></li>
+<li>geostatystyka: <strong>gstat</strong></li>
+</ul></li>
+</ul>
+<p>Więcej szczegółów na temat pakietów R służących do analizy przestrzennej można znaleźć pod adresem <a href="https://cran.r-project.org/view=Spatial" class="uri">https://cran.r-project.org/view=Spatial</a>.</p>
+<section id="pakiet-sf" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="pakiet-sf"><span class="header-section-number">3.1.1</span> Pakiet sf</h3>
+<ul>
+<li><p>oparty jest o standard OGC o nazwie <em>Simple Features</em> (<a href="https://r-spatial.github.io/sf/articles/sf1.html" class="uri">https://r-spatial.github.io/sf/articles/sf1.html</a>);</p></li>
+<li><p>definiuje klasę obiektów <em>sf</em>, która jest sposobem reprezentacji przestrzennych danych wektorowych. Pozwala on na stosowanie dodatkowych typów danych wektorowych (np. poligon i multipoligon to dwie oddzielne klasy), łatwiejsze przetwarzanie danych, oraz obsługę przestrzennych baz danych takich jak PostGIS;</p></li>
+<li><p>jest używany przez kilkadziesiąt dodatkowych pakietów R;</p></li>
+<li><p>większość funkcji zawartych w pakiecie zaczyna się od prefiksu <code>st_</code>;</p></li>
+<li><p>więcej informacji:</p>
+<ul>
+<li><a href="https://cran.r-project.org/web/packages/sf/index.html" class="uri">https://cran.r-project.org/web/packages/sf/index.html</a></li>
+<li><a href="https://r-spatial.github.io/sf/" class="uri">https://r-spatial.github.io/sf/</a></li>
+</ul></li>
+</ul>
+</section>
+<section id="pakiet-terra" class="level3" data-number="3.1.2">
+<h3 data-number="3.1.2" class="anchored" data-anchor-id="pakiet-terra"><span class="header-section-number">3.1.2</span> Pakiet terra</h3>
+<ul>
+<li><p>dostarcza funkcji do analizy danych przestrzennych w formacie rastrowym oraz wektorowym;</p></li>
+<li><p>metody dla danych wektorowych obejmują operacje geometryczne, takie jak <em>intersect</em> i <em>buffer</em>;</p></li>
+<li><p>metody analizy danych rastrowych obejmują funkcje lokalne, sąsiedztwa, globalne, strefowe oraz operacje geometryczne;</p></li>
+<li><p>więcej informacji:</p>
+<ul>
+<li><a href="https://github.com/rspatial/terra" class="uri">https://github.com/rspatial/terra</a></li>
+<li><a href="https://rspatial.org/pkg/index.html" class="uri">https://rspatial.org/pkg/index.html</a></li>
+<li><a href="https://cran.r-project.org/web/packages/terra/index.html" class="uri">https://cran.r-project.org/web/packages/terra/index.html</a></li>
+</ul></li>
+</ul>
+</section>
+<section id="pakiet-tmap" class="level3" data-number="3.1.3">
+<h3 data-number="3.1.3" class="anchored" data-anchor-id="pakiet-tmap"><span class="header-section-number">3.1.3</span> Pakiet tmap</h3>
+<ul>
+<li><p>pakiet do wizualizacji danych przestrzennych;</p></li>
+<li><p>sposób tworzenia map jest podobny do składni stosowanej w pakiecie <code>ggplot2</code>, została jednak dostosowana do tworzenia map a nie wykresów;</p></li>
+<li><p>więcej informacji:</p>
+<ul>
+<li><a href="https://r-tmap.github.io/tmap/index.html" class="uri">https://r-tmap.github.io/tmap/index.html</a></li>
+<li><a href="https://r-tmap.github.io/tmap/articles/tmap-getstarted.html" class="uri">https://r-tmap.github.io/tmap/articles/tmap-getstarted.html</a></li>
+<li><a href="https://github.com/r-tmap/tmap" class="uri">https://github.com/r-tmap/tmap</a></li>
+<li><a href="https://cran.r-project.org/web/packages/tmap/" class="uri">https://cran.r-project.org/web/packages/tmap/</a></li>
+</ul></li>
+</ul>
+</section>
+<section id="biblioteki-zewnętrzne" class="level3" data-number="3.1.4">
+<h3 data-number="3.1.4" class="anchored" data-anchor-id="biblioteki-zewnętrzne"><span class="header-section-number">3.1.4</span> Biblioteki zewnętrzne</h3>
+<ul>
+<li><p><strong>GDAL/OGR</strong></p>
+<ul>
+<li>GDAL to biblioteka zawierająca funkcje służące do odczytywania i zapisywania danych w formatach rastrowych.</li>
+<li>OGR to biblioteka służąca to odczytywania i zapisywania danych w formatach wektorowych.</li>
+<li>Wykorzytywana przez pakiety R do wczytywania i zapisywania danych przestrzennych.</li>
+</ul></li>
+<li><p><strong>GEOS</strong></p>
+<ul>
+<li>Biblioteka GEOS jest używana przez pakiety R (np. <code>sf</code>) do wykonywania operacji przestrzennych.</li>
+<li>Przykładowe funkcje tej biblioteki to tworzenie buforów, wyliczanie centroidów, określanie relacji topologicznych (np. przecina, zawiera, etc.) i wiele innych.</li>
+</ul></li>
+<li><p><strong>PROJ</strong></p>
+<ul>
+<li>Biblioteka PROJ jest używana w R do określania i konwersji układów współrzędnych.</li>
+<li>Bardzo popularnym zapisem układu współrzędnych jest wykorzytanie systemu kodów EPSG (ang. <em>European Petroleum Survey Group</em>), który pozwala on na łatwe identyfikowanie układów współrzędnych. Przykładowo, układ PL 1992 może być określony jako “EPSG:2180”.</li>
+<li>Dane przestrzenne moga też przechowywać opis układu współrzędnych w bardziej złożonej formie - tzw. WKT2.</li>
+<li>Strona <a href="https://epsg.org/" class="uri">https://epsg.org/</a> zawiera bazę danych układów współrzędnych.</li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="reprezentacja-danych-przestrzennych-w-r" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="reprezentacja-danych-przestrzennych-w-r"><span class="header-section-number">3.2</span> Reprezentacja danych przestrzennych w R</h2>
+<p>Dane przestrzenne mogą być reprezentowane w R poprzez wiele różnych klas obiektów z użyciem różnych pakietów R:</p>
+<ul>
+<li><p>dane wektorowe:</p>
+<ul>
+<li>pakiet sf: klasy sf</li>
+<li>pakiet terra: klasa <code>spatVector</code></li>
+</ul></li>
+<li><p>dane rastrowe:</p>
+<ul>
+<li>pakiet terra: klasa <code>spatRaster</code></li>
+</ul></li>
+</ul>
+</section>
+<section id="import-i-eksport-danych" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="import-i-eksport-danych"><span class="header-section-number">3.3</span> Import i eksport danych</h2>
+<p>R pozwala na odczytywanie danych przestrzennych z wielu formatów. Do najpopularniejszych należą:</p>
+<ul>
+<li>dane tekstowe z plików o rozszerzeniu <em>.csv</em>,</li>
+<li>dane wektorowe z plików <em>.shp</em>,</li>
+<li>dane rastrowe z plików w formacie <em>GeoTIFF</em>,</li>
+<li>bazy danych przestrzennych z plików rozszerzeniu <em>.gpkg</em>. Geopaczka (<em>geopackage</em>) może przechowywać zarówno pliki tekstowe, wektorowe oraz rastrowe.</li>
+</ul>
+<section id="format-.csv-dane-punktowe" class="level3" data-number="3.3.1">
+<h3 data-number="3.3.1" class="anchored" data-anchor-id="format-.csv-dane-punktowe"><span class="header-section-number">3.3.1</span> Format .csv (dane punktowe)</h3>
+<p>Dane z plików tekstowych (np. rozszerzenie <em>.csv</em>) można odczytać za pomocą uogólnionej funkcji <code>read.table()</code> lub też funkcji szczegółowych - <code>read.csv()</code> lub <code>read.csv2()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>punkty <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"data/punkty.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(punkty)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      srtm clc      temp      ndvi      savi        x        y
+1 175.7430   1 13.852222 0.6158061 0.4189449 750298.0 716731.6
+2 149.8111   1 15.484209 0.5558816 0.3794864 753482.9 717331.4
+3 272.8583  NA 12.760814 0.6067462 0.3745572 747242.5 720589.0
+4 187.2777   1 14.324648 0.3756170 0.2386246 755798.9 718828.1
+5 260.1366   1 15.908549 0.4598393 0.3087599 746963.5 717533.5
+6 160.1416   2  9.941118 0.5600288 0.3453627 756801.6 720474.1</code></pre>
+</div>
+</div>
+<p>Po wczytaniu pliku tekstowego za pomocą funkcji <code>read.csv()</code>, nowy obiekt (np. <em>punkty</em>) jest reprezentowany za pomocą klasy nieprzestrzennej <code>data.frame</code>. Aby obiekt został przetworzony do klasy przestrzennej, konieczne jest określenie które kolumny zawierają informacje o współrzędnych (w tym przykładzie są to kolumny <em>x</em> oraz <em>y</em>).<br>
+Do przekształcenia obiektu typu <code>data.frame</code> do obiektu przestrzennego klasy <code>sf</code> wykorzystuje się funkcję <code>st_as_sf()</code> z pakietu <code>sf</code>. Funkcja <code>st_as_sf()</code> wymaga zdefniowania obiektu zawierającego dane (w tym wypadku <em>punkty</em>), nazw kolumn zawierających współrzędne x oraz y (<em>coords = c(“x”, “y”)</em>). Warto także na tym etapie zdefiniować układ współrzędnych (<em>crs = “EPSG:2180”</em>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Linking to GEOS 3.10.2, GDAL 3.4.1, PROJ 8.2.1; sf_use_s2() is TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>punkty_sf <span class="ot">=</span> <span class="fu">st_as_sf</span>(punkty, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="st">"EPSG:2180"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>punkty_sf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 248 features and 5 fields
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: 745592.5 ymin: 712642.4 xmax: 756967.8 ymax: 721238.7
+Projected CRS: ETRF2000-PL / CS92
+First 10 features:
+       srtm clc      temp      ndvi      savi                  geometry
+1  175.7430   1 13.852222 0.6158061 0.4189449   POINT (750298 716731.6)
+2  149.8111   1 15.484209 0.5558816 0.3794864 POINT (753482.9 717331.4)
+3  272.8583  NA 12.760814 0.6067462 0.3745572   POINT (747242.5 720589)
+4  187.2777   1 14.324648 0.3756170 0.2386246 POINT (755798.9 718828.1)
+5  260.1366   1 15.908549 0.4598393 0.3087599 POINT (746963.5 717533.5)
+6  160.1416   2  9.941118 0.5600288 0.3453627 POINT (756801.6 720474.1)
+7  192.9223   2 13.514751 0.6009588 0.3737249   POINT (752698 718623.6)
+8  234.9989   1 12.919225 0.4979195 0.2978503 POINT (749399.8 716955.2)
+9  228.7312   1 19.247132 0.3819634 0.2077981   POINT (748766.6 713889)
+10 240.5474   2 10.529105 0.5795159 0.3805268   POINT (749290.4 718861)</code></pre>
+</div>
+</div>
+<p>Należy zwrócić uwagę, że po przekształceniu danych wczytanych z pliku tekstowego (<em>punkty.csv</em>) na obiekt przestrzenny (<em>punkty_sf</em>) w tabeli atrybutów nie ma już kolumn <em>“x”</em> oraz <em>“y”</em>. Obiekt przestrzenny zawiera natomiast kolumnę <code>geometry</code> z informacją o współrzędnych punktów. Ponadto po wyświetleniu obiektu <code>punkty_sf</code> w nagłówku mamy podane informacje o układzie współrzędnych, zasięgu danych (obwiedni, <em>bounding box</em>).</p>
+<p>Prostą wizualizacje danych klasy przestrzennej można uzyskać za pomocą funkcji <code>plot()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(punkty_sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_daneprzestrzenne_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Funkcja <code>plot()</code> wyświetli wszystkie zmienne. Wyświetlenie wybranej zmiennej wymaga zdefiniowania jej nazwy.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(punkty_sf[<span class="st">"temp"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_daneprzestrzenne_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="import-i-eksport-danych-wektorowych" class="level3" data-number="3.3.2">
+<h3 data-number="3.3.2" class="anchored" data-anchor-id="import-i-eksport-danych-wektorowych"><span class="header-section-number">3.3.2</span> Import i eksport danych wektorowych</h3>
+<p>Dane przestrzenne zapisane w pliku (<em>.gpkg, .shp</em>) można wczytać do R wykorzystując funkcje <code>read_sf()</code> z pakietu <code>sf</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>powiaty_wlkp <span class="ot">=</span> <span class="fu">read_sf</span>(<span class="st">"data/wlkp_powiaty.gpkg"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Jeśli geopaczka zawiera kilka warstw na etapie wczytywania pliku można podać także nazwę warstwy.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>powiaty_wlkp <span class="ot">=</span> <span class="fu">read_sf</span>(<span class="st">"data/wlkp_powiaty.gpkg"</span>, <span class="at">layer =</span> <span class="st">"powiaty"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Dane przestrzenne można zapisać do pliku wykorzystując funkcję <code>write_sf()</code> z pakietu <code>sf</code> (funkcja ta nadpisuje plik). Dane mogą być zapisane do różnych formatów (np. geopaczka lub plik ESRI Shapefile).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#create output directory out </span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"out"</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">write_sf</span>(powiaty_wlkp, <span class="at">dsn =</span> <span class="st">"out/out_powiaty_wlkp.shp"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>R pozwala także na zapisanie kilku warstw do istniejącej geopaczki. Użyjemy w tym celu funkcji <code>st_write()</code>, która automatycznie nie nadpisuje pliku. W przypadku, gdy chcemy stworzyć geopaczkę składająca się z kilku warstw na etapie zapisu należy podać także nazwę warstwy (argument <em>layer</em>). Argument <em>delete_dsn = TRUE</em> usuwa istniejący wcześniej plik.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">st_write</span>(powiaty_wlkp, <span class="at">dsn =</span> <span class="st">"out/out_powiaty_wlkp.gpkg"</span>, <span class="at">layer =</span> <span class="st">"powiaty2"</span>, <span class="at">delete_dsn =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Deleting source `out/out_powiaty_wlkp.gpkg' using driver `GPKG'
+Writing layer `powiaty2' to data source 
+  `out/out_powiaty_wlkp.gpkg' using driver `GPKG'
+Writing 35 features with 2 fields and geometry type Multi Polygon.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">st_write</span>(powiaty_wlkp, <span class="at">dsn =</span> <span class="st">"out/out_powiaty_wlkp.gpkg"</span>, <span class="at">layer =</span> <span class="st">"powiaty3"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Writing layer `powiaty3' to data source 
+  `out/out_powiaty_wlkp.gpkg' using driver `GPKG'
+Writing 35 features with 2 fields and geometry type Multi Polygon.</code></pre>
+</div>
+</div>
+<p>Aby dowiedzieć się, jakie warstwy są zapisane w geopaczce można użyć funkcji <code>st_layers()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">st_layers</span>(<span class="st">"out/out_powiaty_wlkp.gpkg"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Driver: GPKG 
+Available layers:
+  layer_name geometry_type features fields           crs_name
+1   powiaty2 Multi Polygon       35      2 ETRF2000-PL / CS92
+2   powiaty3 Multi Polygon       35      2 ETRF2000-PL / CS92</code></pre>
+</div>
+</div>
+</section>
+<section id="import-i-eksport-danych-rastrowych" class="level3" data-number="3.3.3">
+<h3 data-number="3.3.3" class="anchored" data-anchor-id="import-i-eksport-danych-rastrowych"><span class="header-section-number">3.3.3</span> Import i eksport danych rastrowych</h3>
+<p>Do obsługi danych rastrowych zostanie wykorzystany pakiet <code>terra</code>. Funkcja <code>rast()</code> pozwala na wczytanie danych rastrowych do klasy <code>SpatRaster</code>. Funkcja ta obsługuje zarówno jednokanałowe jak i wielokanałowe (wielowarstwowe) pliki rastrowe. Przykładem pliku rastrowego, w którym zostało zapisanych kilka kanałów - warstw jest plik <em>siatka-all.tif</em>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>srtm <span class="ot">=</span> <span class="fu">rast</span>(<span class="st">"data/srtm.tif"</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>srtm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster 
+size        : 96, 127, 1  (nrow, ncol, nlyr)
+resolution  : 90, 90  (x, y)
+extent      : 745541.7, 756971.7, 712616.2, 721256.2  (xmin, xmax, ymin, ymax)
+coord. ref. : ETRF2000-PL / CS92 (EPSG:2180) 
+source      : srtm.tif 
+name        : srtm </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>siatka_all <span class="ot">=</span> <span class="fu">rast</span>(<span class="st">"data/siatka-all.tif"</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>siatka_all</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster 
+size        : 96, 127, 5  (nrow, ncol, nlyr)
+resolution  : 90, 90  (x, y)
+extent      : 745541.7, 756971.7, 712616.2, 721256.2  (xmin, xmax, ymin, ymax)
+coord. ref. : +proj=tmerc +lat_0=0 +lon_0=19 +k=0.9993 +x_0=500000 +y_0=-5300000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs 
+source      : siatka-all.tif 
+names       : siatka-all_1, siatka-all_2, siatka-all_3, siatka-all_4, siatka-all_5 </code></pre>
+</div>
+</div>
+<p>Prostą wizualizację danych rastrowych można uzyskać za pomocą funkcji <code>plot()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(srtm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_daneprzestrzenne_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(siatka_all)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_daneprzestrzenne_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(siatka_all[<span class="st">"siatka-all_2"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_daneprzestrzenne_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Dane można zapisać do pliku używając funkcji <code>writeRaster()</code> z pakietu <code>terra</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">writeRaster</span>(srtm, <span class="st">"out/out_srtm.tif"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">writeRaster</span>(siatka_all, <span class="st">"out/out_siatka_all.tif"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">writeRaster</span>(siatka_all[<span class="st">"siatka-all_2"</span>], <span class="st">"out/out_clc.tif"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="struktura-danych-przestrzennych-w-r" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="struktura-danych-przestrzennych-w-r"><span class="header-section-number">3.4</span> Struktura danych przestrzennych w R</h2>
+<section id="dane-wektorowe" class="level3" data-number="3.4.1">
+<h3 data-number="3.4.1" class="anchored" data-anchor-id="dane-wektorowe"><span class="header-section-number">3.4.1</span> Dane wektorowe</h3>
+<p>Podstawowe informacje o obiekcie można uzyskać poprzez wpisanie jego nazwy:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>punkty_sf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 248 features and 5 fields
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: 745592.5 ymin: 712642.4 xmax: 756967.8 ymax: 721238.7
+Projected CRS: ETRF2000-PL / CS92
+First 10 features:
+       srtm clc      temp      ndvi      savi                  geometry
+1  175.7430   1 13.852222 0.6158061 0.4189449   POINT (750298 716731.6)
+2  149.8111   1 15.484209 0.5558816 0.3794864 POINT (753482.9 717331.4)
+3  272.8583  NA 12.760814 0.6067462 0.3745572   POINT (747242.5 720589)
+4  187.2777   1 14.324648 0.3756170 0.2386246 POINT (755798.9 718828.1)
+5  260.1366   1 15.908549 0.4598393 0.3087599 POINT (746963.5 717533.5)
+6  160.1416   2  9.941118 0.5600288 0.3453627 POINT (756801.6 720474.1)
+7  192.9223   2 13.514751 0.6009588 0.3737249   POINT (752698 718623.6)
+8  234.9989   1 12.919225 0.4979195 0.2978503 POINT (749399.8 716955.2)
+9  228.7312   1 19.247132 0.3819634 0.2077981   POINT (748766.6 713889)
+10 240.5474   2 10.529105 0.5795159 0.3805268   POINT (749290.4 718861)</code></pre>
+</div>
+</div>
+<p>Obiekty klasy <code>sf()</code> są zbudowane z tabeli (<em>data frame</em>) wraz z dodatkową kolumną zawierającą geometrię (często nazywaną <code>geometry</code> lub <code>geom</code>) oraz szeregu atrybutów przestrzennych.</p>
+<p>Strukturę obiektu <code>sf</code> można też sprawdzić za pomocą funkcji <code>str()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(punkty_sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Classes 'sf' and 'data.frame':  248 obs. of  6 variables:
+ $ srtm    : num  176 150 273 187 260 ...
+ $ clc     : int  1 1 NA 1 1 2 2 1 1 2 ...
+ $ temp    : num  13.9 15.5 12.8 14.3 15.9 ...
+ $ ndvi    : num  0.616 0.556 0.607 0.376 0.46 ...
+ $ savi    : num  0.419 0.379 0.375 0.239 0.309 ...
+ $ geometry:sfc_POINT of length 248; first list element:  'XY' num  750298 716732
+ - attr(*, "sf_column")= chr "geometry"
+ - attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA
+  ..- attr(*, "names")= chr [1:5] "srtm" "clc" "temp" "ndvi" ...</code></pre>
+</div>
+</div>
+<section id="konwersja-danych-przestrzennych-do-danych-nieprzestrzennych" class="level4" data-number="3.4.1.1">
+<h4 data-number="3.4.1.1" class="anchored" data-anchor-id="konwersja-danych-przestrzennych-do-danych-nieprzestrzennych"><span class="header-section-number">3.4.1.1</span> Konwersja danych przestrzennych do danych nieprzestrzennych</h4>
+<p>Obiekt klasy <code>sf</code> można przetworzyć na obiekt nieprzestrzenny klasy <code>data.frame</code> używając funkcji <code>st_drop_geometry()</code>. Funkcja <code>st_drop_geometry()</code> pozwala na pozbycie się informacji przestrzennych z obiektu klasy <code>sf</code> i uzyskanie jedynie obiektu klasy <code>data.frame</code> zawierającego nieprzestrzenne informacje o kolejnych punktach w tym zbiorze.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>punkty_df <span class="ot">=</span> <span class="fu">st_drop_geometry</span>(punkty_sf)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(punkty_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      srtm clc      temp      ndvi      savi
+1 175.7430   1 13.852222 0.6158061 0.4189449
+2 149.8111   1 15.484209 0.5558816 0.3794864
+3 272.8583  NA 12.760814 0.6067462 0.3745572
+4 187.2777   1 14.324648 0.3756170 0.2386246
+5 260.1366   1 15.908549 0.4598393 0.3087599
+6 160.1416   2  9.941118 0.5600288 0.3453627</code></pre>
+</div>
+</div>
+<p>Proszę zwrócić uwagę, że powyższy obiekt nie zawiera już informacji o współrzęnych (kolumn <em>x</em> oraz <em>y</em>).</p>
+</section>
+<section id="współrzędne" class="level4" data-number="3.4.1.2">
+<h4 data-number="3.4.1.2" class="anchored" data-anchor-id="współrzędne"><span class="header-section-number">3.4.1.2</span> Współrzędne</h4>
+<p>Funkcja <code>st_coordinates()</code> pozwala na wydobycie współrzędnych z obiektu punktowego klasy <code>sf</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>xy <span class="ot">=</span> <span class="fu">st_coordinates</span>(punkty_sf)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(xy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            X        Y
+[1,] 750298.0 716731.6
+[2,] 753482.9 717331.4
+[3,] 747242.5 720589.0
+[4,] 755798.9 718828.1
+[5,] 746963.5 717533.5
+[6,] 756801.6 720474.1</code></pre>
+</div>
+</div>
+<p>Informację o współrzędnych można dołączyć do ramki danych nieprzestrzennych.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>punkty_df2 <span class="ot">=</span> <span class="fu">cbind</span>(punkty_df, xy)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(punkty_df2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      srtm clc      temp      ndvi      savi        X        Y
+1 175.7430   1 13.852222 0.6158061 0.4189449 750298.0 716731.6
+2 149.8111   1 15.484209 0.5558816 0.3794864 753482.9 717331.4
+3 272.8583  NA 12.760814 0.6067462 0.3745572 747242.5 720589.0
+4 187.2777   1 14.324648 0.3756170 0.2386246 755798.9 718828.1
+5 260.1366   1 15.908549 0.4598393 0.3087599 746963.5 717533.5
+6 160.1416   2  9.941118 0.5600288 0.3453627 756801.6 720474.1</code></pre>
+</div>
+</div>
+</section>
+<section id="obwiednia" class="level4" data-number="3.4.1.3">
+<h4 data-number="3.4.1.3" class="anchored" data-anchor-id="obwiednia"><span class="header-section-number">3.4.1.3</span> Obwiednia</h4>
+<p>Funkcja <code>st_bbox()</code> określa zasięg przestrzenny danych w jednostkach mapy.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">st_bbox</span>(punkty_sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    xmin     ymin     xmax     ymax 
+745592.5 712642.4 756967.8 721238.7 </code></pre>
+</div>
+</div>
+</section>
+<section id="układ-współrzędnych" class="level4" data-number="3.4.1.4">
+<h4 data-number="3.4.1.4" class="anchored" data-anchor-id="układ-współrzędnych"><span class="header-section-number">3.4.1.4</span> Układ współrzędnych</h4>
+<p>Funkcja <code>st_crs()</code> wyświetla definicję układu współrzędnych w formacie WKT2.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(punkty_sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Coordinate Reference System:
+  User input: EPSG:2180 
+  wkt:
+PROJCRS["ETRF2000-PL / CS92",
+    BASEGEOGCRS["ETRF2000-PL",
+        DATUM["ETRF2000 Poland",
+            ELLIPSOID["GRS 1980",6378137,298.257222101,
+                LENGTHUNIT["metre",1]]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["degree",0.0174532925199433]],
+        ID["EPSG",9702]],
+    CONVERSION["Poland CS92",
+        METHOD["Transverse Mercator",
+            ID["EPSG",9807]],
+        PARAMETER["Latitude of natural origin",0,
+            ANGLEUNIT["degree",0.0174532925199433],
+            ID["EPSG",8801]],
+        PARAMETER["Longitude of natural origin",19,
+            ANGLEUNIT["degree",0.0174532925199433],
+            ID["EPSG",8802]],
+        PARAMETER["Scale factor at natural origin",0.9993,
+            SCALEUNIT["unity",1],
+            ID["EPSG",8805]],
+        PARAMETER["False easting",500000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8806]],
+        PARAMETER["False northing",-5300000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8807]]],
+    CS[Cartesian,2],
+        AXIS["northing (x)",north,
+            ORDER[1],
+            LENGTHUNIT["metre",1]],
+        AXIS["easting (y)",east,
+            ORDER[2],
+            LENGTHUNIT["metre",1]],
+    USAGE[
+        SCOPE["Topographic mapping (medium and small scale)."],
+        AREA["Poland - onshore and offshore."],
+        BBOX[49,14.14,55.93,24.15]],
+    ID["EPSG",2180]]</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="dane-rastrowe" class="level3" data-number="3.4.2">
+<h3 data-number="3.4.2" class="anchored" data-anchor-id="dane-rastrowe"><span class="header-section-number">3.4.2</span> Dane rastrowe</h3>
+<p>Po wczytaniu danych rastrowych do R otrzymamy następujące informacje: wielkość rastra zdefiniowaną liczbą wierszy i kolumn (<em>dimensions</em>), rozdzielczość danych (<em>resolution</em>), zasięg warstwy (<em>extent</em>), informację o układzie współrzędnych warstwy (<em>coord. ref.</em>), nazwę pliku źródłowego wczytanego do R (<em>source</em>) oraz nazwę warstwy (<em>name</em>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>srtm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster 
+size        : 96, 127, 1  (nrow, ncol, nlyr)
+resolution  : 90, 90  (x, y)
+extent      : 745541.7, 756971.7, 712616.2, 721256.2  (xmin, xmax, ymin, ymax)
+coord. ref. : ETRF2000-PL / CS92 (EPSG:2180) 
+source      : srtm.tif 
+name        : srtm </code></pre>
+</div>
+</div>
+<p>W przypadku pliku rastrowego zawierającego kilka kanałów (<em>bands</em>) zostaną podane nazwy (<em>names</em>) wszystkich kanałów.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>siatka_all</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster 
+size        : 96, 127, 5  (nrow, ncol, nlyr)
+resolution  : 90, 90  (x, y)
+extent      : 745541.7, 756971.7, 712616.2, 721256.2  (xmin, xmax, ymin, ymax)
+coord. ref. : +proj=tmerc +lat_0=0 +lon_0=19 +k=0.9993 +x_0=500000 +y_0=-5300000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs 
+source      : siatka-all.tif 
+names       : siatka-all_1, siatka-all_2, siatka-all_3, siatka-all_4, siatka-all_5 </code></pre>
+</div>
+</div>
+<p>Przetworzenie obiektu klasy <code>SpatRaster</code> na <code>data.frame</code> odbywa się natomiast używając funkcji <code>as.data.frame()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>srtm_df <span class="ot">=</span> <span class="fu">as.data.frame</span>(srtm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Funkcje <code>st_bbox()</code> oraz <code>st_crs()</code> można także zastsować do obiektu klasy <code>SpatRaster</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">st_bbox</span>(srtm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    xmin     ymin     xmax     ymax 
+745541.7 712616.2 756971.7 721256.2 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(siatka_all)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="przetwarzanie-danych-wektorowych-w-r" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="przetwarzanie-danych-wektorowych-w-r"><span class="header-section-number">3.5</span> Przetwarzanie danych wektorowych w R</h2>
+<section id="łączenie-danych-przestrzennych-i-atrybutowych" class="level3" data-number="3.5.1">
+<h3 data-number="3.5.1" class="anchored" data-anchor-id="łączenie-danych-przestrzennych-i-atrybutowych"><span class="header-section-number">3.5.1</span> Łączenie danych przestrzennych i atrybutowych</h3>
+<p>Plik <em>wlkp_powiaty.gpkg</em> zawiera granice powiatów województwa wielkopolskiego, a plik <em>bezrobocie_wlkp.csv</em> zawiera informacje o stopie bezrobocia w powiatach województwa wielkopolskiego w 2004, 2010 oraz 2023 roku.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>powiaty_wlkp <span class="ot">=</span> <span class="fu">read_sf</span>(<span class="st">"data/wlkp_powiaty.gpkg"</span>)</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(powiaty_wlkp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 6 features and 2 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 290692.6 ymin: 427189.4 xmax: 431664.5 ymax: 588338.5
+Projected CRS: ETRF2000-PL / CS92
+# A tibble: 6 × 3
+  Nazwa                   TERYT                                             geom
+  &lt;chr&gt;                   &lt;chr&gt;                               &lt;MULTIPOLYGON [m]&gt;
+1 chodzieski              3001  (((365822.6 579030.7, 365850.1 579032.1, 365909…
+2 czarnkowsko-trzcianecki 3002  (((342585.5 579834.4, 342574.5 579840.3, 342578…
+3 gnieźnieński            3003  (((385846.8 531930.4, 385847.9 531933.4, 385852…
+4 gostyński               3004  (((367318.3 453501.8, 367470.1 453670.5, 367470…
+5 grodziski               3005  (((326493 471503, 326484.8 471495.6, 326449.4 4…
+6 jarociński              3006  (((394140.5 464050.1, 394117.8 464090.4, 394120…</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>bezrobocie_wlkp <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"data/bezrobocie_wlkp.csv"</span>, <span class="at">sep =</span> <span class="st">";"</span>, <span class="at">dec =</span> <span class="st">","</span>)</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(bezrobocie_wlkp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Kod                          Nazwa sb2004 sb2010 sb2023
+1 3001000              Powiat chodzieski   23.6   15.2    7.5
+2 3002000 Powiat czarnkowsko-trzcianecki   23.8   15.0    4.8
+3 3003000            Powiat gnieźnieński   24.0   12.7    4.5
+4 3004000               Powiat gostyński   18.6   12.5    5.1
+5 3005000               Powiat grodziski   10.8    8.1    4.6
+6 3006000              Powiat jarociński   24.2   15.2    4.3</code></pre>
+</div>
+</div>
+<p>Aby połączyć dane przestrzenne z informacją o stopie bezrobocia wykorzystane zostaną pola TERYT oraz Kod. Kolumna TERYT w pliku <em>wlkp_powiaty.gpkg</em> zawiera identyfikator powiatu w postaci 4 cyfr. Do pola TERYT trzeba dodać “000”, aby identyfikator powiatu w obu obiektach był taki sam.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>powiaty_wlkp<span class="sc">$</span>TERYT <span class="ot">=</span> <span class="fu">paste</span>(powiaty_wlkp<span class="sc">$</span>TERYT, <span class="st">"000"</span>, <span class="at">sep=</span><span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Do połączenia danych przestrzennych i nieprzestrzennych zostanie wykorzystana funkcja <code>merge()</code>. <em>Funkcja ta nie będzie działać, jeśli będziemy chcieli połączyć dwa obiekty klasy przestrzennej.</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>powiaty_wlkp_attr <span class="ot">=</span> <span class="fu">merge</span>(powiaty_wlkp, bezrobocie_wlkp[, <span class="sc">-</span><span class="dv">2</span>], <span class="at">by.x =</span> <span class="st">"TERYT"</span>, <span class="at">by.y =</span> <span class="st">"Kod"</span>)</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(powiaty_wlkp_attr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 6 features and 5 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 290692.6 ymin: 427189.4 xmax: 431664.5 ymax: 588338.5
+Projected CRS: ETRF2000-PL / CS92
+    TERYT                   Nazwa sb2004 sb2010 sb2023
+1 3001000              chodzieski   23.6   15.2    7.5
+2 3002000 czarnkowsko-trzcianecki   23.8   15.0    4.8
+3 3003000            gnieźnieński   24.0   12.7    4.5
+4 3004000               gostyński   18.6   12.5    5.1
+5 3005000               grodziski   10.8    8.1    4.6
+6 3006000              jarociński   24.2   15.2    4.3
+                            geom
+1 MULTIPOLYGON (((365822.6 57...
+2 MULTIPOLYGON (((342585.5 57...
+3 MULTIPOLYGON (((385846.8 53...
+4 MULTIPOLYGON (((367318.3 45...
+5 MULTIPOLYGON (((326493 4715...
+6 MULTIPOLYGON (((394140.5 46...</code></pre>
+</div>
+</div>
+</section>
+<section id="tworzenie-obiektów-wektorowych" class="level3" data-number="3.5.2">
+<h3 data-number="3.5.2" class="anchored" data-anchor-id="tworzenie-obiektów-wektorowych"><span class="header-section-number">3.5.2</span> Tworzenie obiektów wektorowych</h3>
+<p>Funkcja <code>st_point()</code> z pakietu <code>sf</code> tworzy obiekt punktowy <em>Simple Feautures</em> na podstawie wektora, listy lub macierzy zawierającej współrzędne x oraz y.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">st_point</span>(<span class="fu">c</span>(<span class="fl">16.941820</span>, <span class="fl">52.464279</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>POINT (16.94182 52.46428)</code></pre>
+</div>
+</div>
+<p>Funkcja <code>st_sfc()</code> z pakietu <code>sf</code> tworzy kolumnę z geometrią oraz dodaje informację o układzie współrzędnych dla obiektu typu <em>Simple Feautures</em>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">=</span> <span class="fu">st_sfc</span>(<span class="fu">st_point</span>(<span class="fu">c</span>(<span class="fl">16.941820</span>, <span class="fl">52.464279</span>)), <span class="at">crs =</span> <span class="dv">4326</span>)</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>p1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Geometry set for 1 feature 
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: 16.94182 ymin: 52.46428 xmax: 16.94182 ymax: 52.46428
+Geodetic CRS:  WGS 84</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>POINT (16.94182 52.46428)</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(p1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_daneprzestrzenne_files/figure-html/unnamed-chunk-37-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Do utworzenia obiektu punktowego klasy <code>sf</code> na podstawie ramki danych (<em>data.frame</em>) używa się funkcji <code>st_as_sf()</code>.</p>
+</section>
+<section id="zmiana-układu-współrzędnych" class="level3" data-number="3.5.3">
+<h3 data-number="3.5.3" class="anchored" data-anchor-id="zmiana-układu-współrzędnych"><span class="header-section-number">3.5.3</span> Zmiana układu współrzędnych</h3>
+<p>Obiekt <code>p1</code> został utworzony podając współrzędne w układzie WGS84 (EPSG: 4326). Do zmiany układu współrzędnych służy funkcja <code>st_transform()</code>. Poniżej zmienimy układ na PUWG1992 (EPSG: 2180).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>p1a <span class="ot">=</span> <span class="fu">st_transform</span>(p1, <span class="dv">2180</span>)</span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>p1a</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Geometry set for 1 feature 
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: 360220.9 ymin: 512925.4 xmax: 360220.9 ymax: 512925.4
+Projected CRS: ETRF2000-PL / CS92</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>POINT (360220.9 512925.4)</code></pre>
+</div>
+</div>
+</section>
+<section id="strefa-buforowa" class="level3" data-number="3.5.4">
+<h3 data-number="3.5.4" class="anchored" data-anchor-id="strefa-buforowa"><span class="header-section-number">3.5.4</span> Strefa buforowa</h3>
+<p>Funkcja <code>st_buffer()</code> pozwala na wyznaczenie strefy bufforowej (otoczki) o zadanej odległości w jednostkach układu współrzędnych (w tym wypadku 50000 metrów).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>bfr <span class="ot">=</span> <span class="fu">st_buffer</span>(p1a, <span class="at">dist =</span> <span class="dv">50000</span>)</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>bfr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Geometry set for 1 feature 
+Geometry type: POLYGON
+Dimension:     XY
+Bounding box:  xmin: 310220.9 ymin: 462925.4 xmax: 410220.9 ymax: 562925.4
+Projected CRS: ETRF2000-PL / CS92</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>POLYGON ((410220.9 512925.4, 410152.4 510308.6,...</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(bfr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_daneprzestrzenne_files/figure-html/unnamed-chunk-40-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="centroidy-poligonów" class="level3" data-number="3.5.5">
+<h3 data-number="3.5.5" class="anchored" data-anchor-id="centroidy-poligonów"><span class="header-section-number">3.5.5</span> Centroidy poligonów</h3>
+<p>Funkcja <code>st_centroid()</code> wyznacza centroidy poligonów.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>powiaty_centroidy <span class="ot">=</span> <span class="fu">st_centroid</span>(powiaty_wlkp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: st_centroid assumes attributes are constant over geometries</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(powiaty_centroidy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 6 features and 2 fields
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: 319500.7 ymin: 442156.9 xmax: 404928.2 ymax: 568496.7
+Projected CRS: ETRF2000-PL / CS92
+# A tibble: 6 × 3
+  Nazwa                   TERYT                  geom
+  &lt;chr&gt;                   &lt;chr&gt;           &lt;POINT [m]&gt;
+1 chodzieski              3001000 (365156.4 568496.7)
+2 czarnkowsko-trzcianecki 3002000 (323039.8 563992.2)
+3 gnieźnieński            3003000 (404928.2 520088.9)
+4 gostyński               3004000 (366508.5 442156.9)
+5 grodziski               3005000 (319500.7 482387.3)
+6 jarociński              3006000   (398122.1 459364)</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(powiaty_centroidy[<span class="st">"geom"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_daneprzestrzenne_files/figure-html/unnamed-chunk-42-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>centroidy_attr <span class="ot">=</span> <span class="fu">st_centroid</span>(powiaty_wlkp_attr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: st_centroid assumes attributes are constant over geometries</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>centroidy_attr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 35 features and 5 fields
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: 298759.2 ymin: 375275.2 xmax: 484054.5 ymax: 618120.6
+Projected CRS: ETRF2000-PL / CS92
+First 10 features:
+     TERYT                   Nazwa sb2004 sb2010 sb2023
+1  3001000              chodzieski   23.6   15.2    7.5
+2  3002000 czarnkowsko-trzcianecki   23.8   15.0    4.8
+3  3003000            gnieźnieński   24.0   12.7    4.5
+4  3004000               gostyński   18.6   12.5    5.1
+5  3005000               grodziski   10.8    8.1    4.6
+6  3006000              jarociński   24.2   15.2    4.3
+7  3007000                 kaliski   17.2    8.5    3.1
+8  3008000                kępiński    8.9    5.6    1.6
+9  3009000                  kolski   24.1   14.4    3.9
+10 3010000                koniński   27.5   18.1    8.3
+                        geom
+1  POINT (365156.4 568496.7)
+2  POINT (323039.8 563992.2)
+3  POINT (404928.2 520088.9)
+4  POINT (366508.5 442156.9)
+5  POINT (319500.7 482387.3)
+6    POINT (398122.1 459364)
+7  POINT (446068.2 436904.3)
+8  POINT (427638.9 375275.2)
+9  POINT (484054.5 485762.4)
+10 POINT (449786.4 490670.6)</code></pre>
+</div>
+</div>
+</section>
+<section id="selekcja-na-podstawie-lokalizacji" class="level3" data-number="3.5.6">
+<h3 data-number="3.5.6" class="anchored" data-anchor-id="selekcja-na-podstawie-lokalizacji"><span class="header-section-number">3.5.6</span> Selekcja na podstawie lokalizacji</h3>
+<p>Używając indeksowania można w R wykonywać selekcje na podstawie lokalizacji. Poniżej wybrano wszystkie centroidy przecinające się z obiektem <em>bfr</em>. Możliwe jest stosowanie także innych metod opisujących relacje przestrzenne.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>centroidy_bfr <span class="ot">=</span> powiaty_centroidy[bfr, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>centroidy_bfr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 9 features and 2 fields
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: 325004.7 ymin: 467381.3 xmax: 404928.2 ymax: 551033.6
+Projected CRS: ETRF2000-PL / CS92
+# A tibble: 9 × 3
+  Nazwa        TERYT                  geom
+  &lt;chr&gt;        &lt;chr&gt;           &lt;POINT [m]&gt;
+1 gnieźnieński 3003000 (404928.2 520088.9)
+2 kościański   3011000 (342649.8 467381.3)
+3 obornicki    3016000 (354281.4 540430.6)
+4 Poznań       3064000 (358768.1 506529.9)
+5 poznański    3021000 (360114.6 504966.5)
+6 szamotulski  3024000 (325004.7 529234.5)
+7 średzki      3025000 (385041.2 480378.2)
+8 śremski      3026000   (367149 468692.8)
+9 wągrowiecki  3028000 (383478.6 551033.6)</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(centroidy_bfr[<span class="st">"geom"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_daneprzestrzenne_files/figure-html/unnamed-chunk-46-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>powiaty_centroidy[bfr, , op <span class="ot">=</span> st_within]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="selekcja-na-podstawie-atrybutów" class="level3" data-number="3.5.7">
+<h3 data-number="3.5.7" class="anchored" data-anchor-id="selekcja-na-podstawie-atrybutów"><span class="header-section-number">3.5.7</span> Selekcja na podstawie atrybutów</h3>
+<p>Obiekty klasy <code>sf()</code> są zbudowane z tabeli (<em>data frame</em>) zawierajacej szereg atrybutów oraz dodatkową kolumnę zawierającą geometrie (często nazywaną <code>geometry</code> lub <code>geom</code>). Tabelę atrybutów można przeszukiwać używając dowolnych nprzeznaczonych do danych nieprzestrzennych (np. indeksowania).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a>poznan <span class="ot">=</span> powiaty_wlkp[powiaty_wlkp<span class="sc">$</span>Nazwa <span class="sc">==</span> <span class="st">"Poznań"</span>,]</span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(poznan))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_daneprzestrzenne_files/figure-html/unnamed-chunk-48-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="tworzenie-siatki---obiekt-wektorowy" class="level3" data-number="3.5.8">
+<h3 data-number="3.5.8" class="anchored" data-anchor-id="tworzenie-siatki---obiekt-wektorowy"><span class="header-section-number">3.5.8</span> Tworzenie siatki - obiekt wektorowy</h3>
+<p>Tworzenie siatki składa się z 3 kroków:</p>
+<ol type="1">
+<li>Utworzenie poligonu o zasięgu warstwy (w przykładzie poligon o zasięgu warstwy powiaty_wlkp).</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>wlkp_bb <span class="ot">=</span> <span class="fu">st_sf</span>(<span class="at">geom =</span> <span class="fu">st_as_sfc</span>(<span class="fu">st_bbox</span>(powiaty_wlkp)))</span>
+<span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(wlkp_bb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_daneprzestrzenne_files/figure-html/unnamed-chunk-49-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ol start="2" type="1">
+<li>Utworzenie siatki używając funkcji <code>st_make_grid()</code>. Pierwszym argumentem jest obiekt definiujący zasięg siatki, a drugi (<em>n</em>) definiuje liczbę kolumn oraz wierszy. W przykładzie zostanie utworzona siatka o wymiarach 10x10.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>wlkp_grid <span class="ot">=</span> <span class="fu">st_make_grid</span>(wlkp_bb, <span class="at">n =</span> <span class="dv">10</span>)</span>
+<span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a>wlkp_grid</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Geometry set for 100 features 
+Geometry type: POLYGON
+Dimension:     XY
+Bounding box:  xmin: 281949.4 ymin: 360241.8 xmax: 507167.3 ymax: 645513.7
+Projected CRS: ETRF2000-PL / CS92
+First 5 geometries:</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>POLYGON ((281949.4 360241.8, 304471.2 360241.8,...</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>POLYGON ((304471.2 360241.8, 326993 360241.8, 3...</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>POLYGON ((326993 360241.8, 349514.8 360241.8, 3...</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>POLYGON ((349514.8 360241.8, 372036.6 360241.8,...</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>POLYGON ((372036.6 360241.8, 394558.3 360241.8,...</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(wlkp_grid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_daneprzestrzenne_files/figure-html/unnamed-chunk-51-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Funkcja <code>st_sf()</code> przekształca utworzoną siatkę na obiekt klasy <code>sf</code> składający się z ramki danych (<em>data.frame</em>) oraz kolumny zawierającej geometrię.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a>wlkp_grid_sf <span class="ot">=</span> <span class="fu">st_sf</span>(<span class="at">geometry =</span> wlkp_grid)</span>
+<span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a>wlkp_grid_sf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 100 features and 0 fields
+Geometry type: POLYGON
+Dimension:     XY
+Bounding box:  xmin: 281949.4 ymin: 360241.8 xmax: 507167.3 ymax: 645513.7
+Projected CRS: ETRF2000-PL / CS92
+First 10 features:
+                         geometry
+1  POLYGON ((281949.4 360241.8...
+2  POLYGON ((304471.2 360241.8...
+3  POLYGON ((326993 360241.8, ...
+4  POLYGON ((349514.8 360241.8...
+5  POLYGON ((372036.6 360241.8...
+6  POLYGON ((394558.3 360241.8...
+7  POLYGON ((417080.1 360241.8...
+8  POLYGON ((439601.9 360241.8...
+9  POLYGON ((462123.7 360241.8...
+10 POLYGON ((484645.5 360241.8...</code></pre>
+</div>
+</div>
+<p>Podsumowując, do utworzenia siatki potrzebne jest wykonanie 3 poniższych kroków.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a>wlkp_bb <span class="ot">=</span> <span class="fu">st_sf</span>(<span class="at">geom =</span> <span class="fu">st_as_sfc</span>(<span class="fu">st_bbox</span>(powiaty_wlkp)))</span>
+<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a>wlkp_grid <span class="ot">=</span> <span class="fu">st_make_grid</span>(wlkp_bb, <span class="at">n =</span> <span class="dv">10</span>)</span>
+<span id="cb97-3"><a href="#cb97-3" aria-hidden="true" tabindex="-1"></a>wlkp_grid_sf <span class="ot">=</span> <span class="fu">st_sf</span>(<span class="at">geometry =</span> wlkp_grid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="przetwarzanie-danych-rastrowych-w-r" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="przetwarzanie-danych-rastrowych-w-r"><span class="header-section-number">3.6</span> Przetwarzanie danych rastrowych w R</h2>
+<section id="tworzenie-siatki-rastrowej" class="level3" data-number="3.6.1">
+<h3 data-number="3.6.1" class="anchored" data-anchor-id="tworzenie-siatki-rastrowej"><span class="header-section-number">3.6.1</span> Tworzenie siatki rastrowej</h3>
+<p>Funkcja <code>rast()</code> z pakietu <code>terra</code> pozwala na wczytanie danych rastrowych zapisanych w zewnętrznym pliku lub na utworzenie obiektu rastrowego o zadanym zasięgu, rozdzielczości oraz układzie współrzędnych.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra)</span>
+<span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a>moja_siatka <span class="ot">=</span> <span class="fu">rast</span>(<span class="at">ext =</span> poznan, <span class="at">res =</span> <span class="dv">90</span>, <span class="at">crs =</span> <span class="fu">crs</span>(poznan))</span>
+<span id="cb98-3"><a href="#cb98-3" aria-hidden="true" tabindex="-1"></a>moja_siatka</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster 
+size        : 269, 255, 1  (nrow, ncol, nlyr)
+resolution  : 90, 90  (x, y)
+extent      : 345943.2, 368893.2, 493660, 517870  (xmin, xmax, ymin, ymax)
+coord. ref. : ETRF2000-PL / CS92 (EPSG:2180) </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a>moja_siatka2 <span class="ot">=</span> <span class="fu">rast</span>(<span class="at">xmin =</span> <span class="fl">345943.2</span>, <span class="at">ymin =</span> <span class="dv">493660</span>, </span>
+<span id="cb100-2"><a href="#cb100-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">xmax =</span> <span class="fl">368893.2</span>, <span class="at">ymax =</span> <span class="dv">517870</span>, </span>
+<span id="cb100-3"><a href="#cb100-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">res =</span> <span class="dv">90</span>, <span class="at">crs =</span> <span class="fu">crs</span>(poznan))</span>
+<span id="cb100-4"><a href="#cb100-4" aria-hidden="true" tabindex="-1"></a>moja_siatka2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster 
+size        : 269, 255, 1  (nrow, ncol, nlyr)
+resolution  : 90, 90  (x, y)
+extent      : 345943.2, 368893.2, 493660, 517870  (xmin, xmax, ymin, ymax)
+coord. ref. : ETRF2000-PL / CS92 (EPSG:2180) </code></pre>
+</div>
+</div>
+<p>Do utworzonego obiektu rastrowego należy przypisać wartości.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a>moja_siatka <span class="ot">&lt;-</span> <span class="fu">setValues</span>(moja_siatka, <span class="dv">1</span><span class="sc">:</span><span class="fu">ncell</span>(moja_siatka))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(moja_siatka)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_daneprzestrzenne_files/figure-html/unnamed-chunk-57-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="fu">writeRaster</span>(moja_siatka, <span class="st">"out/out_moja_siatka.tif"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="przycięcie-danych-rastrowych-do-zasięgu-warstwy" class="level3" data-number="3.6.2">
+<h3 data-number="3.6.2" class="anchored" data-anchor-id="przycięcie-danych-rastrowych-do-zasięgu-warstwy"><span class="header-section-number">3.6.2</span> Przycięcie danych rastrowych do zasięgu warstwy</h3>
+<p>Funkcja <code>crop()</code> pozwala na przycięcie warstwy rastrowej do granic wyznaczonych przez warstwę wektorową.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb105"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a>poznan_rst <span class="ot">=</span> <span class="fu">crop</span>(moja_siatka, poznan, <span class="at">mask =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb106"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(poznan_rst)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_daneprzestrzenne_files/figure-html/unnamed-chunk-60-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="zmiana-rozdzielczości" class="level3" data-number="3.6.3">
+<h3 data-number="3.6.3" class="anchored" data-anchor-id="zmiana-rozdzielczości"><span class="header-section-number">3.6.3</span> Zmiana rozdzielczości</h3>
+<p>Funkcja <code>aggregate()</code> pozwala na agregację warstwy rastrowej. Warstwa rastrowa <em>poznan_rst</em> ma rozdzielczość 90m. Argument <code>fact = 2</code> agreguję warstwę dwukrotnie zmniejszając rozdzielczość, po agregacji warstwa będzie miała rozdzielczość 180m. Argument <code>fun</code> oznacza funkcję jaka ma być wykorzystana do agregacji danych (np. suma, wartość minimalna lub maksymalna, średnia, itp.). W przykładzie nowa warstwa rastrowa będzie miała rozdzielczość 180m, a wartość komórek będzie sumą wartości z komórek 90m.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a>poznan_rst_agg <span class="ot">=</span> <span class="fu">aggregate</span>(poznan_rst, <span class="at">fact =</span> <span class="dv">2</span>, <span class="at">fun =</span> <span class="st">"sum"</span>)</span>
+<span id="cb107-2"><a href="#cb107-2" aria-hidden="true" tabindex="-1"></a>poznan_rst_agg</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster 
+size        : 135, 128, 1  (nrow, ncol, nlyr)
+resolution  : 180, 180  (x, y)
+extent      : 345943.2, 368983.2, 493570, 517870  (xmin, xmax, ymin, ymax)
+coord. ref. : ETRF2000-PL / CS92 (EPSG:2180) 
+source(s)   : memory
+name        :  lyr.1 
+min value   :   1236 
+max value   : 272612 </code></pre>
+</div>
+</div>
+<blockquote class="blockquote">
+<p>Zagreguj warstwę rastrową srtm do rozdzielczości 360m. Jaką wartość musi przyjąć argument <em>fact</em>? Warstwa rastrowa srtm to cyfrowy model wysokościowy (DEM) zawierający w komórkach wartości wysokości n.p.m. Jaką funkcję należy użyć do aggregacji tych danych?</p>
+</blockquote>
+</section>
+</section>
+<section id="wizualizacja-danych-przestrzennych-w-r" class="level2" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="wizualizacja-danych-przestrzennych-w-r"><span class="header-section-number">3.7</span> Wizualizacja danych przestrzennych w R</h2>
+<p>Istnieje wiele pakietów pozwalajacych na wizualizację danych przestrzennych. Poniżej pokazane są przykłady użycia pakietu <code>tmap</code>.</p>
+<p>Główna idea stojąca za pakietem <code>tmap</code> mówi o łączeniu kolejnych linii kodu znakiem <code>+</code>, i te kolejne elementy będą wyświetlane po sobie. Złożona wizualizacja danych przestrzennych składa się z następujących elementów:</p>
+<ul>
+<li><p><code>tm_shape()</code> - podstawowa funkcja pakietu,która pozwala na zdefiniowanie jaki obiekt przestrzenny chcemy zwizualizować.</p></li>
+<li><p>Elementy odnoszące się do typów obiektów (np. dane punktowe, poligonowe, rastrowe, itp.)</p>
+<ul>
+<li><code>tm_dots()</code>, <code>tm_symbols()</code> - dane punktowe</li>
+<li><code>tm_polygons()</code>, <code>tm_borders()</code> - dane poligonowe</li>
+<li><code>tm_raster()</code> - dane rastrowe.</li>
+</ul></li>
+<li><p>Dodatkowe elementy kompozycji mapy:</p>
+<ul>
+<li>tm_scale_bar() - podziałka liniowa</li>
+<li>tm_compass() - strzałka północy</li>
+</ul></li>
+</ul>
+<p>Każda z powyższych składowych funkcji jest też łatwo modyfikowalna, pozwalając na wybranie zmiennej do przestawienia na mapie, stylu legendy, jej tytułu, itd.</p>
+<section id="dane-poligonowe" class="level3" data-number="3.7.1">
+<h3 data-number="3.7.1" class="anchored" data-anchor-id="dane-poligonowe"><span class="header-section-number">3.7.1</span> Dane poligonowe</h3>
+<p>Podstawowa wizualizacja danych poligonowych składa się z dwóch elementów: <code>tm_shape()</code> oraz <code>tm_polygons()</code> (lub <code>tm_borders()</code>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb109"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>
+<span id="cb109-2"><a href="#cb109-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(powiaty_wlkp) <span class="sc">+</span></span>
+<span id="cb109-3"><a href="#cb109-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_polygons</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_daneprzestrzenne_files/figure-html/unnamed-chunk-62-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb110"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb110-1"><a href="#cb110-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(powiaty_wlkp) <span class="sc">+</span></span>
+<span id="cb110-2"><a href="#cb110-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_borders</span>(<span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_daneprzestrzenne_files/figure-html/unnamed-chunk-63-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Następnie możemy definiować dodatkowe elementy: wizualizowana zmienna, wykorzystana paleta itp.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb111"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>
+<span id="cb111-2"><a href="#cb111-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(powiaty_wlkp_attr) <span class="sc">+</span></span>
+<span id="cb111-3"><a href="#cb111-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"sb2023"</span>, <span class="at">palette =</span> <span class="st">"YlOrBr"</span>, <span class="at">title =</span> <span class="st">"Stopa bezrobocia [%]"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_daneprzestrzenne_files/figure-html/unnamed-chunk-64-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="dane-punktowe" class="level3" data-number="3.7.2">
+<h3 data-number="3.7.2" class="anchored" data-anchor-id="dane-punktowe"><span class="header-section-number">3.7.2</span> Dane punktowe</h3>
+<p>Podstawowa wizualizacja danych punktowych składa się z dwóch elementów: <code>tm_shape()</code> oraz <code>tm_dots()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb112"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb112-1"><a href="#cb112-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(centroidy_attr) <span class="sc">+</span></span>
+<span id="cb112-2"><a href="#cb112-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_dots</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_daneprzestrzenne_files/figure-html/unnamed-chunk-65-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb113"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(centroidy_attr) <span class="sc">+</span> </span>
+<span id="cb113-2"><a href="#cb113-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_dots</span>(<span class="at">fill =</span> <span class="st">"sb2023"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_daneprzestrzenne_files/figure-html/unnamed-chunk-66-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb114"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb114-1"><a href="#cb114-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(centroidy_attr) <span class="sc">+</span> </span>
+<span id="cb114-2"><a href="#cb114-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_dots</span>(<span class="at">fill =</span> <span class="st">"sb2023"</span>, </span>
+<span id="cb114-3"><a href="#cb114-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">fill.scale =</span> <span class="fu">tm_scale_continuous</span>(<span class="at">values =</span> <span class="st">"viridis"</span>, <span class="at">label.na =</span> <span class="st">"Brak danych"</span>),</span>
+<span id="cb114-4"><a href="#cb114-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"Stopa bezrobocia"</span>),</span>
+<span id="cb114-5"><a href="#cb114-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">size =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_daneprzestrzenne_files/figure-html/unnamed-chunk-67-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="dane-rastrowe-1" class="level3" data-number="3.7.3">
+<h3 data-number="3.7.3" class="anchored" data-anchor-id="dane-rastrowe-1"><span class="header-section-number">3.7.3</span> Dane rastrowe</h3>
+<p>Podstawowa wizualizacja danych rastrowych składa się z dwóch elementów: <code>tm_shape()</code> oraz <code>tm_raster()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb115"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(siatka_all) <span class="sc">+</span></span>
+<span id="cb115-2"><a href="#cb115-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_raster</span>(<span class="st">"siatka-all_1"</span>) <span class="sc">+</span></span>
+<span id="cb115-3"><a href="#cb115-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_scalebar</span>() <span class="sc">+</span></span>
+<span id="cb115-4"><a href="#cb115-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_compass</span>(<span class="at">position =</span> <span class="fu">c</span>(<span class="st">"left"</span>, <span class="st">"top"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_daneprzestrzenne_files/figure-html/unnamed-chunk-68-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb116"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb116-1"><a href="#cb116-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(siatka_all) <span class="sc">+</span></span>
+<span id="cb116-2"><a href="#cb116-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_raster</span>(<span class="at">col =</span> <span class="st">"siatka-all_1"</span>,</span>
+<span id="cb116-3"><a href="#cb116-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">col.scale =</span> <span class="fu">tm_scale_continuous</span>(<span class="at">values =</span> <span class="st">"Spectral"</span>),</span>
+<span id="cb116-4"><a href="#cb116-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">col.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"m npm"</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>[cols4all] color palettes: use palettes from the R package cols4all. Run
+`cols4all::c4a_gui()` to explore them. The old palette name "Spectral" is named
+"brewer.spectral"</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_daneprzestrzenne_files/figure-html/unnamed-chunk-69-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="łączenie-warstw" class="level3" data-number="3.7.4">
+<h3 data-number="3.7.4" class="anchored" data-anchor-id="łączenie-warstw"><span class="header-section-number">3.7.4</span> Łączenie warstw</h3>
+<p>Pakiet <code>tmap</code> pozwala także na tworzenie złożonych wizualizacji, łącząc obiekty różnego typu (np. dane poligonowe oraz punktowe lub dane rastrowe i wektorowe).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb118"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb118-1"><a href="#cb118-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>
+<span id="cb118-2"><a href="#cb118-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(powiaty_wlkp_attr) <span class="sc">+</span></span>
+<span id="cb118-3"><a href="#cb118-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"sb2023"</span>, <span class="at">palette =</span> <span class="st">"YlOrBr"</span>) <span class="sc">+</span> </span>
+<span id="cb118-4"><a href="#cb118-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(centroidy_attr) <span class="sc">+</span> </span>
+<span id="cb118-5"><a href="#cb118-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_dots</span>(<span class="at">size =</span> <span class="fl">0.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_daneprzestrzenne_files/figure-html/unnamed-chunk-70-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb119"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb119-1"><a href="#cb119-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(siatka_all) <span class="sc">+</span></span>
+<span id="cb119-2"><a href="#cb119-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_raster</span>(<span class="at">col =</span> <span class="st">"siatka-all_1"</span>,</span>
+<span id="cb119-3"><a href="#cb119-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">col.scale =</span> <span class="fu">tm_scale_continuous</span>(<span class="at">values =</span> <span class="st">"Spectral"</span>),</span>
+<span id="cb119-4"><a href="#cb119-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">col.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"m npm"</span>)) <span class="sc">+</span> </span>
+<span id="cb119-5"><a href="#cb119-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_shape</span>(punkty_sf) <span class="sc">+</span> </span>
+<span id="cb119-6"><a href="#cb119-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_symbols</span>(<span class="at">fill =</span> <span class="st">"temp"</span>, </span>
+<span id="cb119-7"><a href="#cb119-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">fill.scale =</span> <span class="fu">tm_scale_continuous</span>(<span class="at">values =</span> <span class="st">"viridis"</span>, <span class="at">label.na =</span> <span class="st">"Brak danych"</span>),</span>
+<span id="cb119-8"><a href="#cb119-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"Temperatura [*C]"</span>),</span>
+<span id="cb119-9"><a href="#cb119-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">col =</span> <span class="st">"white"</span>,</span>
+<span id="cb119-10"><a href="#cb119-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">size =</span> <span class="fl">0.75</span>) <span class="sc">+</span></span>
+<span id="cb119-11"><a href="#cb119-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_scalebar</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>[cols4all] color palettes: use palettes from the R package cols4all. Run
+`cols4all::c4a_gui()` to explore them. The old palette name "Spectral" is named
+"brewer.spectral"
+[plot mode] legend/component: Some components or legends are too "high" and are
+therefore rescaled.
+ℹ Set the tmap option `component.autoscale = FALSE` to disable rescaling.</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_daneprzestrzenne_files/figure-html/unnamed-chunk-71-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="zapisywanie-map" class="level3" data-number="3.7.5">
+<h3 data-number="3.7.5" class="anchored" data-anchor-id="zapisywanie-map"><span class="header-section-number">3.7.5</span> Zapisywanie map</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb121"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb121-1"><a href="#cb121-1" aria-hidden="true" tabindex="-1"></a>tm <span class="ot">=</span> <span class="fu">tm_shape</span>(powiaty_wlkp) <span class="sc">+</span></span>
+<span id="cb121-2"><a href="#cb121-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_polygons</span>()</span>
+<span id="cb121-3"><a href="#cb121-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_save</span>(tm, <span class="st">"out/mapa.png"</span>, <span class="at">width =</span> <span class="dv">600</span>, <span class="at">height =</span> <span class="dv">600</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./03_zastosowanie.html" class="pagination-link" aria-label="Zastosowania statystyki przestrzennej">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Zastosowania statystyki przestrzennej</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./05_eksploracja.html" class="pagination-link" aria-label="Eksploracyjna analiza danych przestrzennych">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Eksploracyjna analiza danych przestrzennych</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

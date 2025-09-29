@@ -1,0 +1,1666 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>4&nbsp; Eksploracyjna analiza danych przestrzennych – Statystyka przestrzenna</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./06_punkty.html" rel="next">
+<link href="./04_daneprzestrzenne.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-c852b7e71cc1c09f55f367b2512aabbd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_wstep.html">WSTĘP</a></li><li class="breadcrumb-item"><a href="./05_eksploracja.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Eksploracyjna analiza danych przestrzennych</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Statystyka przestrzenna</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">O skrypcie</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./01_wstep.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">WSTĘP</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_wprowadzenie.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Wprowadzenie</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_zastosowanie.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Zastosowania statystyki przestrzennej</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_daneprzestrzenne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Dane przestrzenne w R</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_eksploracja.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Eksploracyjna analiza danych przestrzennych</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./06_punkty.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE PUNKTOWE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_punkty_centrograficzne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Statystyki centrograficzne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_punkty_odleglosc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Metody oparte na odległości</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09_punkty_intensywnosc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Metody oparte na analizie intensywności</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./10_poligony.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE OBSZAROWE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_poligony_sasiedztwo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Określanie sąsiedztwa danych obszarowych</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12_poligony_autokorelacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Miary autokorelacji danych obszarowych</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./13_pola.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE POWIERZCHNIOWE CIĄGŁE PRZESTRZENNIE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14_pola_interpolacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Metody interpolacji</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15_pola_modelowanie.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Geostatystyka: Analiza i modelowanie autokorelacji przestrzennej</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_pola_estymacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Geostatystyczne metody estymacji</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_pola_ocena.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Ocena jakości estymacji</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">ZADANIA</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18_zadania_samodzielne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Zadania samodzielne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19_projekt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Projekt</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20_projekt_geostatystyka.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Projekt 2: Geostatytyka</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#eksploracyjna-analiza-danych" id="toc-eksploracyjna-analiza-danych" class="nav-link active" data-scroll-target="#eksploracyjna-analiza-danych"><span class="header-section-number">4.1</span> Eksploracyjna analiza danych</a>
+  <ul class="collapse">
+  <li><a href="#cele-eksploracyjnej-analizy-danych" id="toc-cele-eksploracyjnej-analizy-danych" class="nav-link" data-scroll-target="#cele-eksploracyjnej-analizy-danych"><span class="header-section-number">4.1.1</span> Cele eksploracyjnej analizy danych</a></li>
+  <li><a href="#eksploracyjna-analiza-nieprzestrzenna-i-przestrzenna" id="toc-eksploracyjna-analiza-nieprzestrzenna-i-przestrzenna" class="nav-link" data-scroll-target="#eksploracyjna-analiza-nieprzestrzenna-i-przestrzenna"><span class="header-section-number">4.1.2</span> Eksploracyjna analiza nieprzestrzenna i przestrzenna</a></li>
+  </ul></li>
+  <li><a href="#eksploracyjna-analiza-dla-różnych-typów-danych" id="toc-eksploracyjna-analiza-dla-różnych-typów-danych" class="nav-link" data-scroll-target="#eksploracyjna-analiza-dla-różnych-typów-danych"><span class="header-section-number">4.2</span> Eksploracyjna analiza dla różnych typów danych</a>
+  <ul class="collapse">
+  <li><a href="#statystyka-punktów" id="toc-statystyka-punktów" class="nav-link" data-scroll-target="#statystyka-punktów"><span class="header-section-number">4.2.1</span> Statystyka punktów</a></li>
+  <li><a href="#statystyka-powierzchni-dane-poligonowe" id="toc-statystyka-powierzchni-dane-poligonowe" class="nav-link" data-scroll-target="#statystyka-powierzchni-dane-poligonowe"><span class="header-section-number">4.2.2</span> Statystyka powierzchni (dane poligonowe)</a></li>
+  <li><a href="#geostatystyka" id="toc-geostatystyka" class="nav-link" data-scroll-target="#geostatystyka"><span class="header-section-number">4.2.3</span> Geostatystyka</a></li>
+  </ul></li>
+  <li><a href="#przykład-1.-analiza-rozkładu-temperatury-powietrza" id="toc-przykład-1.-analiza-rozkładu-temperatury-powietrza" class="nav-link" data-scroll-target="#przykład-1.-analiza-rozkładu-temperatury-powietrza"><span class="header-section-number">4.3</span> Przykład 1. Analiza rozkładu temperatury powietrza</a>
+  <ul class="collapse">
+  <li><a href="#dane-i-cel-analizy" id="toc-dane-i-cel-analizy" class="nav-link" data-scroll-target="#dane-i-cel-analizy"><span class="header-section-number">4.3.1</span> Dane i cel analizy</a></li>
+  <li><a href="#eksploracyjna-nieprzestrzenna-analiza-danych" id="toc-eksploracyjna-nieprzestrzenna-analiza-danych" class="nav-link" data-scroll-target="#eksploracyjna-nieprzestrzenna-analiza-danych"><span class="header-section-number">4.3.2</span> Eksploracyjna nieprzestrzenna analiza danych</a></li>
+  <li><a href="#eksploracyjna-przestrzenna-analiza-danych" id="toc-eksploracyjna-przestrzenna-analiza-danych" class="nav-link" data-scroll-target="#eksploracyjna-przestrzenna-analiza-danych"><span class="header-section-number">4.3.3</span> Eksploracyjna przestrzenna analiza danych</a></li>
+  </ul></li>
+  <li><a href="#przykład-2-analiza-przestępczości-w-hrabstwie-cook" id="toc-przykład-2-analiza-przestępczości-w-hrabstwie-cook" class="nav-link" data-scroll-target="#przykład-2-analiza-przestępczości-w-hrabstwie-cook"><span class="header-section-number">4.4</span> Przykład 2: Analiza przestępczości w hrabstwie Cook</a>
+  <ul class="collapse">
+  <li><a href="#dane-1" id="toc-dane-1" class="nav-link" data-scroll-target="#dane-1"><span class="header-section-number">4.4.1</span> Dane</a></li>
+  <li><a href="#cel-analizy" id="toc-cel-analizy" class="nav-link" data-scroll-target="#cel-analizy"><span class="header-section-number">4.4.2</span> Cel analizy</a></li>
+  <li><a href="#przygotowanie-danych-do-analizy" id="toc-przygotowanie-danych-do-analizy" class="nav-link" data-scroll-target="#przygotowanie-danych-do-analizy"><span class="header-section-number">4.4.3</span> Przygotowanie danych do analizy</a></li>
+  <li><a href="#eksploracyjna-nieprzestrzenna-analiza-danych-1" id="toc-eksploracyjna-nieprzestrzenna-analiza-danych-1" class="nav-link" data-scroll-target="#eksploracyjna-nieprzestrzenna-analiza-danych-1"><span class="header-section-number">4.4.4</span> Eksploracyjna nieprzestrzenna analiza danych</a></li>
+  <li><a href="#eksploracyjna-przestrzenna-analiza-danych-1" id="toc-eksploracyjna-przestrzenna-analiza-danych-1" class="nav-link" data-scroll-target="#eksploracyjna-przestrzenna-analiza-danych-1"><span class="header-section-number">4.4.5</span> Eksploracyjna przestrzenna analiza danych</a></li>
+  <li><a href="#podsumowanie" id="toc-podsumowanie" class="nav-link" data-scroll-target="#podsumowanie"><span class="header-section-number">4.4.6</span> Podsumowanie</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_wstep.html">WSTĘP</a></li><li class="breadcrumb-item"><a href="./05_eksploracja.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Eksploracyjna analiza danych przestrzennych</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Eksploracyjna analiza danych przestrzennych</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<!-- https://bookdown.org/nowosad/geostatystyka/eksploracja-analiza-danych-nieprzestrzennych.html -->
+<!-- https://bookdown.org/nowosad/geostatystyka/eksploracyjna-analiza-danych-przestrzennych.html -->
+<!-- pytanie czy to przeredagować (żeby było uniwersalne dla wszystkich typów danych przestrzennych) czy też przenieść do rozdziałów geostatyski, albo też trochę to i to -->
+<section id="eksploracyjna-analiza-danych" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="eksploracyjna-analiza-danych"><span class="header-section-number">4.1</span> Eksploracyjna analiza danych</h2>
+<ul>
+<li><p>Każda analiza danych przestrzennych powinna być poprzedzona <strong>eksploracyjną analizą danych</strong>. Celem eksploracyjnej analizy danych jest <strong>uzyskanie podstawowych informacji o analizowanych danych.</strong></p></li>
+<li><p>Sposób wykonania eksploracyjnej analizy danych (np. dobór wykorzystywanych metod) różni się w zależności od posiadanego zbioru danych, jak i od postawionego pytania.</p></li>
+</ul>
+<section id="cele-eksploracyjnej-analizy-danych" class="level3" data-number="4.1.1">
+<h3 data-number="4.1.1" class="anchored" data-anchor-id="cele-eksploracyjnej-analizy-danych"><span class="header-section-number">4.1.1</span> Cele eksploracyjnej analizy danych</h3>
+<p>Ogólne cele eksploracyjnej analizy danych obejmują:</p>
+<ul>
+<li>Przygotowanie ogólnej charakterystyki danych oraz badanego zjawiska.</li>
+<li>Identyfikacja przestrzennego/czasowego typu próbkowania.</li>
+<li>Ocena relacji zachodzących pomiędzy lokalizacją pomiaru/obserwacji, a czynnikami wpływającymi na zmienność przestrzenną badanych cech.</li>
+</ul>
+</section>
+<section id="eksploracyjna-analiza-nieprzestrzenna-i-przestrzenna" class="level3" data-number="4.1.2">
+<h3 data-number="4.1.2" class="anchored" data-anchor-id="eksploracyjna-analiza-nieprzestrzenna-i-przestrzenna"><span class="header-section-number">4.1.2</span> Eksploracyjna analiza nieprzestrzenna i przestrzenna</h3>
+<p>Eksploracyjna analiza danych dzieli się na analizę nieprzestrzenną i przestrzenną.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 61%">
+<col style="width: 38%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Nieprzestrzenna</th>
+<th>Przestrzenna</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>w analizie uwzględniane są wartości atrybutów, a nie ich lokalizacja</td>
+<td>podstawą analizy danych jest lokalizacja obserwacji</td>
+</tr>
+<tr class="even">
+<td><em>analiza statystyczna danych</em> wykonywana w oparciu o tabelę atrybutów dołączoną do danych geoprzestrzennych</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>podstawowe statystyki opisowe, typ rozkładu danych, analiza korelacji, zmienność cechy w grupach</td>
+<td>typ próbkowania, ogólny pogląd na zmienność przestrzenną zjawiska</td>
+</tr>
+</tbody>
+</table>
+<p><img src="figs/eksploracja_danych.png" class="img-fluid"></p>
+<!-- ograniczenia danych -->
+</section>
+</section>
+<section id="eksploracyjna-analiza-dla-różnych-typów-danych" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="eksploracyjna-analiza-dla-różnych-typów-danych"><span class="header-section-number">4.2</span> Eksploracyjna analiza dla różnych typów danych</h2>
+<section id="statystyka-punktów" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="statystyka-punktów"><span class="header-section-number">4.2.1</span> Statystyka punktów</h3>
+<p>Cel:</p>
+<ul>
+<li>określenie w jaki sposób obiekty/zdarzenia są rozmieszczone w przestrzeni</li>
+</ul>
+<p>Eksploracyjna analiza danych:</p>
+<ul>
+<li>Sprawdzenie poprawności współrzędnych</li>
+<li>Wgląd w typ próbkowania</li>
+<li>Określenie zależności między lokalizacją, a innymi czynnikami (np. więcej włamań notuje się w obszarach z wysokimi cenami nieruchomości)</li>
+</ul>
+</section>
+<section id="statystyka-powierzchni-dane-poligonowe" class="level3" data-number="4.2.2">
+<h3 data-number="4.2.2" class="anchored" data-anchor-id="statystyka-powierzchni-dane-poligonowe"><span class="header-section-number">4.2.2</span> Statystyka powierzchni (dane poligonowe)</h3>
+<p>Cel:</p>
+<ul>
+<li>analiza podobieństwa i różnic między obszarami/regionami</li>
+<li>wyszukanie obszarów podobnych do siebie</li>
+<li>znalezienie obszarów znacząco różnych od sąsiednich</li>
+</ul>
+<p>Eksploracyjna analiza danych:</p>
+<ul>
+<li>Charakterystyka statystyczna danych (statystyki podstawowe, wartości odstające globalnie, rozkład danych)</li>
+<li>Sprawdzenie poprawności danych, w tym między innymi identyfikacja danych odstających lokalnie</li>
+</ul>
+</section>
+<section id="geostatystyka" class="level3" data-number="4.2.3">
+<h3 data-number="4.2.3" class="anchored" data-anchor-id="geostatystyka"><span class="header-section-number">4.2.3</span> Geostatystyka</h3>
+<p>Cel:</p>
+<ul>
+<li>zrozumienie zmienności przestrzennej lub czasowej zjawiska</li>
+<li>szacowanie wartości dla całego obszaru (dane ciągłe) na podstawie danych punktowych (estymacja)</li>
+</ul>
+<p>Eksploracyjna analiza danych:</p>
+<ul>
+<li>Charakterystyka statystyczna danych (statystyki podstawowe, wartości odstające globalnie, rozkład danych)</li>
+<li>Sprawdzenie poprawności współrzędnych</li>
+<li>Sprawdzenie poprawności danych, w tym między innymi identyfikacja danych odstających lokalnie</li>
+<li>Wgląd w tym próbkowania</li>
+<li>Ogólny pogląd na zmienność przestrzenną, wykorzystanie prostej automatycznej procedury interpolacji</li>
+</ul>
+</section>
+</section>
+<section id="przykład-1.-analiza-rozkładu-temperatury-powietrza" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="przykład-1.-analiza-rozkładu-temperatury-powietrza"><span class="header-section-number">4.3</span> Przykład 1. Analiza rozkładu temperatury powietrza</h2>
+<section id="dane-i-cel-analizy" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="dane-i-cel-analizy"><span class="header-section-number">4.3.1</span> Dane i cel analizy</h3>
+<section id="cel" class="level4" data-number="4.3.1.1">
+<h4 data-number="4.3.1.1" class="anchored" data-anchor-id="cel"><span class="header-section-number">4.3.1.1</span> Cel</h4>
+<p>Celem analizy jest uzyskanie informacji o przestrzennym rozkładzie wartości temperatury w analizowanym obszarze. Dane punktowe przedstawiające lokalizacje pomiaru temperatury powietrza zostaną wykorzystane następnie w analizie geostatystycznej mającej w celu oszacowania wartości dla całego obszaru z wykorzystaniem jednej z geostatystycznych metod estymacji.</p>
+</section>
+<section id="dane" class="level4" data-number="4.3.1.2">
+<h4 data-number="4.3.1.2" class="anchored" data-anchor-id="dane"><span class="header-section-number">4.3.1.2</span> Dane</h4>
+<p>Dla analizowanego obszaru dysponujemy:</p>
+<ul>
+<li>danymi punktowymi (<em>punkty.csv</em>) zapisanymi w pliku tekstowym zawierającymi lokalizacje, w których wykonano pomiary temperatury powietrza. Dla każdej lokalizacji dysponujemy także zestawem zmiennych dodatkowych (ndvi, wysokość n.p.m (srtm), klasa pokrycia terenu (clc)).</li>
+<li>plikiem wektorowym w formacie <em>.gpkg</em> (<em>granica.gpkg</em>) zawierającym granicę obszaru analizy.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>granica <span class="ot">=</span> <span class="fu">read_sf</span>(<span class="st">"data/granica.gpkg"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#wczytanie danych oraz konwersja do klasy sf</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>pkt <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"data/punkty.csv"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>pkt <span class="ot">=</span> pkt[<span class="sc">!</span><span class="fu">is.na</span>(pkt<span class="sc">$</span>temp), ]</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>punkty <span class="ot">=</span> <span class="fu">st_as_sf</span>(pkt, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="st">"EPSG:2180"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(punkty)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Classes 'sf' and 'data.frame':  247 obs. of  6 variables:
+ $ srtm    : num  176 150 273 187 260 ...
+ $ clc     : int  1 1 NA 1 1 2 2 1 1 2 ...
+ $ temp    : num  13.9 15.5 12.8 14.3 15.9 ...
+ $ ndvi    : num  0.616 0.556 0.607 0.376 0.46 ...
+ $ savi    : num  0.419 0.379 0.375 0.239 0.309 ...
+ $ geometry:sfc_POINT of length 247; first list element:  'XY' num  750298 716732
+ - attr(*, "sf_column")= chr "geometry"
+ - attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA
+  ..- attr(*, "names")= chr [1:5] "srtm" "clc" "temp" "ndvi" ...</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="eksploracyjna-nieprzestrzenna-analiza-danych" class="level3" data-number="4.3.2">
+<h3 data-number="4.3.2" class="anchored" data-anchor-id="eksploracyjna-nieprzestrzenna-analiza-danych"><span class="header-section-number">4.3.2</span> Eksploracyjna nieprzestrzenna analiza danych</h3>
+<section id="podsumowanie-numeryczne" class="level4" data-number="4.3.2.1">
+<h4 data-number="4.3.2.1" class="anchored" data-anchor-id="podsumowanie-numeryczne"><span class="header-section-number">4.3.2.1</span> Podsumowanie numeryczne</h4>
+<p>Podstawowe informacje o analizowanej zmiennej (w tym przykładzie temperatura powietrza <em>temp</em>) można uzyskać za pomocą funkcji <code>summary()</code>. Dodatkowo można obliczyć inne statystyki opisowe, np. odchylenie standardowe (funkcja <code>sd</code>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(punkty<span class="sc">$</span>temp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  7.883  12.003  14.941  15.273  17.630  24.945 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(punkty<span class="sc">$</span>temp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.973076</code></pre>
+</div>
+</div>
+</section>
+<section id="rozkład-danych" class="level4" data-number="4.3.2.2">
+<h4 data-number="4.3.2.2" class="anchored" data-anchor-id="rozkład-danych"><span class="header-section-number">4.3.2.2</span> Rozkład danych</h4>
+<p>Rozkład danych można przedstawić graficznie wykorzystując histogram (<em>geom_histogram</em>) lub estymator jądrowy gęstości (<em>geom_density</em>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(punkty, <span class="fu">aes</span>(temp)) <span class="sc">+</span> </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span> </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Zmienna temp"</span>, <span class="at">y =</span> <span class="st">"Liczba obserwacji"</span>) <span class="sc">+</span> </span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05_eksploracja_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(punkty, <span class="fu">aes</span>(temp)) <span class="sc">+</span> <span class="fu">geom_density</span>() <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05_eksploracja_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Dodatkowo rozkład danych można opisać za pomocą dwóch statystyk opisowych: skośności oraz kurtozy.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(e1071)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">skewness</span>(punkty<span class="sc">$</span>temp)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">kurtosis</span>(punkty<span class="sc">$</span>temp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="dane-globalnie-odstające" class="level4" data-number="4.3.2.3">
+<h4 data-number="4.3.2.3" class="anchored" data-anchor-id="dane-globalnie-odstające"><span class="header-section-number">4.3.2.3</span> Dane globalnie odstające</h4>
+<p>Dane globalnie odstające to bardzo niskie lub bardzo wysokie wartości względem pozostałych w zbiorze danych. Można je zidentyfikować poprzez wykonanie histogramu oraz obejrzenie rozkładu danych.</p>
+</section>
+<section id="zależność-między-temperaturą-a-zmiennymi-ndvi-i-srtm" class="level4" data-number="4.3.2.4">
+<h4 data-number="4.3.2.4" class="anchored" data-anchor-id="zależność-między-temperaturą-a-zmiennymi-ndvi-i-srtm"><span class="header-section-number">4.3.2.4</span> Zależność między temperaturą, a zmiennymi ndvi i srtm</h4>
+<p>Do określenia związku między zmiennymi ilościowymi (np. temperaturą a wartościami zmiennych srtm oraz ndvi) można wykorzystać wykres rozrzutu oraz miary korelacji (współczynnik korelacji liniowej lub współczynnik korelacji rang Spearmana). Poniżej wykonano wykresy rozrzutu pokazujące zależnośc między zmienną temp, a ndvi oraz zmienną temp, a srtm.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(punkty, <span class="fu">aes</span>(temp, ndvi)) <span class="sc">+</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Zmienna temp"</span>, <span class="at">y =</span> <span class="st">"Zmienna ndvi"</span>) <span class="sc">+</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05_eksploracja_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p>Czy istnieje zależność między zmienną temp, a ndvi?</p>
+</blockquote>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(punkty, <span class="fu">aes</span>(temp, srtm)) <span class="sc">+</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Zmienna temp"</span>, <span class="at">y =</span> <span class="st">"Zmienna srtm"</span>) <span class="sc">+</span> </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 2 rows containing missing values or values outside the scale range
+(`geom_point()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05_eksploracja_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p>Czy istnieje zależność między zmienną temp, a srtm?</p>
+</blockquote>
+<p>Do liczbowego określenia zależności między zmiennymi wykorzystano test korelacji dla współczynnika korelacji rang Spearmana. Test korelacji wyliczany jest z wykorzystaniem funkcji <code>cor.test()</code>, w której jako metodę (argument <em>method</em>) można podać współczynnik korelacji rang Spearmana (<em>method = “spearman”</em>) lub współczynnik korelacji liniowej Pearsona (<em>method = “pearson”</em>). W wyniku otrzymamy wartość współczynnika korelacji oraz poziom istotności.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(punkty<span class="sc">$</span>temp, punkty<span class="sc">$</span>ndvi, <span class="at">method =</span> <span class="st">"spearman"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in cor.test.default(punkty$temp, punkty$ndvi, method = "spearman"):
+Cannot compute exact p-value with ties</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Spearman's rank correlation rho
+
+data:  punkty$temp and punkty$ndvi
+S = 2378524, p-value = 0.4074
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+       rho 
+0.05294538 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(punkty<span class="sc">$</span>temp, punkty<span class="sc">$</span>srtm, <span class="at">method =</span> <span class="st">"spearman"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in cor.test.default(punkty$temp, punkty$srtm, method = "spearman"):
+Cannot compute exact p-value with ties</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Spearman's rank correlation rho
+
+data:  punkty$temp and punkty$srtm
+S = 2866567, p-value = 0.00782
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+       rho 
+-0.1695597 </code></pre>
+</div>
+</div>
+<blockquote class="blockquote">
+<p>Jaka jest wartość korelacji dla zmiennych temp/ndvi, oraz temp/srtm? Czy w każdym z przypadków uzyskano wynik istotny statystycznie?</p>
+</blockquote>
+</section>
+<section id="zmienność-temperatury-w-klasach-pokrycia-terenu" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="zmienność-temperatury-w-klasach-pokrycia-terenu">Zmienność temperatury w klasach pokrycia terenu</h4>
+<p>Zależność między zmienną ilościową a jakościową można przedstawić na wykresie pudełkowym.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>punkty<span class="sc">$</span>clc <span class="ot">=</span> <span class="fu">as.factor</span>(punkty<span class="sc">$</span>clc)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(punkty, <span class="fu">aes</span>(<span class="at">x =</span> clc, <span class="at">y =</span> temp)) <span class="sc">+</span> </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Zmienna clc"</span>, <span class="at">y =</span> <span class="st">"Zmienna temp"</span>) <span class="sc">+</span> </span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05_eksploracja_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p>Czy temperatura różnicuje się w zależności od klasy pokrycia terenu?</p>
+</blockquote>
+<p>Do określenia istotności różnić średniej pomiędzy grupami można wykorzystać analizę wariancji. Analiza wariancji (ang. <em>Analysis of Variance - ANOVA</em>) służy do testowania istotności różnic między średnimi w wielu grupach. Metoda ta służy do oceny czy średnie wartości cechy Y różnią się istotnie pomiędzy grupami wyznaczonymi przez zmienną X.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>aov_test <span class="ot">=</span> <span class="fu">aov</span>(temp <span class="sc">~</span> clc, <span class="at">data =</span> punkty)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(aov_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             Df Sum Sq Mean Sq F value Pr(&gt;F)    
+clc           2   1272   636.0   60.86 &lt;2e-16 ***
+Residuals   239   2498    10.4                   
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+5 observations deleted due to missingness</code></pre>
+</div>
+</div>
+<p>ANOVA nie pozwala natomiast na stwierdzenie między którymi grupami występują różnice. Aby to stwierdzić konieczne jest wykonanie porównań wielokrotnych (post-hoc), np. testu Tukeya.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>tukey <span class="ot">=</span> <span class="fu">TukeyHSD</span>(aov_test, <span class="st">"clc"</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(tukey, <span class="at">las =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05_eksploracja_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p>Czy temperatura różnicuje się <strong>istotnie</strong> w zależności od klasy pokrycia terenu?</p>
+</blockquote>
+</section>
+</section>
+<section id="eksploracyjna-przestrzenna-analiza-danych" class="level3" data-number="4.3.3">
+<h3 data-number="4.3.3" class="anchored" data-anchor-id="eksploracyjna-przestrzenna-analiza-danych"><span class="header-section-number">4.3.3</span> Eksploracyjna przestrzenna analiza danych</h3>
+<p>Do sprawdzenia poprawności współrzędnych, określenia typu próbkowania oraz identyfikacji danych odstających lokalnie można wykorzystać mapę lokalizacyjną pokazującą lokalizację wykonania pomiarów. Mapę lokalizacyjną można wykonać wykorzystując pakiet <code>tmap</code>.</p>
+<section id="sprawdzenie-poprawności-współrzędnych-oraz-określenie-typu-próbkowania" class="level4" data-number="4.3.3.1">
+<h4 data-number="4.3.3.1" class="anchored" data-anchor-id="sprawdzenie-poprawności-współrzędnych-oraz-określenie-typu-próbkowania"><span class="header-section-number">4.3.3.1</span> Sprawdzenie poprawności współrzędnych oraz określenie typu próbkowania</h4>
+<ul>
+<li>Czy współrzędne są w odpowiednim porządku (X-Y, Y-X)?</li>
+<li>Czy współrzędne są w odpowiednim układzie?</li>
+<li>Czy wszystkie punkty znajdują się na badanym obszarze?</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(granica) <span class="sc">+</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tm_shape</span>(punkty) <span class="sc">+</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tm_symbols</span>() <span class="sc">+</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tm_grid</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05_eksploracja_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="sprawdzenie-poprawności-danych-oraz-identyfikacja-danych-odstających-lokalnie" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="sprawdzenie-poprawności-danych-oraz-identyfikacja-danych-odstających-lokalnie">Sprawdzenie poprawności danych oraz identyfikacja danych odstających lokalnie</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(punkty) <span class="sc">+</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">labels.show =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_symbols</span>(<span class="at">col =</span> <span class="st">"temp"</span>,</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">style =</span> <span class="st">"cont"</span>, </span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">n =</span> <span class="dv">10</span>,</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">palette =</span> <span class="st">"-Spectral"</span>,</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">title.col =</span> <span class="st">"Zmienna temp"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="05_eksploracja_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Rozkład wartości temperatury powietrza w analizowanym obszarze.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="przykład-2-analiza-przestępczości-w-hrabstwie-cook" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="przykład-2-analiza-przestępczości-w-hrabstwie-cook"><span class="header-section-number">4.4</span> Przykład 2: Analiza przestępczości w hrabstwie Cook</h2>
+<section id="dane-1" class="level3" data-number="4.4.1">
+<h3 data-number="4.4.1" class="anchored" data-anchor-id="dane-1"><span class="header-section-number">4.4.1</span> Dane</h3>
+<ul>
+<li><p>Plik <em>socio_economic_variables.gpkg</em> dostarcza danych społeczno-ekonomicznych dla obszaru hrabstwa Cook (centralna część miasta Chicago). Dane te pochodzą ze zbioru danych American Community Survey: ACS 2016-2020.</p></li>
+<li><p>Plik <em>crimes_vehicle_theft.gpkg</em> zawiera lokalizacje przestępstw (kradzieży samochodów) dla centralnej części Chicago dla 2020 roku.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>socio_data <span class="ot">=</span> <span class="fu">read_sf</span>(<span class="st">"data/socio_economic_variables.gpkg"</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>crimes <span class="ot">=</span> <span class="fu">read_sf</span>(<span class="st">"data/crimes_vehicle_theft.gpkg"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(socio_data) <span class="sc">+</span> </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">col =</span> <span class="st">"grey"</span>) <span class="sc">+</span> </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(crimes) <span class="sc">+</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_dots</span>(<span class="at">fill =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05_eksploracja_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Kolorem czerwonym zaznaczono lokalizacje przestępstw (kradzieży samochodów), a szarym granice obszarów spisowych w hrabstwie Cook, dla których pozyskano dane ekonomiczne.</p>
+<p>Wykorzystując funkcję <code>str()</code> możemy uzyskać podstawowe informacje o analizowanych zmiennych.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(socio_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>sf [1,332 × 23] (S3: sf/tbl_df/tbl/data.frame)
+ $ GEOID            : chr [1:1332] "17031822400" "17031740100" "17031530501" "17031830300" ...
+ $ POP              : num [1:1332] 6214 2962 5073 4536 2523 ...
+ $ WHITE            : num [1:1332] 0.6999 0.8383 0.0195 0.2277 0.8922 ...
+ $ BLACK            : num [1:1332] 0.00724 0 0.94067 0.74757 0.04201 ...
+ $ ASIAN            : num [1:1332] 0.0439 0.0135 0 0.0117 0.0103 ...
+ $ HISPANIC         : num [1:1332] 0.242 0.1435 0.0264 0.0126 0.0289 ...
+ $ FOREIGN_BORN     : num [1:1332] 0.2948 0.023 0.0199 0.0423 0.0258 ...
+ $ UNEMPL           : num [1:1332] 0.0339 0.0554 0.2593 0.1521 0.0249 ...
+ $ PUBLIC_ASSIST    : num [1:1332] 0.1664 0.0565 0.4314 0.183 0.0387 ...
+ $ VACANT           : num [1:1332] 0.1591 0.0884 0.2364 0.1074 0.0459 ...
+ $ OCCUPIED         : num [1:1332] 1 1 1 1 1 ...
+ $ OWNER            : num [1:1332] 0.662 0.851 0.567 0.416 0.828 ...
+ $ RENTER           : num [1:1332] 0.338 0.149 0.433 0.584 0.172 ...
+ $ MEDIAN_INCOME    : num [1:1332] 51782 84800 45651 48491 102543 ...
+ $ MEDIAN_BUILT_YEAR: num [1:1332] 1972 1954 0 1958 1947 ...
+ $ MEDIAN_HOME_VALUE: num [1:1332] 204900 245200 121100 26000 285700 ...
+ $ OTHER            : num [1:1332] 0.993 0.995 0.987 1 0.973 ...
+ $ SEX_RATIO        : num [1:1332] 0.000974 0.001032 0.0008 0.000715 0.000941 ...
+ $ EDU_HIGH         : num [1:1332] 0.209 0.33 0.142 0.321 0.619 ...
+ $ HOME_VALUES_CAT  : chr [1:1332] "medium" "medium" "low" "low" ...
+ $ INCOME_CAT       : chr [1:1332] "medium" "medium" "low" "medium" ...
+ $ BUILT_YEAR_CAT   : chr [1:1332] "medium" "medium" "old" "medium" ...
+ $ geom             :sfc_MULTIPOLYGON of length 1332; first list element: List of 1
+  ..$ :List of 1
+  .. ..$ : num [1:37, 1:2] -87.8 -87.8 -87.8 -87.8 -87.8 ...
+  ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"
+ - attr(*, "sf_column")= chr "geom"
+ - attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...
+  ..- attr(*, "names")= chr [1:22] "GEOID" "POP" "WHITE" "BLACK" ...</code></pre>
+</div>
+</div>
+<p>Ramka danych <em>socio_data</em> zawiera szereg zmiennych społeczno-ekonomicznych i demograficznych:</p>
+<ul>
+<li>liczbę ludności w każdym obszarze spisowym (<em>POP</em>)</li>
+<li>odsetek ludności w podziale na grupy rasowo-etniczne (<em>WHITE, BLACK, ASIAN, HISPANIC, OTHER</em>)</li>
+<li>odsetek osób urodzonych za granicą (<em>FOREIGN_BORN</em>)</li>
+<li>odsetek osób bezrobotnych (<em>UNEMPL</em>)</li>
+<li>odsetek osób korzystających z pomocy społecznej (<em>PUBLIC_ASSIST</em>)</li>
+<li>odsetek niezamieszkłaych domów oraz mieszkań (<em>VACANT</em>)</li>
+<li>odsetek zamieszkałych domów oraz mieszkań (<em>OCCUPPIED</em>)</li>
+<li>odsetek domów/mieszkań zamieszkałych przez właściciela (<em>OWNER</em>)</li>
+<li>odsetek domów/mieszkań zamieszkałych przez osoby wynajmujące (<em>RENTER</em>)</li>
+<li>mediana dochodów w obszarze spisowym (<em>MEDIAN_INCOME</em>)</li>
+<li>mediana wieku zabudowy w obszarze spisowym (<em>MEDIAN_BUILT_YEAR</em>)</li>
+<li>mediana wartości domów w obszarze spisowym (<em>MEDIAN_HOME_VALUE</em>)</li>
+<li>odsetek osób w wyższym wykształceniem (<em>EDU_HIGH</em>)</li>
+<li>wartość domów: niska, średnia, wysoka (<em>HOME_VALUES_CAT</em>)</li>
+<li>dochód: niski, średni, wysoki (<em>INCOME_CAT</em>)</li>
+<li>wiek zabudowy: nowa, średnia, stara zabudowa (<em>BUILT_YEAR_CAT</em>)</li>
+</ul>
+</section>
+<section id="cel-analizy" class="level3" data-number="4.4.2">
+<h3 data-number="4.4.2" class="anchored" data-anchor-id="cel-analizy"><span class="header-section-number">4.4.2</span> Cel analizy</h3>
+<p>Celem analizy jest znalezienie czynników społeczno-ekonomicznych wpływających na poziom przestępczości (kradzieży samochodów). <strong>Czy istnieje zależność między poziomem przestępczości, a zmiennymi społeczno-ekonomicznymi?</strong></p>
+</section>
+<section id="przygotowanie-danych-do-analizy" class="level3" data-number="4.4.3">
+<h3 data-number="4.4.3" class="anchored" data-anchor-id="przygotowanie-danych-do-analizy"><span class="header-section-number">4.4.3</span> Przygotowanie danych do analizy</h3>
+<ul>
+<li>Ujednolicenie układów współrzędnych między warstwami.</li>
+</ul>
+<p><em>Lokalizacja przestępstw jest w układzie WGS84, warstwę trzeba przekształcić do układu warstwy z danymi społeczno-ekonomicznymi.</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>crimes <span class="ot">=</span> <span class="fu">st_transform</span>(crimes, <span class="fu">st_crs</span>(socio_data))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>selekcja obszarow spisowych, w których zlokalizowane są przestępstwa.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>socio_data <span class="ot">=</span> socio_data[crimes, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>zliczenie przestępstw w obszarach spisowych</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>socio_data<span class="sc">$</span>NB_CRIMES <span class="ot">&lt;-</span> <span class="fu">lengths</span>(<span class="fu">st_intersects</span>(socio_data, crimes))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>obliczenie odsetka przestępst na 1000 mieszkańców (ang. <em>crime rates</em>)</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>socio_data<span class="sc">$</span>CRIME_RATE <span class="ot">=</span> (socio_data<span class="sc">$</span>NB_CRIMES<span class="sc">/</span>socio_data<span class="sc">$</span>POP)<span class="sc">*</span><span class="dv">1000</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>utworzenie ramki danych bez kolumny z geometrią (będzie potrzebne przy części analiz statystycznych)</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>socio_data_attr <span class="ot">=</span> socio_data</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>socio_data_attr<span class="sc">$</span>geom <span class="ot">&lt;-</span><span class="cn">NULL</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="eksploracyjna-nieprzestrzenna-analiza-danych-1" class="level3" data-number="4.4.4">
+<h3 data-number="4.4.4" class="anchored" data-anchor-id="eksploracyjna-nieprzestrzenna-analiza-danych-1"><span class="header-section-number">4.4.4</span> Eksploracyjna nieprzestrzenna analiza danych</h3>
+<section id="podsumowanie-numeryczne-1" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="podsumowanie-numeryczne-1">Podsumowanie numeryczne</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(socio_data_attr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    GEOID                POP            WHITE             BLACK        
+ Length:788         Min.   :    0   Min.   :0.00000   Min.   :0.00000  
+ Class :character   1st Qu.: 2044   1st Qu.:0.03004   1st Qu.:0.02311  
+ Mode  :character   Median : 3142   Median :0.22915   Median :0.09334  
+                    Mean   : 3440   Mean   :0.30523   Mean   :0.34852  
+                    3rd Qu.: 4570   3rd Qu.:0.57202   3rd Qu.:0.81515  
+                    Max.   :10974   Max.   :0.92883   Max.   :1.00000  
+                                    NA's   :3         NA's   :3        
+     ASIAN            HISPANIC        FOREIGN_BORN        UNEMPL       
+ Min.   :0.00000   Min.   :0.00000   Min.   :0.0000   Min.   :0.00000  
+ 1st Qu.:0.00000   1st Qu.:0.04447   1st Qu.:0.0458   1st Qu.:0.03864  
+ Median :0.02261   Median :0.13664   Median :0.1531   Median :0.07256  
+ Mean   :0.06003   Mean   :0.26169   Mean   :0.1803   Mean   :0.09981  
+ 3rd Qu.:0.07913   3rd Qu.:0.40534   3rd Qu.:0.2974   3rd Qu.:0.14334  
+ Max.   :0.84913   Max.   :0.98900   Max.   :0.6585   Max.   :0.46776  
+ NA's   :3         NA's   :3         NA's   :3        NA's   :3        
+ PUBLIC_ASSIST         VACANT           OCCUPIED          OWNER       
+ Min.   :0.00000   Min.   :0.00000   Min.   :0.9983   Min.   :0.0000  
+ 1st Qu.:0.07705   1st Qu.:0.06515   1st Qu.:0.9998   1st Qu.:0.2993  
+ Median :0.17330   Median :0.09682   Median :0.9999   Median :0.4352  
+ Mean   :0.21870   Mean   :0.11825   Mean   :0.9999   Mean   :0.4516  
+ 3rd Qu.:0.33914   3rd Qu.:0.14966   3rd Qu.:1.0000   3rd Qu.:0.5860  
+ Max.   :0.77023   Max.   :0.47222   Max.   :1.0000   Max.   :0.9745  
+ NA's   :3         NA's   :3         NA's   :3        NA's   :3       
+     RENTER        MEDIAN_INCOME    MEDIAN_BUILT_YEAR MEDIAN_HOME_VALUE
+ Min.   :0.02548   Min.   : 12328   Min.   :   0      Min.   :  65500  
+ 1st Qu.:0.41399   1st Qu.: 38394   1st Qu.:   0      1st Qu.: 168600  
+ Median :0.56484   Median : 55062   Median :1945      Median : 248700  
+ Mean   :0.54843   Mean   : 63882   Mean   :1148      Mean   : 288966  
+ 3rd Qu.:0.70067   3rd Qu.: 80872   3rd Qu.:1957      3rd Qu.: 368300  
+ Max.   :1.00000   Max.   :216667   Max.   :2006      Max.   :1245500  
+ NA's   :3         NA's   :8        NA's   :3         NA's   :19       
+     OTHER          SEX_RATIO            EDU_HIGH       HOME_VALUES_CAT   
+ Min.   :0.8020   Min.   :0.0004454   Min.   :0.01092   Length:788        
+ 1st Qu.:0.9636   1st Qu.:0.0008190   1st Qu.:0.15302   Class :character  
+ Median :0.9821   Median :0.0009405   Median :0.30406   Mode  :character  
+ Mean   :0.9755   Mean   :0.0009558   Mean   :0.38004                     
+ 3rd Qu.:0.9960   3rd Qu.:0.0010612   3rd Qu.:0.59072                     
+ Max.   :1.0000   Max.   :0.0088278   Max.   :0.93945                     
+ NA's   :3        NA's   :3           NA's   :3                           
+  INCOME_CAT        BUILT_YEAR_CAT       NB_CRIMES       CRIME_RATE    
+ Length:788         Length:788         Min.   : 1.00   Min.   :0.1563  
+ Class :character   Class :character   1st Qu.: 5.00   1st Qu.:1.5722  
+ Mode  :character   Mode  :character   Median : 9.00   Median :2.9283  
+                                       Mean   :12.53   Mean   :   Inf  
+                                       3rd Qu.:16.00   3rd Qu.:6.1173  
+                                       Max.   :92.00   Max.   :   Inf  
+                                                                       </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(socio_data_attr<span class="sc">$</span>INCOME_CAT)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  high    low medium 
+   151    282    347 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(socio_data_attr<span class="sc">$</span>HOME_VALUES_CAT)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  high    low medium 
+   207    198    364 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(socio_data_attr<span class="sc">$</span>BUILT_YEAR_CAT)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+medium    new    old 
+   312     16    457 </code></pre>
+</div>
+</div>
+</section>
+<section id="rozkład-danych-o-przestępczości" class="level4" data-number="4.4.4.1">
+<h4 data-number="4.4.4.1" class="anchored" data-anchor-id="rozkład-danych-o-przestępczości"><span class="header-section-number">4.4.4.1</span> Rozkład danych o przestępczości</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(socio_data_attr, <span class="fu">aes</span>(<span class="at">x =</span> CRIME_RATE)) <span class="sc">+</span> <span class="fu">geom_histogram</span>() <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 3 rows containing non-finite outside the scale range
+(`stat_bin()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05_eksploracja_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="zależność-między-odsetkiem-przestępstw-a-zmiennymi-społeczno-ekonomicznymi" class="level4" data-number="4.4.4.2">
+<h4 data-number="4.4.4.2" class="anchored" data-anchor-id="zależność-między-odsetkiem-przestępstw-a-zmiennymi-społeczno-ekonomicznymi"><span class="header-section-number">4.4.4.2</span> Zależność między odsetkiem przestępstw a zmiennymi społeczno-ekonomicznymi</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>cor <span class="ot">=</span> <span class="fu">cor</span>(socio_data_attr[<span class="dv">24</span>], socio_data_attr[<span class="dv">3</span><span class="sc">:</span><span class="dv">19</span>], <span class="at">method =</span> <span class="st">"spearman"</span>, <span class="at">use =</span> <span class="st">"complete.obs"</span>)</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(cor, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           WHITE BLACK ASIAN HISPANIC FOREIGN_BORN UNEMPL PUBLIC_ASSIST VACANT
+CRIME_RATE -0.58  0.64 -0.49    -0.41        -0.54   0.48          0.55   0.53
+           OCCUPIED OWNER RENTER MEDIAN_INCOME MEDIAN_BUILT_YEAR
+CRIME_RATE    -0.54 -0.35   0.35          -0.5             -0.01
+           MEDIAN_HOME_VALUE OTHER SEX_RATIO EDU_HIGH
+CRIME_RATE             -0.41  0.15     -0.26    -0.37</code></pre>
+</div>
+</div>
+<p>W kolejnym kroku zostaną wyselekcjonowane wartości współczynnika korelacji +/- 0,5, a następnie dla nich zostaną wykonane wykresy rozrzutu.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>cor_v <span class="ot">=</span> <span class="fu">as.vector</span>(cor)</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(cor_v) <span class="ot">=</span> <span class="fu">colnames</span>(cor)</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>sel_cor <span class="ot">=</span> cor_v[<span class="fu">abs</span>(cor)<span class="sc">&gt;</span><span class="fl">0.5</span>]</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(sel_cor, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        WHITE         BLACK  FOREIGN_BORN PUBLIC_ASSIST        VACANT 
+        -0.58          0.64         -0.54          0.55          0.53 
+     OCCUPIED 
+        -0.54 </code></pre>
+</div>
+</div>
+<p>Objaśnienie zmiennych:</p>
+<pre><code>- WHITE - odsetek ludności białych
+- BLACK - odsetek ludności czarnej 
+- FOREIGN_BORN - odsetek ludności urodzonej zagranicą
+- PUBLIC ASSIST - odestek gospodarstw domowych korzystających z pomocy społecznej
+- VACANT - odsetek niezamieszkałych budynków
+- OCCUPIED - odsetek zamieszkałych budynków</code></pre>
+<p>Wizualizacja zależności między zmiennymi ze współczynnikiem korelacji +/- 0,5.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(PerformanceAnalytics)</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>list_variables <span class="ot">=</span> <span class="fu">names</span>(sel_cor)</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="fu">chart.Correlation</span>(socio_data_attr[, <span class="fu">c</span>(<span class="st">"CRIME_RATE"</span>, list_variables)], <span class="at">histogram=</span><span class="cn">TRUE</span>, <span class="at">pch=</span><span class="dv">19</span>, <span class="at">method =</span> <span class="st">"spearman"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05_eksploracja_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="zmienność-odsetka-przestępczości-w-klasach-poziomu-dochodu-cen-domów-oraz-wieku-zabudowy" class="level4" data-number="4.4.4.3">
+<h4 data-number="4.4.4.3" class="anchored" data-anchor-id="zmienność-odsetka-przestępczości-w-klasach-poziomu-dochodu-cen-domów-oraz-wieku-zabudowy"><span class="header-section-number">4.4.4.3</span> Zmienność odsetka przestępczości w klasach poziomu dochodu, cen domów oraz wieku zabudowy</h4>
+<ul>
+<li><strong>Zależność między odsetkiem przestępczości a poziomem dochodów.</strong></li>
+</ul>
+<p>Wyróżniono 3 klasy używając zmiennej MEDIAN_INCOME:</p>
+<ul>
+<li>low - wartości dochodów niższe od kwartyla 1.</li>
+<li>medium - wartości dochodów między 1 i 3 kwartylem.</li>
+<li>high - wartości dochodów wyższe do 3. kwartyla.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>socio_data_attr <span class="sc">%&gt;%</span> <span class="fu">na.omit</span>() <span class="sc">%&gt;%</span>  </span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">INCOME_CAT =</span> <span class="fu">factor</span>(INCOME_CAT,<span class="at">level=</span><span class="fu">c</span>(<span class="st">"low"</span>, <span class="st">"medium"</span>, <span class="st">"high"</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(., <span class="fu">aes</span>(<span class="at">x =</span> INCOME_CAT, <span class="at">y =</span> CRIME_RATE)) <span class="sc">+</span> </span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()  <span class="sc">+</span> </span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Household income"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"Crime rates"</span>) <span class="sc">+</span> </span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05_eksploracja_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li><strong>Zależność między odsetkiem przestępczości a cenami domów</strong>.</li>
+</ul>
+<p>Wyróżniono 3 klasy używając zmiennej MEDIAN_HOME_VALUE:</p>
+<ul>
+<li>low - wartości cen domów niższe od kwartyla 1.</li>
+<li>medium - wartości cen domów między 1 i 3 kwartylem.</li>
+<li>high - wartości cen domów wyższe do 3. kwartyla.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>socio_data_attr <span class="sc">%&gt;%</span> <span class="fu">na.omit</span>() <span class="sc">%&gt;%</span>  </span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">HOME_VALUES_CAT =</span> <span class="fu">factor</span>(HOME_VALUES_CAT,<span class="at">level=</span><span class="fu">c</span>(<span class="st">"low"</span>, <span class="st">"medium"</span>, <span class="st">"high"</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(., <span class="fu">aes</span>(<span class="at">x =</span> HOME_VALUES_CAT, <span class="at">y =</span> CRIME_RATE)) <span class="sc">+</span> </span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()  <span class="sc">+</span> </span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Home values"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"Crime rates"</span>) <span class="sc">+</span> </span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05_eksploracja_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li><strong>Zależnośc między odsetkiem przestęczpości, a wiekiem zabudowy</strong>.</li>
+</ul>
+<p>Wyróżnione zostały 3 klasy zabudowy:</p>
+<ul>
+<li>old - wybudowane przed 1950,</li>
+<li>medium - wybudowane między 1950 a 2000,</li>
+<li>new - wybudowane po 2000.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>socio_data_attr <span class="sc">%&gt;%</span> <span class="fu">na.omit</span>() <span class="sc">%&gt;%</span>  </span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">BUILT_YEAR_CAT =</span> <span class="fu">factor</span>(BUILT_YEAR_CAT,<span class="at">level=</span><span class="fu">c</span>(<span class="st">"old"</span>, <span class="st">"medium"</span>, <span class="st">"new"</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(., <span class="fu">aes</span>(<span class="at">x =</span> BUILT_YEAR_CAT, <span class="at">y =</span> CRIME_RATE)) <span class="sc">+</span> </span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()  <span class="sc">+</span> </span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Housing age"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"Crime rates"</span>) <span class="sc">+</span> </span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05_eksploracja_files/figure-html/unnamed-chunk-36-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="eksploracyjna-przestrzenna-analiza-danych-1" class="level3" data-number="4.4.5">
+<h3 data-number="4.4.5" class="anchored" data-anchor-id="eksploracyjna-przestrzenna-analiza-danych-1"><span class="header-section-number">4.4.5</span> Eksploracyjna przestrzenna analiza danych</h3>
+<p>Eksploracyjna przestrzenna analiza danych obejmuje przede wszystkim wizualizację zmiennych społeczno-ekonomicznych oraz odsetka przestępczości w celu wizualnego określenia, czy istnieją obszary o wysokim/niskim odsetku przestępczości i czy są one powiązane z wyższymi/niższymi wartościami zmiennych społeczno-ekonomicznych.</p>
+<p>Wizualizacja danych ma także na celu sprawdzenie poprawności danych, w tym między innymi identyfikacja danych odstających lokalnie.</p>
+<section id="odsetek-przestępczości" class="level4" data-number="4.4.5.1">
+<h4 data-number="4.4.5.1" class="anchored" data-anchor-id="odsetek-przestępczości"><span class="header-section-number">4.4.5.1</span> Odsetek przestępczości</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(socio_data) <span class="sc">+</span> </span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"CRIME_RATE"</span>, <span class="at">palette =</span> <span class="st">"YlOrRd"</span>, <span class="at">n =</span> <span class="dv">4</span>, <span class="at">style =</span> <span class="st">'jenks'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05_eksploracja_files/figure-html/unnamed-chunk-37-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="struktura-rasowo-etniczna-ludności" class="level4" data-number="4.4.5.2">
+<h4 data-number="4.4.5.2" class="anchored" data-anchor-id="struktura-rasowo-etniczna-ludności"><span class="header-section-number">4.4.5.2</span> Struktura rasowo-etniczna ludności</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(socio_data) <span class="sc">+</span> </span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"WHITE"</span>, <span class="at">palette =</span> <span class="st">"YlOrRd"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05_eksploracja_files/figure-html/unnamed-chunk-38-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(socio_data) <span class="sc">+</span> </span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"BLACK"</span>, <span class="at">palette =</span> <span class="st">"YlOrRd"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05_eksploracja_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(socio_data) <span class="sc">+</span> </span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"FOREIGN_BORN"</span>, <span class="at">palette =</span> <span class="st">"YlOrRd"</span>, <span class="at">n =</span> <span class="dv">3</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05_eksploracja_files/figure-html/unnamed-chunk-40-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="poziom-wykształcenia" class="level4" data-number="4.4.5.3">
+<h4 data-number="4.4.5.3" class="anchored" data-anchor-id="poziom-wykształcenia"><span class="header-section-number">4.4.5.3</span> Poziom wykształcenia</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(socio_data) <span class="sc">+</span> </span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"EDU_HIGH"</span>, <span class="at">palette =</span> <span class="st">"YlOrRd"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05_eksploracja_files/figure-html/unnamed-chunk-41-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="zabudowa-niezamieszkała" class="level4" data-number="4.4.5.4">
+<h4 data-number="4.4.5.4" class="anchored" data-anchor-id="zabudowa-niezamieszkała"><span class="header-section-number">4.4.5.4</span> Zabudowa niezamieszkała</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(socio_data) <span class="sc">+</span> </span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"VACANT"</span>, <span class="at">palette =</span> <span class="st">"YlOrRd"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05_eksploracja_files/figure-html/unnamed-chunk-42-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="poziom-dochodów" class="level4" data-number="4.4.5.5">
+<h4 data-number="4.4.5.5" class="anchored" data-anchor-id="poziom-dochodów"><span class="header-section-number">4.4.5.5</span> Poziom dochodów</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(socio_data) <span class="sc">+</span> </span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"INCOME_CAT"</span>, <span class="at">palette =</span> <span class="fu">c</span>(<span class="at">low=</span><span class="st">"#FFF68F"</span>, <span class="at">medium=</span><span class="st">"#EEB422"</span>, <span class="at">high=</span><span class="st">"#FF4040"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05_eksploracja_files/figure-html/unnamed-chunk-43-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="ceny-domów" class="level4" data-number="4.4.5.6">
+<h4 data-number="4.4.5.6" class="anchored" data-anchor-id="ceny-domów"><span class="header-section-number">4.4.5.6</span> Ceny domów</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(socio_data) <span class="sc">+</span> </span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"HOME_VALUES_CAT"</span>, <span class="at">palette =</span> <span class="fu">c</span>(<span class="at">low=</span><span class="st">"#FFF68F"</span>, <span class="at">medium=</span><span class="st">"#EEB422"</span>, <span class="at">high=</span><span class="st">"#FF4040"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05_eksploracja_files/figure-html/unnamed-chunk-44-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="wiek-zabudowy" class="level4" data-number="4.4.5.7">
+<h4 data-number="4.4.5.7" class="anchored" data-anchor-id="wiek-zabudowy"><span class="header-section-number">4.4.5.7</span> Wiek zabudowy</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(socio_data) <span class="sc">+</span> </span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"BUILT_YEAR_CAT"</span>, <span class="at">palette =</span> <span class="fu">c</span>(<span class="at">old=</span><span class="st">"#FFF68F"</span>, <span class="at">medium=</span><span class="st">"#EEB422"</span>, <span class="at">new=</span><span class="st">"#FF4040"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05_eksploracja_files/figure-html/unnamed-chunk-45-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="podsumowanie" class="level3" data-number="4.4.6">
+<h3 data-number="4.4.6" class="anchored" data-anchor-id="podsumowanie"><span class="header-section-number">4.4.6</span> Podsumowanie</h3>
+<ul>
+<li><p>Przeprowadzona analiza korelacji wskazała na istnienie słabej zależności:</p>
+<ul>
+<li>wprostproporcjonalnej przekraczającej 0.5 między odsetkiem przestępstw na 1000 mieszkańców a odsetkiem czarnych (zmienna BLACK) oraz odsetkiem niezamieszkałej zabudowy (zmienna VACANT) oraz odsetkiem osób korzystających z pomocy społecznej</li>
+<li>odwrotnieproporcjonalnej przekraczającej 0.5 między odsetkiem przestępstw na 1000 miekszańców a odsetkiem ludności białej (zmienna WHITE), odsetkiem zamieszkałej zabudowy (zmienna OCCUPIED) oraz odsetkiem osób urodzonych za granicą.</li>
+</ul></li>
+<li><p>Analiza wykresów pudełkowych pokazuje, że odsetek przestępczości przyjmuje wyższe wartości dla klasy o niskich dochodach, niskich cenach domów oraz dla obszarów o nowej zabudowie (powstałej po 2000 roku).</p></li>
+<li><p>Obszary o niskim dochodzie (184 obszary), a także o małej wartości domów (258 obszarów) są zlokalizowane przede wszystkim w południowej części analizowanego obszaru.</p></li>
+<li><p>Mapa przestępczości pokazuje wyższe wartości w południowej części analizowanego obszaru oraz środkowej części obszaru.</p></li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./04_daneprzestrzenne.html" class="pagination-link" aria-label="Dane przestrzenne w R">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Dane przestrzenne w R</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./06_punkty.html" class="pagination-link" aria-label="DANE PUNKTOWE">
+        <span class="nav-page-text">DANE PUNKTOWE</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
