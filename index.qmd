@@ -14,7 +14,7 @@ Skrypt składa się z kilku części dotyczących:
 
 ## Dane wykorzystywane w skrypcie {.unnumbered}
 
-Dane wykorzystywane w skrypcie można pobrać [TUTAJ](https://dmowska_dydaktyka@dmowska.web.amu.edu.pl/data/uploads/statystyka_przestrzenna/data.zip)
+Dane wykorzystywane w skrypcie można pobrać [TUTAJ](https://dmowska-dydaktyka.web.amu.edu.pl/data/uploads/statystyka_przestrzenna/data.zip)
 
 ## Zadania samodzielne {.unnumbered}
 
