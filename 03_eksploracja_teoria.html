@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pl" xml:lang="pl"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>EKSPLORACYJNA ANALIZA DANYCH – Statystyka przestrzenna</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./04_eksploracja.html" rel="next">
+<link href="./02_dane_przestrzenne.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-c852b7e71cc1c09f55f367b2512aabbd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Brak wyników",
+    "search-matching-documents-text": "dopasowane dokumenty",
+    "search-copy-link-title": "Kopiuj link do wyszukiwania",
+    "search-hide-matches-text": "Ukryj dodatkowe dopasowania",
+    "search-more-match-text": "więcej dopasowań w tym dokumencie",
+    "search-more-matches-text": "więcej dopasowań w tym dokumencie",
+    "search-clear-button-title": "Wyczyść",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Anuluj",
+    "search-submit-button-title": "Zatwierdź",
+    "search-label": "Szukaj"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Przełącz pasek boczny" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./03_eksploracja_teoria.html">EKSPLORACYJNA ANALIZA DANYCH</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Przełącz pasek boczny" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Szukaj" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Statystyka przestrzenna</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Szukaj"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">O skrypcie</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./01_wstep.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">WSTĘP</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_dane_przestrzenne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Dane przestrzenne w R</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./03_eksploracja_teoria.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">EKSPLORACYJNA ANALIZA DANYCH</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_eksploracja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Eksploracyjna analiza danych</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./05_punkty_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE PUNKTOWE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_punkty_centrograficzne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Statystyki centrograficzne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_punkty_intensywnosc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Metody oparte na analizie intensywności</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_punkty_odleglosc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Metody oparte na odległości</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./09_obszarowe_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE OBSZAROWE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_obszarowe_sasiedztwo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Określanie sąsiedztwa danych obszarowych</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_obszarowe_autokorelacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Miary autokorelacji danych obszarowych</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./12_pola_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE POWIERZCHNIOWE CIĄGŁE PRZESTRZENNIE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13_pola_interpolacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Metody interpolacji</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14_pola_semiwariogram.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Analiza i modelowanie struktury przestrzennej</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15_pola_estymacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Geostatystyczne metody estymacji</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_pola_ocena.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Ocena jakości estymacji</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">ZADANIA I PROJEKTY</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_zadania_samodzielne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Zadania samodzielne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18_projekt1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Projekt 1: przestępczość a zmienne społeczno-ekonomiczne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19_projekt2_geostatystyka.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Projekt 2: Geostatystyka</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Załączniki</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./A_pakiety.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Pakiety</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./B_funkcje.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Funkcje</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./C_operacje.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Operacje na danych przestrzennych</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./D_slownik.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Słownik pojęć</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bibliografia</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Spis treści</h2>
+   
+  <ul>
+  <li><a href="#wprowadzenie" id="toc-wprowadzenie" class="nav-link active" data-scroll-target="#wprowadzenie">Wprowadzenie</a></li>
+  <li><a href="#pojęcia-podstawowe" id="toc-pojęcia-podstawowe" class="nav-link" data-scroll-target="#pojęcia-podstawowe">Pojęcia podstawowe</a></li>
+  <li><a href="#analiza-nieprzestrzenna" id="toc-analiza-nieprzestrzenna" class="nav-link" data-scroll-target="#analiza-nieprzestrzenna">Analiza nieprzestrzenna</a>
+  <ul class="collapse">
+  <li><a href="#statystyki-opisowe" id="toc-statystyki-opisowe" class="nav-link" data-scroll-target="#statystyki-opisowe">Statystyki opisowe</a></li>
+  <li><a href="#rozkład-danych" id="toc-rozkład-danych" class="nav-link" data-scroll-target="#rozkład-danych">Rozkład danych</a></li>
+  <li><a href="#wartości-globalnie-odstające" id="toc-wartości-globalnie-odstające" class="nav-link" data-scroll-target="#wartości-globalnie-odstające">Wartości globalnie odstające</a></li>
+  <li><a href="#zależność-między-zmiennymi-ilościowymi" id="toc-zależność-między-zmiennymi-ilościowymi" class="nav-link" data-scroll-target="#zależność-między-zmiennymi-ilościowymi">Zależność między zmiennymi ilościowymi</a></li>
+  <li><a href="#zależność-między-zmienną-ilościową-a-jakościową" id="toc-zależność-między-zmienną-ilościową-a-jakościową" class="nav-link" data-scroll-target="#zależność-między-zmienną-ilościową-a-jakościową">Zależność między zmienną ilościową a jakościową</a></li>
+  </ul></li>
+  <li><a href="#analiza-przestrzenna" id="toc-analiza-przestrzenna" class="nav-link" data-scroll-target="#analiza-przestrzenna">Analiza przestrzenna</a>
+  <ul class="collapse">
+  <li><a href="#sprawdzenie-poprawności-współrzędnych" id="toc-sprawdzenie-poprawności-współrzędnych" class="nav-link" data-scroll-target="#sprawdzenie-poprawności-współrzędnych">Sprawdzenie poprawności współrzędnych</a></li>
+  <li><a href="#wartości-odstające-lokalnie" id="toc-wartości-odstające-lokalnie" class="nav-link" data-scroll-target="#wartości-odstające-lokalnie">Wartości odstające lokalnie</a></li>
+  <li><a href="#typ-próbkowania" id="toc-typ-próbkowania" class="nav-link" data-scroll-target="#typ-próbkowania">Typ próbkowania</a></li>
+  <li><a href="#ogólna-charakterystyka-zmienności-przestrzennej" id="toc-ogólna-charakterystyka-zmienności-przestrzennej" class="nav-link" data-scroll-target="#ogólna-charakterystyka-zmienności-przestrzennej">Ogólna charakterystyka zmienności przestrzennej</a></li>
+  </ul></li>
+  <li><a href="#dobór-metod-eksploracji-do-typu-danych" id="toc-dobór-metod-eksploracji-do-typu-danych" class="nav-link" data-scroll-target="#dobór-metod-eksploracji-do-typu-danych">Dobór metod eksploracji do typu danych</a>
+  <ul class="collapse">
+  <li><a href="#statystyka-punktów" id="toc-statystyka-punktów" class="nav-link" data-scroll-target="#statystyka-punktów">Statystyka punktów</a></li>
+  <li><a href="#dane-obszarowe" id="toc-dane-obszarowe" class="nav-link" data-scroll-target="#dane-obszarowe">Dane obszarowe</a></li>
+  <li><a href="#geostatystyka" id="toc-geostatystyka" class="nav-link" data-scroll-target="#geostatystyka">Geostatystyka</a></li>
+  </ul></li>
+  <li><a href="#powiązanie-z-ćwiczeniami" id="toc-powiązanie-z-ćwiczeniami" class="nav-link" data-scroll-target="#powiązanie-z-ćwiczeniami">Powiązanie z ćwiczeniami</a></li>
+  <li><a href="#literatura" id="toc-literatura" class="nav-link" data-scroll-target="#literatura">Literatura</a></li>
+  <li><a href="#pytania-kontrolne" id="toc-pytania-kontrolne" class="nav-link" data-scroll-target="#pytania-kontrolne">Pytania kontrolne</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-eksploracja-teoria" class="quarto-section-identifier">EKSPLORACYJNA ANALIZA DANYCH</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Czego się nauczysz
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Po tym rozdziale potrafisz:</strong></p>
+<ul>
+<li>wyjaśnić, czemu służy eksploracyjna analiza danych i dlaczego poprzedza właściwą analizę, a nie następuje po niej,</li>
+<li>wskazać, które pytania rozstrzyga analiza nieprzestrzenna, a które przestrzenna, i dlaczego żadna z nich nie zastępuje drugiej,</li>
+<li>dobrać zakres eksploracji do typu danych: punktowych, obszarowych i geostatystycznych,</li>
+<li>rozpoznać cztery typy próbkowania.</li>
+</ul>
+<p><strong>Rozumiesz i umiesz zinterpretować:</strong></p>
+<ul>
+<li>podstawowe statystyki opisowe oraz wniosek o kształcie rozkładu płynący z porównania średniej i mediany,</li>
+<li>skośność i kurtozę jako liczbowy opis rozkładu,</li>
+<li>współczynniki korelacji Pearsona i Spearmana oraz warunki stosowania każdego z nich,</li>
+<li>różnicę między <strong>istotnością statystyczną</strong> a <strong>siłą zależności</strong>,</li>
+<li>różnicę między wartością odstającą globalnie a lokalnie oraz narzędzie właściwe dla każdej z nich,</li>
+<li>konsekwencje typu próbkowania dla dalszych analiz.</li>
+</ul>
+<p><strong>Zastosowanie w R:</strong> <a href="04_eksploracja.html" class="quarto-xref"><span>2&nbsp; Eksploracyjna analiza danych</span></a>. <strong>Słownik pojęć:</strong> <a href="D_slownik.html" class="quarto-xref"><span>Załącznik D — Słownik pojęć</span></a>.</p>
+</div>
+</div>
+<section id="wprowadzenie" class="level2">
+<h2 class="anchored" data-anchor-id="wprowadzenie">Wprowadzenie</h2>
+<p>Każda analiza danych przestrzennych powinna być poprzedzona <strong>eksploracyjną analizą danych</strong> (ang. <em>exploratory data analysis</em>, EDA). Jej celem jest uzyskanie podstawowych informacji o analizowanych danych: jakie wartości przyjmuje badana zmienna, jaki ma rozkład, czy w zbiorze są wartości odstające, czy zmienna jest powiązana z innymi zmiennymi oraz jak rozkłada się w przestrzeni.</p>
+<p>Eksploracja nie jest etapem pomocniczym, który można pominąć. Decyduje o tym, czy w ogóle wolno zastosować wybraną metodę — geostatystyczne metody estymacji wymagają danych o określonych właściwościach (<a href="14_pola_semiwariogram.html" class="quarto-xref"><span>9&nbsp; Analiza i modelowanie struktury przestrzennej</span></a>), a miary autokorelacji przestrzennej zakładają poprawnie przypisane wartości do jednostek odniesienia (<a href="11_obszarowe_autokorelacja.html" class="quarto-xref"><span>7&nbsp; Miary autokorelacji danych obszarowych</span></a>). Sposób wykonania eksploracji — dobór metod — zależy od posiadanego zbioru danych oraz od postawionego pytania.</p>
+<p>Przykładem jest mapa stopy bezrobocia w powiatach, na której jeden powiat odcina się wartością 19 % przy kilku procentach w powiatach sąsiednich. Mapa nie rozstrzyga, czy jest to lokalne uwarunkowanie gospodarcze, czy zapis wartości 1,9 bez przecinka — ale pokazuje, że przed przystąpieniem do analizy trzeba wrócić do źródła danych. Taka wartość nie zwraca uwagi w zestawieniu liczbowym, ponieważ mieści się w zakresie zmiennej; widać ją dopiero wtedy, gdy zestawi się ją z otoczeniem.</p>
+</section>
+<section id="pojęcia-podstawowe" class="level2">
+<h2 class="anchored" data-anchor-id="pojęcia-podstawowe">Pojęcia podstawowe</h2>
+<p>Eksploracyjna analiza danych dzieli się na <strong>nieprzestrzenną</strong> i <strong>przestrzenną</strong>. Obie są konieczne, ponieważ każda z nich pokazuje coś, czego druga nie wykrywa.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Analiza nieprzestrzenna</th>
+<th>Analiza przestrzenna</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>uwzględnia wartości atrybutów, nie ich lokalizację</td>
+<td>podstawą analizy jest lokalizacja obserwacji</td>
+</tr>
+<tr class="even">
+<td>wykonywana na tabeli atrybutów dołączonej do danych geoprzestrzennych</td>
+<td>wykonywana na mapie</td>
+</tr>
+<tr class="odd">
+<td>podstawowe statystyki opisowe, typ rozkładu danych, analiza korelacji, zmienność cechy w grupach</td>
+<td>typ próbkowania, ogólny pogląd na zmienność przestrzenną zjawiska, wartości odstające lokalnie</td>
+</tr>
+<tr class="even">
+<td>nie wykryje wartości odstającej lokalnie, jeśli mieści się ona w typowym zakresie zmiennej</td>
+<td>nie wykryje wartości odstającej globalnie, jeśli leży ona wśród podobnych do siebie</td>
+</tr>
+</tbody>
+</table>
+<p><img src="figs/eksploracja_danych.png" class="img-fluid"></p>
+<p>Rozróżnienie to przenosi się na definicję wartości nietypowych:</p>
+<ul>
+<li><strong>Wartość odstająca globalnie</strong> (ang. <em>global outlier</em>) to wartość bardzo niska lub bardzo wysoka względem pozostałych w zbiorze. Wykrywa ją analiza rozkładu zmiennej.</li>
+<li><strong>Wartość odstająca lokalnie</strong> (ang. <em>local outlier</em>) mieści się w typowym zakresie zmiennej, ale wyraźnie odbiega od wartości w swoim najbliższym otoczeniu. Wykrywa ją wyłącznie mapa.</li>
+</ul>
+<p>Trzecim pojęciem używanym w całym rozdziale jest <strong>typ próbkowania</strong> — sposób rozmieszczenia punktów pomiarowych w przestrzeni, niezależny od wartości, jakie w tych punktach zmierzono.</p>
+</section>
+<section id="analiza-nieprzestrzenna" class="level2">
+<h2 class="anchored" data-anchor-id="analiza-nieprzestrzenna">Analiza nieprzestrzenna</h2>
+<section id="statystyki-opisowe" class="level3">
+<h3 class="anchored" data-anchor-id="statystyki-opisowe">Statystyki opisowe</h3>
+<p>Podstawowa charakterystyka zmiennej ilościowej obejmuje miary położenia i miary rozproszenia.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Statystyka</th>
+<th>Co opisuje</th>
+<th>Na co zwrócić uwagę</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>średnia arytmetyczna</strong></td>
+<td>przeciętny poziom zmiennej</td>
+<td>wrażliwa na wartości skrajne; pojedyncza bardzo wysoka wartość ją zawyża</td>
+</tr>
+<tr class="even">
+<td><strong>mediana</strong></td>
+<td>wartość środkowa — połowa obserwacji jest od niej mniejsza</td>
+<td>odporna na wartości skrajne</td>
+</tr>
+<tr class="odd">
+<td><strong>kwartyle</strong></td>
+<td>wartości dzielące zbiór na cztery równe części</td>
+<td>pierwszy i trzeci kwartyl ograniczają połowę obserwacji położoną centralnie</td>
+</tr>
+<tr class="even">
+<td><strong>minimum i maksimum</strong></td>
+<td>zakres zmienności</td>
+<td>wartości skrajne warto sprawdzić pod kątem błędów pomiaru</td>
+</tr>
+<tr class="odd">
+<td><strong>odchylenie standardowe</strong></td>
+<td>przeciętne odchylenie od średniej</td>
+<td>wyrażone w jednostkach zmiennej, więc łatwe do interpretacji</td>
+</tr>
+<tr class="even">
+<td><strong>liczebność grup</strong></td>
+<td>liczba obserwacji w każdej kategorii</td>
+<td>niezbędna przy porównywaniu grup — grupa kilkunastoelementowa nie uprawnia do mocnych wniosków</td>
+</tr>
+</tbody>
+</table>
+<p>Porównanie średniej i mediany jest pierwszą informacją o kształcie rozkładu. Średnia wyraźnie wyższa od mediany wskazuje na rozkład z wydłużonym prawym ramieniem, niższa — z wydłużonym lewym.</p>
+<p>Odchylenie standardowe nabiera dodatkowego znaczenia, gdy rozkład zmiennej jest zbliżony do normalnego. Dla rozkładu normalnego:</p>
+<ul>
+<li>68 % obserwacji mieści się w granicach jednego odchylenia standardowego od średniej,</li>
+<li>95 % obserwacji — w granicach dwóch odchyleń standardowych,</li>
+<li>99,7 % obserwacji — w granicach trzech odchyleń standardowych.</li>
+</ul>
+<p><img src="figs/normal_distribution.png" class="img-fluid"></p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Statystyki ilościowe a zmienne kategoryzowane
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Dla zmiennych kategoryzowanych nie oblicza się minimum, maksimum, średniej, kwantyli ani odchylenia standardowego. Jedyną statystyką opisową właściwą dla takiej zmiennej jest <strong>liczebność grup</strong>. Kategorie zapisane liczbami — na przykład kod klasy pokrycia terenu — pozwalają obliczyć średnią technicznie, ale wynik nie ma interpretacji.</p>
+</div>
+</div>
+</section>
+<section id="rozkład-danych" class="level3">
+<h3 class="anchored" data-anchor-id="rozkład-danych">Rozkład danych</h3>
+<p>Rozkład zmiennej opisuje się graficznie i liczbowo.</p>
+<p><strong>Histogram</strong> (ang. <em>histogram</em>) przedstawia liczbę obserwacji w kolejnych przedziałach wartości. Jego wygląd zależy od przyjętej szerokości przedziałów, dlatego warto obejrzeć kilka wariantów — różny podział na przedziały może prowadzić do różnych wniosków o kształcie rozkładu.</p>
+<p><img src="figs/rozklad_danych.png" class="img-fluid"></p>
+<p><strong>Estymator jądrowy gęstości</strong> (ang. <em>kernel density estimation</em>, KDE) daje wygładzony obraz rozkładu, bez podziału na przedziały. Wynik zależy od szerokości pasma wygładzania: zbyt małe daje obraz postrzępiony, zbyt duże — zaciera szczegóły.</p>
+<p><img src="figs/kernelplot.png" class="img-fluid"></p>
+<p><strong>Wykres kwantyl-kwantyl</strong> (ang. <em>quantile-quantile plot</em>) porównuje rozkład empiryczny z teoretycznym, najczęściej z rozkładem normalnym. Punkty układające się wzdłuż prostej oznaczają zgodność rozkładów.</p>
+<p>Rozkład opisują liczbowo <strong>skośność</strong> i <strong>kurtoza</strong>:</p>
+<ul>
+<li><p><strong>skośność</strong> (ang. <em>skewness</em>) — asymetria rozkładu. Wartość równa zeru oznacza rozkład symetryczny, wartość dodatnia — rozkład asymetryczny prawostronnie, czyli z wydłużonym prawym ramieniem (pojedyncze wysokie wartości, średnia wyższa od mediany), wartość ujemna — rozkład asymetryczny lewostronnie, z wydłużonym lewym ramieniem.</p>
+<p><img src="figs/asymetria.png" class="img-fluid"></p></li>
+<li><p><strong>kurtoza</strong> (ang. <em>kurtosis</em>) — koncentracja wartości wokół średniej w porównaniu z rozkładem normalnym. Wartość dodatnia oznacza rozkład bardziej wysmukły, czyli większą koncentrację wokół średniej; wartość ujemna — rozkład bardziej spłaszczony niż normalny, z wartościami rozłożonymi równomierniej.</p>
+<p><img src="figs/koncentracja.png" class="img-fluid"></p></li>
+</ul>
+<p>Typ rozkładu ma znaczenie praktyczne: decyduje o wyborze miary korelacji oraz o tym, czy wolno zastosować metody zakładające rozkład normalny.</p>
+</section>
+<section id="wartości-globalnie-odstające" class="level3">
+<h3 class="anchored" data-anchor-id="wartości-globalnie-odstające">Wartości globalnie odstające</h3>
+<p>Wartość globalnie odstającą identyfikuje się na histogramie oraz na <strong>wykresie pudełkowym</strong> (ang. <em>box plot</em>). Wykres pudełkowy przedstawia jednocześnie podstawowe statystyki opisowe i wartości odstające:</p>
+<ul>
+<li>wysokość pudełka to <strong>rozstęp międzykwartylowy</strong> (ang. <em>interquartile range</em>, IQR),</li>
+<li>dolna krawędź pudełka to pierwszy kwartyl, górna — trzeci kwartyl,</li>
+<li>linia wewnątrz pudełka to mediana,</li>
+<li>pionowe linie (wąsy) sięgają najbardziej skrajnych wartości, które nie są jeszcze uznane za odstające — najwyżej 1,5 IQR ponad górną krawędź pudełka i najwyżej 1,5 IQR poniżej dolnej,</li>
+<li>punkty poza wąsami to wartości odstające.</li>
+</ul>
+<p><img src="figs/boxplot.png" class="img-fluid"></p>
+<p>Granica 1,5 IQR jest umowna i przyjęta powszechnie <span class="citation" data-cites="nowosad_geostat">(<a href="references.html#ref-nowosad_geostat" role="doc-biblioref">Nowosad, b.d.</a>)</span>; w niektórych zastosowaniach stosuje się mnożnik 3,0, wskazujący wyłącznie wartości skrajne.</p>
+<p>Wykrycie wartości odstającej nie oznacza, że należy ją usunąć. W analizie danych należy zidentyfikować takie wartości, ustalić ich przyczynę — czy są wynikiem błędu pomiaru lub zapisu, czy wiążą się z analizowanym zjawiskiem — i dopiero wtedy zdecydować o ewentualnym usunięciu. Wartość odstająca może być poprawną obserwacją zjawiska rzadkiego, a wtedy jest najcenniejszą informacją w zbiorze. Decyzja wymaga powrotu do źródła danych.</p>
+</section>
+<section id="zależność-między-zmiennymi-ilościowymi" class="level3">
+<h3 class="anchored" data-anchor-id="zależność-między-zmiennymi-ilościowymi">Zależność między zmiennymi ilościowymi</h3>
+<p>Zależność dwóch zmiennych ilościowych przedstawia <strong>wykres rozrzutu</strong> (ang. <em>scatter plot</em>), a opisuje <strong>współczynnik korelacji</strong>:</p>
+<ul>
+<li><strong>współczynnik korelacji liniowej Pearsona</strong> (ang. <em>Pearson correlation</em>) — mierzy siłę zależności liniowej; wymaga rozkładów zbliżonych do normalnego i jest wrażliwy na wartości odstające,</li>
+<li><strong>współczynnik korelacji rang Spearmana</strong> (ang. <em>Spearman rank correlation</em>) — mierzy siłę zależności monotonicznej, obliczany na rangach; odporny na wartości odstające i nie wymaga normalności rozkładu.</li>
+</ul>
+<p>Oba przyjmują wartości od −1 do 1. Wartość bliska zera oznacza brak zależności, bliska ±1 — zależność silną. Znak wskazuje kierunek.</p>
+<p>Przy wielu zmiennych wygodnym narzędziem jest <strong>macierz korelacji</strong> oraz <strong>macierz wykresów rozrzutu</strong>, przedstawiająca jednocześnie rozkłady zmiennych, wykresy rozrzutu dla wszystkich par i wartości współczynników.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Istotność statystyczna to nie siła zależności
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Test korelacji podaje dwie liczby: <strong>wartość współczynnika</strong> oraz <strong>poziom istotności</strong>. Druga z nich zależy nie tylko od siły zależności, ale też od liczby obserwacji — przy dużej próbie istotna statystycznie okazuje się nawet bardzo słaba zależność.</p>
+<p>Wynik istotny statystycznie oznacza jedynie, że obserwowanej zależności nie da się przypisać przypadkowi przy tej liczbie obserwacji. Nie oznacza, że zależność jest silna ani że jest przydatna. Siłę zależności opisuje wartość współczynnika, nie poziom istotności.</p>
+</div>
+</div>
+</section>
+<section id="zależność-między-zmienną-ilościową-a-jakościową" class="level3">
+<h3 class="anchored" data-anchor-id="zależność-między-zmienną-ilościową-a-jakościową">Zależność między zmienną ilościową a jakościową</h3>
+<p>Zróżnicowanie zmiennej ilościowej w grupach wyznaczonych zmienną jakościową przedstawia wykres pudełkowy sporządzony osobno dla każdej grupy. Pozwala porównać położenie, rozproszenie i asymetrię rozkładów.</p>
+<p>Istotność różnic ocenia się testem statystycznym. <strong>Analiza wariancji</strong> (ang. <em>analysis of variance</em>, ANOVA) odpowiada na pytanie, czy średnie wartości zmiennej różnią się istotnie między grupami. Daje jedną odpowiedź dla całego podziału — nie wskazuje, <strong>które</strong> grupy się różnią.</p>
+<p>Do wskazania konkretnych par grup służą <strong>porównania wielokrotne</strong> (ang. <em>post-hoc comparisons</em>), na przykład test Tukeya. Korygują one poziom istotności z uwagi na liczbę wykonywanych porównań.</p>
+<p>Analiza wariancji zakłada niezależność obserwacji, zbliżony do normalnego rozkład reszt oraz zbliżoną wariancję w porównywanych grupach — założenia znane z kursu statystyki, które przed odczytaniem wyniku należy sprawdzić.</p>
+<p>Wykres pudełkowy przedstawia każdą grupę w tej samej skali graficznej, niezależnie od jej liczebności. Dlatego czyta się go zawsze razem z liczebnością grup: wyraźna różnica oparta na kilkunastu obserwacjach jest słabą przesłanką.</p>
+</section>
+</section>
+<section id="analiza-przestrzenna" class="level2">
+<h2 class="anchored" data-anchor-id="analiza-przestrzenna">Analiza przestrzenna</h2>
+<section id="sprawdzenie-poprawności-współrzędnych" class="level3">
+<h3 class="anchored" data-anchor-id="sprawdzenie-poprawności-współrzędnych">Sprawdzenie poprawności współrzędnych</h3>
+<p>Mapa lokalizacyjna, przedstawiająca położenie obserwacji na tle granicy obszaru analizy, pozwala odpowiedzieć na trzy pytania:</p>
+<ul>
+<li>czy współrzędne są w odpowiedniej kolejności (X–Y, a nie Y–X)?</li>
+<li>czy są wyrażone w odpowiednim układzie współrzędnych?</li>
+<li>czy wszystkie obserwacje leżą w badanym obszarze?</li>
+</ul>
+<p>Błąd w którymkolwiek z tych punktów jest na mapie natychmiast widoczny — obserwacje wypadają daleko poza obszar albo tworzą układ odbity względem przekątnej.</p>
+</section>
+<section id="wartości-odstające-lokalnie" class="level3">
+<h3 class="anchored" data-anchor-id="wartości-odstające-lokalnie">Wartości odstające lokalnie</h3>
+<p>Temperatura 10 °C w zbiorze o zakresie od 8 do 25 °C jest zupełnie zwyczajna, ale jeśli wszystkie okoliczne punkty wskazują 20 °C, jest to sygnał błędu pomiaru albo zjawiska lokalnego. Występowanie niskich wartości otoczonych wysokimi — lub odwrotnie — może oznaczać błąd w danych albo wpływ innego czynnika na analizowaną cechę.</p>
+<p>Analiza nieprzestrzenna takiej wartości nie wykryje, ponieważ pomija lokalizację; wartość mieści się w zakresie zmiennej, więc nie wyróżnia się ani w statystykach opisowych, ani na histogramie. Wykrywa ją mapa rozkładu przestrzennego zmiennej — dla danych punktowych przez porównanie wartości w punkcie z wartościami w punktach sąsiednich, dla danych obszarowych przez porównanie wartości w obszarze z wartościami w obszarach graniczących.</p>
+<p>Dla danych obszarowych narzędziem systematycznym są lokalne miary autokorelacji przestrzennej, omawiane w <a href="11_obszarowe_autokorelacja.html" class="quarto-xref"><span>7&nbsp; Miary autokorelacji danych obszarowych</span></a>.</p>
+</section>
+<section id="typ-próbkowania" class="level3">
+<h3 class="anchored" data-anchor-id="typ-próbkowania">Typ próbkowania</h3>
+<p>Rozmieszczenie punktów pomiarowych w przestrzeni wpływa na wybór i na wynik dalszych analiz. Wyróżnia się cztery typy próbkowania <span class="citation" data-cites="nowosad_geostat">(<a href="references.html#ref-nowosad_geostat" role="doc-biblioref">Nowosad, b.d.</a>)</span>:</p>
+<ul>
+<li><strong>regularne</strong> (ang. <em>regular</em>) — punkty rozłożone równomiernie na badanym obszarze,</li>
+<li><strong>losowe</strong> (ang. <em>random</em>) — każda lokalizacja ma takie samo prawdopodobieństwo wystąpienia, a każdy punkt jest losowany niezależnie od pozostałych,</li>
+<li><strong>losowe stratyfikowane</strong> (ang. <em>stratified</em>) — obszar dzieli się na regularne komórki i w każdej komórce losuje się lokalizację punktu,</li>
+<li><strong>preferencyjne</strong> (ang. <em>clustered</em>) — pewne obszary są opróbowane znacznie częściej niż pozostałe, na przykład z uwagi na spodziewane wartości analizowanej cechy.</li>
+</ul>
+<p><img src="figs/probkowanie.png" class="img-fluid"></p>
+<p>Typ próbkowania ma bezpośrednie znaczenie dla geostatystyki: od rozmieszczenia punktów i odległości między nimi zależy, dla jakich odstępów można wyznaczyć semiwariogram (<a href="14_pola_semiwariogram.html" class="quarto-xref"><span>9&nbsp; Analiza i modelowanie struktury przestrzennej</span></a>). Próbkowanie preferencyjne powoduje dodatkowo, że obszary gęściej opróbowane mają nieproporcjonalnie duży wpływ na wynik.</p>
+</section>
+<section id="ogólna-charakterystyka-zmienności-przestrzennej" class="level3">
+<h3 class="anchored" data-anchor-id="ogólna-charakterystyka-zmienności-przestrzennej">Ogólna charakterystyka zmienności przestrzennej</h3>
+<p>Na etapie eksploracji przydatna jest prosta, automatyczna procedura interpolacji, pozwalająca zobaczyć ogólny obraz zmienności zjawiska w całym obszarze. Nie jest to jeszcze estymacja — służy wyłącznie ocenie, czy zmienna ma strukturę przestrzenną, czyli czy wartości podobne do siebie występują blisko siebie. Jeśli takiej struktury nie ma, metody geostatystyczne nie mają zastosowania. Metody interpolacji omawia <a href="13_pola_interpolacja.html" class="quarto-xref"><span>8&nbsp; Metody interpolacji</span></a>.</p>
+</section>
+</section>
+<section id="dobór-metod-eksploracji-do-typu-danych" class="level2">
+<h2 class="anchored" data-anchor-id="dobór-metod-eksploracji-do-typu-danych">Dobór metod eksploracji do typu danych</h2>
+<p>Zakres eksploracji zależy od nurtu metodologicznego i od pytania badawczego.</p>
+<section id="statystyka-punktów" class="level3">
+<h3 class="anchored" data-anchor-id="statystyka-punktów">Statystyka punktów</h3>
+<p><strong>Cel:</strong> określenie, w jaki sposób obiekty lub zdarzenia są rozmieszczone w przestrzeni.</p>
+<p>Eksploracja obejmuje: sprawdzenie poprawności współrzędnych, wgląd w typ próbkowania oraz określenie zależności między lokalizacją a innymi czynnikami — na przykład czy więcej włamań notuje się w obszarach o wysokich cenach nieruchomości.</p>
+</section>
+<section id="dane-obszarowe" class="level3">
+<h3 class="anchored" data-anchor-id="dane-obszarowe">Dane obszarowe</h3>
+<p><strong>Cel:</strong> analiza podobieństwa i różnic między obszarami, wyszukanie obszarów podobnych do siebie oraz obszarów znacząco różnych od sąsiednich.</p>
+<p>Eksploracja obejmuje: charakterystykę statystyczną danych (statystyki podstawowe, rozkład, wartości globalnie odstające) oraz sprawdzenie poprawności danych, w tym identyfikację wartości odstających lokalnie.</p>
+</section>
+<section id="geostatystyka" class="level3">
+<h3 class="anchored" data-anchor-id="geostatystyka">Geostatystyka</h3>
+<p><strong>Cel:</strong> zrozumienie zmienności przestrzennej lub czasowej zjawiska oraz oszacowanie wartości dla całego obszaru na podstawie danych punktowych.</p>
+<p>Eksploracja obejmuje: charakterystykę statystyczną danych, sprawdzenie poprawności współrzędnych, identyfikację wartości odstających lokalnie, wgląd w typ próbkowania oraz ogólny pogląd na zmienność przestrzenną z wykorzystaniem prostej automatycznej procedury interpolacji.</p>
+</section>
+</section>
+<section id="powiązanie-z-ćwiczeniami" class="level2">
+<h2 class="anchored" data-anchor-id="powiązanie-z-ćwiczeniami">Powiązanie z ćwiczeniami</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Zadanie eksploracji</th>
+<th>Funkcje</th>
+<th>Pakiet</th>
+<th>Gdzie wykonujesz</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>podsumowanie numeryczne</td>
+<td><code>summary()</code>, <code>mean()</code>, <code>median()</code>, <code>sd()</code>, <code>table()</code></td>
+<td>base</td>
+<td><a href="04_eksploracja.html" class="quarto-xref"><span>2&nbsp; Eksploracyjna analiza danych</span></a></td>
+</tr>
+<tr class="even">
+<td>rozkład zmiennej</td>
+<td><code>geom_histogram()</code>, <code>geom_density()</code></td>
+<td><code>ggplot2</code></td>
+<td><a href="04_eksploracja.html" class="quarto-xref"><span>2&nbsp; Eksploracyjna analiza danych</span></a></td>
+</tr>
+<tr class="odd">
+<td>skośność i kurtoza</td>
+<td><code>skewness()</code>, <code>kurtosis()</code></td>
+<td><code>e1071</code></td>
+<td><a href="04_eksploracja.html" class="quarto-xref"><span>2&nbsp; Eksploracyjna analiza danych</span></a></td>
+</tr>
+<tr class="even">
+<td>korelacja i jej istotność</td>
+<td><code>cor.test(method =)</code>, <code>chart.Correlation()</code></td>
+<td>base, <code>PerformanceAnalytics</code></td>
+<td><a href="04_eksploracja.html" class="quarto-xref"><span>2&nbsp; Eksploracyjna analiza danych</span></a></td>
+</tr>
+<tr class="odd">
+<td>zróżnicowanie w grupach</td>
+<td><code>geom_boxplot()</code>, <code>aov()</code>, <code>TukeyHSD()</code></td>
+<td><code>ggplot2</code>, base</td>
+<td><a href="04_eksploracja.html" class="quarto-xref"><span>2&nbsp; Eksploracyjna analiza danych</span></a></td>
+</tr>
+<tr class="even">
+<td>eksploracja przestrzenna</td>
+<td><code>tm_symbols()</code>, <code>tm_polygons()</code>, <code>tm_grid()</code></td>
+<td><code>tmap</code></td>
+<td><a href="04_eksploracja.html" class="quarto-xref"><span>2&nbsp; Eksploracyjna analiza danych</span></a></td>
+</tr>
+</tbody>
+</table>
+<p>Opis pakietów wraz z odnośnikami do dokumentacji zawiera <a href="A_pakiety.html" class="quarto-xref"><span>Załącznik A — Pakiety</span></a>, a pełne zestawienie funkcji — <a href="B_funkcje.html" class="quarto-xref"><span>Załącznik B — Funkcje</span></a>.</p>
+</section>
+<section id="literatura" class="level2">
+<h2 class="anchored" data-anchor-id="literatura">Literatura</h2>
+<ul>
+<li><span class="citation" data-cites="nowosad_geostat">Nowosad (<a href="references.html#ref-nowosad_geostat" role="doc-biblioref">b.d.</a>)</span> — eksploracyjna analiza danych nieprzestrzennych i przestrzennych, typy próbkowania.</li>
+<li><span class="citation" data-cites="anselin_geoda">Anselin (<a href="references.html#ref-anselin_geoda" role="doc-biblioref">b.d.</a>)</span> — eksploracyjna analiza danych: histogram, wykres pudełkowy, wykres rozrzutu, wartości odstające.</li>
+<li><span class="citation" data-cites="lovelace2025">Lovelace, Nowosad, i Muenchow (<a href="references.html#ref-lovelace2025" role="doc-biblioref">2025</a>)</span> — praca z danymi przestrzennymi w R.</li>
+</ul>
+</section>
+<section id="pytania-kontrolne" class="level2">
+<h2 class="anchored" data-anchor-id="pytania-kontrolne">Pytania kontrolne</h2>
+<ol type="1">
+<li>Czemu służy eksploracyjna analiza danych i dlaczego wykonuje się ją przed właściwą analizą, a nie po niej?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Celem eksploracji jest uzyskanie podstawowych informacji o danych: zakresu wartości, typu rozkładu, obecności wartości odstających, zależności od innych zmiennych oraz sposobu rozmieszczenia obserwacji w przestrzeni. Wykonuje się ją przed analizą, ponieważ rozstrzyga, czy wybraną metodę w ogóle wolno zastosować — metody geostatystyczne wymagają danych o określonych właściwościach, a wartość będąca błędem zapisu zafałszuje wynik każdej analizy, do której trafi.</p>
+</div>
+</div>
+</div>
+<ol start="2" type="1">
+<li>Średnia wartość zmiennej jest wyraźnie wyższa od mediany. Co to mówi o rozkładzie i która z tych miar lepiej opisuje wartość przeciętną?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Rozkład jest asymetryczny prawostronnie — ma wydłużone prawe ramię, czyli pojedyncze wysokie wartości zawyżają średnią. Przy takim rozkładzie lepszą miarą wartości przeciętnej jest mediana, ponieważ jest odporna na wartości skrajne. W praktyce podaje się obie miary.</p>
+</div>
+</div>
+</div>
+<ol start="3" type="1">
+<li>Zmienna ma dodatnią skośność i dodatnią kurtozę. Jak wygląda jej rozkład?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Dodatnia skośność oznacza asymetrię prawostronną — rozkład ma wydłużone prawe ramię. Dodatnia kurtoza oznacza większą niż w rozkładzie normalnym koncentrację wartości wokół średniej, czyli rozkład bardziej wysmukły. Razem: większość obserwacji skupia się w wąskim zakresie, a nieliczne wysokie wartości tworzą długie prawe ramię.</p>
+</div>
+</div>
+</div>
+<ol start="4" type="1">
+<li>Kiedy należy użyć współczynnika korelacji rang Spearmana zamiast współczynnika Pearsona?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Wtedy, gdy naruszone jest założenie o rozkładzie zbliżonym do normalnego — na przykład gdy w zbiorze są wartości odstające — albo gdy zależność nie jest liniowa, lecz monotoniczna. Współczynnik Spearmana obliczany jest na rangach, więc jest odporny na wartości odstające i nie wymaga normalności rozkładu. Współczynnik Pearsona mierzy wyłącznie zależność liniową.</p>
+</div>
+</div>
+</div>
+<ol start="5" type="1">
+<li>Test korelacji dał wynik istotny statystycznie przy współczynniku równym 0,17. Czy oznacza to, że zależność jest silna?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Nie. Poziom istotności zależy nie tylko od siły zależności, ale też od liczby obserwacji — przy dużej próbie istotna statystycznie okazuje się nawet bardzo słaba zależność. Wynik istotny oznacza jedynie, że obserwowanej zależności nie da się przypisać przypadkowi przy tej liczbie obserwacji. Siłę zależności opisuje wartość współczynnika, a 0,17 to zależność bardzo słaba.</p>
+</div>
+</div>
+</div>
+<ol start="6" type="1">
+<li>Czym różni się wartość odstająca lokalnie od wartości odstającej globalnie i dlaczego histogram nie wykryje tej pierwszej?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Wartość odstająca globalnie jest bardzo niska lub bardzo wysoka względem całego zbioru, więc wyróżnia się w statystykach opisowych, na histogramie i na wykresie pudełkowym. Wartość odstająca lokalnie mieści się w typowym zakresie zmiennej, ale wyraźnie odbiega od wartości w swoim najbliższym otoczeniu. Histogram jej nie wykryje, ponieważ nie uwzględnia lokalizacji obserwacji — wartość trafia do przedziału, w którym jest wiele innych obserwacji. Wykrywa ją mapa rozkładu przestrzennego zmiennej.</p>
+</div>
+</div>
+</div>
+<ol start="7" type="1">
+<li>Punkty pomiarowe są rozmieszczone preferencyjnie. Jakie są konsekwencje dla dalszej analizy?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Obszary opróbowane gęściej mają nieproporcjonalnie duży wpływ na wynik, ponieważ wnoszą do obliczeń więcej obserwacji niż obszary opróbowane rzadko. Dodatkowo od rozmieszczenia punktów i odległości między nimi zależy, dla jakich odstępów można wyznaczyć semiwariogram — przy próbkowaniu preferencyjnym część zakresu odległości jest reprezentowana słabo albo wcale.</p>
+</div>
+</div>
+</div>
+<ol start="8" type="1">
+<li>Dysponujesz lokalizacjami kradzieży samochodów w mieście, bez atrybutów. Jaki zakres eksploracji jest właściwy i czym różni się od eksploracji danych geostatystycznych?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Jest to zadanie statystyki punktów: celem jest określenie, w jaki sposób zdarzenia są rozmieszczone w przestrzeni. Eksploracja obejmuje sprawdzenie poprawności współrzędnych, wgląd w typ próbkowania oraz określenie zależności między lokalizacją a innymi czynnikami. Nie ma tu zastosowania analiza rozkładu wartości atrybutu, ponieważ atrybutu nie ma. W geostatystyce analizowana jest wartość zmierzona w punkcie, więc eksploracja obejmuje dodatkowo pełną charakterystykę statystyczną zmiennej, identyfikację wartości odstających lokalnie oraz ogólny pogląd na zmienność przestrzenną uzyskany prostą procedurą interpolacji.</p>
+</div>
+</div>
+</div>
+<div id="najwazniejsze-eksploracja" class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Najważniejsze informacje — zanim przejdziesz do części praktycznej
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Eksploracyjna analiza danych poprzedza każdą analizę przestrzenną i rozstrzyga, czy wybraną metodę w ogóle wolno zastosować.</li>
+<li>Analiza nieprzestrzenna pracuje na wartościach atrybutów, przestrzenna — na ich lokalizacji; żadna nie zastępuje drugiej.</li>
+<li>Średnia jest wrażliwa na wartości skrajne, mediana nie; ich porównanie jest pierwszą informacją o asymetrii rozkładu.</li>
+<li>Skośność opisuje asymetrię rozkładu — znak wskazuje, które ramię jest wydłużone; kurtoza opisuje koncentrację wartości wokół średniej względem rozkładu normalnego.</li>
+<li>Współczynnik korelacji Pearsona wymaga zależności liniowej i rozkładu zbliżonego do normalnego; przy naruszeniu tych warunków stosuje się współczynnik korelacji rang Spearmana.</li>
+<li>Istotność statystyczna zależy od liczby obserwacji i nie jest miarą siły zależności.</li>
+<li>Wartość odstająca lokalnie mieści się w typowym zakresie zmiennej, więc wykrywa ją wyłącznie mapa.</li>
+<li>Cztery typy próbkowania to: regularne, losowe, losowe stratyfikowane i preferencyjne.</li>
+</ul>
+</div>
+</div>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-anselin_geoda" class="csl-entry" role="listitem">
+Anselin, Luc. b.d. <span>„GeoDa Workbook: Exploratory Data Analysis”</span>. <a href="https://geodacenter.github.io/workbook/2a_eda/lab2a.html">https://geodacenter.github.io/workbook/2a_eda/lab2a.html</a>.
+</div>
+<div id="ref-lovelace2025" class="csl-entry" role="listitem">
+Lovelace, Robin, Jakub Nowosad, i Jannes Muenchow. 2025. <em>Geocomputation with R</em>. 2. wyd. Boca Raton: Chapman; Hall/CRC. <a href="https://r.geocompx.org/">https://r.geocompx.org/</a>.
+</div>
+<div id="ref-nowosad_geostat" class="csl-entry" role="listitem">
+Nowosad, Jakub. b.d. <em>Geostatystyka w R</em>. <a href="https://jakubnowosad.com/geostat_book/">https://jakubnowosad.com/geostat_book/</a>.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Skopiowano!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Skopiowano!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./02_dane_przestrzenne.html" class="pagination-link" aria-label="Dane przestrzenne w R">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Dane przestrzenne w R</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./04_eksploracja.html" class="pagination-link" aria-label="Eksploracyjna analiza danych">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Eksploracyjna analiza danych</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

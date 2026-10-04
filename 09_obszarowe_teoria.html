@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pl" xml:lang="pl"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>DANE OBSZAROWE – Statystyka przestrzenna</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./10_obszarowe_sasiedztwo.html" rel="next">
+<link href="./08_punkty_odleglosc.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-c852b7e71cc1c09f55f367b2512aabbd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Brak wyników",
+    "search-matching-documents-text": "dopasowane dokumenty",
+    "search-copy-link-title": "Kopiuj link do wyszukiwania",
+    "search-hide-matches-text": "Ukryj dodatkowe dopasowania",
+    "search-more-match-text": "więcej dopasowań w tym dokumencie",
+    "search-more-matches-text": "więcej dopasowań w tym dokumencie",
+    "search-clear-button-title": "Wyczyść",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Anuluj",
+    "search-submit-button-title": "Zatwierdź",
+    "search-label": "Szukaj"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Przełącz pasek boczny" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./09_obszarowe_teoria.html">DANE OBSZAROWE</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Przełącz pasek boczny" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Szukaj" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Statystyka przestrzenna</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Szukaj"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">O skrypcie</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./01_wstep.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">WSTĘP</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_dane_przestrzenne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Dane przestrzenne w R</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./03_eksploracja_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">EKSPLORACYJNA ANALIZA DANYCH</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_eksploracja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Eksploracyjna analiza danych</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./05_punkty_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE PUNKTOWE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_punkty_centrograficzne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Statystyki centrograficzne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_punkty_intensywnosc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Metody oparte na analizie intensywności</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_punkty_odleglosc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Metody oparte na odległości</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./09_obszarowe_teoria.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">DANE OBSZAROWE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_obszarowe_sasiedztwo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Określanie sąsiedztwa danych obszarowych</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_obszarowe_autokorelacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Miary autokorelacji danych obszarowych</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./12_pola_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE POWIERZCHNIOWE CIĄGŁE PRZESTRZENNIE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13_pola_interpolacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Metody interpolacji</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14_pola_semiwariogram.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Analiza i modelowanie struktury przestrzennej</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15_pola_estymacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Geostatystyczne metody estymacji</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_pola_ocena.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Ocena jakości estymacji</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">ZADANIA I PROJEKTY</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_zadania_samodzielne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Zadania samodzielne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18_projekt1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Projekt 1: przestępczość a zmienne społeczno-ekonomiczne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19_projekt2_geostatystyka.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Projekt 2: Geostatystyka</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Załączniki</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./A_pakiety.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Pakiety</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./B_funkcje.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Funkcje</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./C_operacje.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Operacje na danych przestrzennych</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./D_slownik.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Słownik pojęć</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bibliografia</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Spis treści</h2>
+   
+  <ul>
+  <li><a href="#wprowadzenie" id="toc-wprowadzenie" class="nav-link active" data-scroll-target="#wprowadzenie">Wprowadzenie</a></li>
+  <li><a href="#pojęcia-podstawowe" id="toc-pojęcia-podstawowe" class="nav-link" data-scroll-target="#pojęcia-podstawowe">Pojęcia podstawowe</a>
+  <ul class="collapse">
+  <li><a href="#autokorelacja-przestrzenna" id="toc-autokorelacja-przestrzenna" class="nav-link" data-scroll-target="#autokorelacja-przestrzenna">Autokorelacja przestrzenna</a></li>
+  <li><a href="#losowość-przestrzenna" id="toc-losowość-przestrzenna" class="nav-link" data-scroll-target="#losowość-przestrzenna">Losowość przestrzenna</a></li>
+  <li><a href="#autokorelacja-dodatnia-i-ujemna" id="toc-autokorelacja-dodatnia-i-ujemna" class="nav-link" data-scroll-target="#autokorelacja-dodatnia-i-ujemna">Autokorelacja dodatnia i ujemna</a></li>
+  <li><a href="#zmienna-opóźniona-przestrzennie" id="toc-zmienna-opóźniona-przestrzennie" class="nav-link" data-scroll-target="#zmienna-opóźniona-przestrzennie">Zmienna opóźniona przestrzennie</a></li>
+  </ul></li>
+  <li><a href="#sąsiedztwo-obszarów" id="toc-sąsiedztwo-obszarów" class="nav-link" data-scroll-target="#sąsiedztwo-obszarów">Sąsiedztwo obszarów</a>
+  <ul class="collapse">
+  <li><a href="#kryterium-wspólnej-granicy" id="toc-kryterium-wspólnej-granicy" class="nav-link" data-scroll-target="#kryterium-wspólnej-granicy">Kryterium wspólnej granicy</a></li>
+  <li><a href="#kryterium-odległości" id="toc-kryterium-odległości" class="nav-link" data-scroll-target="#kryterium-odległości">Kryterium odległości</a></li>
+  </ul></li>
+  <li><a href="#macierz-wag-przestrzennych" id="toc-macierz-wag-przestrzennych" class="nav-link" data-scroll-target="#macierz-wag-przestrzennych">Macierz wag przestrzennych</a>
+  <ul class="collapse">
+  <li><a href="#macierz-sąsiedztwa" id="toc-macierz-sąsiedztwa" class="nav-link" data-scroll-target="#macierz-sąsiedztwa">Macierz sąsiedztwa</a></li>
+  <li><a href="#standaryzacja" id="toc-standaryzacja" class="nav-link" data-scroll-target="#standaryzacja">Standaryzacja</a></li>
+  </ul></li>
+  <li><a href="#miary-autokorelacji-przestrzennej" id="toc-miary-autokorelacji-przestrzennej" class="nav-link" data-scroll-target="#miary-autokorelacji-przestrzennej">Miary autokorelacji przestrzennej</a>
+  <ul class="collapse">
+  <li><a href="#globalna-i-morana" id="toc-globalna-i-morana" class="nav-link" data-scroll-target="#globalna-i-morana">Globalna I Morana</a></li>
+  <li><a href="#globalna-c-gearyego" id="toc-globalna-c-gearyego" class="nav-link" data-scroll-target="#globalna-c-gearyego">Globalna C Geary’ego</a></li>
+  <li><a href="#globalna-g-getisa-orda" id="toc-globalna-g-getisa-orda" class="nav-link" data-scroll-target="#globalna-g-getisa-orda">Globalna G Getisa &amp; Orda</a></li>
+  <li><a href="#testowanie-istotności" id="toc-testowanie-istotności" class="nav-link" data-scroll-target="#testowanie-istotności">Testowanie istotności</a></li>
+  <li><a href="#lokalna-i-morana" id="toc-lokalna-i-morana" class="nav-link" data-scroll-target="#lokalna-i-morana">Lokalna I Morana</a></li>
+  <li><a href="#lokalna-c-gearyego" id="toc-lokalna-c-gearyego" class="nav-link" data-scroll-target="#lokalna-c-gearyego">Lokalna C Geary’ego</a></li>
+  <li><a href="#lokalna-g-getisa-orda" id="toc-lokalna-g-getisa-orda" class="nav-link" data-scroll-target="#lokalna-g-getisa-orda">Lokalna G Getisa &amp; Orda</a></li>
+  <li><a href="#zestawienie" id="toc-zestawienie" class="nav-link" data-scroll-target="#zestawienie">Zestawienie</a></li>
+  </ul></li>
+  <li><a href="#wykres-rozrzutu-morana" id="toc-wykres-rozrzutu-morana" class="nav-link" data-scroll-target="#wykres-rozrzutu-morana">Wykres rozrzutu Morana</a>
+  <ul class="collapse">
+  <li><a href="#identyfikacja-klastrów" id="toc-identyfikacja-klastrów" class="nav-link" data-scroll-target="#identyfikacja-klastrów">Identyfikacja klastrów</a></li>
+  </ul></li>
+  <li><a href="#problem-zmiennych-jednostek-odniesienia" id="toc-problem-zmiennych-jednostek-odniesienia" class="nav-link" data-scroll-target="#problem-zmiennych-jednostek-odniesienia">Problem zmiennych jednostek odniesienia</a></li>
+  <li><a href="#powiązanie-z-ćwiczeniami" id="toc-powiązanie-z-ćwiczeniami" class="nav-link" data-scroll-target="#powiązanie-z-ćwiczeniami">Powiązanie z ćwiczeniami</a></li>
+  <li><a href="#literatura" id="toc-literatura" class="nav-link" data-scroll-target="#literatura">Literatura</a></li>
+  <li><a href="#pytania-kontrolne" id="toc-pytania-kontrolne" class="nav-link" data-scroll-target="#pytania-kontrolne">Pytania kontrolne</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">DANE OBSZAROWE</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Czego się nauczysz
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Po tym rozdziale potrafisz:</strong></p>
+<ul>
+<li>wyjaśnić, czym jest autokorelacja przestrzenna i co oznacza jej brak,</li>
+<li>wskazać trzy kryteria wyznaczania sąsiedztwa obszarów i konsekwencje wyboru każdego z nich,</li>
+<li>opisać, jak z macierzy sąsiedztwa powstaje macierz wag przestrzennych,</li>
+<li>wymienić miary globalne i lokalne autokorelacji oraz powiedzieć, na jakie pytanie odpowiada każda grupa.</li>
+</ul>
+<p><strong>Rozumiesz i umiesz zinterpretować:</strong></p>
+<ul>
+<li>znak i wielkość statystyk I Morana, C Geary’ego i G Getisa &amp; Orda,</li>
+<li>wynik testu istotności opartego na symulacji oraz pseudo <em>p</em>-value,</li>
+<li>wykres rozrzutu Morana wraz z czterema ćwiartkami,</li>
+<li>mapę lokalnych statystyk i mapę klastrów,</li>
+<li>dlaczego wynik analizy zależy od podziału obszaru na jednostki.</li>
+</ul>
+<p><strong>Część praktyczna:</strong> <a href="10_obszarowe_sasiedztwo.html" class="quarto-xref"><span>6&nbsp; Określanie sąsiedztwa danych obszarowych</span></a>, <a href="11_obszarowe_autokorelacja.html" class="quarto-xref"><span>7&nbsp; Miary autokorelacji danych obszarowych</span></a>. <strong>Słownik pojęć:</strong> <a href="D_slownik.html" class="quarto-xref"><span>Załącznik D — Słownik pojęć</span></a>. <strong>Funkcje:</strong> <a href="B_funkcje.html" class="quarto-xref"><span>Załącznik B — Funkcje</span></a>.</p>
+</div>
+</div>
+<section id="wprowadzenie" class="level2">
+<h2 class="anchored" data-anchor-id="wprowadzenie">Wprowadzenie</h2>
+<p><strong>Dane obszarowe</strong> (ang. <em>areal data</em>) powstają przez podzielenie obszaru badań na jednostki przestrzenne, w których agregowane są wyniki — na przykład na jednostki administracyjne albo obszary spisowe. Charakteryzują się skokową zmiennością wartości: w obrębie jednostki wartość jest stała, a na granicy zmienia się skokowo. Przykładami są dane społeczno-ekonomiczne udostępniane w ramach spisów ludności: stopa bezrobocia według powiatów, liczba ludności według obszarów spisowych.</p>
+<p>Celem analizy danych obszarowych jest <strong>ocena podobieństwa i różnic między obszarami</strong>: wyszukanie obszarów podobnych do siebie oraz obszarów znacząco różnych od sąsiednich.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Przykład przewijający się przez rozdział — zbiór już znany
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Wszystkie ryciny w tym rozdziale obliczono na pliku <code>cook_przygotowane.gpkg</code>, czyli <strong>na tych samych danych, które poznałeś w części praktycznej</strong>: plik powstaje krok po kroku w <a href="02_dane_przestrzenne.html" class="quarto-xref"><span>1&nbsp; Dane przestrzenne w R</span></a> i jest przedmiotem Przykładu 1 w <a href="04_eksploracja.html" class="quarto-xref"><span>2&nbsp; Eksploracyjna analiza danych</span></a>.</p>
+<p>Są to <strong>788 obszarów spisowych</strong> hrabstwa Cook wraz ze współczynnikiem kradzieży samochodów na 1000 mieszkańców (<code>CRIME_RATE</code>). Z eksploracji wiesz już, że współczynnik waha się od 0,16 do 31,13 przy medianie 2,89 i ma rozkład silnie asymetryczny prawostronnie, a jego wartości są wyraźnie wyższe w południowej i środkowej części hrabstwa.</p>
+<p>Eksploracja zatrzymała się na stwierdzeniu, że <strong>mapa pokazuje jakiś układ przestrzenny</strong>. Ten rozdział podaje miary, którymi ten układ opisuje się liczbowo i sprawdza, czy nie jest dziełem przypadku.</p>
+</div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/autokorelacja_mapy.png" class="img-fluid figure-img"></p>
+<figcaption>Współczynnik kradzieży samochodów w 788 obszarach spisowych hrabstwa Cook. Po lewej wartości rzeczywiste, po prawej te same wartości przestawione losowo między obszarami.</figcaption>
+</figure>
+</div>
+<p>Obie mapy przedstawiają <strong>ten sam zbiór liczb</strong> — identyczne minimum, maksimum, średnią i rozkład. Różnią się wyłącznie tym, którym obszarom przypisano które wartości. Na mapie po lewej wartości wysokie sąsiadują z wysokimi i tworzą zwarte obszary; na mapie po prawej rozkładają się bez żadnego porządku. Analiza nieprzestrzenna nie odróżni tych dwóch sytuacji, bo pomija lokalizację. Odróżniają je dopiero miary opisane w tym rozdziale.</p>
+</section>
+<section id="pojęcia-podstawowe" class="level2">
+<h2 class="anchored" data-anchor-id="pojęcia-podstawowe">Pojęcia podstawowe</h2>
+<section id="autokorelacja-przestrzenna" class="level3">
+<h3 class="anchored" data-anchor-id="autokorelacja-przestrzenna">Autokorelacja przestrzenna</h3>
+<p><strong>Autokorelacja przestrzenna</strong> (ang. <em>spatial autocorrelation</em>) określa zależność przestrzenną, która może być obserwowana jako zgrupowania (klastry) podobnych wartości albo jako systematyczny wzorzec przestrzenny (ang. <em>spatial pattern</em>). Oznacza, że obserwacje bliskie geograficznie są bardziej do siebie podobne niż obserwacje odległe.</p>
+<p>Pomiar autokorelacji wymaga dwóch rzeczy jednocześnie:</p>
+<ul>
+<li>miary <strong>podobieństwa wartości</strong> — o ile wartości w dwóch obszarach różnią się od siebie,</li>
+<li>definicji <strong>sąsiedztwa w przestrzeni geograficznej</strong> — które obszary uznajemy za sąsiadujące.</li>
+</ul>
+<p>Druga z nich nie wynika z danych i jest decyzją analityka; poświęcona jest jej następna sekcja.</p>
+</section>
+<section id="losowość-przestrzenna" class="level3">
+<h3 class="anchored" data-anchor-id="losowość-przestrzenna">Losowość przestrzenna</h3>
+<p>Brak autokorelacji przestrzennej oznacza <strong>losowość przestrzenną</strong> (ang. <em>spatial randomness</em>): wartości obserwowane w danym obszarze nie zależą od wartości obserwowanych w obszarach sąsiednich, a obserwowany wzorzec przestrzenny jest równie prawdopodobny jak każdy inny.</p>
+<p>Losowość przestrzenna jest <strong>hipotezą zerową</strong> w analizie autokorelacji. Nie szukamy jej w danych — przeciwnie, celem analizy jest jej <strong>odrzucenie</strong>, bo odrzucenie hipotezy zerowej oznacza, że w danych istnieje jakiś wzorzec.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Losowość przestrzenna a całkowita przestrzenna przypadkowość
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Obie nazwy opisują hipotezę zerową, ale dotyczą <strong>różnych rzeczy</strong>. Całkowita przestrzenna przypadkowość (CSR), omawiana w części o danych punktowych, jest modelem rozmieszczenia <strong>lokalizacji zdarzeń</strong>: każde miejsce jest jednakowo prawdopodobne. Losowość przestrzenna w analizie danych obszarowych dotyczy <strong>wartości przypisanych do ustalonych jednostek</strong>: jednostki się nie zmieniają, zmienia się tylko to, która wartość trafia do której. Dlatego hipotezę tę weryfikuje się przestawianiem wartości między jednostkami, a nie losowaniem nowych lokalizacji.</p>
+</div>
+</div>
+</section>
+<section id="autokorelacja-dodatnia-i-ujemna" class="level3">
+<h3 class="anchored" data-anchor-id="autokorelacja-dodatnia-i-ujemna">Autokorelacja dodatnia i ujemna</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/autokorelacja.png" class="img-fluid figure-img"></p>
+<figcaption>Trzy przypadki: losowość przestrzenna, autokorelacja dodatnia i autokorelacja ujemna.</figcaption>
+</figure>
+</div>
+<p><strong>Autokorelacja dodatnia</strong> oznacza, że w sąsiadujących obszarach obserwuje się podobne wartości: wysokie otoczone wysokimi albo niskie otoczone niskimi. Obszary sąsiedzkie są wtedy <strong>mniej zróżnicowane</strong>, niż wynikałoby to z losowego rozmieszczenia wartości.</p>
+<p><strong>Autokorelacja ujemna</strong> oznacza, że wartości sąsiednie różnią się od siebie — na przykład niskie wartości otoczone wysokimi. Obszary sąsiedzkie są wtedy <strong>bardziej zróżnicowane</strong>, niż wynikałoby z losowego rozmieszczenia. Skrajnym przypadkiem jest <strong>efekt szachownicy</strong>, widoczny na prawym panelu ryciny.</p>
+</section>
+<section id="zmienna-opóźniona-przestrzennie" class="level3">
+<h3 class="anchored" data-anchor-id="zmienna-opóźniona-przestrzennie">Zmienna opóźniona przestrzennie</h3>
+<p>Większość miar autokorelacji zestawia wartość w obszarze z wartościami w jego otoczeniu. Otoczenie podsumowuje <strong>zmienna opóźniona przestrzennie</strong> (ang. <em>spatial lag</em>) — ważona suma wartości sąsiadów:</p>
+<p><span class="math display">\[\tilde{x}_i = \sum_{j} w_{ij}\, x_j\]</span></p>
+<p>gdzie <span class="math inline">\(w_{ij}\)</span> to waga przypisana parze obszarów <span class="math inline">\(i\)</span> oraz <span class="math inline">\(j\)</span>, a <span class="math inline">\(x_j\)</span> — wartość w obszarze <span class="math inline">\(j\)</span>. Przy wagach standaryzowanych wierszami (opisanych niżej) wagi w każdym wierszu sumują się do jedynki, więc zmienna opóźniona przestrzennie jest po prostu <strong>średnią wartością u sąsiadów</strong>.</p>
+</section>
+</section>
+<section id="sąsiedztwo-obszarów" class="level2">
+<h2 class="anchored" data-anchor-id="sąsiedztwo-obszarów">Sąsiedztwo obszarów</h2>
+<p>Sąsiadów przestrzennych można definiować na kilka sposobów, a wybór definicji zmienia wynik każdej miary liczonej dalej.</p>
+<section id="kryterium-wspólnej-granicy" class="level3">
+<h3 class="anchored" data-anchor-id="kryterium-wspólnej-granicy">Kryterium wspólnej granicy</h3>
+<p>Kryterium wspólnej granicy (ang. <em>adjacency</em>) zakłada, że sąsiadami są obszary mające wspólną granicę. Granicę tę wyznacza się jedną z dwóch reguł:</p>
+<ul>
+<li><strong>reguła rook</strong> — sąsiadami są obszary stykające się <strong>odcinkiem</strong> granicy,</li>
+<li><strong>reguła queen</strong> — sąsiadami są obszary stykające się odcinkiem granicy <strong>albo choćby jednym punktem</strong> (narożnikiem).</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/sasiedztwo_rook_queen.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption>Sąsiedzi komórki środkowej siatki 3×3 wyznaczeni regułą rook i regułą queen.</figcaption>
+</figure>
+</div>
+<p>Nazwy pochodzą od ruchów figur szachowych. Dla komórki środkowej siatki 3×3 reguła rook wskazuje <strong>4 sąsiadów</strong>, a reguła queen — <strong>8</strong>. Różnica dotyczy wyłącznie obszarów stykających się narożnikiem, więc w podziałach administracyjnych, gdzie styk w jednym punkcie zdarza się rzadko, obie reguły dają często ten sam wynik.</p>
+</section>
+<section id="kryterium-odległości" class="level3">
+<h3 class="anchored" data-anchor-id="kryterium-odległości">Kryterium odległości</h3>
+<p>Kryterium odległości zakłada, że sąsiadami są obszary leżące w pewnej odległości od siebie, niekoniecznie stykające się granicami. Odległość mierzy się <strong>między centroidami</strong> obszarów. Wyróżnia się trzy warianty:</p>
+<ul>
+<li><strong>sąsiedzi w promieniu <em>d</em></strong> — sąsiadem jest obszar, którego centroid leży nie dalej niż <em>d</em> od centroidu obszaru odniesienia,</li>
+<li><strong><em>k</em> najbliższych sąsiadów</strong> (ang. <em>k nearest neighbours</em>, knn) — sąsiadami jest <em>k</em> obszarów o centroidach położonych najbliżej. Kryterium to pierwotnie dotyczy danych punktowych, więc dla danych obszarowych trzeba najpierw wyznaczyć centroidy; na to, które obszary trafią do zbioru sąsiadów, wpływa wielkość i kształt regionów,</li>
+<li><strong>odległość odwrotna</strong> (<span class="math inline">\(1/d\)</span>) — sąsiadami są wszystkie obszary, ale z wagą malejącą wraz z odległością.</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/sasiedztwo_kryteria.png" class="img-fluid figure-img"></p>
+<figcaption>Sąsiedzi tego samego obszaru spisowego wyznaczeni trzema kryteriami. Czerwony — obszar odniesienia, zielony — jego sąsiedzi.</figcaption>
+</figure>
+</div>
+<p>Dla obszaru zaznaczonego na czerwono reguła queen wskazuje <strong>5 sąsiadów</strong>, kryterium odległości do 3 km — <strong>32</strong>, a kryterium 6 najbliższych sąsiadów — z definicji <strong>6</strong>. Trzy kryteria dają więc trzy różne zbiory sąsiadów dla tego samego obszaru, a każdy z nich prowadzi do innej wartości miary autokorelacji.</p>
+<p>Dwa kryteria różnią się przy tym własnością istotną praktycznie. Sąsiedztwo wyznaczone wspólną granicą i promieniem <em>d</em> jest <strong>symetryczne</strong>: jeśli obszar A jest sąsiadem B, to B jest sąsiadem A. Sąsiedztwo <em>k</em> najbliższych sąsiadów symetryczne <strong>nie jest</strong> — obszar duży może być jednym z <em>k</em> najbliższych sąsiadów obszaru małego, podczas gdy w drugą stronę zależność nie zachodzi.</p>
+</section>
+</section>
+<section id="macierz-wag-przestrzennych" class="level2">
+<h2 class="anchored" data-anchor-id="macierz-wag-przestrzennych">Macierz wag przestrzennych</h2>
+<p><strong>Macierz wag przestrzennych</strong> to tabela <span class="math inline">\(N \times N\)</span>, w której przechowywane są informacje o <strong>występowaniu</strong> oraz o <strong>sile</strong> zależności przestrzennych między obiektami. Każdy element reprezentuje powiązanie między parą jednostek, a przekątna jest zerowa — jednostka nie jest sąsiadem samej siebie. Macierz wag stanowi podstawę większości technik analizy danych obszarowych.</p>
+<p>Powstaje w dwóch krokach:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/macierz_wag_przestrzennych.png" class="img-fluid figure-img"></p>
+<figcaption>Dwa kroki tworzenia macierzy wag przestrzennych.</figcaption>
+</figure>
+</div>
+<section id="macierz-sąsiedztwa" class="level3">
+<h3 class="anchored" data-anchor-id="macierz-sąsiedztwa">Macierz sąsiedztwa</h3>
+<p>Mając definicję sąsiedztwa, buduje się <strong>macierz sąsiedztwa</strong> — tabelę, w której zapisana jest informacja o tym, czy obszary ze sobą sąsiadują. Najprostszą jej formą jest macierz binarna:</p>
+<p><span class="math display">\[
+m_{ij} =
+\begin{cases}
+1 &amp; \text{obszar } i \text{ jest sąsiadem obszaru } j \\
+0 &amp; \text{obszar } i \text{ nie jest sąsiadem obszaru } j \\
+0 &amp; \text{elementy na przekątnej}
+\end{cases}
+\]</span></p>
+</section>
+<section id="standaryzacja" class="level3">
+<h3 class="anchored" data-anchor-id="standaryzacja">Standaryzacja</h3>
+<p>W kolejnym kroku macierz sąsiedztwa standaryzuje się, aby otrzymać wagi. Najczęściej stosuje się <strong>standaryzację wierszami</strong> do jedynki, tak aby suma wag w każdym wierszu wynosiła 1:</p>
+<p><span class="math display">\[w_{ij} = \frac{m_{ij}}{w_{i}}\]</span></p>
+<p>gdzie <span class="math inline">\(m_{ij}\)</span> to wartość macierzy sąsiedztwa dla obszarów <span class="math inline">\(i\)</span> oraz <span class="math inline">\(j\)</span>, a <span class="math inline">\(w_i\)</span> — suma <span class="math inline">\(i\)</span>-tego wiersza, czyli liczba sąsiadów obszaru <span class="math inline">\(i\)</span>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/macierz_bw.png" class="img-fluid figure-img"></p>
+<figcaption>Macierz sąsiedztwa dla siatki 3×3 i ta sama macierz po standaryzacji wierszami. Wiersze i kolumny ponumerowano zgodnie z numeracją komórek.</figcaption>
+</figure>
+</div>
+<p>Standaryzacja ma konsekwencję, o której trzeba pamiętać przy interpretacji: obszar mający 2 sąsiadów przypisuje każdemu z nich wagę 1/2, a obszar mający 8 sąsiadów — po 1/8. <strong>Pojedynczy sąsiad znaczy tym więcej, im mniej sąsiadów ma dany obszar.</strong> W zbiorze z hrabstwa Cook liczba sąsiadów waha się od 1 do 17 przy średniej 6,5, więc różnice w wadze pojedynczego sąsiada są znaczne.</p>
+</section>
+</section>
+<section id="miary-autokorelacji-przestrzennej" class="level2">
+<h2 class="anchored" data-anchor-id="miary-autokorelacji-przestrzennej">Miary autokorelacji przestrzennej</h2>
+<p>Miary autokorelacji służą do testowania, czy autokorelacja przestrzenna w danych występuje. Dzielą się na dwie grupy:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/miary_autokorelacji.png" class="img-fluid figure-img"></p>
+<figcaption>Miary autokorelacji przestrzennej.</figcaption>
+</figure>
+</div>
+<p><strong>Miary globalne</strong> to jednoliczbowe wskaźniki autokorelacji przestrzennej, czyli ogólnego podobieństwa regionów. Informują, że wartości nie są w przestrzeni rozmieszczone losowo — czyli że istnieją przesłanki, by sądzić, że podobne wartości grupują się w przestrzeni. <strong>Nie informują</strong>, gdzie te zgrupowania leżą.</p>
+<p><strong>Miary lokalne</strong> obliczane są osobno dla każdego regionu. Pozwalają odpowiedzieć na pytania: czy dany region jest otoczony regionami o wysokich czy o niskich wartościach, oraz czy jest podobny, czy różny względem swoich sąsiadów. Dzięki temu umożliwiają identyfikację klastrów.</p>
+<section id="globalna-i-morana" class="level3">
+<h3 class="anchored" data-anchor-id="globalna-i-morana">Globalna I Morana</h3>
+<p>Najstarsza miara przestrzenna, wprowadzona przez <span class="citation" data-cites="moran1950">Moran (<a href="references.html#ref-moran1950" role="doc-biblioref">1950</a>)</span>:</p>
+<p><span class="math display">\[I = \frac{n}{\sum_{i}\sum_{j} w_{ij}} \cdot
+\frac{\sum_{i}\sum_{j} w_{ij}\,(x_i - \bar{x})(x_j - \bar{x})}{\sum_{i}(x_i - \bar{x})^2}\]</span></p>
+<p>gdzie <span class="math inline">\(n\)</span> to liczba obszarów, <span class="math inline">\(x_i\)</span> — wartość w obszarze <span class="math inline">\(i\)</span>, <span class="math inline">\(\bar{x}\)</span> — średnia wartość w zbiorze, a <span class="math inline">\(w_{ij}\)</span> — waga pary obszarów. Licznik sumuje iloczyny odchyleń od średniej dla par sąsiadów: jest dodatni, gdy sąsiedzi odchylają się w tę samą stronę, a ujemny, gdy w przeciwne.</p>
+<p>Hipotezy: <span class="math inline">\(H_0\)</span> — brak autokorelacji przestrzennej; <span class="math inline">\(H_1\)</span> — autokorelacja przestrzenna. Interpretacja:</p>
+<ul>
+<li><span class="math inline">\(I = 0\)</span> — wartości rozłożone losowo,</li>
+<li><span class="math inline">\(I &gt; 0\)</span> — autokorelacja dodatnia; sąsiadujące wartości są podobne, czyli wartości podobne stykają się częściej, niż wynikałoby to z przypadku,</li>
+<li><span class="math inline">\(I &lt; 0\)</span> — autokorelacja ujemna; sąsiadujące wartości są różne.</li>
+</ul>
+<p>Dla współczynnika kradzieży w hrabstwie Cook <span class="math inline">\(I\)</span> = <strong>0,578</strong>, czyli autokorelacja wyraźnie dodatnia.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Wysoka wartość statystyki nie znaczy, że jest ona istotna
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Sama wartość statystyki nie rozstrzyga, czy odnotowana zależność nie jest dziełem przypadku. Poza policzeniem statystyki należy <strong>wykonać test</strong> określający jej istotność.</p>
+</div>
+</div>
+</section>
+<section id="globalna-c-gearyego" class="level3">
+<h3 class="anchored" data-anchor-id="globalna-c-gearyego">Globalna C Geary’ego</h3>
+<p>Statystyka C Geary’ego porównuje wartości sąsiadów bezpośrednio, przez kwadrat ich różnicy:</p>
+<p><span class="math display">\[C = \frac{n-1}{2\sum_{i}\sum_{j} w_{ij}} \cdot
+\frac{\sum_{i}\sum_{j} w_{ij}\,(x_i - x_j)^2}{\sum_{i}(x_i - \bar{x})^2}\]</span></p>
+<p>Licznik jest sumą kwadratów różnic między sąsiadami, więc statystyka jest <strong>zawsze dodatnia</strong> i mieści się w przedziale od 0 do 2:</p>
+<ul>
+<li><strong>0–1</strong> — autokorelacja dodatnia; sąsiadujące wartości są podobne (różnice małe),</li>
+<li><strong>1</strong> — brak autokorelacji przestrzennej; sąsiadujące wartości rozłożone losowo,</li>
+<li><strong>1–2</strong> — autokorelacja ujemna; sąsiadujące wartości nie są podobne (różnice duże).</li>
+</ul>
+<p>Dla danych z hrabstwa Cook <span class="math inline">\(C\)</span> = <strong>0,462</strong>, co prowadzi do tego samego wniosku co I Morana: autokorelacja dodatnia. Zwróć uwagę na <strong>przeciwny kierunek skali</strong>: w przypadku I Morana autokorelację dodatnią wskazuje wartość wysoka, a w przypadku C Geary’ego — niska.</p>
+</section>
+<section id="globalna-g-getisa-orda" class="level3">
+<h3 class="anchored" data-anchor-id="globalna-g-getisa-orda">Globalna G Getisa &amp; Orda</h3>
+<p>Statystyka G Getisa &amp; Orda jest udziałem iloczynów wartości par sąsiadujących obszarów w sumie iloczynów wszystkich par:</p>
+<p><span class="math display">\[G = \frac{\sum_{i}\sum_{j} w_{ij}\, x_i x_j}{\sum_{i}\sum_{j} x_i x_j}, \qquad j \neq i\]</span></p>
+<p>Licznik obejmuje wyłącznie pary sąsiadów, bo dla par niesąsiadujących <span class="math inline">\(w_{ij} = 0\)</span>. Jeśli wysokie wartości sąsiadują ze sobą, iloczyny w liczniku są duże i statystyka rośnie. Konstrukcja ta ma dwie konsekwencje. Po pierwsze, <strong>wszystkie wartości <span class="math inline">\(x_i\)</span> muszą być nieujemne</strong> — inaczej iloczyny mogłyby się znosić. Po drugie, statystyka <strong>wymaga wag binarnych</strong>, nie standaryzowanych wierszami.</p>
+<p>Dla danych z hrabstwa Cook <span class="math inline">\(G\)</span> = 0,0135 przy wartości oczekiwanej 0,0082. Sama wartość <span class="math inline">\(G\)</span> nie ma interpretacji w oderwaniu od wartości oczekiwanej, dlatego wynik testu podaje się jako <strong>statystykę standaryzowaną</strong>: tutaj 25,3 przy <span class="math inline">\(p\)</span> &lt; 0,001.</p>
+<p>Test weryfikuje hipotezę zerową o braku autokorelacji przestrzennej przeciwko hipotezie alternatywnej o autokorelacji <strong>dodatniej</strong>. Oznacza to, że statystyka <strong>nie mierzy autokorelacji ujemnej</strong> — rozkład szachownicowy pozostanie dla niej nieodróżnialny od losowego.</p>
+</section>
+<section id="testowanie-istotności" class="level3">
+<h3 class="anchored" data-anchor-id="testowanie-istotności">Testowanie istotności</h3>
+<p>Istotność statystyki globalnej można ocenić testem asymptotycznym albo testem opartym na <strong>symulacji</strong>. W tym drugim wielokrotnie przestawia się wartości między obszarami — zachowując sam podział na jednostki — i dla każdego takiego przestawienia liczy statystykę. Otrzymany rozkład pokazuje, jakich wartości należałoby się spodziewać, gdyby prawdziwa była hipoteza o losowości przestrzennej.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/moran_symulacja.png" class="img-fluid figure-img" style="width:60.0%"></p>
+<figcaption>Rozkład wartości I Morana w 999 symulacjach wraz z wartością obliczoną z danych.</figcaption>
+</figure>
+</div>
+<p>Dla danych z hrabstwa Cook wartości symulowane mieszczą się w przedziale od −0,055 do 0,070, czyli skupiają się wokół zera, a wartość obserwowana wynosi 0,578 i leży daleko poza tym przedziałem. Hipotezę o losowości przestrzennej odrzucamy.</p>
+<p>Istotność wyraża się <strong>pseudo <em>p</em>-value</strong>, obliczaną ze wzoru:</p>
+<p><span class="math display">\[p = \frac{N_{extreme} + 1}{N + 1}\]</span></p>
+<p>gdzie <span class="math inline">\(N_{extreme}\)</span> to liczba symulowanych wartości statystyki skrajniejszych od wartości obserwowanej, a <span class="math inline">\(N\)</span> — liczba symulacji. Przy 999 symulacjach i żadnej wartości skrajniejszej otrzymujemy <span class="math inline">\(p\)</span> = 1/1000 = 0,001 — i jest to <strong>najmniejsza wartość osiągalna</strong> przy tej liczbie symulacji. Liczba symulacji wyznacza więc dokładność wyniku.</p>
+</section>
+<section id="lokalna-i-morana" class="level3">
+<h3 class="anchored" data-anchor-id="lokalna-i-morana">Lokalna I Morana</h3>
+<p>Lokalna statystyka I Morana obliczana jest dla każdego obszaru osobno:</p>
+<p><span class="math display">\[I_i = \frac{x_i - \bar{x}}{m_2} \sum_{j} w_{ij}\,(x_j - \bar{x})
+\qquad \text{gdzie} \qquad m_2 = \frac{\sum_{i}(x_i - \bar{x})^2}{n}\]</span></p>
+<p>Jest to iloczyn odchylenia wartości w obszarze <span class="math inline">\(i\)</span> od średniej oraz sumy odchyleń jego sąsiadów, odniesiony do wariancji zbioru. Mierzy, czy region jest otoczony przez regiony o podobnych, czy o różnych wartościach — w stosunku do losowego rozmieszczenia wartości w przestrzeni:</p>
+<ul>
+<li><span class="math inline">\(I_i &gt; 0\)</span> — grupowanie wartości podobnych (wyższych albo niższych od średniej),</li>
+<li><span class="math inline">\(I_i &lt; 0\)</span> — połączenie wartości różnych, na przykład wysokiej otoczonej niskimi.</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/moran_lokalny.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<figcaption>Lokalna statystyka I Morana dla współczynnika kradzieży.</figcaption>
+</figure>
+</div>
+<p>Wartości wahają się od −2,59 do 11,74. Czerwone obszary to te, które wraz z sąsiadami tworzą zgrupowania wartości podobnych; niebieskie — obszary odstające od swojego otoczenia. Mapa ta pokazuje <strong>wartość statystyki</strong>, a nie jej istotność; podział na klastry wymaga dodatkowego kroku, opisanego niżej.</p>
+</section>
+<section id="lokalna-c-gearyego" class="level3">
+<h3 class="anchored" data-anchor-id="lokalna-c-gearyego">Lokalna C Geary’ego</h3>
+<p>Lokalna statystyka C Geary’ego pokazuje średnie różnice między obszarem a jego sąsiadami, co pomaga znaleźć wartości odstające:</p>
+<p><span class="math display">\[c_i = \sum_{j} w_{ij}\,(z_i - z_j)^2\]</span></p>
+<p>gdzie <span class="math inline">\(z_i\)</span> to <strong>wartość standaryzowana</strong> w obszarze <span class="math inline">\(i\)</span>. Statystyka jest sumą kwadratów różnic, więc <strong>nie może przyjmować wartości ujemnych</strong> — dla danych z hrabstwa Cook mieści się w przedziale od 0,00 do 24,81. Interpretacja nie opiera się więc na znaku:</p>
+<ul>
+<li><strong>niskie</strong> wartości <span class="math inline">\(c_i\)</span> wskazują na autokorelację dodatnią, czyli podobieństwo obszaru do sąsiadów,</li>
+<li><strong>wysokie</strong> wartości wskazują na autokorelację ujemną, czyli na obszar odstający od otoczenia.</li>
+</ul>
+<p>Wniosek o istotności opiera się na pseudo <em>p</em>-value wyznaczonej z permutacji, nie na samej wartości statystyki. O tym, czy wartość istotna leży po stronie „niskiej”, czy „wysokiej”, rozstrzyga jej położenie względem rozkładu statystyki w zbiorze.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/geary_lokalny_cook.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<figcaption>Lokalna statystyka C Geary’ego dla współczynnika kradzieży. Skala jest jednokierunkowa, bo statystyka nie przyjmuje wartości ujemnych.</figcaption>
+</figure>
+</div>
+<p>Rozkład wartości jest silnie asymetryczny: mediana wynosi 0,31, a maksimum 24,81. Obszary jasne to te, które niewiele różnią się od swoich sąsiadów; pojedyncze obszary ciemne odstają od otoczenia najmocniej i to one są kandydatami na wartości odstające przestrzennie. Test oparty na permutacjach wskazał <strong>323 obszary istotne</strong> przy poziomie 0,05 — z czego 203 o wartości <span class="math inline">\(c_i\)</span> poniżej mediany zbioru (podobieństwo do sąsiadów) i 120 powyżej niej (odstawanie od sąsiadów).</p>
+<p>Zwróć uwagę na różnicę w stosunku do poprzednich dwóch map: lokalna I Morana i lokalna G mają skalę dwukierunkową, bo ich znak niesie informację. Tutaj skala jest jednokierunkowa, bo wszystkie wartości są dodatnie — to bezpośrednia konsekwencja wzoru, w którym sumuje się kwadraty różnic.</p>
+</section>
+<section id="lokalna-g-getisa-orda" class="level3">
+<h3 class="anchored" data-anchor-id="lokalna-g-getisa-orda">Lokalna G Getisa &amp; Orda</h3>
+<p>Lokalna statystyka G Getisa &amp; Orda służy do identyfikacji lokalnych koncentracji przestrzennych, które nie ujawniają się w analizie globalnej. W postaci podstawowej jest to udział wartości sąsiadów w sumie wartości w całym zbiorze:</p>
+<p><span class="math display">\[G_i = \frac{\sum_{j} w_{ij}\, x_j}{\sum_{j} x_j}\]</span></p>
+<p>Tak zdefiniowana statystyka jest zawsze dodatnia, więc jej wartość sama w sobie nie ma interpretacji. Funkcje liczące ją w R zwracają <strong>wartość standaryzowaną</strong>, czyli odchylenie od wartości oczekiwanej wyrażone w jednostkach odchylenia standardowego, i dopiero dla niej obowiązują progi:</p>
+<ul>
+<li><span class="math inline">\(G_i &gt; 0\)</span> — zgrupowanie regionów o wysokich wartościach; obszar i jego sąsiedzi mają wartości wysokie. Jest to <strong>obszar wysokich wartości</strong> (ang. <em>hot spot</em>),</li>
+<li><span class="math inline">\(G_i &lt; 0\)</span> — zgrupowanie regionów o niskich wartościach, czyli <strong>obszar niskich wartości</strong> (ang. <em>cold spot</em>).</li>
+</ul>
+<p>Jako wysokie uznaje się wartości wyższe od średniej, a jako niskie — niższe od średniej. Podobnie jak miara globalna, lokalna statystyka G <strong>nie mierzy autokorelacji ujemnej</strong>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/getis_cook.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<figcaption>Lokalna statystyka G Getisa &amp; Orda. Wartości dodatnie oznaczają obszary wysokich wartości, ujemne — obszary niskich.</figcaption>
+</figure>
+</div>
+<p>Dla danych z hrabstwa Cook wartości wahają się od −2,47 do 8,11, a 462 z 788 obszarów ma wartość ujemną — co potwierdza, że funkcja zwraca wielkość standaryzowaną, a nie surowy iloraz.</p>
+</section>
+<section id="zestawienie" class="level3">
+<h3 class="anchored" data-anchor-id="zestawienie">Zestawienie</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Statystyka</th>
+<th>Autokorelacja ujemna</th>
+<th>Brak autokorelacji</th>
+<th>Autokorelacja dodatnia</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>I Morana oraz lokalna <span class="math inline">\(I_i\)</span></td>
+<td><span class="math inline">\(I &lt; 0\)</span></td>
+<td><span class="math inline">\(I = 0\)</span></td>
+<td><span class="math inline">\(I &gt; 0\)</span></td>
+</tr>
+<tr class="even">
+<td>C Geary’ego (globalna)</td>
+<td><span class="math inline">\(C &gt; 1\)</span></td>
+<td><span class="math inline">\(C = 1\)</span></td>
+<td><span class="math inline">\(C &lt; 1\)</span></td>
+</tr>
+<tr class="odd">
+<td>lokalna <span class="math inline">\(C_i\)</span></td>
+<td>wartości wysokie</td>
+<td>—</td>
+<td>wartości niskie</td>
+</tr>
+<tr class="even">
+<td>G Getisa &amp; Orda oraz lokalna <span class="math inline">\(G_i\)</span></td>
+<td>nie dotyczy</td>
+<td><span class="math inline">\(G_i = 0\)</span></td>
+<td><span class="math inline">\(G_i &gt; 0\)</span> — obszar wysokich wartości; <span class="math inline">\(G_i &lt; 0\)</span> — obszar niskich wartości</td>
+</tr>
+</tbody>
+</table>
+<p><strong>LISA</strong> (ang. <em>local indicators of spatial association</em>, lokalne wskaźniki związków przestrzennych) to nazwa zbiorcza dwóch statystyk lokalnych zaproponowanych przez <span class="citation" data-cites="anselin1995">Anselin (<a href="references.html#ref-anselin1995" role="doc-biblioref">1995</a>)</span>: lokalnej I Morana, służącej do identyfikacji klastrów wartości wysokich i niskich, oraz lokalnej C Geary’ego, pokazującej średnie różnice między obszarem a sąsiadami.</p>
+</section>
+</section>
+<section id="wykres-rozrzutu-morana" class="level2">
+<h2 class="anchored" data-anchor-id="wykres-rozrzutu-morana">Wykres rozrzutu Morana</h2>
+<p>Wykres rozrzutu Morana przedstawia zależność między wartościami zmiennej (oś pozioma) a wartościami zmiennej opóźnionej przestrzennie (oś pionowa). Linie przerywane wyznaczają średnie obu zmiennych; po standaryzacji obie wynoszą zero i dzielą wykres na cztery ćwiartki.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/moran_scatter.png" class="img-fluid figure-img" style="width:60.0%"></p>
+<figcaption>Wykres rozrzutu Morana dla współczynnika kradzieży. Zmienne standaryzowane.</figcaption>
+</figure>
+</div>
+<p><strong>Nachylenie linii regresji na wykresie rozrzutu Morana jest tożsame z globalną statystyką I Morana</strong> — dla tych danych wynosi 0,578, czyli dokładnie tyle, ile podaje statystyka globalna. Wykres jest więc graficzną reprezentacją tej statystyki.</p>
+<p>Cztery ćwiartki (ang. <em>quadrant</em>) opisują cztery możliwe relacje między obszarem a jego sąsiadami:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"></th>
+<th style="text-align: center;">Wartości niskie w regionie <span class="math inline">\(i\)</span> (L)</th>
+<th style="text-align: center;">Wartości wysokie w regionie <span class="math inline">\(i\)</span> (H)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><strong>Wartości wysokie u sąsiadów (H)</strong></td>
+<td style="text-align: center;"><strong>ćwiartka LH (Q2)</strong> — autokorelacja ujemna</td>
+<td style="text-align: center;"><strong>ćwiartka HH (Q1)</strong> — autokorelacja dodatnia</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>Wartości niskie u sąsiadów (L)</strong></td>
+<td style="text-align: center;"><strong>ćwiartka LL (Q3)</strong> — autokorelacja dodatnia</td>
+<td style="text-align: center;"><strong>ćwiartka HL (Q4)</strong> — autokorelacja ujemna</td>
+</tr>
+</tbody>
+</table>
+<p>Ćwiartka Q1 (HH) obejmuje obszary o wartościach wyższych od średniej otoczone obszarami również o wartościach wyższych od średniej; Q3 (LL) — obszary o wartościach niższych od średniej otoczone podobnymi. Obie wskazują autokorelację dodatnią. Ćwiartki Q2 (LH) i Q4 (HL) przedstawiają autokorelację ujemną: obszar odstaje od swojego otoczenia.</p>
+<section id="identyfikacja-klastrów" class="level3">
+<h3 class="anchored" data-anchor-id="identyfikacja-klastrów">Identyfikacja klastrów</h3>
+<p>Przynależność do ćwiartki sama w sobie nie wystarcza do wskazania klastra — każdy obszar leży w którejś z czterech ćwiartek. <strong>Klastry wydziela się wyłącznie z obszarów, dla których lokalna statystyka okazała się istotna statystycznie</strong>; pozostałe pozostają nieprzypisane.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/klastry_cook.png" class="img-fluid figure-img" style="width:55.0%"></p>
+<figcaption>Klastry wydzielone z lokalnej statystyki I Morana przy poziomie istotności 0,05 z korektą na wielokrotne testowanie (FDR).</figcaption>
+</figure>
+</div>
+<p>Statystyka lokalna liczona dla 788 obszarów to 788 testów wykonanych naraz, dlatego poziom istotności skorygowano metodą FDR (ang. <em>false discovery rate</em>). Bez tej korekty klastrów jest więcej: 179 obszarów zamiast 97. Korekta jest decyzją analityka i podaje się ją razem z wynikiem — rozdział <a href="11_obszarowe_autokorelacja.html" class="quarto-xref"><span>7&nbsp; Miary autokorelacji danych obszarowych</span></a> pokazuje oba warianty na innym zbiorze.</p>
+<p>Dla współczynnika kradzieży w hrabstwie Cook po korekcie istotnych okazało się <strong>97 obszarów z 788</strong>: 92 należą do klastra High-High, a 5 do typu Low-High. Pozostałe 691 obszarów nie różni się istotnie od tego, czego można oczekiwać przy losowym rozmieszczeniu wartości. Mapa pokazuje dwa zwarte obszary wysokich wartości — zachodnią i południową część Chicago — czyli dokładnie tę informację, której statystyka globalna dostarczyć nie może.</p>
+</section>
+</section>
+<section id="problem-zmiennych-jednostek-odniesienia" class="level2">
+<h2 class="anchored" data-anchor-id="problem-zmiennych-jednostek-odniesienia">Problem zmiennych jednostek odniesienia</h2>
+<p>Dane obszarowe powstają przez agregację, a sposób tej agregacji wpływa na wynik analizy. Zjawisko to nosi nazwę <strong>problemu zmiennych jednostek odniesienia</strong> (ang. <em>modifiable areal unit problem</em>, MAUP) i łączy dwa osobne problemy.</p>
+<p><strong>Problem skali</strong> (ang. <em>scale problem</em>) to zmiana informacji wywołana poziomem agregacji przestrzennej. Ta sama zmienna analizowana na poziomie gmin, powiatów i województw daje różne wyniki.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/maup.png" class="img-fluid figure-img" style="width:55.0%"></p>
+<figcaption>Problem skali: ta sama zmienna agregowana na trzech poziomach.</figcaption>
+</figure>
+</div>
+<p><strong>Problem agregacji</strong> (ang. <em>zonation problem</em>) wynika ze sposobu podziału przestrzeni na strefy. Wyniki analizy mogą się różnić w zależności od tego, jak poprowadzono granice jednostek — nawet przy zachowaniu tej samej skali, czyli tej samej liczby i wielkości jednostek.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/maup_zones.png" class="img-fluid figure-img" style="width:55.0%"></p>
+<figcaption>Problem agregacji: ta sama liczba jednostek, inny przebieg granic.</figcaption>
+</figure>
+</div>
+<p>Konsekwencja dla wniosków jest taka, że wartość miary autokorelacji opisuje <strong>zmienną w danym podziale</strong>, a nie samą zmienną. Porównywanie wartości statystyki policzonych na różnych podziałach nie ma uzasadnienia, a wnioski formułuje się zawsze z zaznaczeniem, na jakich jednostkach pracowano.</p>
+</section>
+<section id="powiązanie-z-ćwiczeniami" class="level2">
+<h2 class="anchored" data-anchor-id="powiązanie-z-ćwiczeniami">Powiązanie z ćwiczeniami</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Zagadnienie</th>
+<th>Funkcje</th>
+<th>Pakiet</th>
+<th>Gdzie wykonujesz</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>sąsiedztwo wg wspólnej granicy</td>
+<td><code>poly2nb(queen =)</code></td>
+<td><code>spdep</code></td>
+<td><a href="10_obszarowe_sasiedztwo.html" class="quarto-xref"><span>6&nbsp; Określanie sąsiedztwa danych obszarowych</span></a>, <a href="11_obszarowe_autokorelacja.html" class="quarto-xref"><span>7&nbsp; Miary autokorelacji danych obszarowych</span></a></td>
+</tr>
+<tr class="even">
+<td>sąsiedztwo wg odległości i <em>k</em> najbliższych sąsiadów</td>
+<td><code>dnearneigh()</code>, <code>knearneigh()</code>, <code>knn2nb()</code></td>
+<td><code>spdep</code></td>
+<td><a href="10_obszarowe_sasiedztwo.html" class="quarto-xref"><span>6&nbsp; Określanie sąsiedztwa danych obszarowych</span></a></td>
+</tr>
+<tr class="odd">
+<td>macierz wag przestrzennych</td>
+<td><code>nb2listw(style =)</code>, <code>nb2mat()</code>, <code>listw2mat()</code></td>
+<td><code>spdep</code></td>
+<td><a href="10_obszarowe_sasiedztwo.html" class="quarto-xref"><span>6&nbsp; Określanie sąsiedztwa danych obszarowych</span></a>, <a href="11_obszarowe_autokorelacja.html" class="quarto-xref"><span>7&nbsp; Miary autokorelacji danych obszarowych</span></a></td>
+</tr>
+<tr class="even">
+<td>zmienna opóźniona przestrzennie</td>
+<td><code>lag.listw()</code></td>
+<td><code>spdep</code></td>
+<td><a href="11_obszarowe_autokorelacja.html" class="quarto-xref"><span>7&nbsp; Miary autokorelacji danych obszarowych</span></a></td>
+</tr>
+<tr class="odd">
+<td>miary globalne</td>
+<td><code>moran.test()</code>, <code>moran.mc()</code>, <code>geary.test()</code>, <code>globalG.test()</code></td>
+<td><code>spdep</code></td>
+<td><a href="11_obszarowe_autokorelacja.html" class="quarto-xref"><span>7&nbsp; Miary autokorelacji danych obszarowych</span></a></td>
+</tr>
+<tr class="even">
+<td>miary lokalne</td>
+<td><code>localmoran()</code>, <code>localC_perm()</code>, <code>localG_perm()</code></td>
+<td><code>spdep</code></td>
+<td><a href="11_obszarowe_autokorelacja.html" class="quarto-xref"><span>7&nbsp; Miary autokorelacji danych obszarowych</span></a></td>
+</tr>
+<tr class="odd">
+<td>wykres rozrzutu i klastry</td>
+<td><code>moran.plot()</code>, <code>hotspot()</code></td>
+<td><code>spdep</code></td>
+<td><a href="11_obszarowe_autokorelacja.html" class="quarto-xref"><span>7&nbsp; Miary autokorelacji danych obszarowych</span></a></td>
+</tr>
+</tbody>
+</table>
+<p>Opis pakietów wraz z odnośnikami do dokumentacji zawiera <a href="A_pakiety.html" class="quarto-xref"><span>Załącznik A — Pakiety</span></a>, a pełne zestawienie funkcji — <a href="B_funkcje.html" class="quarto-xref"><span>Załącznik B — Funkcje</span></a>.</p>
+</section>
+<section id="literatura" class="level2">
+<h2 class="anchored" data-anchor-id="literatura">Literatura</h2>
+<ul>
+<li><span class="citation" data-cites="mgimond">Gimond (<a href="references.html#ref-mgimond" role="doc-biblioref">b.d.</a>)</span> — autokorelacja przestrzenna, macierz wag, statystyka I Morana.</li>
+<li><span class="citation" data-cites="moraga2023">Moraga (<a href="references.html#ref-moraga2023" role="doc-biblioref">2023</a>)</span> — miary autokorelacji przestrzennej, miary lokalne.</li>
+<li><span class="citation" data-cites="anselin_geoda">Anselin (<a href="references.html#ref-anselin_geoda" role="doc-biblioref">b.d.</a>)</span> — dokumentacja GeoDa: lokalna I Morana, lokalna C Geary’ego, statystyki Getisa &amp; Orda.</li>
+<li><span class="citation" data-cites="kopczewska2023">Kopczewska (<a href="references.html#ref-kopczewska2023" role="doc-biblioref">2023</a>)</span> — przegląd miar autokorelacji wraz z ich realizacją w R.</li>
+<li><span class="citation" data-cites="lovelace2025">Lovelace, Nowosad, i Muenchow (<a href="references.html#ref-lovelace2025" role="doc-biblioref">2025</a>)</span> — praca z danymi przestrzennymi w R.</li>
+</ul>
+</section>
+<section id="pytania-kontrolne" class="level2">
+<h2 class="anchored" data-anchor-id="pytania-kontrolne">Pytania kontrolne</h2>
+<ol type="1">
+<li>Czym jest autokorelacja przestrzenna i co oznacza jej brak?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Autokorelacja przestrzenna to zależność, w której obserwacje bliskie geograficznie są bardziej do siebie podobne niż obserwacje odległe; obserwuje się ją jako zgrupowania podobnych wartości albo systematyczny wzorzec przestrzenny. Jej brak to <strong>losowość przestrzenna</strong>: wartości w danym obszarze nie zależą od wartości u sąsiadów, a obserwowany wzorzec jest równie prawdopodobny jak każdy inny. Losowość przestrzenna jest hipotezą zerową analizy — celem jest jej odrzucenie.</p>
+</div>
+</div>
+</div>
+<ol start="2" type="1">
+<li>Czym różni się autokorelacja dodatnia od ujemnej i jak wygląda każda z nich na mapie?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Przy autokorelacji <strong>dodatniej</strong> sąsiadujące obszary mają wartości podobne — wysokie otoczone wysokimi, niskie otoczone niskimi — więc obszary sąsiedzkie są <strong>mniej zróżnicowane</strong>, niż wynikałoby to z losowego rozmieszczenia wartości. Na mapie widać zwarte obszary o zbliżonych wartościach.</p>
+<p>Przy autokorelacji <strong>ujemnej</strong> wartości sąsiednie różnią się od siebie, więc obszary sąsiedzkie są <strong>bardziej zróżnicowane</strong> niż przy rozmieszczeniu losowym. Skrajnym przypadkiem jest efekt szachownicy: wartości wysokie i niskie na przemian.</p>
+</div>
+</div>
+</div>
+<ol start="3" type="1">
+<li>Jak określić, czy dwa regiony ze sobą sąsiadują? Wymień kryteria i podaj konsekwencje wyboru.</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Dwa kryteria główne: <strong>wspólnej granicy</strong> (reguła <em>rook</em> — styk odcinkiem granicy; reguła <em>queen</em> — styk odcinkiem albo choćby narożnikiem) oraz <strong>odległości</strong> mierzonej między centroidami (sąsiedzi w promieniu <em>d</em>, <em>k</em> najbliższych sąsiadów, odległość odwrotna).</p>
+<p>Wybór zmienia wynik każdej miary liczonej dalej: dla przykładowego obszaru spisowego reguła queen wskazała 5 sąsiadów, kryterium odległości do 3 km — 32, a kryterium 6 najbliższych sąsiadów — 6. Dodatkowo sąsiedztwo <em>k</em> najbliższych sąsiadów <strong>nie jest symetryczne</strong>: A może być sąsiadem B, podczas gdy B nie jest sąsiadem A.</p>
+</div>
+</div>
+</div>
+<ol start="4" type="1">
+<li>Czym jest macierz sąsiedztwa i co oznaczają jej elementy?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>To tabela, w której zapisana jest informacja o występowaniu relacji sąsiedztwa między obszarami. W postaci binarnej element <span class="math inline">\(m_{ij}\)</span> wynosi 1, gdy obszar <span class="math inline">\(i\)</span> jest sąsiadem obszaru <span class="math inline">\(j\)</span>, i 0, gdy nie jest. Elementy na przekątnej są zerowe, ponieważ obszar nie jest sąsiadem samego siebie.</p>
+</div>
+</div>
+</div>
+<ol start="5" type="1">
+<li>Po co standaryzuje się macierz sąsiedztwa i co zmienia się po standaryzacji?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Standaryzacja zamienia informację o samym występowaniu sąsiedztwa na <strong>wagi</strong>, czyli miarę siły powiązania. Najczęściej stosuje się standaryzację wierszami do jedynki: <span class="math inline">\(w_{ij} = m_{ij}/w_i\)</span>, gdzie <span class="math inline">\(w_i\)</span> to liczba sąsiadów obszaru <span class="math inline">\(i\)</span>. Po standaryzacji suma wag w każdym wierszu wynosi 1, a zmienna opóźniona przestrzennie staje się po prostu średnią wartością u sąsiadów.</p>
+<p>Konsekwencja: obszar mający 2 sąsiadów przypisuje każdemu wagę 1/2, a obszar mający 8 sąsiadów — po 1/8. Pojedynczy sąsiad znaczy tym więcej, im mniej sąsiadów ma dany obszar.</p>
+</div>
+</div>
+</div>
+<ol start="6" type="1">
+<li>Czym różnią się miary globalne od lokalnych i na jakie pytanie odpowiada każda grupa?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Miary globalne</strong> sprowadzają cały zbiór do jednej liczby i odpowiadają na pytanie, czy wzorzec przestrzenny w ogóle istnieje. Nie wskazują, gdzie leżą zgrupowania podobnych wartości.</p>
+<p><strong>Miary lokalne</strong> liczone są osobno dla każdego regionu i odpowiadają na pytanie, czy dany region jest otoczony regionami o wartościach wysokich czy niskich oraz czy jest do nich podobny. Pozwalają wskazać klastry. Obie grupy są potrzebne: miara globalna bliska zeru nie wyklucza istnienia lokalnych klastrów, które wzajemnie się znoszą.</p>
+</div>
+</div>
+</div>
+<ol start="7" type="1">
+<li>Czym jest zmienna opóźniona przestrzennie i jaką rolę pełni na wykresie rozrzutu Morana?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>To ważona suma wartości u sąsiadów, <span class="math inline">\(\tilde{x}_i = \sum_j w_{ij} x_j\)</span>. Przy wagach standaryzowanych wierszami jest to średnia wartość u sąsiadów.</p>
+<p>Na wykresie rozrzutu Morana tworzy oś pionową, podczas gdy oś pozioma to wartość zmiennej w obszarze. Dzięki temu wykres zestawia obszar z jego otoczeniem, a nachylenie linii regresji równa się globalnej statystyce I Morana.</p>
+</div>
+</div>
+</div>
+<ol start="8" type="1">
+<li>Globalna statystyka C Geary’ego dla pewnego zbioru wyniosła 0,6. Co to oznacza?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Autokorelację dodatnią: sąsiadujące wartości są podobne. Statystyka C Geary’ego mieści się w przedziale od 0 do 2, przy czym przedział 0–1 oznacza autokorelację dodatnią, wartość 1 — brak autokorelacji, a przedział 1–2 — autokorelację ujemną.</p>
+<p>Zwróć uwagę na przeciwny kierunek skali niż w przypadku I Morana: tam autokorelację dodatnią wskazuje wartość <strong>wysoka</strong>, tutaj — <strong>niska</strong>.</p>
+</div>
+</div>
+</div>
+<ol start="9" type="1">
+<li>Jak czyta się wynik testu istotności opartego na symulacji i czym jest pseudo <em>p</em>-value?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>W teście wielokrotnie przestawia się wartości między obszarami — zachowując sam podział na jednostki — i dla każdego przestawienia liczy statystykę. Otrzymany rozkład pokazuje, jakich wartości należałoby oczekiwać przy prawdziwej hipotezie o losowości przestrzennej. Wniosek wyciąga się z położenia wartości obserwowanej względem tego rozkładu.</p>
+<p>Pseudo <em>p</em>-value oblicza się ze wzoru <span class="math inline">\(p = (N_{extreme} + 1)/(N + 1)\)</span>, gdzie <span class="math inline">\(N_{extreme}\)</span> to liczba symulowanych wartości skrajniejszych od obserwowanej, a <span class="math inline">\(N\)</span> — liczba symulacji. Przy 999 symulacjach najmniejsza osiągalna wartość to 0,001; liczba symulacji wyznacza więc dokładność wyniku.</p>
+</div>
+</div>
+</div>
+<ol start="10" type="1">
+<li>Statystyka I Morana wyniosła 0,45. Czy to wystarczy, by stwierdzić autokorelację przestrzenną?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Nie. Sama wartość statystyki nie rozstrzyga, czy odnotowana zależność nie jest dziełem przypadku — nawet wysokie wartości nie świadczą o tym, że statystyka jest istotna statystycznie. Poza policzeniem wartości należy wykonać test istotności: asymptotyczny albo oparty na symulacji. Dopiero wynik testu uprawnia do odrzucenia hipotezy o losowości przestrzennej.</p>
+</div>
+</div>
+</div>
+<ol start="11" type="1">
+<li>Na czym polega problem zmiennych jednostek odniesienia i co z niego wynika dla wniosków z analizy?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>MAUP łączy dwa problemy. <strong>Problem skali</strong> to zmiana wyniku wraz z poziomem agregacji: ta sama zmienna analizowana na poziomie gmin, powiatów i województw daje różne wyniki. <strong>Problem agregacji</strong> to zmiana wyniku wraz ze sposobem poprowadzenia granic jednostek, nawet przy zachowaniu tej samej liczby i wielkości jednostek.</p>
+<p>Wniosek: wartość miary autokorelacji opisuje <strong>zmienną w danym podziale</strong>, a nie samą zmienną. Porównywanie wartości policzonych na różnych podziałach nie ma uzasadnienia, a wnioski formułuje się zawsze z zaznaczeniem, na jakich jednostkach pracowano.</p>
+</div>
+</div>
+</div>
+<div id="najwazniejsze-obszarowe" class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Najważniejsze informacje — zanim przejdziesz do części praktycznej
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Autokorelacja przestrzenna oznacza, że obserwacje bliskie geograficznie są bardziej do siebie podobne niż odległe; jej brak to <strong>losowość przestrzenna</strong>, przyjmowana jako hipoteza zerowa.</li>
+<li>Autokorelacja <strong>dodatnia</strong> oznacza, że obszary sąsiednie są mniej zróżnicowane, niż wynikałoby z losowego rozmieszczenia wartości; <strong>ujemna</strong> — że są bardziej zróżnicowane (efekt szachownicy).</li>
+<li>Pomiar autokorelacji wymaga dwóch rzeczy: miary <strong>podobieństwa wartości</strong> i definicji <strong>sąsiedztwa w przestrzeni geograficznej</strong>.</li>
+<li>Sąsiedztwo wyznacza się kryterium wspólnej granicy (reguła <em>rook</em> albo <em>queen</em>) albo kryterium odległości (promień <em>d</em>, <em>k</em> najbliższych sąsiadów, odległość odwrotna); wybór kryterium zmienia wynik.</li>
+<li>Macierz wag przestrzennych powstaje w dwóch krokach: macierz sąsiedztwa, następnie standaryzacja — najczęściej wierszami do jedynki, czyli <span class="math inline">\(w_{ij} = m_{ij}/w_i\)</span>.</li>
+<li><strong>Miary globalne</strong> (I Morana, C Geary’ego, G Getisa &amp; Orda) sprowadzają zbiór do jednej liczby i nie wskazują, gdzie leżą zgrupowania; <strong>miary lokalne</strong> (lokalna <span class="math inline">\(I_i\)</span>, <span class="math inline">\(C_i\)</span>, <span class="math inline">\(G_i\)</span>) liczone są dla każdego regionu i pozwalają wskazać klastry.</li>
+<li>Progi interpretacyjne: <span class="math inline">\(I\)</span> i <span class="math inline">\(I_i\)</span> dodatnie oznaczają autokorelację dodatnią; <span class="math inline">\(C\)</span> globalne mieści się w przedziale 0–2, przy czym 0–1 to autokorelacja dodatnia, a 1 brak; <span class="math inline">\(G\)</span> i <span class="math inline">\(G_i\)</span> mierzą <strong>wyłącznie</strong> autokorelację dodatnią. Lokalna <span class="math inline">\(C_i\)</span> jest nieujemna — czyta się ją względem wartości oczekiwanej z permutacji, nie względem zera.</li>
+<li>Klastry wydziela się <strong>wyłącznie</strong> z obszarów, dla których statystyka lokalna okazała się istotna statystycznie.</li>
+<li>Wynik analizy zależy od podziału obszaru na jednostki — <strong>problem zmiennych jednostek odniesienia</strong> (MAUP) łączy problem skali agregacji i problem sposobu podziału na strefy.</li>
+</ul>
+</div>
+</div>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-anselin1995" class="csl-entry" role="listitem">
+Anselin, Luc. 1995. <span>„Local indicators of spatial association — <span>LISA</span>”</span>. <em>Geographical Analysis</em> 27 (2): 93–115.
+</div>
+<div id="ref-anselin_geoda" class="csl-entry" role="listitem">
+———. b.d. <span>„GeoDa Workbook: Exploratory Data Analysis”</span>. <a href="https://geodacenter.github.io/workbook/2a_eda/lab2a.html">https://geodacenter.github.io/workbook/2a_eda/lab2a.html</a>.
+</div>
+<div id="ref-mgimond" class="csl-entry" role="listitem">
+Gimond, Manuel. b.d. <em>Intro to GIS and Spatial Analysis</em>. <a href="https://mgimond.github.io/Spatial/">https://mgimond.github.io/Spatial/</a>.
+</div>
+<div id="ref-kopczewska2023" class="csl-entry" role="listitem">
+Kopczewska, Katarzyna. 2023. <em>Przestrzenne metody ilościowe w R</em>. Warszawa: CeDeWu.
+</div>
+<div id="ref-lovelace2025" class="csl-entry" role="listitem">
+Lovelace, Robin, Jakub Nowosad, i Jannes Muenchow. 2025. <em>Geocomputation with R</em>. 2. wyd. Boca Raton: Chapman; Hall/CRC. <a href="https://r.geocompx.org/">https://r.geocompx.org/</a>.
+</div>
+<div id="ref-moraga2023" class="csl-entry" role="listitem">
+Moraga, Paula. 2023. <em>Spatial Statistics for Data Science: Theory and Practice with R</em>. Chapman; Hall/CRC. <a href="https://www.paulamoraga.com/book-spatial/">https://www.paulamoraga.com/book-spatial/</a>.
+</div>
+<div id="ref-moran1950" class="csl-entry" role="listitem">
+Moran, Patrick A. P. 1950. <span>„Notes on continuous stochastic phenomena”</span>. <em>Biometrika</em> 37 (1/2): 17–23.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Skopiowano!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Skopiowano!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./08_punkty_odleglosc.html" class="pagination-link" aria-label="Metody oparte na odległości">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Metody oparte na odległości</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./10_obszarowe_sasiedztwo.html" class="pagination-link" aria-label="Określanie sąsiedztwa danych obszarowych">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Określanie sąsiedztwa danych obszarowych</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

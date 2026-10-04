@@ -1,0 +1,1661 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pl" xml:lang="pl"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>DANE PUNKTOWE – Statystyka przestrzenna</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./06_punkty_centrograficzne.html" rel="next">
+<link href="./04_eksploracja.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-c852b7e71cc1c09f55f367b2512aabbd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Brak wyników",
+    "search-matching-documents-text": "dopasowane dokumenty",
+    "search-copy-link-title": "Kopiuj link do wyszukiwania",
+    "search-hide-matches-text": "Ukryj dodatkowe dopasowania",
+    "search-more-match-text": "więcej dopasowań w tym dokumencie",
+    "search-more-matches-text": "więcej dopasowań w tym dokumencie",
+    "search-clear-button-title": "Wyczyść",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Anuluj",
+    "search-submit-button-title": "Zatwierdź",
+    "search-label": "Szukaj"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Przełącz pasek boczny" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./05_punkty_teoria.html">DANE PUNKTOWE</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Przełącz pasek boczny" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Szukaj" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Statystyka przestrzenna</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Szukaj"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">O skrypcie</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./01_wstep.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">WSTĘP</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_dane_przestrzenne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Dane przestrzenne w R</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./03_eksploracja_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">EKSPLORACYJNA ANALIZA DANYCH</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_eksploracja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Eksploracyjna analiza danych</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./05_punkty_teoria.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">DANE PUNKTOWE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_punkty_centrograficzne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Statystyki centrograficzne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_punkty_intensywnosc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Metody oparte na analizie intensywności</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_punkty_odleglosc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Metody oparte na odległości</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./09_obszarowe_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE OBSZAROWE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_obszarowe_sasiedztwo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Określanie sąsiedztwa danych obszarowych</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_obszarowe_autokorelacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Miary autokorelacji danych obszarowych</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./12_pola_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE POWIERZCHNIOWE CIĄGŁE PRZESTRZENNIE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13_pola_interpolacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Metody interpolacji</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14_pola_semiwariogram.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Analiza i modelowanie struktury przestrzennej</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15_pola_estymacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Geostatystyczne metody estymacji</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_pola_ocena.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Ocena jakości estymacji</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">ZADANIA I PROJEKTY</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_zadania_samodzielne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Zadania samodzielne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18_projekt1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Projekt 1: przestępczość a zmienne społeczno-ekonomiczne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19_projekt2_geostatystyka.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Projekt 2: Geostatystyka</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Załączniki</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./A_pakiety.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Pakiety</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./B_funkcje.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Funkcje</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./C_operacje.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Operacje na danych przestrzennych</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./D_slownik.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Słownik pojęć</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bibliografia</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Spis treści</h2>
+   
+  <ul>
+  <li><a href="#wprowadzenie" id="toc-wprowadzenie" class="nav-link active" data-scroll-target="#wprowadzenie">Wprowadzenie</a>
+  <ul class="collapse">
+  <li><a href="#statystyka-punktów" id="toc-statystyka-punktów" class="nav-link" data-scroll-target="#statystyka-punktów">Statystyka punktów</a></li>
+  </ul></li>
+  <li><a href="#pojęcia-podstawowe" id="toc-pojęcia-podstawowe" class="nav-link" data-scroll-target="#pojęcia-podstawowe">Pojęcia podstawowe</a>
+  <ul class="collapse">
+  <li><a href="#punkt-zdarzenie-i-znak" id="toc-punkt-zdarzenie-i-znak" class="nav-link" data-scroll-target="#punkt-zdarzenie-i-znak">Punkt, zdarzenie i znak</a></li>
+  <li><a href="#dane-oznakowane-i-nieoznakowane" id="toc-dane-oznakowane-i-nieoznakowane" class="nav-link" data-scroll-target="#dane-oznakowane-i-nieoznakowane">Dane oznakowane i nieoznakowane</a></li>
+  <li><a href="#obszar-badań-i-okno-analizy" id="toc-obszar-badań-i-okno-analizy" class="nav-link" data-scroll-target="#obszar-badań-i-okno-analizy">Obszar badań i okno analizy</a></li>
+  <li><a href="#typy-rozkładu-punktów" id="toc-typy-rozkładu-punktów" class="nav-link" data-scroll-target="#typy-rozkładu-punktów">Typy rozkładu punktów</a></li>
+  <li><a href="#całkowita-przestrzenna-przypadkowość" id="toc-całkowita-przestrzenna-przypadkowość" class="nav-link" data-scroll-target="#całkowita-przestrzenna-przypadkowość">Całkowita przestrzenna przypadkowość</a></li>
+  <li><a href="#efekt-brzegowy" id="toc-efekt-brzegowy" class="nav-link" data-scroll-target="#efekt-brzegowy">Efekt brzegowy</a></li>
+  </ul></li>
+  <li><a href="#trzy-grupy-metod" id="toc-trzy-grupy-metod" class="nav-link" data-scroll-target="#trzy-grupy-metod">Trzy grupy metod</a></li>
+  <li><a href="#statystyki-centrograficzne" id="toc-statystyki-centrograficzne" class="nav-link" data-scroll-target="#statystyki-centrograficzne">Statystyki centrograficzne</a>
+  <ul class="collapse">
+  <li><a href="#średnia-centralna" id="toc-średnia-centralna" class="nav-link" data-scroll-target="#średnia-centralna">Średnia centralna</a></li>
+  <li><a href="#mediana-centralna" id="toc-mediana-centralna" class="nav-link" data-scroll-target="#mediana-centralna">Mediana centralna</a></li>
+  <li><a href="#odległość-standardowa" id="toc-odległość-standardowa" class="nav-link" data-scroll-target="#odległość-standardowa">Odległość standardowa</a></li>
+  <li><a href="#elipsa-odchylenia-standardowego" id="toc-elipsa-odchylenia-standardowego" class="nav-link" data-scroll-target="#elipsa-odchylenia-standardowego">Elipsa odchylenia standardowego</a></li>
+  <li><a href="#przykład-cztery-statystyki-dla-zgonów-w-soho" id="toc-przykład-cztery-statystyki-dla-zgonów-w-soho" class="nav-link" data-scroll-target="#przykład-cztery-statystyki-dla-zgonów-w-soho">Przykład: cztery statystyki dla zgonów w Soho</a></li>
+  <li><a href="#zakres-wniosków" id="toc-zakres-wniosków" class="nav-link" data-scroll-target="#zakres-wniosków">Zakres wniosków</a></li>
+  </ul></li>
+  <li><a href="#metody-oparte-na-intensywności" id="toc-metody-oparte-na-intensywności" class="nav-link" data-scroll-target="#metody-oparte-na-intensywności">Metody oparte na intensywności</a>
+  <ul class="collapse">
+  <li><a href="#średnia-intensywność" id="toc-średnia-intensywność" class="nav-link" data-scroll-target="#średnia-intensywność">Średnia intensywność</a></li>
+  <li><a href="#test-zliczania-w-kwadratach" id="toc-test-zliczania-w-kwadratach" class="nav-link" data-scroll-target="#test-zliczania-w-kwadratach">Test zliczania w kwadratach</a></li>
+  <li><a href="#estymacja-gęstości-jądra" id="toc-estymacja-gęstości-jądra" class="nav-link" data-scroll-target="#estymacja-gęstości-jądra">Estymacja gęstości jądra</a></li>
+  <li><a href="#zakres-wniosków-1" id="toc-zakres-wniosków-1" class="nav-link" data-scroll-target="#zakres-wniosków-1">Zakres wniosków</a></li>
+  </ul></li>
+  <li><a href="#metody-oparte-na-odległości" id="toc-metody-oparte-na-odległości" class="nav-link" data-scroll-target="#metody-oparte-na-odległości">Metody oparte na odległości</a>
+  <ul class="collapse">
+  <li><a href="#statystyki-najbliższego-sąsiada" id="toc-statystyki-najbliższego-sąsiada" class="nav-link" data-scroll-target="#statystyki-najbliższego-sąsiada">Statystyki najbliższego sąsiada</a></li>
+  <li><a href="#wskaźnik-clarka-evansa" id="toc-wskaźnik-clarka-evansa" class="nav-link" data-scroll-target="#wskaźnik-clarka-evansa">Wskaźnik Clarka-Evansa</a></li>
+  <li><a href="#funkcje-podsumowujące" id="toc-funkcje-podsumowujące" class="nav-link" data-scroll-target="#funkcje-podsumowujące">Funkcje podsumowujące</a></li>
+  <li><a href="#obwiednia" id="toc-obwiednia" class="nav-link" data-scroll-target="#obwiednia">Obwiednia</a></li>
+  <li><a href="#zakres-wniosków-2" id="toc-zakres-wniosków-2" class="nav-link" data-scroll-target="#zakres-wniosków-2">Zakres wniosków</a></li>
+  </ul></li>
+  <li><a href="#powiązanie-z-ćwiczeniami" id="toc-powiązanie-z-ćwiczeniami" class="nav-link" data-scroll-target="#powiązanie-z-ćwiczeniami">Powiązanie z ćwiczeniami</a></li>
+  <li><a href="#literatura" id="toc-literatura" class="nav-link" data-scroll-target="#literatura">Literatura</a></li>
+  <li><a href="#pytania-kontrolne" id="toc-pytania-kontrolne" class="nav-link" data-scroll-target="#pytania-kontrolne">Pytania kontrolne</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">DANE PUNKTOWE</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Czego się nauczysz
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Po tym rozdziale potrafisz:</strong></p>
+<ul>
+<li>wyjaśnić, na jakie pytanie odpowiada analiza rozkładu przestrzennego danych punktowych,</li>
+<li>wskazać trzy grupy metod tej analizy i metody należące do każdej z nich,</li>
+<li>sformułować hipotezę zerową przyjmowaną w tej analizie,</li>
+<li>odróżnić dane punktowe oznakowane od nieoznakowanych.</li>
+</ul>
+<p><strong>Rozumiesz i umiesz zinterpretować:</strong></p>
+<ul>
+<li>średnią centralną, medianę centralną, odległość standardową i elipsę odchylenia standardowego,</li>
+<li>średnią intensywność, wynik testu zliczania w kwadratach i mapę gęstości jądra,</li>
+<li>statystyki najbliższego sąsiada oraz wskaźnik Clarka-Evansa,</li>
+<li>przebieg funkcji G i funkcji K Ripleya względem obwiedni,</li>
+<li>dlaczego efekt brzegowy zawyża odległości mierzone przy granicy obszaru badań.</li>
+</ul>
+<p><strong>Część praktyczna:</strong> <a href="06_punkty_centrograficzne.html" class="quarto-xref"><span>3&nbsp; Statystyki centrograficzne</span></a>, <a href="07_punkty_intensywnosc.html" class="quarto-xref"><span>4&nbsp; Metody oparte na analizie intensywności</span></a>, <a href="08_punkty_odleglosc.html" class="quarto-xref"><span>5&nbsp; Metody oparte na odległości</span></a>. <strong>Słownik pojęć:</strong> <a href="D_slownik.html" class="quarto-xref"><span>Załącznik D — Słownik pojęć</span></a>. <strong>Funkcje:</strong> <a href="B_funkcje.html" class="quarto-xref"><span>Załącznik B — Funkcje</span></a>.</p>
+</div>
+</div>
+<section id="wprowadzenie" class="level2">
+<h2 class="anchored" data-anchor-id="wprowadzenie">Wprowadzenie</h2>
+<p>Analiza rozkładu przestrzennego danych punktowych odpowiada na pytanie, <strong>w jaki sposób obiekty lub zdarzenia są rozmieszczone w przestrzeni</strong>. Materiałem wejściowym są same lokalizacje — współrzędne miejsc, w których coś się wydarzyło albo coś się znajduje.</p>
+<p>Klasycznym przykładem jest epidemia cholery w londyńskiej dzielnicy Soho w 1854 roku. John Snow naniósł na plan dzielnicy miejsca zgonów oraz położenie publicznych pomp wodnych.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/soho_cholera.png" class="img-fluid figure-img"></p>
+<figcaption>Zgony na cholerę (punkty) i publiczne pompy wodne (romby) w dzielnicy Soho, Londyn, 1854. Dane: <code>HistData</code>.</figcaption>
+</figure>
+</div>
+<p>Na mapie widać, że zgony nie są rozłożone równomiernie: skupiają się wokół jednej z pomp, podczas gdy w otoczeniu pozostałych jest ich niewiele. Rozmieszczenie zdarzeń nie wygląda więc na przypadkowe — a to wskazuje, że działa na nie jakiś czynnik. Analiza rozkładu punktów opisuje takie odstępstwo liczbowo i pozwala sprawdzić, czy jest ono większe od tego, co daje sam przypadek.</p>
+<p>Pytanie, <strong>dlaczego</strong> rozmieszczenie jest takie, a nie inne, wymaga odniesienia lokalizacji zdarzeń do innych zmiennych — czym zajmują się metody opisane w kolejnych częściach skryptu.</p>
+<section id="statystyka-punktów" class="level3">
+<h3 class="anchored" data-anchor-id="statystyka-punktów">Statystyka punktów</h3>
+<p><strong>Statystyka punktów</strong> to dział statystyki przestrzennej zajmujący się rozmieszczeniem zdarzeń w przestrzeni. Od pozostałych działów odróżnia ją to, czym jest dana wejściowa: nie wartość zmierzona w punkcie ani wartość zagregowana w jednostce przestrzennej, lecz <strong>sama lokalizacja zdarzenia</strong>. Zbiór takich lokalizacji nazywany jest wzorcem punktowym, a pytanie badawcze dotyczy jego struktury — czy zdarzenia rozkładają się równomiernie, czy tworzą skupiska.</p>
+<p>Zadania statystyki punktów dzielą się na dwa:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/statystyka_punktow.png" class="img-fluid figure-img"></p>
+<figcaption>Dwa zadania statystyki punktów.</figcaption>
+</figure>
+</div>
+<p><strong>Charakterystyka statystyczna</strong> opisuje zbiór punktów liczbami i rycinami: wskazuje jego środek i rozproszenie, podaje liczbę zdarzeń przypadającą na jednostkę powierzchni, pokazuje, jak daleko od siebie leżą punkty. Jest odpowiednikiem statystyk opisowych w statystyce klasycznej, z tą różnicą, że opisuje położenie, a nie wartość zmiennej.</p>
+<p><strong>Weryfikacja hipotez</strong> rozstrzyga, czy zaobserwowany obraz różni się od tego, co dałby czysty przypadek. Hipotezą zerową jest <strong>całkowita przestrzenna przypadkowość</strong> (opisana w następnej sekcji), a jej odrzucenie oznacza, że w danych istnieje struktura przestrzenna. Bez tego kroku charakterystyka statystyczna pozostaje samym opisem: pokazuje, jak zbiór wygląda, ale nie rozstrzyga, czy jego wygląd wymaga wyjaśnienia.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Przykład przewijający się przez rozdział
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Wszystkie ryciny ilustrujące metody obliczono na danych z mapy Snowa: <strong>250 adresów</strong>, pod którymi odnotowano zgony na cholerę, na fragmencie Soho o wymiarach około <strong>496 × 448 m</strong> (powierzchnia 222 138 m²). Dane są w układzie współrzędnych wyrażonym w metrach, więc wszystkie odległości podane niżej to metry.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="pojęcia-podstawowe" class="level2">
+<h2 class="anchored" data-anchor-id="pojęcia-podstawowe">Pojęcia podstawowe</h2>
+<section id="punkt-zdarzenie-i-znak" class="level3">
+<h3 class="anchored" data-anchor-id="punkt-zdarzenie-i-znak">Punkt, zdarzenie i znak</h3>
+<p><strong>Punkt</strong> (ang. <em>point</em>) to lokalizacja opisana parą współrzędnych. <strong>Zdarzenie</strong> (ang. <em>event</em>) to obiekt lub zjawisko, którego lokalizację zarejestrowano — zgon, przestępstwo, drzewo, szkoła. Dodatkowa cecha przypisana zdarzeniu nazywana jest <strong>znakiem</strong> (ang. <em>mark</em>); w terminologii systemów informacji geograficznej odpowiada mu atrybut.</p>
+</section>
+<section id="dane-oznakowane-i-nieoznakowane" class="level3">
+<h3 class="anchored" data-anchor-id="dane-oznakowane-i-nieoznakowane">Dane oznakowane i nieoznakowane</h3>
+<p>Rozróżnienie między lokalizacją a znakiem dzieli zbiory danych punktowych na dwie grupy:</p>
+<ul>
+<li><strong>dane punktowe nieoznakowane</strong> (ang. <em>unmarked spatial point pattern data</em>) — same lokalizacje, bez atrybutów,</li>
+<li><strong>dane punktowe oznakowane</strong> (ang. <em>marked spatial point pattern data</em>) — lokalizacje wraz z wartością przypisaną każdemu zdarzeniu, na przykład liczbą zgonów pod danym adresem albo średnicą drzewa.</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/punkty_oznakowane.png" class="img-fluid figure-img"></p>
+<figcaption>Ten sam zbiór przedstawiony bez znaku i ze znakiem. Po lewej każdy adres jest jednym punktem tej samej wielkości. Po prawej wielkość punktu odpowiada liczbie zgonów pod danym adresem (od 1 do 15).</figcaption>
+</figure>
+</div>
+<p>Obie mapy pokazują te same 250 lokalizacji, ale odpowiadają na inne pytania. Lewa mówi, gdzie odnotowano zgony; prawa — gdzie było ich najwięcej. Metody opisane w tym rozdziale analizują <strong>wyłącznie lokalizacje</strong>, więc stosuje się je do danych nieoznakowanych. Wszystkie zbiory używane w części praktycznej są nieoznakowane. Jeśli dane mają atrybut, a pytanie dotyczy jego wartości, właściwe są metody z pozostałych części skryptu.</p>
+</section>
+<section id="obszar-badań-i-okno-analizy" class="level3">
+<h3 class="anchored" data-anchor-id="obszar-badań-i-okno-analizy">Obszar badań i okno analizy</h3>
+<p>Zbiór punktów zawsze leży wewnątrz jakiegoś obszaru, a wynik wielu metod zależy od tego, jak ten obszar wyznaczono. Granica obszaru badań nosi nazwę <strong>okna analizy</strong> (ang. <em>window</em>). W pakiecie <code>spatstat</code>, używanym w części praktycznej, wzorzec punktowy jest obiektem klasy <code>ppp</code> (ang. <em>planar point pattern</em>) i zawiera zarówno współrzędne punktów, jak i okno analizy.</p>
+</section>
+<section id="typy-rozkładu-punktów" class="level3">
+<h3 class="anchored" data-anchor-id="typy-rozkładu-punktów">Typy rozkładu punktów</h3>
+<p>Rozmieszczenie punktów opisuje się na skali od rozproszenia do skupienia:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/rozklad_punktow.png" class="img-fluid figure-img"></p>
+<figcaption>Skala rozmieszczenia punktów: od rozproszonego (<em>dispersed</em>) do skupionego (<em>clustered</em>).</figcaption>
+</figure>
+</div>
+<p>Wyróżnia się trzy typy rozkładu, a każdy z nich mówi coś innego o procesie, który doprowadził do powstania zbioru:</p>
+<ul>
+<li><strong>losowy</strong> — na rozmieszczenie nie działa żaden czynnik albo działa wiele czynników, których wpływy wzajemnie się znoszą,</li>
+<li><strong>regularny</strong> — punkty rozmieszczone równomiernie; zwykle efekt świadomego działania, a nie procesu naturalnego,</li>
+<li><strong>skupiony</strong> — występują skupiska (klastry) punktów, co wskazuje, że na rozmieszczenie wpływa jakiś czynnik.</li>
+</ul>
+</section>
+<section id="całkowita-przestrzenna-przypadkowość" class="level3">
+<h3 class="anchored" data-anchor-id="całkowita-przestrzenna-przypadkowość">Całkowita przestrzenna przypadkowość</h3>
+<p>Punktem odniesienia dla wszystkich metod tej części jest <strong>całkowita przestrzenna przypadkowość</strong> (ang. <em>complete spatial randomness</em>, CSR). Jest to model, w którym każda lokalizacja w obszarze badań jest jednakowo prawdopodobna, a położenie każdego zdarzenia nie zależy od położenia pozostałych <span class="citation" data-cites="moraga2023">(<a href="references.html#ref-moraga2023" role="doc-biblioref">Moraga 2023</a>)</span>.</p>
+<p>Całkowita przestrzenna przypadkowość jest <strong>hipotezą zerową</strong> analizy rozkładu punktów. Jej odrzucenie oznacza, że w danych istnieje struktura przestrzenna — skupienie albo regularność. Samo odrzucenie hipotezy nie wskazuje jednak przyczyny tej struktury.</p>
+</section>
+<section id="efekt-brzegowy" class="level3">
+<h3 class="anchored" data-anchor-id="efekt-brzegowy">Efekt brzegowy</h3>
+<p>Punkt leżący blisko granicy obszaru badań może mieć swojego faktycznego najbliższego sąsiada <strong>poza</strong> tym obszarem. Sąsiad ten nie został zarejestrowany, więc zapisana odległość jest zawyżona. Zjawisko to nosi nazwę <strong>efektu brzegowego</strong> (ang. <em>edge effect</em>) i dotyczy wszystkich metod opartych na odległości.</p>
+<p>Funkcje pakietu <code>spatstat</code> udostępniają korekty brzegowe, które to obciążenie zmniejszają; wybór korekty jest decyzją analityka i pokazany jest na liczbach w <a href="08_punkty_odleglosc.html" class="quarto-xref"><span>5&nbsp; Metody oparte na odległości</span></a>. Efekt brzegowy jest jednym z trzech zagrożeń, przed którymi ostrzega literatura przedmiotu — obok niewłaściwego wyznaczenia okna analizy i stosowania opisywanych metod do wzorców próbkowanych, czyli takich, w których zarejestrowano tylko część zdarzeń <span class="citation" data-cites="paez">(<a href="references.html#ref-paez" role="doc-biblioref">Páez i Boisjoly, b.d.</a>)</span>.</p>
+</section>
+</section>
+<section id="trzy-grupy-metod" class="level2">
+<h2 class="anchored" data-anchor-id="trzy-grupy-metod">Trzy grupy metod</h2>
+<p>Metody analizy rozkładu punktów dzielą się na trzy grupy. Każda opisuje rozmieszczenie w inny sposób i żadna nie zastępuje pozostałych.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/taksonomia_punkty.png" class="img-fluid figure-img"></p>
+<figcaption>Trzy grupy metod analizy rozkładu danych punktowych wraz z metodami należącymi do każdej z nich.</figcaption>
+</figure>
+</div>
+<p>Statystyki centrograficzne podsumowują zbiór jako całość: podają jego środek i miarę rozproszenia. Metody oparte na intensywności odnoszą liczbę punktów do powierzchni obszaru badań. Metody oparte na odległości pomijają obszar i pracują na odległościach między samymi punktami.</p>
+</section>
+<section id="statystyki-centrograficzne" class="level2">
+<h2 class="anchored" data-anchor-id="statystyki-centrograficzne">Statystyki centrograficzne</h2>
+<p>Statystyki centrograficzne są <strong>przestrzennymi statystykami opisowymi</strong> — stanowią modyfikację statystyk opisowych znanych ze statystyki klasycznej i są podstawową formą opisu rozkładu przestrzennego danych punktowych. Dzielą się na dwie podgrupy:</p>
+<ul>
+<li><strong>statystyki tendencji centralnej</strong> — wyznaczają punkt, wokół którego skoncentrowane są lokalizacje badanego zjawiska,</li>
+<li><strong>statystyki dyspersji</strong> — określają, jak daleko od tego punktu rozproszone są pozostałe punkty.</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/stat_centrograficzne.png" class="img-fluid figure-img"></p>
+<figcaption>Średnia centralna, odległość standardowa i elipsa odchylenia standardowego. Źródło: <span class="citation" data-cites="mgimond">Gimond (<a href="references.html#ref-mgimond" role="doc-biblioref">b.d.</a>)</span>.</figcaption>
+</figure>
+</div>
+<section id="średnia-centralna" class="level3">
+<h3 class="anchored" data-anchor-id="średnia-centralna">Średnia centralna</h3>
+<p><strong>Średnia centralna</strong> (ang. <em>mean center</em>) to punkt o współrzędnych będących średnimi arytmetycznymi współrzędnych wszystkich punktów zbioru:</p>
+<p><span class="math display">\[\overline{x_c} = \frac{\sum_{i=1}^{n} x_i}{n} \qquad \overline{y_c} = \frac{\sum_{i=1}^{n} y_i}{n}\]</span></p>
+<p>gdzie <span class="math inline">\(x_i\)</span> i <span class="math inline">\(y_i\)</span> to współrzędne <span class="math inline">\(i\)</span>-tego punktu, a <span class="math inline">\(n\)</span> — liczba punktów w zbiorze.</p>
+<p>Jest to jedna z najczęściej stosowanych miar centrograficznych. Podobnie jak średnia arytmetyczna w statystyce klasycznej, jest <strong>silnie zależna od lokalizacji punktów skrajnych</strong>: pojedynczy punkt położony daleko od pozostałych przesuwa ją w swoją stronę.</p>
+</section>
+<section id="mediana-centralna" class="level3">
+<h3 class="anchored" data-anchor-id="mediana-centralna">Mediana centralna</h3>
+<p><strong>Mediana centralna</strong> (ang. <em>median center</em>) to punkt o współrzędnych będących medianami współrzędnych, wyznaczanymi <strong>osobno dla każdej osi</strong>:</p>
+<p><span class="math display">\[\widetilde{x_c} = \mathrm{med}(x_1, \ldots, x_n) \qquad \widetilde{y_c} = \mathrm{med}(y_1, \ldots, y_n)\]</span></p>
+<p>Mediana centralna jest odporna na wartości skrajne: pojedynczy punkt położony bardzo daleko od pozostałych przesuwa średnią centralną, a mediany centralnej praktycznie nie zmienia. Porównanie położenia obu środków jest prostym sprawdzeniem, czy średnia centralna nie została zaburzona przez nietypowe lokalizacje.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Mediana centralna a mediana geometryczna
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Tak zdefiniowana mediana centralna <strong>nie jest</strong> punktem minimalizującym sumę odległości do wszystkich punktów zbioru, nazywanym medianą geometryczną albo środkiem minimalnej odległości. Ten drugi punkt nie ma rozwiązania w postaci wzoru i wyznacza się go iteracyjnie. Część podręczników używa nazwy „mediana centralna” właśnie w tym drugim znaczeniu, dlatego przed interpretacją wyniku sprawdź, co liczy używana funkcja.</p>
+</div>
+</div>
+</section>
+<section id="odległość-standardowa" class="level3">
+<h3 class="anchored" data-anchor-id="odległość-standardowa">Odległość standardowa</h3>
+<p><strong>Odległość standardowa</strong> (ang. <em>standard distance</em>) to absolutna miara rozproszenia punktów w przestrzeni. Określa średnią odległość punktów od średniej centralnej i obliczana jest jako średnia kwadratowa tych odległości:</p>
+<p><span class="math display">\[d = \sqrt{\frac{\sum_{i=1}^{n} d_{ic}^2}{n}} \qquad \text{gdzie} \qquad d_{ic}^2 = (x_i - \overline{x_c})^2 + (y_i - \overline{y_c})^2\]</span></p>
+<p>Symbol <span class="math inline">\(d_{ic}\)</span> oznacza odległość <span class="math inline">\(i\)</span>-tego punktu od średniej centralnej.</p>
+<p>Odległość standardowa jest odpowiednikiem odchylenia standardowego w statystyce klasycznej. Wyrażona jest w jednostkach układu współrzędnych, więc dla danych w układzie odwzorowanym — w metrach. Graficznie przedstawia się ją jako okrąg o środku w średniej centralnej i promieniu równym odległości standardowej.</p>
+</section>
+<section id="elipsa-odchylenia-standardowego" class="level3">
+<h3 class="anchored" data-anchor-id="elipsa-odchylenia-standardowego">Elipsa odchylenia standardowego</h3>
+<p><strong>Elipsa odchylenia standardowego</strong> (ang. <em>standard deviational ellipse</em>) pozwala określić kierunki rozrzutu punktów w przestrzeni. Opisują ją trzy parametry:</p>
+<ul>
+<li><span class="math inline">\(s_x\)</span>, <span class="math inline">\(s_y\)</span> — długości dwóch prostopadłych półosi elipsy,</li>
+<li><span class="math inline">\(\theta\)</span> — kąt obrotu elipsy, czyli kierunek, w którym punkty są najbardziej rozproszone.</li>
+</ul>
+<p>Odległość standardowa podaje jedną liczbę opisującą rozproszenie we wszystkich kierunkach jednocześnie, a elipsa rozdziela je na dwa kierunki prostopadłe. Stosunek dłuższej półosi do krótszej mówi, jak silnie rozkład jest wydłużony: wartość bliska 1 oznacza rozproszenie jednakowe we wszystkich kierunkach.</p>
+</section>
+<section id="przykład-cztery-statystyki-dla-zgonów-w-soho" class="level3">
+<h3 class="anchored" data-anchor-id="przykład-cztery-statystyki-dla-zgonów-w-soho">Przykład: cztery statystyki dla zgonów w Soho</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/centrograficzne_soho.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<figcaption>Statystyki centrograficzne dla 250 adresów ze zgonami na cholerę: średnia centralna, mediana centralna, okrąg o promieniu równym odległości standardowej oraz elipsa odchylenia standardowego.</figcaption>
+</figure>
+</div>
+<p>Dla tego zbioru:</p>
+<ul>
+<li><strong>średnia centralna i mediana centralna leżą 11 m od siebie</strong> — bardzo blisko jak na obszar o rozmiarach ok. 500 × 450 m. Oznacza to, że w zbiorze nie ma pojedynczych adresów położonych tak daleko od pozostałych, by przesunąć średnią;</li>
+<li><strong>odległość standardowa wynosi 137 m</strong> — tyle wynosi przeciętne oddalenie adresu od środka zbioru. Sama ta liczba niewiele mówi; nabiera znaczenia w porównaniu z innym zbiorem albo innym okresem;</li>
+<li><strong>półosie elipsy wynoszą 111 m i 160 m</strong>, a ich stosunek 1,45 oznacza rozkład umiarkowanie wydłużony. Kąt obrotu <span class="math inline">\(\theta\)</span> = 66,5° wskazuje kierunek największego rozproszenia.</li>
+</ul>
+</section>
+<section id="zakres-wniosków" class="level3">
+<h3 class="anchored" data-anchor-id="zakres-wniosków">Zakres wniosków</h3>
+<p>Statystyki centrograficzne opisują zbiór punktów jako całość i <strong>nie rozstrzygają</strong>, czy rozkład jest losowy, regularny czy skupiony. Pojedyncza wartość odległości standardowej nic nie znaczy bez punktu odniesienia — nabiera znaczenia dopiero w porównaniu z innym zbiorem danych albo z innym okresem. Typ rozkładu rozstrzygają metody oparte na odległości.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Elipsa opisuje też kształt obszaru badań
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Punkty leżą zawsze wewnątrz jakiegoś obszaru, a jeśli obszar ten jest wydłużony, to <strong>każdy</strong> rozkład punktów w jego wnętrzu — również całkowicie losowy — da wydłużoną elipsę. Zanim uznasz kierunek elipsy za właściwość badanego zjawiska, porównaj go z kierunkiem samego obszaru analizy. Przykład liczbowy zawiera <a href="06_punkty_centrograficzne.html" class="quarto-xref"><span>3&nbsp; Statystyki centrograficzne</span></a>.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="metody-oparte-na-intensywności" class="level2">
+<h2 class="anchored" data-anchor-id="metody-oparte-na-intensywności">Metody oparte na intensywności</h2>
+<p>Metody oparte na intensywności analizują rozkład przestrzenny punktów <strong>pod względem badanego obszaru</strong>. Stosowane są między innymi w epidemiologii i kryminologii, gdzie pytanie brzmi, czy natężenie obserwowanych zjawisk jest w obszarze jednorodne, czy zmienia się w przestrzeni.</p>
+<section id="średnia-intensywność" class="level3">
+<h3 class="anchored" data-anchor-id="średnia-intensywność">Średnia intensywność</h3>
+<p>Jeśli przyjmuje się, że intensywność zdarzeń jest stała w całym obszarze, opisuje ją jedna liczba — <strong>średnia intensywność</strong>, czyli liczba zdarzeń przypadająca na jednostkę powierzchni:</p>
+<p><span class="math display">\[\lambda = \frac{n}{a}\]</span></p>
+<p>gdzie <span class="math inline">\(n\)</span> to liczba zdarzeń, a <span class="math inline">\(a\)</span> — powierzchnia obszaru badań.</p>
+<p>Dla zbioru z Soho <span class="math inline">\(n\)</span> = 250, a powierzchnia analizowanego fragmentu wynosi 222 138 m², więc <span class="math inline">\(\lambda\)</span> = 0,001125 zdarzenia na metr kwadratowy, czyli <strong>11,25 adresu ze zgonem na hektar</strong>.</p>
+<p>Wartość ta zależy od tego, jaki obszar uznano za obszar badań. Gdyby zamiast całego fragmentu dzielnicy wziąć sam kwartał wokół skupienia zgonów, powierzchnia byłaby kilkakrotnie mniejsza, a intensywność odpowiednio większa — przy tych samych punktach.</p>
+</section>
+<section id="test-zliczania-w-kwadratach" class="level3">
+<h3 class="anchored" data-anchor-id="test-zliczania-w-kwadratach">Test zliczania w kwadratach</h3>
+<p>Założenie o stałej intensywności sprawdza <strong>test zliczania w kwadratach</strong> (ang. <em>quadrat count test</em>). Przebiega w trzech krokach:</p>
+<ol type="1">
+<li>podział obszaru badań na równe kwadraty,</li>
+<li>zliczenie punktów w każdym kwadracie,</li>
+<li>porównanie zliczeń z wartościami oczekiwanymi, czyli z sytuacją, w której w każdym kwadracie jest ta sama liczba punktów.</li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/kwadraty_soho.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<figcaption>Zliczenia adresów w siatce 3×3 nałożonej na analizowany fragment Soho.</figcaption>
+</figure>
+</div>
+<p>Przy 250 punktach i 9 oczkach wartość oczekiwana wynosi 27,8 punktu na oczko. Zliczenia rzeczywiste wahają się od 2 do 60: w górnym rzędzie jest ich 2, 12 i 10, a w środkowym i dolnym — od 14 do 60. Już sam ten rozrzut sugeruje, że intensywność nie jest stała.</p>
+<p>Statystykę testową oblicza się jako sumę po wszystkich oczkach <span class="citation" data-cites="mgimond paez">(<a href="references.html#ref-mgimond" role="doc-biblioref">Gimond, b.d.</a>; <a href="references.html#ref-paez" role="doc-biblioref">Páez i Boisjoly, b.d.</a>)</span>:</p>
+<p><span class="math display">\[X^2 = \sum_{i=1}^{m} \frac{(O_i - E_i)^2}{E_i}\]</span></p>
+<p>gdzie <span class="math inline">\(O_i\)</span> to zliczenie obserwowane w oczku <span class="math inline">\(i\)</span>, <span class="math inline">\(E_i\)</span> — zliczenie oczekiwane, a <span class="math inline">\(m\)</span> — liczba oczek. Statystykę porównuje się z rozkładem <span class="math inline">\(\chi^2\)</span> o <span class="math inline">\(m - 1\)</span> stopniach swobody. Warunkiem stosowalności testu jest <strong>wartość oczekiwana większa od 5 w każdym oczku</strong>; przy drobniejszej siatce warunek ten przestaje być spełniony i wtedy stosuje się wariant oparty na symulacji Monte Carlo.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/kwadraty_test_soho.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<figcaption>Wynik testu zliczania w kwadratach dla zgonów w Soho. W każdym oczku podane są trzy liczby.</figcaption>
+</figure>
+</div>
+<p>Trzy liczby w każdym oczku oznaczają kolejno:</p>
+<ul>
+<li><strong>lewa górna</strong> — zliczenie <strong>obserwowane</strong> <span class="math inline">\(O_i\)</span>, czyli liczba punktów, które faktycznie wpadły do tego oczka,</li>
+<li><strong>prawa górna</strong> — zliczenie <strong>oczekiwane</strong> <span class="math inline">\(E_i\)</span>, to samo dla wszystkich oczek i równe <span class="math inline">\(n/m\)</span> = 250/9 = 27,8,</li>
+<li><strong>dolna</strong> — <strong>residuum Pearsona</strong>, czyli <span class="math inline">\((O_i - E_i)/\sqrt{E_i}\)</span>. Pokazuje, o ile odchyleń standardowych zliczenie w tym oczku odbiega od oczekiwanego. Wartość dodatnia oznacza więcej punktów, niż wynikałoby z jednorodnej intensywności, ujemna — mniej.</li>
+</ul>
+<p>Residua pokazują, <strong>gdzie</strong> leży źródło odstępstwa: w dolnym środkowym oczku residuum wynosi 6,1 (60 punktów wobec 27,8 oczekiwanych), a w lewym górnym −4,9 (2 punkty wobec 27,8). Test chi-kwadrat daje dla tych danych <span class="math inline">\(X^2\)</span> = 123,6 przy 8 stopniach swobody i <span class="math inline">\(p\)</span> &lt; 0,001, więc hipotezę o stałej intensywności odrzucamy: zdarzenia nie rozkładają się w obszarze równomiernie.</p>
+<p>Wynik zależy od przyjętej liczby oczek. Ten sam zbiór podzielony na siatkę 2×2 i 4×4 może dać różne rozstrzygnięcia, ponieważ każda siatka opisuje zmienność na innej skali. Siatka zbyt drobna łamie przy tym warunek <span class="math inline">\(E_i &gt; 5\)</span>.</p>
+</section>
+<section id="estymacja-gęstości-jądra" class="level3">
+<h3 class="anchored" data-anchor-id="estymacja-gęstości-jądra">Estymacja gęstości jądra</h3>
+<p><strong>Estymacja gęstości jądra</strong> (ang. <em>kernel density estimation</em>, KDE) opisuje intensywność jako wielkość zmienną w przestrzeni. Metoda wykorzystuje <strong>ruchome okno</strong> do obliczenia lokalnej intensywności dla kolejnych podzbiorów badanego obszaru.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/kernelplot.png" class="img-fluid figure-img"></p>
+<figcaption>Estymacja gęstości jądra: ruchome okno i wynikowa powierzchnia intensywności. Źródło: <span class="citation" data-cites="moraga2023">Moraga (<a href="references.html#ref-moraga2023" role="doc-biblioref">2023</a>)</span>.</figcaption>
+</figure>
+</div>
+<p>Ruchome okno definiuje się przez ustawienie parametrów <strong>jądra</strong> (ang. <em>kernel</em>) — jego kształtu oraz rozmiaru, nazywanego szerokością pasma (ang. <em>bandwidth</em>). Jądro nie tylko wyznacza kształt i rozmiar okna, lecz może także ważyć punkty według zadanej funkcji; często stosuje się w tej roli funkcję gaussowską.</p>
+<p>Wynikiem jest siatka rastrowa, w której każde oczko ma przypisaną wartość intensywności obliczoną dla obszaru o wielkości ruchomego okna wyśrodkowanego na tym oczku. Rozdzielczość komórki wynikowej jest zawsze mniejsza niż rozmiar ruchomego okna.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/kde_soho.png" class="img-fluid figure-img"></p>
+<figcaption>Gęstość jądra dla zgonów w Soho przy dwóch szerokościach pasma. Punkty zaznaczono na biało.</figcaption>
+</figure>
+</div>
+<p>Obie mapy przedstawiają ten sam zbiór. Przy paśmie 20 m widać kilkanaście osobnych ognisk odpowiadających pojedynczym ulicom i kwartałom. Przy paśmie 60 m obraz jest wygładzony i zostaje jedno wyraźne maksimum w środkowo-południowej części obszaru. <strong>Szerokość pasma nie wynika z danych</strong> — wybiera ją analityk, a wybór rozstrzyga, czy na mapie zobaczy się wiele małych skupień, czy jedno duże.</p>
+</section>
+<section id="zakres-wniosków-1" class="level3">
+<h3 class="anchored" data-anchor-id="zakres-wniosków-1">Zakres wniosków</h3>
+<p>Żadne z trzech założeń — zasięg obszaru badań, liczba kwadratów, szerokość pasma — nie wynika z danych. Wybiera je analityk i musi podać je razem z wynikiem.</p>
+</section>
+</section>
+<section id="metody-oparte-na-odległości" class="level2">
+<h2 class="anchored" data-anchor-id="metody-oparte-na-odległości">Metody oparte na odległości</h2>
+<p>Metody oparte na odległości wykorzystują informację o odległości między każdą lokalizacją pomiaru lub obserwacji a najbliższym innym pomiarem lub obserwacją. W odróżnieniu od metod opartych na intensywności nie wymagają dzielenia obszaru na fragmenty, więc ich wynik nie zależy od wyboru siatki ani szerokości pasma.</p>
+<section id="statystyki-najbliższego-sąsiada" class="level3">
+<h3 class="anchored" data-anchor-id="statystyki-najbliższego-sąsiada">Statystyki najbliższego sąsiada</h3>
+<p>Podstawą jest wektor odległości od każdego punktu do jego najbliższego sąsiada. Wektor ten podsumowuje się tak jak każdą inną zmienną ilościową — wartością minimalną i maksymalną, średnią, medianą i kwantylami — oraz przedstawia na histogramie.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/nndist_soho.png" class="img-fluid figure-img"></p>
+<figcaption>Rozkład odległości do najbliższego sąsiada dla 250 adresów w Soho.</figcaption>
+</figure>
+</div>
+<p>Dla tego zbioru odległości wynoszą od 2 m do 90 m, mediana to 8 m, a średnia 10 m. Odczyt mediany mówi, że <strong>połowa adresów ma innego adresu ze zgonem nie dalej niż 8 metrów</strong>. Histogram jest wyraźnie prawostronnie asymetryczny: zdecydowana większość odległości mieści się poniżej 20 m, a pojedyncze adresy są oddalone o kilkadziesiąt metrów. Rozbieżność między medianą (8 m) a średnią (10 m) sygnalizuje właśnie te nieliczne izolowane lokalizacje.</p>
+</section>
+<section id="wskaźnik-clarka-evansa" class="level3">
+<h3 class="anchored" data-anchor-id="wskaźnik-clarka-evansa">Wskaźnik Clarka-Evansa</h3>
+<p><strong>Wskaźnik Clarka-Evansa</strong> <span class="citation" data-cites="clark1954">(<a href="references.html#ref-clark1954" role="doc-biblioref">Clark i Evans 1954</a>)</span> to stosunek rzeczywistej średniej odległości od najbliższego sąsiada do odległości oczekiwanej przy rozmieszczeniu losowym. Jest jedną liczbą opisującą cały zbiór:</p>
+<ul>
+<li><span class="math inline">\(R &lt; 1\)</span> — punkty leżą bliżej siebie, niż wynikałoby z rozmieszczenia losowego, co wskazuje na występowanie skupień,</li>
+<li><span class="math inline">\(R = 1\)</span> — rozmieszczenie losowe,</li>
+<li><span class="math inline">\(R &gt; 1\)</span> — rozmieszczenie bardziej regularne; dla regularnej siatki heksagonalnej wskaźnik przyjmuje wartość 2,15.</li>
+</ul>
+<p>Dla zgonów w Soho wskaźnik wynosi <strong>0,675</strong> bez korekty brzegowej i <strong>0,629</strong> z korektą <code>cdf</code> — w obu przypadkach wyraźnie mniej niż 1: adresy leżą bliżej siebie, niż wynikałoby z rozmieszczenia losowego. Jest to ta sama informacja, którą daje test zliczania w kwadratach, ale uzyskana bez dzielenia obszaru na oczka. Korekta brzegowa jest decyzją analityka i w części praktycznej podajemy ją jawnie (<a href="08_punkty_odleglosc.html" class="quarto-xref"><span>5&nbsp; Metody oparte na odległości</span></a>).</p>
+</section>
+<section id="funkcje-podsumowujące" class="level3">
+<h3 class="anchored" data-anchor-id="funkcje-podsumowujące">Funkcje podsumowujące</h3>
+<p><strong>Funkcje podsumowujące</strong> (ang. <em>summary functions</em>) porównują wartości empiryczne, obliczone na podstawie danych, z wartościami teoretycznymi wynikającymi z rozmieszczenia losowego — i robią to <strong>w funkcji odległości</strong>, a nie dla jednej liczby.</p>
+<p><strong>Funkcja G</strong> podsumowuje rozkład odległości do najbliższego sąsiada w postaci dystrybuanty (ang. <em>cumulative distribution function</em>). Wartość <span class="math inline">\(G(r)\)</span> to udział punktów, których najbliższy sąsiad leży nie dalej niż <span class="math inline">\(r\)</span>. Funkcja G patrzy wyłącznie na najbliższego sąsiada, więc <strong>operuje tylko w jednej skali</strong>. Porównanie krzywej empirycznej <span class="math inline">\(G_{emp}\)</span> z teoretyczną <span class="math inline">\(G_t\)</span> czyta się następująco:</p>
+<ul>
+<li><span class="math inline">\(G_{emp} &gt; G_t\)</span> — punkty zlokalizowane bliżej, niż to wynika z rozkładu losowego, co może wskazywać na istnienie klastrów,</li>
+<li><span class="math inline">\(G_{emp} &lt; G_t\)</span> — punkty zlokalizowane dalej, niż to wynika z rozkładu losowego, co może wskazywać na rozkład regularny lub rozproszony.</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/funkcja_g_soho.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<figcaption>Funkcja G dla zgonów w Soho. Linia ciągła — krzywa empiryczna, linia przerywana — krzywa teoretyczna dla rozmieszczenia losowego.</figcaption>
+</figure>
+</div>
+<p>Krzywa empiryczna biegnie <strong>powyżej</strong> teoretycznej na zakresie od około 6 do 37 m: przy <span class="math inline">\(r\)</span> = 10 m sąsiada w promieniu 10 m ma 71% adresów, podczas gdy przy rozmieszczeniu losowym byłoby ich 30%. Odczyt ten wskazuje na skupienie punktów. Powyżej 37 m obie krzywe zbiegają się do jedynki, bo na takiej odległości każdy adres ma już jakiegoś sąsiada.</p>
+<p>Przebieg funkcji G wygląda inaczej dla każdego z czterech typów próbkowania opisanych wyżej:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/funkcja_g_probkowanie.png" class="img-fluid figure-img"></p>
+<figcaption>Funkcja G dla czterech typów próbkowania. Linia ciągła — krzywa empiryczna, przerywana — teoretyczna.</figcaption>
+</figure>
+</div>
+<p>Wskaźniki Clarka-Evansa podane niżej policzono bez korekty brzegowej.</p>
+<ul>
+<li><strong>Losowe</strong> — krzywa empiryczna biegnie blisko teoretycznej na całym zakresie; rozkład jest nieodróżnialny od losowego (wskaźnik Clarka-Evansa 1,00).</li>
+<li><strong>Regularne</strong> — krzywa jest schodkiem: do 1900 m wynosi 0, a potem skacze do 1. Wszystkie punkty mają najbliższego sąsiada w <strong>dokładnie tej samej</strong> odległości 1900 m, bo leżą w węzłach siatki. Do tego progu krzywa leży poniżej teoretycznej, czyli punkty są od siebie dalej, niż wynikałoby z losowania (wskaźnik 1,98).</li>
+<li><strong>Losowe stratyfikowane</strong> — krzywa leży poniżej teoretycznej, ale łagodnie: losowanie jednego punktu w każdej komórce siatki wymusza pewną regularność, słabszą niż przy próbkowaniu regularnym (wskaźnik 1,32).</li>
+<li><strong>Preferencyjne</strong> — krzywa leży wyraźnie powyżej teoretycznej i osiąga 1 już około 1000 m; punkty leżą znacznie bliżej siebie, niż wynikałoby z losowania (wskaźnik 0,37).</li>
+</ul>
+<p><strong>Funkcja K Ripleya</strong> odpowiada na pokrewne pytanie przy innej definicji sąsiedztwa: zlicza <strong>wszystkie</strong> punkty leżące w otoczeniu o promieniu <span class="math inline">\(r\)</span>, nie tylko najbliższy. Dzięki temu analizuje wzorzec przestrzenny <strong>na wielu skalach</strong> jednocześnie. Interpretacja jest analogiczna: <span class="math inline">\(K_{emp} &gt; K_t\)</span> wskazuje na skupienie punktów, a <span class="math inline">\(K_{emp} &lt; K_t\)</span> — na ich rozrzut, czyli sytuację, w której punkty są otoczone przez mniejszą liczbę punktów, niż można by oczekiwać przy rozmieszczeniu losowym <span class="citation" data-cites="mgimond">(<a href="references.html#ref-mgimond" role="doc-biblioref">Gimond, b.d.</a>)</span>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/funkcja_k_soho.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<figcaption>Funkcja K Ripleya dla zgonów w Soho.</figcaption>
+</figure>
+</div>
+<p>Krzywa empiryczna leży powyżej teoretycznej od około 6 m aż do końca zakresu (112 m), co prowadzi do tego samego wniosku co funkcja G — z tą różnicą, że dotyczy on nie tylko najbliższego otoczenia, ale całej skali kilkudziesięciu metrów. Funkcja G przestaje odróżniać rozkłady powyżej 37 m, bo tam osiąga już wartość 1; funkcja K opisuje strukturę dalej.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/funkcja_k_probkowanie.png" class="img-fluid figure-img"></p>
+<figcaption>Funkcja K Ripleya dla czterech typów próbkowania.</figcaption>
+</figure>
+</div>
+<p>Odczyt jest zgodny z funkcją G, ale obejmuje szerszy zakres odległości. Dla próbkowania <strong>losowego</strong> krzywa empiryczna pokrywa się z teoretyczną na małych odległościach. Dla <strong>regularnego</strong> jest schodkowa i do około 2500 m leży poniżej teoretycznej. Dla <strong>losowego stratyfikowanego</strong> leży poniżej teoretycznej na całym zakresie. Dla <strong>preferencyjnego</strong> biegnie wyraźnie powyżej, i to już od najmniejszych odległości.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Odczyt na dużych odległościach
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Powyższe krzywe policzono bez korekty brzegowej. Przy dużych promieniach otoczenie punktu wystaje poza okno analizy, więc zliczana jest tylko jego część i krzywa empiryczna jest zaniżona. Widać to na panelach „losowe” i „stratyfikowane”, gdzie krzywa oddala się od teoretycznej w prawej części wykresu. Wniosek o typie rozkładu wyciąga się więc z zakresu małych odległości względem rozmiaru obszaru albo stosuje korektę brzegową.</p>
+</div>
+</div>
+</section>
+<section id="obwiednia" class="level3">
+<h3 class="anchored" data-anchor-id="obwiednia">Obwiednia</h3>
+<p>Krzywa teoretyczna opisuje wartość <strong>przeciętną</strong> przy rozmieszczeniu losowym, a pojedyncza realizacja takiego rozmieszczenia od tej przeciętnej odbiega. Samo porównanie krzywej empirycznej z teoretyczną mówi więc, w którą stronę odbiega rozmieszczenie, ale nie rozstrzyga, czy odstępstwo jest większe od zwykłej zmienności losowania.</p>
+<p>Rozstrzyga to <strong>obwiednia</strong> (ang. <em>envelope</em>). Buduje się ją przez symulację: generuje się wiele zbiorów punktów przy hipotezie zerowej o całkowitej przestrzennej przypadkowości, dla każdego z nich oblicza się funkcję G lub K, a z otrzymanego zbioru krzywych wyznacza się pas wartości. Pas ten jest obszarem nieodrzucania hipotezy zerowej, a wniosek odczytuje się z położenia krzywej empirycznej względem niego <span class="citation" data-cites="moraga2023">(<a href="references.html#ref-moraga2023" role="doc-biblioref">Moraga 2023</a>)</span>:</p>
+<ul>
+<li>krzywa <strong>wewnątrz</strong> obwiedni — rozkład nie różni się istotnie od losowego,</li>
+<li>krzywa <strong>powyżej</strong> obwiedni — rozkład istotnie skupiony,</li>
+<li>krzywa <strong>poniżej</strong> obwiedni — rozkład istotnie rozproszony.</li>
+</ul>
+<p>Sposób budowy pasa rozstrzyga, jak wolno go czytać. Obwiednia <strong>jednoczesna</strong> ma stałą szerokość i pozwala ocenić <strong>całą krzywę naraz</strong>; jej poziom istotności wynosi <span class="math inline">\(\alpha = \texttt{nrank}/(1 + \texttt{nsim})\)</span>. Obwiednia <strong>punktowa</strong>, zwracana domyślnie, jest testem wyłącznie przy jednej, z góry ustalonej wartości <span class="math inline">\(r\)</span> — szczegóły i konsekwencje odczytywania jej jako testu całej krzywej omawia <a href="08_punkty_odleglosc.html" class="quarto-xref"><span>5&nbsp; Metody oparte na odległości</span></a>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/obwiednia_soho.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<figcaption>Funkcja G z obwiednią jednoczesną wyznaczoną na podstawie 99 symulacji przy <code>nrank = 5</code>, czyli na poziomie istotności 0,05. Szary pas to obwiednia, linia ciągła — krzywa empiryczna, przerywana — teoretyczna.</figcaption>
+</figure>
+</div>
+<p>Krzywa empiryczna wychodzi <strong>ponad</strong> obwiednię. Rozkład zgonów jest więc <strong>istotnie skupiony</strong>: odstępstwo od rozmieszczenia losowego jest większe niż zmienność, jakiej można oczekiwać przy samym losowaniu. Wniosek jest przy tym <strong>binarny</strong> i dotyczy całej krzywej łącznie — obwiednia jednoczesna nie wskazuje, <strong>przy jakich odległościach</strong> odstępstwo występuje.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Obwiednia jest wynikiem procedury losowej
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Każde uruchomienie symulacji daje nieco inny pas. Aby wynik był powtarzalny, przed obliczeniem obwiedni ustawia się ziarno generatora liczb losowych. Dwie osoby, które tego nie zrobią, otrzymają dwie różne obwiednie dla tych samych danych.</p>
+</div>
+</div>
+</section>
+<section id="zakres-wniosków-2" class="level3">
+<h3 class="anchored" data-anchor-id="zakres-wniosków-2">Zakres wniosków</h3>
+<p>Metody oparte na odległości rozstrzygają, <strong>czy</strong> i <strong>na jakiej odległości</strong> rozmieszczenie punktów odbiega od losowego. Nie wskazują natomiast, <strong>gdzie</strong> w obszarze badań leżą miejsca zagęszczone — to pytanie należy do metod opartych na intensywności.</p>
+</section>
+</section>
+<section id="powiązanie-z-ćwiczeniami" class="level2">
+<h2 class="anchored" data-anchor-id="powiązanie-z-ćwiczeniami">Powiązanie z ćwiczeniami</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Grupa metod</th>
+<th>Funkcje</th>
+<th>Pakiet</th>
+<th>Gdzie wykonujesz</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>statystyki centrograficzne</td>
+<td><code>center_mean()</code>, <code>center_median()</code>, <code>std_distance()</code>, <code>std_dev_ellipse()</code></td>
+<td><code>sfdep</code></td>
+<td><a href="06_punkty_centrograficzne.html" class="quarto-xref"><span>3&nbsp; Statystyki centrograficzne</span></a></td>
+</tr>
+<tr class="even">
+<td>przygotowanie wzorca punktowego</td>
+<td><code>as.owin()</code>, <code>as.ppp()</code>, <code>rescale()</code></td>
+<td><code>spatstat</code></td>
+<td><a href="07_punkty_intensywnosc.html" class="quarto-xref"><span>4&nbsp; Metody oparte na analizie intensywności</span></a></td>
+</tr>
+<tr class="odd">
+<td>oparte na intensywności</td>
+<td><code>quadratcount()</code>, <code>quadrat.test()</code>, <code>density()</code></td>
+<td><code>spatstat</code></td>
+<td><a href="07_punkty_intensywnosc.html" class="quarto-xref"><span>4&nbsp; Metody oparte na analizie intensywności</span></a></td>
+</tr>
+<tr class="even">
+<td>oparte na odległości</td>
+<td><code>nndist()</code>, <code>clarkevans()</code>, <code>clarkevans.test()</code>, <code>Gest()</code>, <code>Kest()</code>, <code>envelope()</code></td>
+<td><code>spatstat</code></td>
+<td><a href="08_punkty_odleglosc.html" class="quarto-xref"><span>5&nbsp; Metody oparte na odległości</span></a></td>
+</tr>
+</tbody>
+</table>
+<p>Opis pakietów wraz z odnośnikami do dokumentacji zawiera <a href="A_pakiety.html" class="quarto-xref"><span>Załącznik A — Pakiety</span></a>, a pełne zestawienie funkcji — <a href="B_funkcje.html" class="quarto-xref"><span>Załącznik B — Funkcje</span></a>.</p>
+</section>
+<section id="literatura" class="level2">
+<h2 class="anchored" data-anchor-id="literatura">Literatura</h2>
+<ul>
+<li><span class="citation" data-cites="mgimond">Gimond (<a href="references.html#ref-mgimond" role="doc-biblioref">b.d.</a>)</span> — centrografia, metody oparte na intensywności i na odległości.</li>
+<li><span class="citation" data-cites="paez">Páez i Boisjoly (<a href="references.html#ref-paez" role="doc-biblioref">b.d.</a>)</span> — analiza wzorców punktowych, rozdziały 9–17: zliczanie w kwadratach, funkcje G i K, testowanie hipotez przy użyciu obwiedni, ograniczenia metod.</li>
+<li><span class="citation" data-cites="moraga2023">Moraga (<a href="references.html#ref-moraga2023" role="doc-biblioref">2023</a>)</span> — wzorce punktowe, całkowita przestrzenna przypadkowość, funkcje G i K.</li>
+<li><span class="citation" data-cites="lovelace2025">Lovelace, Nowosad, i Muenchow (<a href="references.html#ref-lovelace2025" role="doc-biblioref">2025</a>)</span> — praca z danymi przestrzennymi w R.</li>
+<li><span class="citation" data-cites="anselin_cluster">Anselin (<a href="references.html#ref-anselin_cluster" role="doc-biblioref">b.d.</a>)</span> — kurs wideo <em>Spatial Cluster Analysis</em> przygotowany przez Luca Anselina. Części dotyczące danych punktowych: <a href="https://www.youtube.com/watch?v=oQ9JzWkJJO0">wprowadzenie</a>, <a href="https://www.youtube.com/watch?v=f-FH6lrJsUs">pojęcie wzorca punktowego</a>, <a href="https://www.youtube.com/watch?v=AXmLikQJEbE">intensywność i CSR</a>, <a href="https://www.youtube.com/watch?v=AikwT-kemvk">wizualizacja intensywności — gęstość jądra</a>, <a href="https://www.youtube.com/watch?v=qlQq2ByBaKc">metody oparte na odległości</a>, <a href="https://www.youtube.com/watch?v=pdbziXN4PiA">funkcja K</a>.</li>
+</ul>
+</section>
+<section id="pytania-kontrolne" class="level2">
+<h2 class="anchored" data-anchor-id="pytania-kontrolne">Pytania kontrolne</h2>
+<ol type="1">
+<li>Co jest celem metod stosowanych w ramach statystyki punktów?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Celem jest określenie, <strong>w jaki sposób</strong> obiekty lub zdarzenia są rozmieszczone w przestrzeni: losowo, regularnie czy w skupieniach. Zadania dzielą się na dwa: <strong>charakterystykę statystyczną</strong> zbioru punktów (środek, rozproszenie, intensywność, odległości) oraz <strong>weryfikację hipotez</strong> dotyczących rozkładu, czyli rozstrzygnięcie, czy zaobserwowany obraz różni się od tego, co dałby czysty przypadek.</p>
+</div>
+</div>
+</div>
+<ol start="2" type="1">
+<li>Wymień i krótko opisz trzy grupy metod stosowanych do analizy rozkładu danych punktowych. Podaj przykład metody z każdej grupy.</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li><strong>Statystyki centrograficzne</strong> — przestrzenne statystyki opisowe; podsumowują zbiór jako całość. Przykłady: średnia centralna, mediana centralna, odległość standardowa, elipsa odchylenia standardowego.</li>
+<li><strong>Metody oparte na intensywności</strong> — analizują rozkład punktów względem badanego obszaru. Przykłady: średnia intensywność, test zliczania w kwadratach, estymacja gęstości jądra.</li>
+<li><strong>Metody oparte na odległości</strong> — wykorzystują odległości między punktami, bez dzielenia obszaru. Przykłady: statystyki najbliższego sąsiada, wskaźnik Clarka-Evansa, funkcja G, funkcja K Ripleya.</li>
+</ul>
+</div>
+</div>
+</div>
+<ol start="3" type="1">
+<li>Czym jest całkowita przestrzenna przypadkowość i co oznacza odrzucenie tej hipotezy?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>To model, w którym każda lokalizacja w obszarze badań jest jednakowo prawdopodobna, a położenie każdego zdarzenia nie zależy od położenia pozostałych. Jest hipotezą zerową analizy rozkładu punktów. Jej odrzucenie oznacza, że w danych istnieje struktura przestrzenna — skupienie albo regularność — ale nie wskazuje przyczyny tej struktury.</p>
+</div>
+</div>
+</div>
+<ol start="4" type="1">
+<li>Czym różnią się dane punktowe oznakowane od nieoznakowanych i do których z nich stosuje się metody tej części skryptu?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Dane nieoznakowane to same lokalizacje, bez atrybutów. Dane oznakowane mają dodatkowo wartość przypisaną każdemu zdarzeniu — znak, czyli w terminologii systemów informacji geograficznej atrybut. Metody tej części analizują wyłącznie lokalizacje, więc stosuje się je do danych nieoznakowanych.</p>
+</div>
+</div>
+</div>
+<ol start="5" type="1">
+<li>Co to jest średnia centralna? Czym różni się od mediany centralnej i co oznacza wyraźna różnica w położeniu obu środków?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Średnia centralna to punkt o współrzędnych będących średnimi arytmetycznymi współrzędnych wszystkich punktów zbioru. Mediana centralna to punkt o współrzędnych będących medianami współrzędnych, liczonymi osobno dla każdej osi.</p>
+<p>Średnia centralna jest wrażliwa na punkty skrajne — pojedynczy punkt położony daleko od pozostałych przesuwa ją w swoją stronę; mediana centralna na takie punkty jest odporna. Wyraźna różnica położenia obu środków wskazuje więc, że w zbiorze są lokalizacje odległe od reszty i że średnia centralna została przez nie zaburzona. Dla zgonów w Soho oba środki leżą 11 m od siebie przy obszarze o rozmiarach ok. 500 × 450 m, czyli takich lokalizacji nie ma.</p>
+</div>
+</div>
+</div>
+<ol start="6" type="1">
+<li>Co to jest odległość standardowa i w jakich jednostkach jest wyrażona?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>To absolutna miara rozproszenia punktów: średnia kwadratowa odległości punktów od średniej centralnej, czyli odpowiednik odchylenia standardowego w statystyce klasycznej. Wyrażona jest w jednostkach układu współrzędnych — dla danych w układzie odwzorowanym w metrach. Graficznie przedstawia się ją jako okrąg o środku w średniej centralnej i promieniu równym tej odległości. Pojedyncza wartość nic nie znaczy bez punktu odniesienia: nabiera sensu w porównaniu z innym zbiorem albo innym okresem.</p>
+</div>
+</div>
+</div>
+<ol start="7" type="1">
+<li>Elipsa odchylenia standardowego wyszła wyraźnie wydłużona w kierunku północ–południe. Czy oznacza to, że badane zjawisko rozkłada się w tym kierunku?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Nie można tego stwierdzić bez porównania z kształtem obszaru badań. Punkty leżą zawsze wewnątrz jakiegoś obszaru, a jeśli obszar jest wydłużony południkowo, to każdy rozkład punktów w jego wnętrzu — również całkowicie losowy — da elipsę wydłużoną w tym samym kierunku. Kierunek elipsy wolno uznać za właściwość zjawiska dopiero wtedy, gdy różni się od kierunku obszaru analizy.</p>
+</div>
+</div>
+</div>
+<ol start="8" type="1">
+<li>Do czego służy test zliczania w kwadratach i jak interpretujemy jego wynik?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Sprawdza założenie o <strong>stałej intensywności</strong> zdarzeń w obszarze badań. Obszar dzieli się na równe kwadraty, zlicza punkty w każdym z nich i porównuje zliczenia z wartościami oczekiwanymi, czyli z sytuacją, w której w każdym kwadracie jest ta sama liczba punktów. Im większa rozbieżność, tym mniej prawdopodobne, że intensywność jest stała.</p>
+<p>Statystyka testowa to <span class="math inline">\(X^2 = \sum (O_i - E_i)^2 / E_i\)</span>, porównywana z rozkładem <span class="math inline">\(\chi^2\)</span> o <span class="math inline">\(m - 1\)</span> stopniach swobody; warunkiem stosowalności jest wartość oczekiwana większa od 5 w każdym oczku. Dla zgonów w Soho przy siatce 3×3 wartość oczekiwana wynosi 27,8 punktu na oczko, a zliczenia wahają się od 2 do 60; test daje <span class="math inline">\(X^2\)</span> = 123,6 przy 8 stopniach swobody i <span class="math inline">\(p\)</span> &lt; 0,001, więc hipotezę o stałej intensywności odrzucamy. Residua Pearsona wskazują, które oczka odpowiadają za odstępstwo. Wynik zależy od przyjętej liczby oczek — ta sama zbiorowość na siatce 2×2 i 4×4 może dać różne rozstrzygnięcia, bo każda siatka opisuje zmienność na innej skali.</p>
+</div>
+</div>
+</div>
+<ol start="9" type="1">
+<li>Na czym polega estymacja gęstości jądra i od czego zależy uzyskany obraz?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Metoda opisuje intensywność jako wielkość zmienną w przestrzeni. Ruchome okno, zdefiniowane kształtem i rozmiarem jądra, przesuwa się nad obszarem i dla każdego położenia oblicza lokalną intensywność. Wynikiem jest siatka rastrowa, w której każde oczko ma przypisaną wartość obliczoną dla obszaru o wielkości okna wyśrodkowanego na tym oczku.</p>
+<p>Obraz zależy od <strong>szerokości pasma</strong>: pasmo wąskie daje powierzchnię rozdrobnioną, z osobnym maksimum przy niemal każdym skupieniu punktów, a pasmo szerokie — wygładzoną, na której zostają tylko największe zgrupowania. Dla zgonów w Soho pasmo 20 m daje kilkanaście ognisk, a pasmo 60 m — jedno wyraźne maksimum. Szerokość pasma nie wynika z danych; wybiera ją analityk.</p>
+</div>
+</div>
+</div>
+<ol start="10" type="1">
+<li>Co to jest funkcja G? Jak interpretuje się przebieg krzywej empirycznej względem teoretycznej?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Funkcja G podsumowuje rozkład odległości do najbliższego sąsiada w postaci dystrybuanty: <span class="math inline">\(G(r)\)</span> to udział punktów, których najbliższy sąsiad leży nie dalej niż <span class="math inline">\(r\)</span>. Krzywa teoretyczna opisuje przebieg oczekiwany przy rozmieszczeniu losowym.</p>
+<ul>
+<li><span class="math inline">\(G_{emp} &gt; G_t\)</span> — punkty leżą bliżej siebie, niż wynika z rozkładu losowego, co może wskazywać na istnienie klastrów,</li>
+<li><span class="math inline">\(G_{emp} &lt; G_t\)</span> — punkty leżą dalej, co może wskazywać na rozkład regularny lub rozproszony.</li>
+</ul>
+<p>Funkcja G patrzy wyłącznie na najbliższego sąsiada, więc operuje w jednej skali.</p>
+</div>
+</div>
+</div>
+<ol start="11" type="1">
+<li>Co to jest funkcja K Ripleya i czym różni się od funkcji G?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Różnicą jest definicja sąsiedztwa. Funkcja G patrzy wyłącznie na <strong>najbliższego</strong> sąsiada, więc operuje w jednej skali i opisuje strukturę na małych odległościach. Funkcja K zlicza <strong>wszystkie</strong> punkty leżące w otoczeniu o promieniu <span class="math inline">\(r\)</span>, więc uwzględnia także sąsiadów dalszych i opisuje strukturę na wielu skalach jednocześnie.</p>
+<p>Interpretacja obu jest analogiczna: krzywa empiryczna powyżej teoretycznej wskazuje skupienie, poniżej — rozproszenie.</p>
+</div>
+</div>
+</div>
+<ol start="12" type="1">
+<li>W jaki sposób wykonuje się testowanie hipotezy dotyczącej rozkładu danych dla funkcji G oraz K Ripleya?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-18" class="callout-18-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Przy użyciu <strong>obwiedni</strong>. Generuje się wiele zbiorów punktów przy hipotezie zerowej o całkowitej przestrzennej przypadkowości, dla każdego oblicza się funkcję G lub K, a z otrzymanego zbioru krzywych wyznacza się pas wartości — obszar nieodrzucania hipotezy zerowej. Wniosek odczytuje się z położenia krzywej empirycznej względem tego pasa.</p>
+<p>Dla obwiedni <strong>jednoczesnej</strong> poziom istotności wynosi <span class="math inline">\(\alpha = \texttt{nrank}/(1 + \texttt{nsim})\)</span> — przy 99 symulacjach i <code>nrank = 5</code> daje to 0,05. Obwiednia <strong>punktowa</strong> jest testem tylko przy jednej, z góry ustalonej odległości (<a href="08_punkty_odleglosc.html" class="quarto-xref"><span>5&nbsp; Metody oparte na odległości</span></a>). Ponieważ jest to procedura losowa, przed obliczeniem obwiedni ustawia się ziarno generatora liczb losowych.</p>
+</div>
+</div>
+</div>
+<ol start="13" type="1">
+<li>Krzywa empiryczna funkcji G leży powyżej obwiedni. Jaki z tego wniosek?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-19" class="callout-19-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Rozkład punktów jest istotnie skupiony. Obwiednia wyznacza obszar nieodrzucania hipotezy o całkowitej przestrzennej przypadkowości; krzywa leżąca powyżej niej oznacza, że punkty mają bliżej do najbliższego sąsiada, niż daje rozmieszczenie losowe, a odstępstwo jest większe od zwykłej zmienności losowania. Krzywa wewnątrz obwiedni oznaczałaby rozkład nieodróżnialny od losowego, a poniżej — rozkład istotnie rozproszony.</p>
+<p>Zastrzeżenie: wniosek obwiedni jednoczesnej jest <strong>binarny</strong> i dotyczy całej krzywej łącznie. Odległości, na których krzywa wychodzi poza pas, nie są „skalą, na której pojawia się skupienie” — tego ten test nie rozstrzyga (<a href="08_punkty_odleglosc.html" class="quarto-xref"><span>5&nbsp; Metody oparte na odległości</span></a>).</p>
+</div>
+</div>
+</div>
+<ol start="14" type="1">
+<li>O czym informuje wskaźnik Clarka-Evansa i jak interpretuje się jego wartości? Co oznacza wartość 2,15?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-20" class="callout-20-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Jest to stosunek rzeczywistej średniej odległości od najbliższego sąsiada do odległości oczekiwanej przy rozmieszczeniu losowym — jedna liczba opisująca cały zbiór:</p>
+<ul>
+<li><span class="math inline">\(R &lt; 1\)</span> — punkty leżą bliżej siebie, niż wynikałoby z przypadku, czyli występują skupienia,</li>
+<li><span class="math inline">\(R = 1\)</span> — rozmieszczenie losowe,</li>
+<li><span class="math inline">\(R &gt; 1\)</span> — rozmieszczenie bardziej regularne.</li>
+</ul>
+<p>Wartość 2,15 odpowiada regularnej siatce heksagonalnej, czyli najbardziej regularnemu rozmieszczeniu punktów na płaszczyźnie. Dla zgonów w Soho wskaźnik wynosi 0,675 bez korekty brzegowej i 0,629 z korektą <code>cdf</code>, co w obu wariantach wskazuje na skupienie.</p>
+</div>
+</div>
+</div>
+<div id="najwazniejsze-punkty" class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Najważniejsze informacje — zanim przejdziesz do części praktycznej
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Analiza rozkładu danych punktowych odpowiada na pytanie, <strong>jak</strong> zdarzenia są rozmieszczone w przestrzeni: losowo, regularnie czy w skupieniach. Dzieli się na charakterystykę statystyczną zbioru i weryfikację hipotez dotyczących rozkładu.</li>
+<li>Hipotezą zerową jest <strong>całkowita przestrzenna przypadkowość</strong> (CSR); jej odrzucenie oznacza istnienie struktury przestrzennej.</li>
+<li>Do <strong>statystyk centrograficznych</strong> należą: średnia centralna i mediana centralna (tendencja centralna) oraz odległość standardowa i elipsa odchylenia standardowego (dyspersja). Opisują zbiór jako całość i nie rozstrzygają typu rozkładu — służą do porównywania zbiorów.</li>
+<li>Do <strong>metod opartych na intensywności</strong> należą: średnia intensywność <span class="math inline">\(\lambda = n/a\)</span>, test zliczania w kwadratach i estymacja gęstości jądra. Opisują rozkład względem obszaru, więc każdy ich wynik zależy od założeń analityka: zasięgu obszaru, liczby kwadratów i szerokości pasma.</li>
+<li>Do <strong>metod opartych na odległości</strong> należą: statystyki najbliższego sąsiada, wskaźnik Clarka-Evansa oraz funkcje podsumowujące — funkcja G i funkcja K Ripleya, czytane wraz z obwiednią.</li>
+<li>Średnia centralna to średnia współrzędnych, mediana centralna — mediana współrzędnych liczona osobno dla każdej osi; odległość standardowa wyrażona jest w jednostkach układu współrzędnych, a kierunek elipsy odchylenia standardowego w dużej mierze odzwierciedla kształt obszaru badań.</li>
+<li>Funkcja G opisuje strukturę przez odległość do <strong>najbliższego</strong> sąsiada, więc działa w jednej skali; funkcja K zlicza <strong>wszystkie</strong> punkty w promieniu <span class="math inline">\(r\)</span> i opisuje strukturę na wielu skalach. Krzywa empiryczna <strong>wewnątrz</strong> obwiedni oznacza rozkład nieodróżnialny od losowego, <strong>powyżej</strong> — istotne skupienie, <strong>poniżej</strong> — istotne rozproszenie.</li>
+<li>Wskaźnik Clarka-Evansa: <span class="math inline">\(R &lt; 1\)</span> skupienie, <span class="math inline">\(R = 1\)</span> rozkład losowy, <span class="math inline">\(R &gt; 1\)</span> rozkład regularny (dla regularnej siatki heksagonalnej <span class="math inline">\(R = 2{,}15\)</span>).</li>
+</ul>
+</div>
+</div>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-anselin_cluster" class="csl-entry" role="listitem">
+Anselin, Luc. b.d. <span>„Spatial Cluster Analysis”</span>. <a href="https://www.youtube.com/watch?v=oQ9JzWkJJO0">https://www.youtube.com/watch?v=oQ9JzWkJJO0</a>.
+</div>
+<div id="ref-clark1954" class="csl-entry" role="listitem">
+Clark, Philip J., i Francis C. Evans. 1954. <span>„Distance to nearest neighbor as a measure of spatial relationships in populations”</span>. <em>Ecology</em> 35 (4): 445–53.
+</div>
+<div id="ref-mgimond" class="csl-entry" role="listitem">
+Gimond, Manuel. b.d. <em>Intro to GIS and Spatial Analysis</em>. <a href="https://mgimond.github.io/Spatial/">https://mgimond.github.io/Spatial/</a>.
+</div>
+<div id="ref-lovelace2025" class="csl-entry" role="listitem">
+Lovelace, Robin, Jakub Nowosad, i Jannes Muenchow. 2025. <em>Geocomputation with R</em>. 2. wyd. Boca Raton: Chapman; Hall/CRC. <a href="https://r.geocompx.org/">https://r.geocompx.org/</a>.
+</div>
+<div id="ref-moraga2023" class="csl-entry" role="listitem">
+Moraga, Paula. 2023. <em>Spatial Statistics for Data Science: Theory and Practice with R</em>. Chapman; Hall/CRC. <a href="https://www.paulamoraga.com/book-spatial/">https://www.paulamoraga.com/book-spatial/</a>.
+</div>
+<div id="ref-paez" class="csl-entry" role="listitem">
+Páez, Antonio, i Geneviève Boisjoly. b.d. <em>Spatial Analysis and Modelling in R</em>. <a href="https://paezha.github.io/spatial-analysis-r/">https://paezha.github.io/spatial-analysis-r/</a>.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Skopiowano!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Skopiowano!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./04_eksploracja.html" class="pagination-link" aria-label="Eksploracyjna analiza danych">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Eksploracyjna analiza danych</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./06_punkty_centrograficzne.html" class="pagination-link" aria-label="Statystyki centrograficzne">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Statystyki centrograficzne</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

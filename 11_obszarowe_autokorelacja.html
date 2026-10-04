@@ -1,0 +1,1855 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pl" xml:lang="pl"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>7&nbsp; Miary autokorelacji danych obszarowych – Statystyka przestrzenna</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./12_pola_teoria.html" rel="next">
+<link href="./10_obszarowe_sasiedztwo.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-c852b7e71cc1c09f55f367b2512aabbd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Brak wyników",
+    "search-matching-documents-text": "dopasowane dokumenty",
+    "search-copy-link-title": "Kopiuj link do wyszukiwania",
+    "search-hide-matches-text": "Ukryj dodatkowe dopasowania",
+    "search-more-match-text": "więcej dopasowań w tym dokumencie",
+    "search-more-matches-text": "więcej dopasowań w tym dokumencie",
+    "search-clear-button-title": "Wyczyść",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Anuluj",
+    "search-submit-button-title": "Zatwierdź",
+    "search-label": "Szukaj"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Przełącz pasek boczny" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./09_obszarowe_teoria.html">DANE OBSZAROWE</a></li><li class="breadcrumb-item"><a href="./11_obszarowe_autokorelacja.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Miary autokorelacji danych obszarowych</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Przełącz pasek boczny" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Szukaj" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Statystyka przestrzenna</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Szukaj"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">O skrypcie</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./01_wstep.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">WSTĘP</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_dane_przestrzenne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Dane przestrzenne w R</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./03_eksploracja_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">EKSPLORACYJNA ANALIZA DANYCH</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_eksploracja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Eksploracyjna analiza danych</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./05_punkty_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE PUNKTOWE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_punkty_centrograficzne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Statystyki centrograficzne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_punkty_intensywnosc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Metody oparte na analizie intensywności</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_punkty_odleglosc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Metody oparte na odległości</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./09_obszarowe_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE OBSZAROWE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_obszarowe_sasiedztwo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Określanie sąsiedztwa danych obszarowych</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_obszarowe_autokorelacja.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Miary autokorelacji danych obszarowych</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./12_pola_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE POWIERZCHNIOWE CIĄGŁE PRZESTRZENNIE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13_pola_interpolacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Metody interpolacji</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14_pola_semiwariogram.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Analiza i modelowanie struktury przestrzennej</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15_pola_estymacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Geostatystyczne metody estymacji</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_pola_ocena.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Ocena jakości estymacji</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">ZADANIA I PROJEKTY</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_zadania_samodzielne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Zadania samodzielne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18_projekt1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Projekt 1: przestępczość a zmienne społeczno-ekonomiczne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19_projekt2_geostatystyka.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Projekt 2: Geostatystyka</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Załączniki</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./A_pakiety.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Pakiety</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./B_funkcje.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Funkcje</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./C_operacje.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Operacje na danych przestrzennych</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./D_slownik.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Słownik pojęć</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bibliografia</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Spis treści</h2>
+   
+  <ul>
+  <li><a href="#wprowadzenie" id="toc-wprowadzenie" class="nav-link active" data-scroll-target="#wprowadzenie"><span class="header-section-number">7.1</span> Wprowadzenie</a></li>
+  <li><a href="#struktura-obiektów-lista-sąsiadów-i-macierz-wag" id="toc-struktura-obiektów-lista-sąsiadów-i-macierz-wag" class="nav-link" data-scroll-target="#struktura-obiektów-lista-sąsiadów-i-macierz-wag"><span class="header-section-number">7.2</span> Struktura obiektów: lista sąsiadów i macierz wag</a></li>
+  <li><a href="#miary-autokorelacji-przestrzennej-w-r" id="toc-miary-autokorelacji-przestrzennej-w-r" class="nav-link" data-scroll-target="#miary-autokorelacji-przestrzennej-w-r"><span class="header-section-number">7.3</span> Miary autokorelacji przestrzennej w R</a></li>
+  <li><a href="#przykład-stopa-bezrobocia-w-powiatach-w-2023-roku" id="toc-przykład-stopa-bezrobocia-w-powiatach-w-2023-roku" class="nav-link" data-scroll-target="#przykład-stopa-bezrobocia-w-powiatach-w-2023-roku"><span class="header-section-number">7.4</span> Przykład: stopa bezrobocia w powiatach w 2023 roku</a>
+  <ul class="collapse">
+  <li><a href="#krok-1-dane" id="toc-krok-1-dane" class="nav-link" data-scroll-target="#krok-1-dane">Krok 1: dane</a></li>
+  <li><a href="#krok-2-macierz-wag-przestrzennych" id="toc-krok-2-macierz-wag-przestrzennych" class="nav-link" data-scroll-target="#krok-2-macierz-wag-przestrzennych">Krok 2: macierz wag przestrzennych</a></li>
+  <li><a href="#krok-3-miary-globalne" id="toc-krok-3-miary-globalne" class="nav-link" data-scroll-target="#krok-3-miary-globalne">Krok 3: miary globalne</a></li>
+  <li><a href="#krok-4-lokalna-statystyka-i-morana" id="toc-krok-4-lokalna-statystyka-i-morana" class="nav-link" data-scroll-target="#krok-4-lokalna-statystyka-i-morana">Krok 4: lokalna statystyka I Morana</a></li>
+  <li><a href="#krok-5-klastry" id="toc-krok-5-klastry" class="nav-link" data-scroll-target="#krok-5-klastry">Krok 5: klastry</a></li>
+  <li><a href="#krok-6-obszary-wysokich-i-niskich-wartości" id="toc-krok-6-obszary-wysokich-i-niskich-wartości" class="nav-link" data-scroll-target="#krok-6-obszary-wysokich-i-niskich-wartości">Krok 6: obszary wysokich i niskich wartości</a></li>
+  <li><a href="#krok-7-zapis-wyników" id="toc-krok-7-zapis-wyników" class="nav-link" data-scroll-target="#krok-7-zapis-wyników">Krok 7: zapis wyników</a></li>
+  <li><a href="#interpretacja-wyniku" id="toc-interpretacja-wyniku" class="nav-link" data-scroll-target="#interpretacja-wyniku">Interpretacja wyniku</a></li>
+  </ul></li>
+  <li><a href="#pytania-kontrolne" id="toc-pytania-kontrolne" class="nav-link" data-scroll-target="#pytania-kontrolne"><span class="header-section-number">7.5</span> Pytania kontrolne</a></li>
+  <li><a href="#podsumowanie" id="toc-podsumowanie" class="nav-link" data-scroll-target="#podsumowanie"><span class="header-section-number">7.6</span> Podsumowanie</a></li>
+  <li><a href="#pełny-kod-analizy" id="toc-pełny-kod-analizy" class="nav-link" data-scroll-target="#pełny-kod-analizy"><span class="header-section-number">7.7</span> Pełny kod analizy</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./09_obszarowe_teoria.html">DANE OBSZAROWE</a></li><li class="breadcrumb-item"><a href="./11_obszarowe_autokorelacja.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Miary autokorelacji danych obszarowych</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-obszarowe-autokorelacja" class="quarto-section-identifier"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Miary autokorelacji danych obszarowych</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Czego się nauczysz
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Po tym rozdziale potrafisz wykonać w R:</strong></p>
+<ul>
+<li>zbudować listę sąsiadów i macierz wag przestrzennych (<code>poly2nb()</code>, <code>nb2listw()</code>),</li>
+<li>obliczyć globalne miary autokorelacji: I Morana, C Geary’ego i G Getisa &amp; Orda, w wariancie asymptotycznym i opartym na symulacji,</li>
+<li>sporządzić wykres rozrzutu Morana,</li>
+<li>obliczyć lokalną statystykę I Morana i wydzielić na jej podstawie klastry (<code>localmoran()</code>, <code>hotspot()</code>),</li>
+<li>wskazać obszary wysokich i niskich wartości lokalną statystyką G Getisa &amp; Orda (<code>localG_perm()</code>),</li>
+<li>zapisać wyniki analizy do pliku.</li>
+</ul>
+<p><strong>Rozumiesz i umiesz zinterpretować:</strong></p>
+<ul>
+<li>co oznacza znak i wielkość statystyki I Morana oraz C Geary’ego,</li>
+<li>różnicę między testem asymptotycznym a testem opartym na symulacji Monte Carlo,</li>
+<li>dlaczego G Getisa &amp; Orda nie wykrywa autokorelacji ujemnej,</li>
+<li>cztery ćwiartki wykresu rozrzutu Morana i odpowiadające im typy klastrów,</li>
+<li>dlaczego klastry wydziela się <strong>wyłącznie</strong> z wartości istotnych statystycznie,</li>
+<li>wynik lokalnej statystyki C Geary’ego (<code>localC_perm()</code>) — czytasz go, nie liczysz samodzielnie,</li>
+<li>od czego zależy powtarzalność wyniku procedur opartych na permutacjach.</li>
+</ul>
+<p><strong>Teoria:</strong> <a href="./09_obszarowe_teoria.html#najwazniejsze-obszarowe">Najważniejsze informacje</a>. <strong>Funkcje:</strong> <a href="B_funkcje.html" class="quarto-xref"><span>Załącznik B</span></a>. <strong>Słownik pojęć:</strong> <a href="D_slownik.html" class="quarto-xref"><span>Załącznik D</span></a>.</p>
+</div>
+</div>
+<section id="wprowadzenie" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="wprowadzenie"><span class="header-section-number">7.1</span> Wprowadzenie</h2>
+<p>Dane obszarowe opisują wartość zagregowaną w jednostce przestrzennej: stopę bezrobocia w powiecie, frekwencję wyborczą w gminie, liczbę ludności w obszarze spisowym. Pytanie, które zadajemy tym danym w tym rozdziale, brzmi: <strong>czy jednostki sąsiadujące ze sobą mają wartości podobne, czy różne</strong> — i czy odnotowane podobieństwo jest większe, niż wynikałoby z przypadku.</p>
+<p>Odpowiadamy na nie w dwóch skalach. <strong>Miary globalne</strong> sprowadzają cały zbiór do jednej liczby i rozstrzygają, czy wzorzec przestrzenny w ogóle istnieje. <strong>Miary lokalne</strong> liczone są osobno dla każdej jednostki i wskazują, <strong>gdzie</strong> leżą zgrupowania podobnych wartości oraz jednostki odstające od swojego otoczenia. Obie grupy są potrzebne: miara globalna bliska zeru nie wyklucza istnienia lokalnych klastrów, które wzajemnie się znoszą.</p>
+<p>Trzy pytania pokrewne należą gdzie indziej:</p>
+<ul>
+<li><strong>Dlaczego wzorzec powstał</strong> — do modelowania przestrzennego, które wykracza poza ten przedmiot. Autokorelacja jest własnością rozkładu wartości w przestrzeni; wskazanie przyczyn wymaga odniesienia zmiennej do innych zmiennych.</li>
+<li><strong>Jak wynik zmienia się wraz z podziałem na jednostki</strong> — do <strong>problemu zmiennych jednostek odniesienia</strong> (ang. <em>modifiable areal unit problem</em>, MAUP), opisanego w rozdziale teoretycznym części. Ta sama zmienna agregowana do gmin i do powiatów daje różne wartości miar autokorelacji; w rozdziale pracujemy na jednym, ustalonym podziale.</li>
+<li><strong>Jak wybrać definicję sąsiedztwa</strong> — do rozdziału teoretycznego części, który opisuje pozostałe kryteria: odległość i <em>k</em> najbliższych sąsiadów. Przyjmujemy regułę <em>queen</em>, bo tak zbudowane są dane.</li>
+</ul>
+</section>
+<section id="struktura-obiektów-lista-sąsiadów-i-macierz-wag" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="struktura-obiektów-lista-sąsiadów-i-macierz-wag"><span class="header-section-number">7.2</span> Struktura obiektów: lista sąsiadów i macierz wag</h2>
+<p>Wszystkie miary tego rozdziału wymagają wcześniejszego zapisania informacji o tym, które jednostki ze sobą sąsiadują. Pakiet <code>spdep</code> używa do tego dwóch klas obiektów.</p>
+<p>Obiekt klasy <strong><code>nb</code></strong> (ang. <em>neighbour list</em>) to lista o tylu elementach, ile jest jednostek. Element <em>i</em> zawiera <strong>numery wierszy</strong> jednostek sąsiadujących z jednostką <em>i</em>. Jest to wyłącznie informacja o sąsiedztwie: sąsiad albo jest, albo go nie ma.</p>
+<p>Obiekt klasy <strong><code>listw</code></strong> (ang. <em>weights list</em>) to lista sąsiadów uzupełniona o <strong>wagi</strong> przypisane każdej parze sąsiadów. Dopiero on wchodzi do funkcji liczących statystyki. Sposób nadania wag określa argument <code>style</code>:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><code>style</code></th>
+<th>Wagi</th>
+<th>Kiedy używamy</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>"W"</code></td>
+<td>standaryzowane wierszami — wagi w każdym wierszu sumują się do 1</td>
+<td>domyślny wybór dla I Morana i C Geary’ego</td>
+</tr>
+<tr class="even">
+<td><code>"B"</code></td>
+<td>binarne — 1 dla sąsiada, 0 dla pozostałych</td>
+<td>wymagane przez <code>globalG.test()</code></td>
+</tr>
+</tbody>
+</table>
+<p>Przy standaryzacji wierszami jednostka mająca 7 sąsiadów przypisuje każdemu z nich wagę 1/7, a jednostka mająca 2 sąsiadów — po 1/2. Wartość sąsiada znaczy więc tym więcej, im mniej sąsiadów ma dana jednostka.</p>
+<p>Ważna konsekwencja praktyczna: obiekty <code>nb</code> i <code>listw</code> odwołują się do jednostek przez <strong>numer wiersza</strong>, a nie przez identyfikator. Zmiana kolejności wierszy albo usunięcie choćby jednego wiersza po zbudowaniu listy sąsiadów unieważnia ją. Listę sąsiadów budujemy zawsze na tym obiekcie, na którym liczymy statystyki.</p>
+</section>
+<section id="miary-autokorelacji-przestrzennej-w-r" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="miary-autokorelacji-przestrzennej-w-r"><span class="header-section-number">7.3</span> Miary autokorelacji przestrzennej w R</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Miara</th>
+<th>Funkcja</th>
+<th>Wagi</th>
+<th>Wynik</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>I Morana — test asymptotyczny</td>
+<td><code>moran.test()</code></td>
+<td><code>"W"</code></td>
+<td>deterministyczny</td>
+</tr>
+<tr class="even">
+<td>I Morana — test Monte Carlo</td>
+<td><code>moran.mc()</code></td>
+<td><code>"W"</code></td>
+<td><strong>losowy</strong> (zależy od <code>nsim</code> i ziarna)</td>
+</tr>
+<tr class="odd">
+<td>C Geary’ego — test asymptotyczny</td>
+<td><code>geary.test()</code></td>
+<td><code>"W"</code></td>
+<td>deterministyczny</td>
+</tr>
+<tr class="even">
+<td>C Geary’ego — test Monte Carlo</td>
+<td><code>geary.mc()</code></td>
+<td><code>"W"</code></td>
+<td><strong>losowy</strong></td>
+</tr>
+<tr class="odd">
+<td>G Getisa &amp; Orda — globalna</td>
+<td><code>globalG.test()</code></td>
+<td><code>"B"</code></td>
+<td>deterministyczny</td>
+</tr>
+<tr class="even">
+<td>wykres rozrzutu Morana</td>
+<td><code>moran.plot()</code></td>
+<td><code>"W"</code></td>
+<td>deterministyczny</td>
+</tr>
+<tr class="odd">
+<td>lokalna I Morana</td>
+<td><code>localmoran()</code></td>
+<td><code>"W"</code></td>
+<td>deterministyczny</td>
+</tr>
+<tr class="even">
+<td>lokalna C Geary’ego</td>
+<td><code>localC_perm()</code></td>
+<td><code>"W"</code></td>
+<td><strong>losowy</strong></td>
+</tr>
+<tr class="odd">
+<td>lokalna G Getisa &amp; Orda</td>
+<td><code>localG_perm()</code></td>
+<td><code>"W"</code></td>
+<td><strong>losowy</strong></td>
+</tr>
+<tr class="even">
+<td>klasyfikacja klastrów</td>
+<td><code>hotspot()</code></td>
+<td>—</td>
+<td>dziedziczy po statystyce</td>
+</tr>
+</tbody>
+</table>
+<p>Pełne zestawienie funkcji — <a href="B_funkcje.html" class="quarto-xref"><span>Załącznik B</span></a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spdep)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Funkcje <code>moran.mc()</code> i <code>geary.mc()</code> losują przy każdym wywołaniu, a wyniku nie da się odtworzyć bez ustawienia ziarna generatora liczb losowych. Ustawiamy je raz, na początku rozdziału.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1111</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Funkcje <code>localC_perm()</code> i <code>localG_perm()</code> mają własny argument <code>iseed</code>, niezależny od <code>set.seed()</code> — podajemy go przy każdym wywołaniu.</p>
+</section>
+<section id="przykład-stopa-bezrobocia-w-powiatach-w-2023-roku" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="przykład-stopa-bezrobocia-w-powiatach-w-2023-roku"><span class="header-section-number">7.4</span> Przykład: stopa bezrobocia w powiatach w 2023 roku</h2>
+<p>Dane pochodzą z Banku Danych Lokalnych GUS.</p>
+<ul>
+<li><code>data/bezrobocie_pl.csv</code> — identyfikator powiatu (<code>Kod</code>), nazwa i stopa bezrobocia rejestrowanego w latach 2004, 2010, 2021 i 2023 (kolumny <code>SB2004</code>, <code>SB2010</code>, <code>SB2021</code>, <code>SB2023</code>),</li>
+<li><code>data/powiaty_pl.gpkg</code> — granice 380 powiatów,</li>
+<li><code>data/wojewodztwa.gpkg</code> — granice województw; używane wyłącznie jako tło map.</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Kroki analizy
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Wczytanie i złączenie danych, mapa zmiennej — <code>read.csv()</code>, <code>read_sf()</code>, <code>left_join()</code>.</li>
+<li>Macierz wag przestrzennych — <code>poly2nb()</code>, <code>nb2listw()</code>.</li>
+<li>Miary globalne — <code>moran.test()</code>, <code>moran.mc()</code>, <code>geary.test()</code>, <code>geary.mc()</code>, <code>globalG.test()</code>.</li>
+<li>Lokalna statystyka I Morana — <code>localmoran()</code>.</li>
+<li>Klastry — <code>hotspot()</code>.</li>
+<li>Obszary wysokich i niskich wartości — <code>localG_perm()</code>.</li>
+<li>Zapis wyników — <code>write_sf()</code>.</li>
+</ol>
+<p>Kod spoza tych siedmiu kroków jest objaśnieniem: nie trzeba go uruchamiać, żeby wykonać analizę.</p>
+</div>
+</div>
+<section id="krok-1-dane" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-1-dane">Krok 1: dane</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>bezrobocie <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"data/bezrobocie_pl.csv"</span>, <span class="at">sep =</span> <span class="st">";"</span>, <span class="at">dec =</span> <span class="st">"."</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>powiaty_granica <span class="ot">=</span> <span class="fu">read_sf</span>(<span class="st">"data/powiaty_pl.gpkg"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>woj_granica <span class="ot">=</span> <span class="fu">read_sf</span>(<span class="st">"data/wojewodztwa.gpkg"</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Kolumna <code>TERYT</code> w warstwie granic zawiera czterocyfrowy identyfikator powiatu zapisany jako <strong>tekst</strong> (<code>"0201"</code>), a kolumna <code>Kod</code> w pliku CSV — siedmiocyfrowy identyfikator zapisany jako <strong>liczba</strong> (<code>201000</code>). Żeby złączyć oba zbiory, dopisujemy do <code>TERYT</code> trzy zera i zamieniamy wynik na liczbę.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>powiaty <span class="ot">=</span> powiaty_granica <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Kod =</span> <span class="fu">as.integer</span>(<span class="fu">paste0</span>(TERYT, <span class="st">"000"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Kod) <span class="sc">|&gt;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(bezrobocie, <span class="at">by =</span> <span class="st">"Kod"</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>powiaty</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 380 features and 6 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 171677.5 ymin: 133223.7 xmax: 861895.8 ymax: 775019.1
+Projected CRS: ETRF2000-PL / CS92
+# A tibble: 380 × 7
+      Kod                                 geom Nazwa SB2004 SB2010 SB2021 SB2023
+    &lt;int&gt;                   &lt;MULTIPOLYGON [m]&gt; &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+ 1 201000 (((250582.5 412431, 250591.7 412394… bole…   25.3   14.9    5.1    2.8
+ 2 202000 (((336552.6 331384.4, 336555.6 3313… dzie…   31.7   22.3    5.5    5.5
+ 3 203000 (((292025.7 412185.2, 291923.9 4122… głog…   23.7   14.6    7.7    6.5
+ 4 204000 (((339636.3 422599.6, 339676.3 4226… góro…   32.7   26.6   18.3   14.1
+ 5 205000 (((303544.3 353195.3, 303547 353161… jawo…   30.7   23.6   10.8    9.9
+ 6 261000 (((270808.2 344428.9, 270814.4 3444… Jele…   15.1   10.9    3.8    3.8
+ 7 207000 (((277907.5 324307.4, 277931.5 3243… kami…   29.3   22.1    6.6    6.1
+ 8 206000 (((277907.5 324307.4, 277896.5 3243… kark…   27.1   22.9   10.5    8.5
+ 9 208000 (((319841.5 312824.6, 319845.7 3128… kłod…   32.9   24.7   12.5   11.7
+10 262000 (((302527.4 369768.8, 302470 369776… Legn…   20.3    9.2    5.2    4.4
+# ℹ 370 more rows</code></pre>
+</div>
+</div>
+<p>Wypisany obiekt jest klasy <code>sf</code>. Nagłówek podaje kolejno: liczbę obiektów i liczbę pól atrybutowych (<code>380 features and 6 fields</code>), typ geometrii (<code>MULTIPOLYGON</code> — powiat może składać się z kilku rozłącznych wielokątów), wymiar (<code>XY</code>), zasięg przestrzenny (<code>Bounding box</code>) oraz układ współrzędnych — PUWG 1992, wypisywany przez R jako <code>ETRF2000-PL / CS92</code>; jest to układ odwzorowany, więc odległości są w metrach. Kolumna <code>geom</code> zachowuje się jak każda inna kolumna: pozostaje powiązana z wierszami przy złączeniu, filtrowaniu i sortowaniu.</p>
+<p><code>left_join()</code> zachowuje wszystkie wiersze warstwy granic, więc gdyby któryś powiat nie znalazł odpowiednika w pliku CSV, otrzymałby <code>NA</code> zamiast zniknąć bez ostrzeżenia.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(powiaty) <span class="sc">+</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"SB2023"</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.scale =</span> <span class="fu">tm_scale_intervals</span>(<span class="at">values =</span> <span class="st">"brewer.yl_or_br"</span>),</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"Stopa bezrobocia</span><span class="sc">\n</span><span class="st">w 2023 r. [%]"</span>)) <span class="sc">+</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(woj_granica) <span class="sc">+</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="11_obszarowe_autokorelacja_files/figure-html/mapa-zmiennej-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="krok-2-macierz-wag-przestrzennych" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-2-macierz-wag-przestrzennych">Krok 2: macierz wag przestrzennych</h3>
+<p>Funkcja <code>poly2nb()</code> buduje listę sąsiadów na podstawie wspólnej granicy. Argument <code>queen = TRUE</code> oznacza regułę <em>queen</em> — sąsiadami są jednostki mające wspólny odcinek granicy <strong>lub choćby jeden wspólny punkt</strong>. Reguła <em>rook</em> (<code>queen = FALSE</code>) wymaga wspólnego odcinka.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>nb_q <span class="ot">=</span> <span class="fu">poly2nb</span>(powiaty, <span class="at">queen =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>nb_q</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Neighbour list object:
+Number of regions: 380 
+Number of nonzero links: 2006 
+Percentage nonzero weights: 1.389197 
+Average number of links: 5.278947 </code></pre>
+</div>
+</div>
+<p>Wypis obiektu <code>nb</code> podaje: liczbę jednostek (<code>Number of regions</code>), łączną liczbę relacji sąsiedztwa (<code>Number of nonzero links</code> — każda para liczona dwukrotnie, raz z każdej strony), udział niezerowych komórek w pełnej macierzy 380 × 380 (<code>Percentage nonzero weights</code>) oraz średnią liczbę sąsiadów przypadającą na jednostkę (<code>Average number of links</code>). Dla powiatów w Polsce wynosi ona 5.28.</p>
+<p>Pierwszy element listy zawiera numery wierszy sąsiadów pierwszego powiatu:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>nb_q[[<span class="dv">1</span>]]</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  11  12  14  18  29  30 379</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>powiaty<span class="sc">$</span>Nazwa[nb_q[[<span class="dv">1</span>]]]</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "legnicki"    "lubański"    "lwówecki"    "polkowicki"  "zgorzelecki"
+[6] "złotoryjski" "żagański"   </code></pre>
+</div>
+</div>
+<p>Funkcja <code>nb2listw()</code> dodaje do listy sąsiadów wagi. Budujemy dwie macierze: standaryzowaną wierszami — do I Morana i C Geary’ego — oraz binarną, potrzebną do globalnej statystyki G Getisa &amp; Orda.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>lw <span class="ot">=</span> <span class="fu">nb2listw</span>(nb_q, <span class="at">style =</span> <span class="st">"W"</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>lw_b <span class="ot">=</span> <span class="fu">nb2listw</span>(nb_q, <span class="at">style =</span> <span class="st">"B"</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>lw</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Characteristics of weights list object:
+Neighbour list object:
+Number of regions: 380 
+Number of nonzero links: 2006 
+Percentage nonzero weights: 1.389197 
+Average number of links: 5.278947 
+
+Weights style: W 
+Weights constants summary:
+    n     nn  S0       S1      S2
+W 380 144400 380 169.7589 1632.39</code></pre>
+</div>
+</div>
+<p>Wypis obiektu <code>listw</code> powtarza charakterystykę listy sąsiadów, a poniżej podaje przyjęty styl wag (<code>Weights style: W</code>) i stałe macierzy wag używane we wzorach testów: <code>n</code> — liczba jednostek, <code>S0</code> — suma wszystkich wag (przy standaryzacji wierszami równa liczbie jednostek), <code>S1</code> i <code>S2</code> — sumy pomocnicze wchodzące do wzoru na wariancję statystyki.</p>
+<p>Pierwszy powiat ma 7 sąsiadów, więc po standaryzacji każdy z nich otrzymuje wagę 0.1429:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>lw<span class="sc">$</span>weights[[<span class="dv">1</span>]]</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1428571 0.1428571 0.1428571 0.1428571 0.1428571 0.1428571 0.1428571</code></pre>
+</div>
+</div>
+</section>
+<section id="krok-3-miary-globalne" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-3-miary-globalne">Krok 3: miary globalne</h3>
+<p><strong>I Morana.</strong> Test asymptotyczny wymaga podania wektora wartości i macierzy wag. Hipoteza zerowa to brak autokorelacji przestrzennej.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">moran.test</span>(powiaty<span class="sc">$</span>SB2023, <span class="at">listw =</span> lw)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Moran I test under randomisation
+
+data:  powiaty$SB2023  
+weights: lw    
+
+Moran I statistic standard deviate = 12.997, p-value &lt; 2.2e-16
+alternative hypothesis: greater
+sample estimates:
+Moran I statistic       Expectation          Variance 
+      0.439401477      -0.002638522       0.001156697 </code></pre>
+</div>
+</div>
+<p>Test asymptotyczny opiera się na założeniu o rozkładzie statystyki. Test oparty na symulacji Monte Carlo tego założenia nie wymaga: w każdej z <code>nsim</code> symulacji wartości zmiennej są losowo przypisywane do jednostek, statystyka liczona jest ponownie, a wynik obserwowany porównywany z rozkładem wartości uzyskanych przy losowym rozmieszczeniu.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>moran_mc <span class="ot">=</span> <span class="fu">moran.mc</span>(powiaty<span class="sc">$</span>SB2023, <span class="at">listw =</span> lw, <span class="at">nsim =</span> <span class="dv">999</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>moran_mc</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Monte-Carlo simulation of Moran I
+
+data:  powiaty$SB2023 
+weights: lw  
+number of simulations + 1: 1000 
+
+statistic = 0.4394, observed rank = 1000, p-value = 0.001
+alternative hypothesis: greater</code></pre>
+</div>
+</div>
+<p>Pseudo <em>p</em>-value nie może być mniejsze niż <code>1 / (nsim + 1)</code>, więc przy 999 symulacjach najmniejszą osiągalną wartością jest 0,001. Liczba symulacji jest zatem <strong>elementem wyniku</strong> — przy <code>nsim = 99</code> ten sam zbiór dałby <em>p</em> = 0,01.</p>
+<p><strong>C Geary’ego.</strong> Ta sama para testów, ta sama macierz wag.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">geary.test</span>(powiaty<span class="sc">$</span>SB2023, <span class="at">listw =</span> lw)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Geary C test under randomisation
+
+data:  powiaty$SB2023 
+weights: lw   
+
+Geary C statistic standard deviate = 11.024, p-value &lt; 2.2e-16
+alternative hypothesis: Expectation greater than statistic
+sample estimates:
+Geary C statistic       Expectation          Variance 
+      0.541515148       1.000000000       0.001729799 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">geary.mc</span>(powiaty<span class="sc">$</span>SB2023, <span class="at">listw =</span> lw, <span class="at">nsim =</span> <span class="dv">999</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Monte-Carlo simulation of Geary C
+
+data:  powiaty$SB2023 
+weights: lw  
+number of simulations + 1: 1000 
+
+statistic = 0.54152, observed rank = 1, p-value = 0.001
+alternative hypothesis: greater</code></pre>
+</div>
+</div>
+<p><strong>G Getisa &amp; Orda.</strong> Ta miara wymaga <strong>wag binarnych</strong>: wywołana z macierzą standaryzowaną wierszami zwraca ostrzeżenie <code>Binary weights recommended</code>, a wynik testu zmienia się o kilka rzędów wielkości. Dlatego podajemy <code>lw_b</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">globalG.test</span>(powiaty<span class="sc">$</span>SB2023, <span class="at">listw =</span> lw_b)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Getis-Ord global G statistic
+
+data:  powiaty$SB2023 
+weights: lw_b   
+
+standard deviate = 5.679, p-value = 6.774e-09
+alternative hypothesis: greater
+sample estimates:
+Global G statistic        Expectation           Variance 
+      1.582796e-02       1.392862e-02       1.118554e-07 </code></pre>
+</div>
+</div>
+</section>
+<section id="krok-4-lokalna-statystyka-i-morana" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-4-lokalna-statystyka-i-morana">Krok 4: lokalna statystyka I Morana</h3>
+<p>Funkcja <code>localmoran()</code> liczy statystykę osobno dla każdej jednostki.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>locm <span class="ot">=</span> <span class="fu">localmoran</span>(powiaty<span class="sc">$</span>SB2023, <span class="at">listw =</span> lw)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(locm)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           Ii          E.Ii      Var.Ii        Z.Ii Pr(z != E(Ii))
+1 -0.02618885 -3.278138e-03 0.174557285 -0.05483648      0.9562687
+2 -0.14316746 -4.621114e-04 0.028866576 -0.83992908      0.4009482
+3  0.01752931 -6.811164e-05 0.004256387  0.26972955      0.7873683
+4 -0.66667478 -8.537739e-03 0.452226259 -0.97867488      0.3277406
+5  0.19350355 -1.352469e-03 0.072156657  0.72539678      0.4682086
+6 -0.30415813 -1.936989e-03 0.734629922 -0.35260668      0.7243833</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># dwie kolumny wyniku dopisujemy do obiektu przestrzennego, żeby móc je zwizualizować</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>powiaty<span class="sc">$</span>I <span class="ot">=</span> locm[, <span class="st">"Ii"</span>]</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>powiaty<span class="sc">$</span>I_pvalue <span class="ot">=</span> locm[, <span class="st">"Pr(z != E(Ii))"</span>]</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Wynikiem jest macierz o pięciu kolumnach: <code>Ii</code> — wartość statystyki dla jednostki, <code>E.Ii</code> i <code>Var.Ii</code> — jej wartość oczekiwana i wariancja przy hipotezie zerowej, <code>Z.Ii</code> — standaryzowane odchylenie, <code>Pr(z != E(Ii))</code> — poziom istotności.</p>
+<p>Istotną statystykę lokalną ma 83 z 380 powiatów.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Objaśnienie — poza ścieżką zadania
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Dlaczego klastry wydziela się tylko z wartości istotnych? Mapa po lewej przedstawia <strong>surowe</strong> wartości <span class="math inline">\(I_i\)</span>, mapa po prawej — odpowiadające im poziomy istotności. Czerwone i niebieskie plamy po lewej obejmują znacznie większy obszar niż powiaty, dla których wynik jest istotny statystycznie. Czytanie samej mapy po lewej prowadziłoby do wskazania klastrów tam, gdzie rozmieszczenie wartości mieści się w granicach przypadku.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>tm_i <span class="ot">=</span> <span class="fu">tm_shape</span>(powiaty) <span class="sc">+</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"I"</span>,</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.scale =</span> <span class="fu">tm_scale_continuous</span>(<span class="at">values =</span> <span class="st">"-brewer.rd_bu"</span>, <span class="at">midpoint =</span> <span class="dv">0</span>),</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"lokalna I Morana"</span>)) <span class="sc">+</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_title</span>(<span class="st">"Wartości statystyki"</span>)</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>tm_p <span class="ot">=</span> <span class="fu">tm_shape</span>(powiaty) <span class="sc">+</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"I_pvalue"</span>,</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.scale =</span> <span class="fu">tm_scale_intervals</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.001</span>, <span class="fl">0.01</span>, <span class="fl">0.05</span>, <span class="dv">1</span>),</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>                                              <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"orange"</span>, <span class="st">"yellow"</span>, <span class="st">"grey80"</span>)),</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"p-value"</span>)) <span class="sc">+</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_title</span>(<span class="st">"Istotność statystyczna"</span>)</span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_arrange</span>(tm_i, tm_p)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="11_obszarowe_autokorelacja_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="864"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="krok-5-klastry" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-5-klastry">Krok 5: klastry</h3>
+<p>Klaster to jednostka, która ma <strong>istotną</strong> statystykę lokalną i <strong>określone położenie względem swojego otoczenia</strong>. Położenie odczytuje się z wykresu rozrzutu Morana, który zestawia wartość zmiennej (oś x) z wartością zmiennej opóźnionej przestrzennie (oś y, ang. <em>spatial lag</em> — średnia wartość sąsiadów). Przerywane linie wyznaczają średnie obu zmiennych i dzielą wykres na cztery ćwiartki.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">moran.plot</span>(powiaty<span class="sc">$</span>SB2023, <span class="at">listw =</span> lw, <span class="at">labels =</span> powiaty<span class="sc">$</span>Nazwa,</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">xlab =</span> <span class="st">"Stopa bezrobocia w 2023 r. [%]"</span>,</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">ylab =</span> <span class="st">"Średnia stopa bezrobocia sąsiadów [%]"</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="11_obszarowe_autokorelacja_files/figure-html/moran-plot-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Argument <code>labels</code> podpisuje punkty wyróżniające się wpływem na linię regresji — pozwala odczytać nazwy powiatów najmocniej odstających od ogólnej zależności.</p>
+<p>Nachylenie linii regresji na tym wykresie jest <strong>tożsame z globalną statystyką I Morana</strong> — wynosi 0.4394, czyli dokładnie tyle, co wartość zwrócona przez <code>moran.test()</code>.</p>
+<p>Przerywane linie dzielą wykres na cztery ćwiartki, a każda z nich odpowiada innemu typowi zależności między jednostką a jej otoczeniem:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Ćwiartka</th>
+<th>Jednostka</th>
+<th>Sąsiedzi</th>
+<th>Autokorelacja</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Q1: HH</td>
+<td>wysoka</td>
+<td>wysokie</td>
+<td>dodatnia</td>
+</tr>
+<tr class="even">
+<td>Q2: LH</td>
+<td>niska</td>
+<td>wysokie</td>
+<td>ujemna</td>
+</tr>
+<tr class="odd">
+<td>Q3: LL</td>
+<td>niska</td>
+<td>niskie</td>
+<td>dodatnia</td>
+</tr>
+<tr class="even">
+<td>Q4: HL</td>
+<td>wysoka</td>
+<td>niskie</td>
+<td>ujemna</td>
+</tr>
+</tbody>
+</table>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="11_obszarowe_autokorelacja_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Ćwiartki wykresu rozrzutu Morana dla stopy bezrobocia w 2023 roku.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Funkcja <code>hotspot()</code> łączy oba kryteria: przypisuje jednostce ćwiartkę wykresu rozrzutu i odrzuca jednostki, dla których statystyka nie jest istotna. Argument <code>Prname</code> wskazuje kolumnę z poziomem istotności, <code>cutoff</code> — próg istotności, a <code>p.adjust</code> — korektę na wielokrotne testowanie. Jednostki nieistotne otrzymują <code>NA</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>powiaty<span class="sc">$</span>localI <span class="ot">=</span> <span class="fu">hotspot</span>(locm, <span class="at">Prname =</span> <span class="st">"Pr(z != E(Ii))"</span>,</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>                         <span class="at">cutoff =</span> <span class="fl">0.05</span>, <span class="at">p.adjust =</span> <span class="st">"none"</span>)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(powiaty<span class="sc">$</span>localI, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  Low-Low  High-Low  Low-High High-High      &lt;NA&gt; 
+       33         1         6        43       297 </code></pre>
+</div>
+</div>
+<p><code>hotspot()</code> ma domyślnie <code>cutoff = 0.005</code> i <code>p.adjust = "fdr"</code>. Podajemy oba argumenty jawnie, bo wybieramy inaczej: próg 0,05 i <strong>brak</strong> korekty. Jest to świadome odstępstwo — statystyka lokalna liczona dla 380 jednostek to 380 testów naraz, więc korekta FDR jest metodycznie uzasadniona, ale przy tych danych redukuje liczbę klastrów z 83 do 10. Przy własnej analizie warto zobaczyć obie wersje.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>kolory_moran <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"High-High"</span> <span class="ot">=</span> <span class="st">"red"</span>, <span class="st">"High-Low"</span> <span class="ot">=</span> <span class="st">"lightcoral"</span>,</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Low-High"</span> <span class="ot">=</span> <span class="st">"steelblue1"</span>, <span class="st">"Low-Low"</span> <span class="ot">=</span> <span class="st">"blue"</span>)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(powiaty) <span class="sc">+</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"localI"</span>,</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.scale =</span> <span class="fu">tm_scale_categorical</span>(<span class="at">values =</span> kolory_moran,</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">value.na =</span> <span class="st">"grey90"</span>,</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">label.na =</span> <span class="st">"nieistotne"</span>),</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"Klastry</span><span class="sc">\n</span><span class="st">(lokalna I Morana)"</span>)) <span class="sc">+</span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(woj_granica) <span class="sc">+</span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="11_obszarowe_autokorelacja_files/figure-html/mapa-klastrow-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="krok-6-obszary-wysokich-i-niskich-wartości" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-6-obszary-wysokich-i-niskich-wartości">Krok 6: obszary wysokich i niskich wartości</h3>
+<p>Lokalna statystyka G Getisa &amp; Orda odpowiada na węższe pytanie niż lokalna I Morana: czy jednostka wraz z sąsiadami tworzy skupisko wartości wysokich (<em>hot spot</em>), czy niskich (<em>cold spot</em>). Nie wykrywa jednostek odstających od otoczenia, bo <strong>nie mierzy autokorelacji ujemnej</strong>.</p>
+<p>Funkcja <code>localG_perm()</code> wyznacza istotność przez permutacje, więc wymaga podania liczby symulacji (<code>nsim</code>) oraz ziarna (<code>iseed</code>). Bez <code>iseed</code> każde uruchomienie daje nieco inną liczbę jednostek istotnych.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>locg <span class="ot">=</span> <span class="fu">localG_perm</span>(powiaty<span class="sc">$</span>SB2023, <span class="at">listw =</span> lw, <span class="at">nsim =</span> <span class="dv">999</span>, <span class="at">iseed =</span> <span class="dv">1111</span>)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>powiaty<span class="sc">$</span>localG <span class="ot">=</span> <span class="fu">hotspot</span>(locg, <span class="at">Prname =</span> <span class="st">"Pr(z != E(Gi)) Sim"</span>,</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">cutoff =</span> <span class="fl">0.05</span>, <span class="at">p.adjust =</span> <span class="st">"none"</span>)</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(powiaty<span class="sc">$</span>localG, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ Low High &lt;NA&gt; 
+  51   34  295 </code></pre>
+</div>
+</div>
+<p>Kategoria <code>High</code> to obszary wysokich wartości, <code>Low</code> — obszary niskich wartości.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>kolory_g <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Low"</span> <span class="ot">=</span> <span class="st">"blue"</span>, <span class="st">"High"</span> <span class="ot">=</span> <span class="st">"red"</span>)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(powiaty) <span class="sc">+</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"localG"</span>,</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.scale =</span> <span class="fu">tm_scale_categorical</span>(<span class="at">values =</span> kolory_g,</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">value.na =</span> <span class="st">"grey90"</span>,</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">label.na =</span> <span class="st">"nieistotne"</span>),</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"Obszary wysokich</span><span class="sc">\n</span><span class="st">i niskich wartości"</span>)) <span class="sc">+</span></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(woj_granica) <span class="sc">+</span></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="11_obszarowe_autokorelacja_files/figure-html/mapa-local-g-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Objaśnienie — poza ścieżką zadania
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Lokalna statystyka C Geary’ego</strong> mierzy sumę kwadratów różnic między jednostką a jej sąsiadami, więc jest wielkością <strong>nieujemną</strong>: niskie wartości oznaczają podobieństwo do sąsiadów (autokorelacja dodatnia), wysokie — odmienność (autokorelacja ujemna). Funkcja <code>hotspot()</code> zwraca dla niej inny zestaw kategorii niż dla I Morana: obok <code>High-High</code> i <code>Low-Low</code> pojawiają się <code>Other Positive</code> (jednostka podobna do sąsiadów, ale bez jednoznacznego kierunku) oraz <code>Negative</code> (jednostka odstająca).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>locc <span class="ot">=</span> <span class="fu">localC_perm</span>(powiaty<span class="sc">$</span>SB2023, <span class="at">listw =</span> lw, <span class="at">nsim =</span> <span class="dv">999</span>, <span class="at">iseed =</span> <span class="dv">1111</span>)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>powiaty<span class="sc">$</span>localC <span class="ot">=</span> <span class="fu">hotspot</span>(locc, <span class="at">Prname =</span> <span class="st">"Pr(z != E(Ci)) Sim"</span>,</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">cutoff =</span> <span class="fl">0.05</span>, <span class="at">p.adjust =</span> <span class="st">"none"</span>)</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(powiaty<span class="sc">$</span>localC, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+     High-High        Low-Low Other Positive       Negative           &lt;NA&gt; 
+            35             58              2              4            281 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>kolory_c <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"High-High"</span> <span class="ot">=</span> <span class="st">"red"</span>, <span class="st">"Low-Low"</span> <span class="ot">=</span> <span class="st">"blue"</span>,</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>             <span class="st">"Other Positive"</span> <span class="ot">=</span> <span class="st">"lightcoral"</span>, <span class="st">"Negative"</span> <span class="ot">=</span> <span class="st">"steelblue1"</span>)</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(powiaty) <span class="sc">+</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"localC"</span>,</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.scale =</span> <span class="fu">tm_scale_categorical</span>(<span class="at">values =</span> kolory_c,</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">value.na =</span> <span class="st">"grey90"</span>,</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">label.na =</span> <span class="st">"nieistotne"</span>),</span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"Klastry</span><span class="sc">\n</span><span class="st">(lokalna C Geary'ego)"</span>)) <span class="sc">+</span></span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(woj_granica) <span class="sc">+</span></span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="11_obszarowe_autokorelacja_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="krok-7-zapis-wyników" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-7-zapis-wyników">Krok 7: zapis wyników</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"out"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write_sf</span>(powiaty, <span class="st">"out/powiaty_autokorelacja.gpkg"</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="interpretacja-wyniku" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="interpretacja-wyniku">Interpretacja wyniku</h3>
+<p><strong>Miary globalne są zgodne i wskazują na dodatnią autokorelację przestrzenną.</strong> Statystyka I Morana wynosi 0.4394, czyli jest dodatnia i wyraźnie większa od wartości oczekiwanej przy braku autokorelacji (-0.0026). Statystyka C Geary’ego wynosi 0.5415, a więc mieści się w przedziale 0–1, który również odpowiada autokorelacji dodatniej. Oba testy Monte Carlo dały pseudo <em>p</em>-value 0.001, czyli wartość najmniejszą osiągalną przy 999 symulacjach. Statystyka G Getisa &amp; Orda prowadzi do tego samego wniosku.</p>
+<p>Dodatnia autokorelacja oznacza, że powiaty o podobnej stopie bezrobocia <strong>sąsiadują ze sobą częściej, niż wynikałoby z losowego rozmieszczenia wartości</strong>. Miara globalna nie mówi jednak, gdzie te zgrupowania leżą — do tego potrzebne są miary lokalne.</p>
+<p><strong>Istotną statystykę lokalną ma 83 z 380 powiatów</strong>, czyli nieco ponad jedna piąta zbioru. Pozostałe powiaty nie różnią się od swojego otoczenia bardziej, niż można oczekiwać przy rozmieszczeniu losowym — i dlatego nie trafiają do żadnego klastra.</p>
+<p>Klastry rozkładają się następująco:</p>
+<ul>
+<li><strong>High-High</strong> — 43 powiatów: powiaty o wysokiej stopie bezrobocia otoczone powiatami o wysokiej stopie bezrobocia. Tworzą dwa zwarte obszary: południowo-wschodni (Podkarpacie) i mazowiecko-świętokrzyski w okolicach Radomia.</li>
+<li><strong>Low-Low</strong> — 33 powiatów: powiaty o niskiej stopie bezrobocia otoczone podobnymi. Skupiają się wokół największych miast: Warszawy, Poznania, Krakowa i Trójmiasta.</li>
+<li><strong>Low-High</strong> i <strong>High-Low</strong> — łącznie 7 powiatów: jednostki odstające od swojego otoczenia. Jest ich niewiele, co jest zgodne z dodatnią wartością globalnej statystyki I Morana.</li>
+</ul>
+<p>Statystyka G Getisa &amp; Orda wskazuje obszary wysokich wartości w 34 powiatach, a obszary niskich wartości — w 51 powiatach. Liczby te nie pokrywają się z liczebnościami klastrów High-High i Low-Low z lokalnej I Morana, bo obie statystyki mierzą co innego: I Morana porównuje jednostkę z jej sąsiadami, a G sumuje wartości w otoczeniu i porównuje tę sumę z sumą dla całego zbioru. <strong>Zgodność kierunku wniosku przy różnych liczebnościach jest typowa i nie świadczy o błędzie.</strong></p>
+<p>Wynik jest opisem rozmieszczenia, nie wyjaśnieniem. Mapa wskazuje, że wysokie bezrobocie grupuje się na Podkarpaciu i w okolicach Radomia; pytanie o przyczyny tego układu należy do modelowania, które zestawia stopę bezrobocia z innymi zmiennymi.</p>
+</section>
+</section>
+<section id="pytania-kontrolne" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="pytania-kontrolne"><span class="header-section-number">7.5</span> Pytania kontrolne</h2>
+<blockquote class="blockquote">
+<p><strong>1.</strong> Czym różni się obiekt klasy <code>nb</code> od obiektu klasy <code>listw</code>?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Obiekt <code>nb</code> to sama <strong>lista sąsiadów</strong>: dla każdej jednostki numery wierszy jednostek z nią sąsiadujących. Informacja jest binarna — sąsiad albo jest, albo go nie ma.</p>
+<p>Obiekt <code>listw</code> to lista sąsiadów <strong>uzupełniona o wagi</strong> przypisane każdej parze. Sposób nadania wag określa argument <code>style</code> funkcji <code>nb2listw()</code>. Funkcje liczące miary autokorelacji przyjmują <code>listw</code>, nie <code>nb</code>.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>2.</strong> Czym różni się reguła <em>queen</em> od reguły <em>rook</em>?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Zakresem tego, co uznaje się za wspólną granicę. Reguła <em>rook</em> wymaga wspólnego <strong>odcinka</strong> granicy. Regule <em>queen</em> wystarcza jeden wspólny <strong>punkt</strong> — sąsiadami są więc także jednostki stykające się narożnikiem.</p>
+<p>Reguła <em>queen</em> daje zawsze co najmniej tyle samo relacji sąsiedztwa co <em>rook</em>, nigdy mniej. W funkcji <code>poly2nb()</code> wybiera się ją argumentem <code>queen = TRUE</code> (wartość domyślna).</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>3.</strong> Dlaczego <code>globalG.test()</code> wymaga wag binarnych, a <code>moran.test()</code> standaryzowanych wierszami?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Statystyka G Getisa &amp; Orda jest zbudowana jako <strong>stosunek sumy wartości w otoczeniu do sumy wszystkich wartości</strong>. Przy wagach standaryzowanych wierszami sumowane są wartości przemnożone przez ułamki, co zmienia sens tego stosunku. <code>spdep</code> zwraca w takim wypadku ostrzeżenie <code>Binary weights recommended</code>.</p>
+<p>Dla I Morana i C Geary’ego standaryzacja wierszami sprawia, że wkład każdej jednostki jest porównywalny niezależnie od liczby jej sąsiadów — bez niej jednostki mające wielu sąsiadów ważyłyby w wyniku więcej.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>4.</strong> Które miary autokorelacji wykrywają autokorelację ujemną, a która wyłącznie dodatnią?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Autokorelację ujemną wykrywają <strong>I Morana</strong> (wartości poniżej zera) i <strong>C Geary’ego</strong> (wartości z przedziału 1–2), a w skali lokalnej — lokalna I Morana (ćwiartki <code>Low-High</code> i <code>High-Low</code>) oraz lokalna C Geary’ego (kategoria <code>Negative</code>).</p>
+<p><strong>G Getisa &amp; Orda</strong> mierzy wyłącznie autokorelację dodatnią. Jej hipotezą alternatywną jest skupienie wartości podobnych: statystyka sumuje wartości w otoczeniu jednostki i sprawdza, czy suma jest nietypowo wysoka albo nietypowo niska względem całego zbioru. Jednostka o wysokiej wartości otoczona niskimi daje w tym otoczeniu sumę przeciętną, więc w tej statystyce się nie wyróżni.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>5.</strong> Statystyka globalna I Morana dla pewnego zbioru wyniosła 0,02 przy <em>p</em> = 0,4. Czy to znaczy, że w danych nie ma żadnych zgrupowań podobnych wartości?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Nie. Oznacza to tylko, że <strong>w skali całego zbioru</strong> nie ma podstaw do odrzucenia hipotezy o braku autokorelacji przestrzennej.</p>
+<p>Miara globalna sprowadza cały zbiór do jednej liczby, więc klaster wysokich wartości w jednej części obszaru i klaster niskich wartości w innej mogą się w niej wzajemnie znieść. Dlatego statystyki globalne i lokalne liczy się razem: globalna odpowiada na pytanie „czy”, lokalna — „gdzie”.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>6.</strong> Dlaczego klastry wydziela się wyłącznie z istotnych statystycznie wartości statystyki lokalnej?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Ponieważ sama wartość <span class="math inline">\(I_i\)</span> zawsze jest dodatnia albo ujemna — każda jednostka trafia do jednej z czterech ćwiartek wykresu rozrzutu, także wtedy, gdy jej położenie względem sąsiadów jest zwykłą zmiennością losową. Mapa surowych wartości <span class="math inline">\(I_i\)</span> pokazuje więc „klastry” w całym obszarze.</p>
+<p>Istotność statystyczna rozstrzyga, czy odnotowane podobieństwo do sąsiadów jest większe, niż można oczekiwać przy losowym rozmieszczeniu wartości. Dla stopy bezrobocia w 2023 roku warunek ten spełnia 83 z 380 powiatów.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>7.</strong> Co oznaczają ćwiartki Q2 (LH) i Q4 (HL) wykresu rozrzutu Morana?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Obie oznaczają <strong>ujemną</strong> autokorelację przestrzenną, czyli jednostkę odstającą od swojego otoczenia.</p>
+<p>Q2 (LH) to jednostka o wartości niższej od średniej otoczona jednostkami o wartościach wysokich. Q4 (HL) — odwrotnie: jednostka o wartości wysokiej otoczona niskimi. Dodatnią autokorelację wskazują ćwiartki Q1 (HH) i Q3 (LL).</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>8.</strong> Dwie osoby policzyły lokalną statystykę G Getisa &amp; Orda dla tych samych danych i otrzymały różną liczbę obszarów wysokich wartości. Co mogło się stać?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>localG_perm()</code> wyznacza istotność przez <strong>permutacje</strong>, więc wynik zależy od losowania. Bez ustawienia ziarna (<code>iseed</code>) każde uruchomienie daje nieco inny zestaw jednostek istotnych — przy <code>nsim = 99</code> różnice sięgają kilku jednostek.</p>
+<p>Drugą możliwą przyczyną jest inna liczba symulacji: przy <code>nsim = 999</code> pseudo <em>p</em>-value jest wyznaczane dokładniej niż przy <code>nsim = 99</code>, więc liczba jednostek istotnych też się zmienia. Żeby wynik był odtwarzalny, trzeba ustalić <strong>oba</strong> parametry.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>9.</strong> Dlaczego lokalna statystyka C Geary’ego nie przyjmuje wartości ujemnych?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Ponieważ liczona jest jako suma <strong>kwadratów</strong> różnic między wartością jednostki a wartościami jej sąsiadów: <span class="math inline">\(c_i = \sum_j w_{ij}(x_i - x_j)^2\)</span>. Suma kwadratów nie może być ujemna.</p>
+<p>Interpretacja opiera się więc nie na znaku, lecz na położeniu wartości względem rozkładu uzyskanego z permutacji: <strong>niskie</strong> wartości <span class="math inline">\(c_i\)</span> oznaczają podobieństwo do sąsiadów (autokorelacja dodatnia), <strong>wysokie</strong> — odmienność (autokorelacja ujemna).</p>
+</div>
+</div>
+</div>
+</section>
+<section id="podsumowanie" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="podsumowanie"><span class="header-section-number">7.6</span> Podsumowanie</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Metoda</th>
+<th>Funkcja</th>
+<th>Co mówi o danych</th>
+<th>Warunek poprawnego użycia</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>lista sąsiadów</td>
+<td><code>poly2nb(queen =)</code></td>
+<td>które jednostki ze sobą sąsiadują</td>
+<td>budowana na obiekcie, na którym liczone są statystyki</td>
+</tr>
+<tr class="even">
+<td>macierz wag</td>
+<td><code>nb2listw(style =)</code></td>
+<td>jak mocno liczy się każdy sąsiad</td>
+<td>styl wag dobrany do miary</td>
+</tr>
+<tr class="odd">
+<td>globalna I Morana</td>
+<td><code>moran.test()</code>, <code>moran.mc()</code></td>
+<td>czy w całym zbiorze podobne wartości sąsiadują ze sobą częściej niż losowo</td>
+<td>wagi <code>"W"</code>; pytanie „gdzie” należy do miar lokalnych</td>
+</tr>
+<tr class="even">
+<td>globalna C Geary’ego</td>
+<td><code>geary.test()</code>, <code>geary.mc()</code></td>
+<td>to samo, na skali odwróconej (0–1 to autokorelacja dodatnia)</td>
+<td>wagi <code>"W"</code>; pytanie „gdzie” należy do miar lokalnych</td>
+</tr>
+<tr class="odd">
+<td>globalna G Getisa &amp; Orda</td>
+<td><code>globalG.test()</code></td>
+<td>czy w zbiorze występuje <strong>dodatnia</strong> autokorelacja</td>
+<td>wagi <code>"B"</code>; autokorelację ujemną wykrywają I Morana i C Geary’ego</td>
+</tr>
+<tr class="even">
+<td>wykres rozrzutu Morana</td>
+<td><code>moran.plot()</code></td>
+<td>położenie każdej jednostki względem sąsiadów; nachylenie = globalna I Morana</td>
+<td>istotność odczytuje się z <code>localmoran()</code></td>
+</tr>
+<tr class="odd">
+<td>lokalna I Morana</td>
+<td><code>localmoran()</code></td>
+<td>wartość statystyki i jej istotność dla każdej jednostki</td>
+<td>klastry wydziela dopiero <code>hotspot()</code></td>
+</tr>
+<tr class="even">
+<td>klasyfikacja klastrów</td>
+<td><code>hotspot()</code></td>
+<td>typ klastra (HH, LL, LH, HL) dla jednostek istotnych</td>
+<td>wynik zależy od <code>cutoff</code> i <code>p.adjust</code> — podajemy je jawnie</td>
+</tr>
+<tr class="odd">
+<td>lokalna G Getisa &amp; Orda</td>
+<td><code>localG_perm()</code></td>
+<td>gdzie leżą obszary wysokich i niskich wartości</td>
+<td>wymaga <code>nsim</code> i <code>iseed</code>; jednostki odstające wykrywa lokalna I Morana</td>
+</tr>
+<tr class="even">
+<td>lokalna C Geary’ego</td>
+<td><code>localC_perm()</code></td>
+<td>podobieństwo jednostki do sąsiadów, także jednostki odstające</td>
+<td>statystyka nieujemna — wniosek z pseudo <em>p</em>-value, nie ze znaku</td>
+</tr>
+</tbody>
+</table>
+<p>Cztery zasady, do których wracamy przy projekcie:</p>
+<ol type="1">
+<li><strong>Listę sąsiadów buduje się na tym obiekcie, na którym liczy się statystyki.</strong> Obiekty <code>nb</code> i <code>listw</code> odwołują się do numerów wierszy; usunięcie wiersza po zbudowaniu listy unieważnia ją.</li>
+<li><strong>Styl wag wybiera się świadomie.</strong> <code>"W"</code> dla I Morana i C Geary’ego, <code>"B"</code> dla <code>globalG.test()</code>.</li>
+<li><strong>Klaster to istotność plus położenie względem otoczenia.</strong> Mapa surowych wartości statystyki lokalnej nie jest mapą klastrów.</li>
+<li><strong>Procedury permutacyjne wymagają ustalenia <code>nsim</code> i ziarna.</strong> Bez nich wynik zmienia się przy każdym uruchomieniu, a liczby podane w opracowaniu stają się nieodtwarzalne.</li>
+</ol>
+</section>
+<section id="pełny-kod-analizy" class="level2" data-number="7.7">
+<h2 data-number="7.7" class="anchored" data-anchor-id="pełny-kod-analizy"><span class="header-section-number">7.7</span> Pełny kod analizy</h2>
+<p>Poniżej zebrany jest cały kod Kroków 1–7 w kolejności wykonania — do skopiowania do własnego skryptu zamiast przeklejania pojedynczych fragmentów. Nie ma w nim kodu objaśniającego ani ryciny dydaktycznej: to dokładnie ta ścieżka, która prowadzi od danych wejściowych do pliku <code>out/powiaty_autokorelacja.gpkg</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spdep)</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1111</span>)</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>bezrobocie <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"data/bezrobocie_pl.csv"</span>, <span class="at">sep =</span> <span class="st">";"</span>, <span class="at">dec =</span> <span class="st">"."</span>)</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>powiaty_granica <span class="ot">=</span> <span class="fu">read_sf</span>(<span class="st">"data/powiaty_pl.gpkg"</span>)</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>woj_granica <span class="ot">=</span> <span class="fu">read_sf</span>(<span class="st">"data/wojewodztwa.gpkg"</span>)</span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>powiaty <span class="ot">=</span> powiaty_granica <span class="sc">|&gt;</span></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Kod =</span> <span class="fu">as.integer</span>(<span class="fu">paste0</span>(TERYT, <span class="st">"000"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Kod) <span class="sc">|&gt;</span></span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(bezrobocie, <span class="at">by =</span> <span class="st">"Kod"</span>)</span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>powiaty</span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(powiaty) <span class="sc">+</span></span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"SB2023"</span>,</span>
+<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.scale =</span> <span class="fu">tm_scale_intervals</span>(<span class="at">values =</span> <span class="st">"brewer.yl_or_br"</span>),</span>
+<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"Stopa bezrobocia</span><span class="sc">\n</span><span class="st">w 2023 r. [%]"</span>)) <span class="sc">+</span></span>
+<span id="cb42-18"><a href="#cb42-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(woj_granica) <span class="sc">+</span></span>
+<span id="cb42-19"><a href="#cb42-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb42-20"><a href="#cb42-20" aria-hidden="true" tabindex="-1"></a>nb_q <span class="ot">=</span> <span class="fu">poly2nb</span>(powiaty, <span class="at">queen =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb42-21"><a href="#cb42-21" aria-hidden="true" tabindex="-1"></a>nb_q</span>
+<span id="cb42-22"><a href="#cb42-22" aria-hidden="true" tabindex="-1"></a>nb_q[[<span class="dv">1</span>]]</span>
+<span id="cb42-23"><a href="#cb42-23" aria-hidden="true" tabindex="-1"></a>powiaty<span class="sc">$</span>Nazwa[nb_q[[<span class="dv">1</span>]]]</span>
+<span id="cb42-24"><a href="#cb42-24" aria-hidden="true" tabindex="-1"></a>lw <span class="ot">=</span> <span class="fu">nb2listw</span>(nb_q, <span class="at">style =</span> <span class="st">"W"</span>)</span>
+<span id="cb42-25"><a href="#cb42-25" aria-hidden="true" tabindex="-1"></a>lw_b <span class="ot">=</span> <span class="fu">nb2listw</span>(nb_q, <span class="at">style =</span> <span class="st">"B"</span>)</span>
+<span id="cb42-26"><a href="#cb42-26" aria-hidden="true" tabindex="-1"></a>lw</span>
+<span id="cb42-27"><a href="#cb42-27" aria-hidden="true" tabindex="-1"></a>lw<span class="sc">$</span>weights[[<span class="dv">1</span>]]</span>
+<span id="cb42-28"><a href="#cb42-28" aria-hidden="true" tabindex="-1"></a><span class="fu">moran.test</span>(powiaty<span class="sc">$</span>SB2023, <span class="at">listw =</span> lw)</span>
+<span id="cb42-29"><a href="#cb42-29" aria-hidden="true" tabindex="-1"></a>moran_mc <span class="ot">=</span> <span class="fu">moran.mc</span>(powiaty<span class="sc">$</span>SB2023, <span class="at">listw =</span> lw, <span class="at">nsim =</span> <span class="dv">999</span>)</span>
+<span id="cb42-30"><a href="#cb42-30" aria-hidden="true" tabindex="-1"></a>moran_mc</span>
+<span id="cb42-31"><a href="#cb42-31" aria-hidden="true" tabindex="-1"></a><span class="fu">geary.test</span>(powiaty<span class="sc">$</span>SB2023, <span class="at">listw =</span> lw)</span>
+<span id="cb42-32"><a href="#cb42-32" aria-hidden="true" tabindex="-1"></a><span class="fu">geary.mc</span>(powiaty<span class="sc">$</span>SB2023, <span class="at">listw =</span> lw, <span class="at">nsim =</span> <span class="dv">999</span>)</span>
+<span id="cb42-33"><a href="#cb42-33" aria-hidden="true" tabindex="-1"></a><span class="fu">globalG.test</span>(powiaty<span class="sc">$</span>SB2023, <span class="at">listw =</span> lw_b)</span>
+<span id="cb42-34"><a href="#cb42-34" aria-hidden="true" tabindex="-1"></a>locm <span class="ot">=</span> <span class="fu">localmoran</span>(powiaty<span class="sc">$</span>SB2023, <span class="at">listw =</span> lw)</span>
+<span id="cb42-35"><a href="#cb42-35" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(locm)</span>
+<span id="cb42-36"><a href="#cb42-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-37"><a href="#cb42-37" aria-hidden="true" tabindex="-1"></a><span class="co"># dwie kolumny wyniku dopisujemy do obiektu przestrzennego, żeby móc je zwizualizować</span></span>
+<span id="cb42-38"><a href="#cb42-38" aria-hidden="true" tabindex="-1"></a>powiaty<span class="sc">$</span>I <span class="ot">=</span> locm[, <span class="st">"Ii"</span>]</span>
+<span id="cb42-39"><a href="#cb42-39" aria-hidden="true" tabindex="-1"></a>powiaty<span class="sc">$</span>I_pvalue <span class="ot">=</span> locm[, <span class="st">"Pr(z != E(Ii))"</span>]</span>
+<span id="cb42-40"><a href="#cb42-40" aria-hidden="true" tabindex="-1"></a><span class="fu">moran.plot</span>(powiaty<span class="sc">$</span>SB2023, <span class="at">listw =</span> lw, <span class="at">labels =</span> powiaty<span class="sc">$</span>Nazwa,</span>
+<span id="cb42-41"><a href="#cb42-41" aria-hidden="true" tabindex="-1"></a>           <span class="at">xlab =</span> <span class="st">"Stopa bezrobocia w 2023 r. [%]"</span>,</span>
+<span id="cb42-42"><a href="#cb42-42" aria-hidden="true" tabindex="-1"></a>           <span class="at">ylab =</span> <span class="st">"Średnia stopa bezrobocia sąsiadów [%]"</span>)</span>
+<span id="cb42-43"><a href="#cb42-43" aria-hidden="true" tabindex="-1"></a>powiaty<span class="sc">$</span>localI <span class="ot">=</span> <span class="fu">hotspot</span>(locm, <span class="at">Prname =</span> <span class="st">"Pr(z != E(Ii))"</span>,</span>
+<span id="cb42-44"><a href="#cb42-44" aria-hidden="true" tabindex="-1"></a>                         <span class="at">cutoff =</span> <span class="fl">0.05</span>, <span class="at">p.adjust =</span> <span class="st">"none"</span>)</span>
+<span id="cb42-45"><a href="#cb42-45" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(powiaty<span class="sc">$</span>localI, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span>
+<span id="cb42-46"><a href="#cb42-46" aria-hidden="true" tabindex="-1"></a>kolory_moran <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"High-High"</span> <span class="ot">=</span> <span class="st">"red"</span>, <span class="st">"High-Low"</span> <span class="ot">=</span> <span class="st">"lightcoral"</span>,</span>
+<span id="cb42-47"><a href="#cb42-47" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Low-High"</span> <span class="ot">=</span> <span class="st">"steelblue1"</span>, <span class="st">"Low-Low"</span> <span class="ot">=</span> <span class="st">"blue"</span>)</span>
+<span id="cb42-48"><a href="#cb42-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-49"><a href="#cb42-49" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(powiaty) <span class="sc">+</span></span>
+<span id="cb42-50"><a href="#cb42-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"localI"</span>,</span>
+<span id="cb42-51"><a href="#cb42-51" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.scale =</span> <span class="fu">tm_scale_categorical</span>(<span class="at">values =</span> kolory_moran,</span>
+<span id="cb42-52"><a href="#cb42-52" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">value.na =</span> <span class="st">"grey90"</span>,</span>
+<span id="cb42-53"><a href="#cb42-53" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">label.na =</span> <span class="st">"nieistotne"</span>),</span>
+<span id="cb42-54"><a href="#cb42-54" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"Klastry</span><span class="sc">\n</span><span class="st">(lokalna I Morana)"</span>)) <span class="sc">+</span></span>
+<span id="cb42-55"><a href="#cb42-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(woj_granica) <span class="sc">+</span></span>
+<span id="cb42-56"><a href="#cb42-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb42-57"><a href="#cb42-57" aria-hidden="true" tabindex="-1"></a>locg <span class="ot">=</span> <span class="fu">localG_perm</span>(powiaty<span class="sc">$</span>SB2023, <span class="at">listw =</span> lw, <span class="at">nsim =</span> <span class="dv">999</span>, <span class="at">iseed =</span> <span class="dv">1111</span>)</span>
+<span id="cb42-58"><a href="#cb42-58" aria-hidden="true" tabindex="-1"></a>powiaty<span class="sc">$</span>localG <span class="ot">=</span> <span class="fu">hotspot</span>(locg, <span class="at">Prname =</span> <span class="st">"Pr(z != E(Gi)) Sim"</span>,</span>
+<span id="cb42-59"><a href="#cb42-59" aria-hidden="true" tabindex="-1"></a>                         <span class="at">cutoff =</span> <span class="fl">0.05</span>, <span class="at">p.adjust =</span> <span class="st">"none"</span>)</span>
+<span id="cb42-60"><a href="#cb42-60" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(powiaty<span class="sc">$</span>localG, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span>
+<span id="cb42-61"><a href="#cb42-61" aria-hidden="true" tabindex="-1"></a>kolory_g <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Low"</span> <span class="ot">=</span> <span class="st">"blue"</span>, <span class="st">"High"</span> <span class="ot">=</span> <span class="st">"red"</span>)</span>
+<span id="cb42-62"><a href="#cb42-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-63"><a href="#cb42-63" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(powiaty) <span class="sc">+</span></span>
+<span id="cb42-64"><a href="#cb42-64" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"localG"</span>,</span>
+<span id="cb42-65"><a href="#cb42-65" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.scale =</span> <span class="fu">tm_scale_categorical</span>(<span class="at">values =</span> kolory_g,</span>
+<span id="cb42-66"><a href="#cb42-66" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">value.na =</span> <span class="st">"grey90"</span>,</span>
+<span id="cb42-67"><a href="#cb42-67" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">label.na =</span> <span class="st">"nieistotne"</span>),</span>
+<span id="cb42-68"><a href="#cb42-68" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"Obszary wysokich</span><span class="sc">\n</span><span class="st">i niskich wartości"</span>)) <span class="sc">+</span></span>
+<span id="cb42-69"><a href="#cb42-69" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(woj_granica) <span class="sc">+</span></span>
+<span id="cb42-70"><a href="#cb42-70" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb42-71"><a href="#cb42-71" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"out"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb42-72"><a href="#cb42-72" aria-hidden="true" tabindex="-1"></a><span class="fu">write_sf</span>(powiaty, <span class="st">"out/powiaty_autokorelacja.gpkg"</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Skopiowano!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Skopiowano!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./10_obszarowe_sasiedztwo.html" class="pagination-link" aria-label="Określanie sąsiedztwa danych obszarowych">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Określanie sąsiedztwa danych obszarowych</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./12_pola_teoria.html" class="pagination-link" aria-label="DANE POWIERZCHNIOWE CIĄGŁE PRZESTRZENNIE">
+        <span class="nav-page-text">DANE POWIERZCHNIOWE CIĄGŁE PRZESTRZENNIE</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,1666 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pl" xml:lang="pl"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>11&nbsp; Ocena jakości estymacji – Statystyka przestrzenna</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./17_zadania_samodzielne.html" rel="next">
+<link href="./15_pola_estymacja.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-c852b7e71cc1c09f55f367b2512aabbd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Brak wyników",
+    "search-matching-documents-text": "dopasowane dokumenty",
+    "search-copy-link-title": "Kopiuj link do wyszukiwania",
+    "search-hide-matches-text": "Ukryj dodatkowe dopasowania",
+    "search-more-match-text": "więcej dopasowań w tym dokumencie",
+    "search-more-matches-text": "więcej dopasowań w tym dokumencie",
+    "search-clear-button-title": "Wyczyść",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Anuluj",
+    "search-submit-button-title": "Zatwierdź",
+    "search-label": "Szukaj"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Przełącz pasek boczny" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./12_pola_teoria.html">DANE POWIERZCHNIOWE CIĄGŁE PRZESTRZENNIE</a></li><li class="breadcrumb-item"><a href="./16_pola_ocena.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Ocena jakości estymacji</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Przełącz pasek boczny" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Szukaj" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Statystyka przestrzenna</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Szukaj"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">O skrypcie</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./01_wstep.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">WSTĘP</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_dane_przestrzenne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Dane przestrzenne w R</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./03_eksploracja_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">EKSPLORACYJNA ANALIZA DANYCH</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_eksploracja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Eksploracyjna analiza danych</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./05_punkty_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE PUNKTOWE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_punkty_centrograficzne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Statystyki centrograficzne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_punkty_intensywnosc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Metody oparte na analizie intensywności</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_punkty_odleglosc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Metody oparte na odległości</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./09_obszarowe_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE OBSZAROWE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_obszarowe_sasiedztwo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Określanie sąsiedztwa danych obszarowych</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_obszarowe_autokorelacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Miary autokorelacji danych obszarowych</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./12_pola_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE POWIERZCHNIOWE CIĄGŁE PRZESTRZENNIE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13_pola_interpolacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Metody interpolacji</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14_pola_semiwariogram.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Analiza i modelowanie struktury przestrzennej</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15_pola_estymacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Geostatystyczne metody estymacji</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_pola_ocena.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Ocena jakości estymacji</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">ZADANIA I PROJEKTY</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_zadania_samodzielne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Zadania samodzielne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18_projekt1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Projekt 1: przestępczość a zmienne społeczno-ekonomiczne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19_projekt2_geostatystyka.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Projekt 2: Geostatystyka</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Załączniki</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./A_pakiety.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Pakiety</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./B_funkcje.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Funkcje</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./C_operacje.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Operacje na danych przestrzennych</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./D_slownik.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Słownik pojęć</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bibliografia</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Spis treści</h2>
+   
+  <ul>
+  <li><a href="#wprowadzenie" id="toc-wprowadzenie" class="nav-link active" data-scroll-target="#wprowadzenie"><span class="header-section-number">11.1</span> Wprowadzenie</a></li>
+  <li><a href="#struktura-obiektów-wynik-walidacji" id="toc-struktura-obiektów-wynik-walidacji" class="nav-link" data-scroll-target="#struktura-obiektów-wynik-walidacji"><span class="header-section-number">11.2</span> Struktura obiektów: wynik walidacji</a></li>
+  <li><a href="#ocena-jakości-estymacji-w-r" id="toc-ocena-jakości-estymacji-w-r" class="nav-link" data-scroll-target="#ocena-jakości-estymacji-w-r"><span class="header-section-number">11.3</span> Ocena jakości estymacji w R</a></li>
+  <li><a href="#przykład-ocena-jakości-estymacji-temperatury" id="toc-przykład-ocena-jakości-estymacji-temperatury" class="nav-link" data-scroll-target="#przykład-ocena-jakości-estymacji-temperatury"><span class="header-section-number">11.4</span> Przykład: ocena jakości estymacji temperatury</a>
+  <ul class="collapse">
+  <li><a href="#krok-1-podział-zbioru" id="toc-krok-1-podział-zbioru" class="nav-link" data-scroll-target="#krok-1-podział-zbioru">Krok 1: podział zbioru</a></li>
+  <li><a href="#krok-2-semiwariogram-i-model-na-zbiorze-treningowym" id="toc-krok-2-semiwariogram-i-model-na-zbiorze-treningowym" class="nav-link" data-scroll-target="#krok-2-semiwariogram-i-model-na-zbiorze-treningowym">Krok 2: semiwariogram i model na zbiorze treningowym</a></li>
+  <li><a href="#krok-3-estymacja-dla-zbioru-testowego-i-błąd-estymacji" id="toc-krok-3-estymacja-dla-zbioru-testowego-i-błąd-estymacji" class="nav-link" data-scroll-target="#krok-3-estymacja-dla-zbioru-testowego-i-błąd-estymacji">Krok 3: estymacja dla zbioru testowego i błąd estymacji</a></li>
+  <li><a href="#krok-4-analiza-błędu-estymacji" id="toc-krok-4-analiza-błędu-estymacji" class="nav-link" data-scroll-target="#krok-4-analiza-błędu-estymacji">Krok 4: analiza błędu estymacji</a></li>
+  <li><a href="#krok-5-statystyki-jakości-estymacji" id="toc-krok-5-statystyki-jakości-estymacji" class="nav-link" data-scroll-target="#krok-5-statystyki-jakości-estymacji">Krok 5: statystyki jakości estymacji</a></li>
+  <li><a href="#krok-6-kroswalidacja" id="toc-krok-6-kroswalidacja" class="nav-link" data-scroll-target="#krok-6-kroswalidacja">Krok 6: kroswalidacja</a></li>
+  <li><a href="#krok-7-estymacja-w-siatce-i-zapis" id="toc-krok-7-estymacja-w-siatce-i-zapis" class="nav-link" data-scroll-target="#krok-7-estymacja-w-siatce-i-zapis">Krok 7: estymacja w siatce i zapis</a></li>
+  <li><a href="#interpretacja-wyniku" id="toc-interpretacja-wyniku" class="nav-link" data-scroll-target="#interpretacja-wyniku">Interpretacja wyniku</a></li>
+  </ul></li>
+  <li><a href="#pytania-kontrolne" id="toc-pytania-kontrolne" class="nav-link" data-scroll-target="#pytania-kontrolne"><span class="header-section-number">11.5</span> Pytania kontrolne</a></li>
+  <li><a href="#podsumowanie" id="toc-podsumowanie" class="nav-link" data-scroll-target="#podsumowanie"><span class="header-section-number">11.6</span> Podsumowanie</a></li>
+  <li><a href="#pełny-kod-analizy" id="toc-pełny-kod-analizy" class="nav-link" data-scroll-target="#pełny-kod-analizy"><span class="header-section-number">11.7</span> Pełny kod analizy</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./12_pola_teoria.html">DANE POWIERZCHNIOWE CIĄGŁE PRZESTRZENNIE</a></li><li class="breadcrumb-item"><a href="./16_pola_ocena.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Ocena jakości estymacji</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-pola-ocena" class="quarto-section-identifier"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Ocena jakości estymacji</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Czego się nauczysz
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Po tym rozdziale potrafisz wykonać w R:</strong></p>
+<ul>
+<li>podzielić zbiór danych na część treningową i testową (<code>initial_split()</code>),</li>
+<li>zbudować model semiwariogramu na zbiorze treningowym i wykonać estymację dla zbioru testowego,</li>
+<li>obliczyć błąd estymacji i przedstawić go na mapie, histogramie i wykresie rozrzutu,</li>
+<li>obliczyć średni błąd estymacji, pierwiastek błędu średniokwadratowego i współczynnik determinacji,</li>
+<li>przeprowadzić kroswalidację (<code>krige.cv()</code>),</li>
+<li>wykonać estymację w siatce po pozytywnej ocenie modelu.</li>
+</ul>
+<p><strong>Rozumiesz i umiesz zinterpretować:</strong></p>
+<ul>
+<li>co oznacza <strong>dodatni</strong>, a co <strong>ujemny</strong> błąd estymacji,</li>
+<li>jaki rozkład błędu świadczy o dobrej estymacji,</li>
+<li>wartości optymalne MPE, RMSE i <span class="math inline">\(r^2\)</span> oraz to, czego każda z tych statystyk nie wykrywa samodzielnie,</li>
+<li>różnicę między walidacją podzbiorem a kroswalidacją — ich zalety i wady,</li>
+<li>dlaczego <strong>wariancja krigingowa</strong> z <a href="15_pola_estymacja.html" class="quarto-xref"><span>Rozdział 10</span></a> mierzy co innego niż błąd estymacji.</li>
+</ul>
+<p><strong>Teoria:</strong> <a href="./12_pola_teoria.html#najwazniejsze-pola">Najważniejsze informacje</a>. <strong>Funkcje:</strong> <a href="B_funkcje.html" class="quarto-xref"><span>Załącznik B</span></a>. <strong>Słownik:</strong> <a href="D_slownik.html" class="quarto-xref"><span>Załącznik D</span></a>.</p>
+</div>
+</div>
+<section id="wprowadzenie" class="level2" data-number="11.1">
+<h2 data-number="11.1" class="anchored" data-anchor-id="wprowadzenie"><span class="header-section-number">11.1</span> Wprowadzenie</h2>
+<p><a href="15_pola_estymacja.html" class="quarto-xref"><span>Rozdział 10</span></a> dał mapę temperatury i mapę wariancji krigingowej. Wariancja krigingowa opisuje jednak <strong>geometrię sieci pomiarowej</strong>, a nie trafność oszacowań — nie korzysta z wartości badanej cechy, więc nie może powiedzieć, o ile estymacja rozminęła się z rzeczywistością.</p>
+<p>Na to pytanie odpowiada <strong>walidacja</strong>: procedura, która dla wybranych lokalizacji dostarcza <strong>dwóch</strong> wartości — obserwowanej i estymowanej — i pozwala je porównać. Różnica między nimi to <strong>błąd estymacji</strong>, a jego rozkład i statystyki podsumowujące służą do oceny modelu oraz do porównywania wariantów estymacji między sobą: różnych wariantów krigingu, alternatywnych modeli semiwariogramu lub innych parametrów sąsiedztwa szukania.</p>
+<p>Obie stosowane metody walidacji — podzbiorem i kroswalidacja — wykorzystują <strong>posiadany już zbiór danych</strong>, zamiast wymagać kosztownego zbierania dodatkowych próbek kontrolnych.</p>
+</section>
+<section id="struktura-obiektów-wynik-walidacji" class="level2" data-number="11.2">
+<h2 data-number="11.2" class="anchored" data-anchor-id="struktura-obiektów-wynik-walidacji"><span class="header-section-number">11.2</span> Struktura obiektów: wynik walidacji</h2>
+<p><strong>Walidacja podzbiorem</strong> daje warstwę punktową z wynikiem <code>predict()</code> dla zbioru testowego: kolumny <code>var1.pred</code> i <code>var1.var</code>. Wartość obserwowaną dopisujemy sami ze zbioru testowego, a błąd liczymy jako ich różnicę.</p>
+<p><strong>Kroswalidacja</strong> (<code>krige.cv()</code>) zwraca warstwę punktową o kolumnach:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Kolumna</th>
+<th>Zawartość</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>var1.pred</code></td>
+<td>wartość estymowana</td>
+</tr>
+<tr class="even">
+<td><code>var1.var</code></td>
+<td>wariancja krigingowa</td>
+</tr>
+<tr class="odd">
+<td><code>observed</code></td>
+<td>wartość obserwowana</td>
+</tr>
+<tr class="even">
+<td><code>residual</code></td>
+<td>błąd estymacji: <code>observed - var1.pred</code></td>
+</tr>
+<tr class="odd">
+<td><code>zscore</code></td>
+<td>błąd podzielony przez pierwiastek wariancji krigingowej</td>
+</tr>
+<tr class="even">
+<td><code>fold</code></td>
+<td>numer podzbioru, w którym dana obserwacja była pomijana</td>
+</tr>
+</tbody>
+</table>
+<p>W obu przypadkach obowiązuje ta sama konwencja znaku:</p>
+<p><span class="math display">\[\text{błąd estymacji} = \text{wartość obserwowana} - \text{wartość estymowana}\]</span></p>
+<p><strong>Dodatni</strong> błąd oznacza więc, że wartość obserwowana jest <strong>większa</strong> od estymowanej, czyli model <strong>zaniżył</strong> oszacowanie. <strong>Ujemny</strong> — że model oszacowanie <strong>zawyżył</strong>.</p>
+</section>
+<section id="ocena-jakości-estymacji-w-r" class="level2" data-number="11.3">
+<h2 data-number="11.3" class="anchored" data-anchor-id="ocena-jakości-estymacji-w-r"><span class="header-section-number">11.3</span> Ocena jakości estymacji w R</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Czynność / statystyka</th>
+<th>Funkcja</th>
+<th>Wartość optymalna</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>podział zbioru</td>
+<td><code>initial_split(prop = , strata = )</code>, <code>training()</code>, <code>testing()</code></td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>estymacja dla zbioru testowego</td>
+<td><code>gstat()</code> + <code>predict()</code></td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>kroswalidacja</td>
+<td><code>krige.cv()</code></td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>błąd estymacji</td>
+<td><code>obserwowane - estymowane</code></td>
+<td>rozkład symetryczny wokół zera</td>
+</tr>
+<tr class="odd">
+<td>średni błąd estymacji (MPE)</td>
+<td><code>mean(blad)</code></td>
+<td><strong>0</strong></td>
+</tr>
+<tr class="even">
+<td>pierwiastek błędu średniokwadratowego (RMSE)</td>
+<td><code>sqrt(mean(blad^2))</code></td>
+<td><strong>jak najmniejszy</strong></td>
+</tr>
+<tr class="odd">
+<td>współczynnik determinacji (<span class="math inline">\(r^2\)</span>)</td>
+<td><code>cor(obs, est)^2</code></td>
+<td><strong>bliski 1</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Wzory wszystkich trzech statystyk znajdują się w rozdziale teoretycznym części. Pełne zestawienie funkcji — <a href="B_funkcje.html" class="quarto-xref"><span>Załącznik B</span></a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstat)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rsample)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Procedury podziału zbioru i kroswalidacji są <strong>losowe</strong>, więc wynik zależy od ziarna generatora liczb losowych. Ustawiamy je raz, na początku rozdziału.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1111</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>interpolate_gstat <span class="ot">=</span> <span class="cf">function</span>(model, x, ...) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  v <span class="ot">=</span> <span class="fu">st_as_sf</span>(x, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="fu">st_crs</span>(model<span class="sc">$</span>data[[<span class="dv">1</span>]]<span class="sc">$</span>data), <span class="at">remove =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">=</span> <span class="fu">predict</span>(model, v, ...)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>(p)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="przykład-ocena-jakości-estymacji-temperatury" class="level2" data-number="11.4">
+<h2 data-number="11.4" class="anchored" data-anchor-id="przykład-ocena-jakości-estymacji-temperatury"><span class="header-section-number">11.4</span> Przykład: ocena jakości estymacji temperatury</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Kroki analizy
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Podział zbioru na treningowy i testowy — <code>initial_split()</code>, <code>training()</code>, <code>testing()</code>.</li>
+<li>Semiwariogram i model na zbiorze <strong>treningowym</strong> — <code>variogram()</code>, <code>fit.variogram()</code>.</li>
+<li>Estymacja dla zbioru <strong>testowego</strong> i błąd estymacji — <code>gstat()</code>, <code>predict()</code>.</li>
+<li>Analiza błędu: mapa, histogram, wykres rozrzutu.</li>
+<li>Statystyki jakości estymacji — MPE, RMSE, <span class="math inline">\(r^2\)</span>.</li>
+<li>Kroswalidacja — <code>krige.cv()</code>.</li>
+<li>Estymacja w siatce i zapis — <code>interpolate()</code>, <code>writeRaster()</code>.</li>
+</ol>
+<p>Kod spoza tych siedmiu kroków jest objaśnieniem: nie trzeba go uruchamiać, żeby wykonać analizę.</p>
+</div>
+</div>
+<section id="krok-1-podział-zbioru" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-1-podział-zbioru">Krok 1: podział zbioru</h3>
+<p>Walidacja podzbiorem dzieli dane na dwie części:</p>
+<ul>
+<li><strong>zbiór treningowy</strong> — służy do zbudowania semiwariogramu empirycznego i dopasowania modelu; zawiera więcej obserwacji,</li>
+<li><strong>zbiór testowy</strong> — dla jego punktów wykonujemy estymację, a następnie porównujemy wynik z wartością rzeczywistą.</li>
+</ul>
+<p>Funkcja <code>initial_split()</code> z pakietu <code>rsample</code> dzieli zbiór, zachowując w obu częściach podobny rozkład wartości (argument <code>strata</code>). Argument <code>prop = 0.75</code> przydziela 75% obserwacji do zbioru treningowego.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>punkty <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"data/punkty.csv"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(temp)) <span class="sc">|&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="st">"EPSG:2180"</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>granica <span class="ot">=</span> <span class="fu">vect</span>(<span class="st">"data/granica.gpkg"</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>podzial <span class="ot">=</span> <span class="fu">initial_split</span>(punkty, <span class="at">prop =</span> <span class="fl">0.75</span>, <span class="at">strata =</span> temp)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>train <span class="ot">=</span> <span class="fu">training</span>(podzial)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>test <span class="ot">=</span> <span class="fu">testing</span>(podzial)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">wszystkie =</span> <span class="fu">nrow</span>(punkty), <span class="at">treningowy =</span> <span class="fu">nrow</span>(train), <span class="at">testowy =</span> <span class="fu">nrow</span>(test))</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> wszystkie treningowy    testowy 
+       247        183         64 </code></pre>
+</div>
+</div>
+<p>Dane filtrujemy po kolumnie <code>temp</code>. Funkcja <code>na.omit()</code> usunęłaby wiersze z brakiem w <strong>którejkolwiek</strong> kolumnie — a <code>punkty.csv</code> ma braki także w <code>srtm</code>, <code>clc</code>, <code>ndvi</code> i <code>savi</code> — więc zbiór byłby mniejszy niż w pozostałych rozdziałach tej części.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(granica) <span class="sc">+</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>() <span class="sc">+</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(train) <span class="sc">+</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_dots</span>(<span class="at">fill =</span> <span class="st">"steelblue"</span>, <span class="at">size =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(test) <span class="sc">+</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_dots</span>(<span class="at">fill =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="fl">0.3</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="16_pola_ocena_files/figure-html/mapa-podzialu-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Kolorem niebieskim zaznaczono zbiór treningowy, czerwonym — testowy.</p>
+</section>
+<section id="krok-2-semiwariogram-i-model-na-zbiorze-treningowym" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-2-semiwariogram-i-model-na-zbiorze-treningowym">Krok 2: semiwariogram i model na zbiorze treningowym</h3>
+<p>Model budujemy <strong>wyłącznie na zbiorze treningowym</strong>. Punkty testowe muszą pozostać nieużyte — inaczej ocena nie byłaby niezależna od estymacji.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>vario <span class="ot">=</span> <span class="fu">variogram</span>(temp <span class="sc">~</span> <span class="dv">1</span>, <span class="at">locations =</span> train)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">fit.variogram</span>(vario, <span class="fu">vgm</span>(<span class="at">psill =</span> <span class="dv">10</span>, <span class="at">model =</span> <span class="st">"Sph"</span>, <span class="at">range =</span> <span class="dv">3000</span>, <span class="at">nugget =</span> <span class="fl">0.5</span>))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>model</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  model      psill    range
+1   Nug  0.9745233    0.000
+2   Sph 15.3695373 7190.001</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(vario, <span class="at">model =</span> model)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="16_pola_ocena_files/figure-html/model-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Semiwariogram empiryczny zbioru treningowego z dopasowanym modelem.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="krok-3-estymacja-dla-zbioru-testowego-i-błąd-estymacji" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-3-estymacja-dla-zbioru-testowego-i-błąd-estymacji">Krok 3: estymacja dla zbioru testowego i błąd estymacji</h3>
+<p>Estymację wykonujemy krigingiem zwykłym. Argument <code>locations</code> wskazuje zbiór <strong>treningowy</strong>, bo na nim zbudowany został model; <code>predict()</code> liczy wartości dla lokalizacji zbioru <strong>testowego</strong>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>ok_param <span class="ot">=</span> <span class="fu">gstat</span>(<span class="at">formula =</span> temp <span class="sc">~</span> <span class="dv">1</span>, <span class="at">locations =</span> train, <span class="at">model =</span> model, <span class="at">nmax =</span> <span class="dv">30</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>ok_test <span class="ot">=</span> <span class="fu">predict</span>(ok_param, test, <span class="at">debug.level =</span> <span class="dv">0</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># wartość obserwowana i błąd estymacji</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>ok_test<span class="sc">$</span>temp_obs <span class="ot">=</span> test<span class="sc">$</span>temp</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>ok_test<span class="sc">$</span>blad <span class="ot">=</span> ok_test<span class="sc">$</span>temp_obs <span class="sc">-</span> ok_test<span class="sc">$</span>var1.pred</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ok_test)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 6 features and 4 fields
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: 747304.1 ymin: 713037.9 xmax: 751710.4 ymax: 719656.1
+Projected CRS: ETRF2000-PL / CS92
+  var1.pred var1.var                  geometry  temp_obs       blad
+1  13.33027 2.556314 POINT (749399.8 716955.2) 12.919225 -0.4110407
+2  16.69310 2.572834   POINT (748766.6 713889) 19.247132  2.5540330
+3  22.26214 2.357392 POINT (751710.4 713037.9) 23.350026  1.0878850
+4  20.63731 2.401245   POINT (750992.9 713508) 21.942678  1.3053722
+5  10.65223 2.348506 POINT (747304.1 716296.2)  8.898949 -1.7532854
+6  12.16901 2.839252 POINT (748877.8 719656.1) 12.552686  0.3836731</code></pre>
+</div>
+</div>
+</section>
+<section id="krok-4-analiza-błędu-estymacji" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-4-analiza-błędu-estymacji">Krok 4: analiza błędu estymacji</h3>
+<p>Rozkład przestrzenny błędu pokazuje, czy odchylenia skupiają się w którejś części obszaru. Skalę rozbieżną z punktem środkowym w zerze dobieramy tak, by odcień zależał od znaku i wielkości błędu.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(granica) <span class="sc">+</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>() <span class="sc">+</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(ok_test) <span class="sc">+</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_symbols</span>(<span class="at">fill =</span> <span class="st">"blad"</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">fill.scale =</span> <span class="fu">tm_scale_continuous</span>(<span class="at">values =</span> <span class="st">"-brewer.rd_bu"</span>, <span class="at">midpoint =</span> <span class="dv">0</span>),</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"Błąd estymacji [°C]"</span>),</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="fl">0.5</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="16_pola_ocena_files/figure-html/mapa-bledu-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Histogram pokazuje, czy rozkład błędu jest symetryczny wokół zera.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ok_test, <span class="fu">aes</span>(blad)) <span class="sc">+</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">20</span>, <span class="at">fill =</span> <span class="st">"grey70"</span>, <span class="at">colour =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Błąd estymacji [°C]"</span>) <span class="sc">+</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Liczebność"</span>) <span class="sc">+</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="16_pola_ocena_files/figure-html/histogram-bledu-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Wykres rozrzutu zestawia wartości estymowane z obserwowanymi. Linia przerywana to prosta <span class="math inline">\(y = x\)</span> — punkty leżące na niej odpowiadają estymacji bezbłędnej.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ok_test, <span class="fu">aes</span>(var1.pred, temp_obs)) <span class="sc">+</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>() <span class="sc">+</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Wartość estymowana [°C]"</span>) <span class="sc">+</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Wartość obserwowana [°C]"</span>) <span class="sc">+</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="16_pola_ocena_files/figure-html/rozrzut-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="krok-5-statystyki-jakości-estymacji" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-5-statystyki-jakości-estymacji">Krok 5: statystyki jakości estymacji</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>MPE <span class="ot">=</span> <span class="fu">mean</span>(ok_test<span class="sc">$</span>blad)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>RMSE <span class="ot">=</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>(ok_test<span class="sc">$</span>blad <span class="sc">^</span> <span class="dv">2</span>))</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>r2 <span class="ot">=</span> <span class="fu">cor</span>(ok_test<span class="sc">$</span>temp_obs, ok_test<span class="sc">$</span>var1.pred) <span class="sc">^</span> <span class="dv">2</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">MPE =</span> MPE, <span class="at">RMSE =</span> RMSE, <span class="at">r2 =</span> r2)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        MPE        RMSE          r2 
+0.004452425 1.501570905 0.876279946 </code></pre>
+</div>
+</div>
+<p>Przydatne jest też podstawowe podsumowanie rozkładu błędu.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ok_test<span class="sc">$</span>blad)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+-5.422480 -0.624136  0.084878  0.004452  1.042063  2.890791 </code></pre>
+</div>
+</div>
+</section>
+<section id="krok-6-kroswalidacja" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-6-kroswalidacja">Krok 6: kroswalidacja</h3>
+<p>Kroswalidacja (ang. <em>leave-one-out cross-validation</em>) używa <strong>wszystkich</strong> obserwacji: kolejno usuwa jedną z nich ze zbioru, szacuje jej wartość na podstawie pozostałych i liczy różnicę między wartością obserwowaną a estymowaną.</p>
+<p>Model budujemy tym razem na pełnym zbiorze, bo kroswalidacja nie wydziela części danych.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>vario_cv <span class="ot">=</span> <span class="fu">variogram</span>(temp <span class="sc">~</span> <span class="dv">1</span>, <span class="at">locations =</span> punkty)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>model_cv <span class="ot">=</span> <span class="fu">fit.variogram</span>(vario_cv, <span class="fu">vgm</span>(<span class="at">psill =</span> <span class="dv">10</span>, <span class="at">model =</span> <span class="st">"Sph"</span>, <span class="at">range =</span> <span class="dv">3000</span>, <span class="at">nugget =</span> <span class="fl">0.5</span>))</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>cv <span class="ot">=</span> <span class="fu">krige.cv</span>(temp <span class="sc">~</span> <span class="dv">1</span>, <span class="at">locations =</span> punkty, <span class="at">model =</span> model_cv, <span class="at">nmax =</span> <span class="dv">30</span>, <span class="at">debug.level =</span> <span class="dv">0</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cv)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 6 features and 6 fields
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: 746963.5 ymin: 716731.6 xmax: 756801.6 ymax: 720589
+Projected CRS: ETRF2000-PL / CS92
+  var1.pred var1.var  observed     residual       zscore fold
+1  14.98483 2.659322 13.852222 -1.132604199 -0.694532740    1
+2  14.12949 1.982134 15.484209  1.354718685  0.962238363    2
+3  12.76448 2.213579 12.760814 -0.003664725 -0.002463167    3
+4  12.59701 2.288667 14.324648  1.727638370  1.141987994    4
+5  15.40375 1.347654 15.908549  0.504803390  0.434843558    5
+6  11.08887 2.824759  9.941118 -1.147756267 -0.682902943    6
+                   geometry
+1   POINT (750298 716731.6)
+2 POINT (753482.9 717331.4)
+3   POINT (747242.5 720589)
+4 POINT (755798.9 718828.1)
+5 POINT (746963.5 717533.5)
+6 POINT (756801.6 720474.1)</code></pre>
+</div>
+</div>
+<p>Statystyki liczymy tak samo, korzystając z gotowej kolumny <code>residual</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>MPE_cv <span class="ot">=</span> <span class="fu">mean</span>(cv<span class="sc">$</span>residual)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>RMSE_cv <span class="ot">=</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>(cv<span class="sc">$</span>residual <span class="sc">^</span> <span class="dv">2</span>))</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>r2_cv <span class="ot">=</span> <span class="fu">cor</span>(cv<span class="sc">$</span>observed, cv<span class="sc">$</span>var1.pred) <span class="sc">^</span> <span class="dv">2</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">MPE =</span> MPE_cv, <span class="at">RMSE =</span> RMSE_cv, <span class="at">r2 =</span> r2_cv)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        MPE        RMSE          r2 
+-0.02901897  1.40975393  0.87375353 </code></pre>
+</div>
+</div>
+</section>
+<section id="krok-7-estymacja-w-siatce-i-zapis" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-7-estymacja-w-siatce-i-zapis">Krok 7: estymacja w siatce i zapis</h3>
+<p>Model przeszedł ocenę, więc liczymy mapę dla całego obszaru — na <strong>pełnym</strong> zbiorze danych.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>siatka <span class="ot">=</span> <span class="fu">rast</span>(<span class="at">ext =</span> granica, <span class="at">res =</span> <span class="dv">90</span>, <span class="at">crs =</span> <span class="fu">crs</span>(granica))</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>ok_pelny <span class="ot">=</span> <span class="fu">gstat</span>(<span class="at">formula =</span> temp <span class="sc">~</span> <span class="dv">1</span>, <span class="at">locations =</span> punkty, <span class="at">model =</span> model_cv, <span class="at">nmax =</span> <span class="dv">30</span>)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>ok_mapa <span class="ot">=</span> <span class="fu">mask</span>(<span class="fu">interpolate</span>(siatka, ok_pelny, <span class="at">fun =</span> interpolate_gstat, <span class="at">debug.level =</span> <span class="dv">0</span>),</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>               granica)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(ok_mapa) <span class="sc">+</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_raster</span>(<span class="at">col =</span> <span class="st">"var1.pred"</span>,</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">col.scale =</span> <span class="fu">tm_scale_continuous</span>(<span class="at">values =</span> <span class="st">"-brewer.spectral"</span>),</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">col.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"Temperatura [°C]"</span>))</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="16_pola_ocena_files/figure-html/mapa-koncowa-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"out"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">writeRaster</span>(ok_mapa, <span class="st">"out/kriging_oceniony.tif"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="interpretacja-wyniku" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="interpretacja-wyniku">Interpretacja wyniku</h3>
+<p><strong>Estymacja jest nieobciążona.</strong> Średni błąd estymacji wynosi 0.0045 °C, czyli praktycznie zero: błędy przeszacowania i niedoszacowania wzajemnie się bilansują. Potwierdza to histogram — rozkład błędu jest w przybliżeniu symetryczny wokół zera, a mediana (0.085 °C) leży blisko średniej.</p>
+<p><strong>MPE bliskie zera nie oznacza jednak małych błędów.</strong> Pojedyncze oszacowania mijają się z obserwacjami o 1.502 °C (RMSE), a największe odchylenie wynosi 5.42 °C. Jest tak dlatego, że MPE sumuje błędy ze znakami: niedoszacowanie o 3 °C i przeszacowanie o 3 °C dają w nim zero. RMSE podnosi błędy do kwadratu, więc znak znika, a duże odchylenia ważą więcej niż małe — i dlatego obie statystyki podaje się razem.</p>
+<p><strong>Współczynnik determinacji wynosi 0.8763</strong>, co oznacza silną zależność między wartościami obserwowanymi a estymowanymi. Na wykresie rozrzutu punkty układają się wzdłuż prostej <span class="math inline">\(y = x\)</span>, z rozrzutem rosnącym przy wartościach skrajnych.</p>
+<p>Rozkład błędu nie jest w pełni symetryczny: zakres sięga od -5.42 do 2.89 °C. Błąd ujemny oznacza estymację zawyżoną, więc największe <strong>przeszacowanie</strong> (5.42 °C) jest wyraźnie większe od największego <strong>niedoszacowania</strong> (2.89 °C). Pojedyncze duże błędy mogą świadczyć o wystąpieniu wartości odstających — na mapie błędu warto sprawdzić, czy skupiają się w jednym miejscu, czy są rozrzucone.</p>
+<p><strong>Obie metody walidacji dały zbliżoną ocenę modelu:</strong></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Statystyka</th>
+<th>Walidacja podzbiorem</th>
+<th>Kroswalidacja</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>MPE</td>
+<td>0.0045</td>
+<td>-0.029</td>
+</tr>
+<tr class="even">
+<td>RMSE</td>
+<td>1.5016</td>
+<td>1.4098</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(r^2\)</span></td>
+<td>0.8763</td>
+<td>0.8738</td>
+</tr>
+<tr class="even">
+<td>liczba ocenianych punktów</td>
+<td>64</td>
+<td>247</td>
+</tr>
+</tbody>
+</table>
+<p>Kroswalidacja oparła ocenę na 247 punktach zamiast 64, więc jej statystyki są wyznaczone dokładniej. Niższe RMSE nie oznacza jednak, że model jest lepszy — obie liczby dotyczą <strong>innych procedur</strong>: w kroswalidacji każda obserwacja szacowana jest na podstawie wszystkich pozostałych 246, a w walidacji podzbiorem na podstawie zaledwie 183 punktów treningowych. Model kroswalidacji dysponuje większą liczbą sąsiadów, więc szacuje dokładniej.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Objaśnienie — poza ścieżką zadania
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Obie metody wykorzystują posiadany już zbiór danych, ale różnią się <strong>sposobem podziału danych i wiarygodnością wyników</strong>.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Walidacja podzbiorem</th>
+<th>Kroswalidacja</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Zaleta</strong></td>
+<td><strong>Niezależność danych</strong> — zbiór walidacyjny jest całkowicie niezależny od danych użytych do estymacji, co czyni ją metodą preferowaną</td>
+<td><strong>Efektywność przy małych zbiorach</strong> — wykorzystuje wszystkie dostępne dane pomiarowe, więc umożliwia walidację nawet bardzo nielicznych zbiorów</td>
+</tr>
+<tr class="even">
+<td><strong>Wada</strong></td>
+<td><strong>Utrata danych</strong> — część pomiarów zostaje usunięta z obliczeń estymacyjnych, co może osłabić jakość samego modelu; <strong>wymóg dużej liczebności</strong> — po podziale mniejszy podzbiór musi nadal pozwalać na wiarygodne statystyki</td>
+<td><strong>Brak niezależności</strong> — ten sam zbiór danych służy do modelowania struktury przestrzennej i do walidacji</td>
+</tr>
+</tbody>
+</table>
+<p>Widać to na liczbach z tego rozdziału. Model zbudowany na zbiorze treningowym ma zasięg 7190 m, a model zbudowany na pełnym zbiorze — 5480 m. Usunięcie jednej czwartej obserwacji zmieniło więc opis struktury przestrzennej — jest to wada podziału zbioru nazywana utratą danych.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="pytania-kontrolne" class="level2" data-number="11.5">
+<h2 data-number="11.5" class="anchored" data-anchor-id="pytania-kontrolne"><span class="header-section-number">11.5</span> Pytania kontrolne</h2>
+<blockquote class="blockquote">
+<p><strong>1.</strong> Dodatni błąd estymacji wskazuje, że…?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>…<strong>wartość obserwowana jest większa od estymowanej</strong>, czyli model <strong>zaniżył</strong> oszacowanie.</p>
+<p>Wynika to wprost z konwencji: <span class="math inline">\(\text{błąd} = \text{obserwowane} - \text{estymowane}\)</span>. Błąd ujemny oznacza sytuację odwrotną — estymacja jest zawyżona.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>2.</strong> Jaki rozkład powinien mieć błąd estymacji przy dobrej estymacji?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Symetryczny</strong>, skupiony wokół zera. Symetria oznacza, że model nie przeszacowuje systematycznie ani nie niedoszacowuje — błędy obu znaków występują równie często i mają podobną wielkość.</p>
+<p>Rozkład przesunięty w jedną stronę wskazuje na obciążenie estymacji, co widać także po wartości MPE wyraźnie różnej od zera.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>3.</strong> Średni błąd estymacji wyniósł 0,004 °C, a RMSE 1,50 °C. Czy estymacja jest dokładna?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Jest <strong>nieobciążona</strong>, ale niekoniecznie dokładna. MPE bliskie zera mówi tylko tyle, że błędy przeszacowania i niedoszacowania <strong>wzajemnie się bilansują</strong> — sumuje je ze znakami, więc niedoszacowanie o 3 °C i przeszacowanie o 3 °C dają zero.</p>
+<p>RMSE podnosi błędy do kwadratu, więc znak znika i duże odchylenia ważą więcej. Wartość 1,50 °C oznacza, że typowe pojedyncze oszacowanie mija się z obserwacją o ok. 1,5 °C. Obie statystyki trzeba czytać razem.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>4.</strong> W walidacji podzbiorem: do czego służy zbiór treningowy, a do czego testowy?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Zbiór treningowy</strong> służy do zbudowania semiwariogramu empirycznego i dopasowania modelu. <strong>Zbiór testowy</strong> służy do wykonania estymacji i obliczenia statystyk jakości estymacji.</p>
+<p>Kolejność jest istotna: punkty testowe nie mogą brać udziału w budowie modelu, bo wtedy ocena przestałaby być niezależna od estymacji. W kodzie widać to w argumencie <code>locations = train</code> przy tworzeniu obiektu <code>gstat()</code>.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>5.</strong> Na czym polega kroswalidacja?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Na <strong>kolejnym usuwaniu pojedynczej obserwacji</strong> ze zbioru danych, wykonaniu estymacji w jej lokalizacji na podstawie pozostałych punktów i obliczeniu różnicy między wartością obserwowaną a estymowaną. Powtarza się to dla każdej obserwacji, a na końcu podsumowuje otrzymane błędy.</p>
+<p>W odróżnieniu od walidacji podzbiorem kroswalidacja <strong>nie dzieli zbioru na dwie części</strong> — używa wszystkich dostępnych danych. W R wykonuje ją funkcja <code>krige.cv()</code>.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>6.</strong> Którą metodę walidacji wybrać przy bardzo małym zbiorze danych?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Kroswalidację.</strong> Wykorzystuje wszystkie dostępne dane pomiarowe, więc umożliwia walidację nawet bardzo nielicznych zbiorów.</p>
+<p>Walidacja podzbiorem wymaga zbioru na tyle dużego, by po podziale mniejsza część nadal pozwalała policzyć wiarygodne statystyki — a usunięcie części pomiarów z obliczeń estymacyjnych dodatkowo osłabia sam model. Jej zaletą jest natomiast pełna <strong>niezależność</strong> danych walidacyjnych od danych użytych do estymacji, czego kroswalidacja nie zapewnia.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>7.</strong> Czym różni się wariancja krigingowa od błędu estymacji?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Wariancja krigingowa</strong> (<a href="15_pola_estymacja.html" class="quarto-xref"><span>Rozdział 10</span></a>) wynika z <strong>rozmieszczenia punktów pomiarowych i z przyjętego modelu</strong> semiwariogramu. Nie korzysta z wartości badanej cechy, więc można ją policzyć dla każdej komórki siatki — także tam, gdzie żadnego pomiaru nie wykonano.</p>
+<p><strong>Błąd estymacji</strong> to różnica między wartością <strong>obserwowaną</strong> a estymowaną, więc wymaga obu. Można go policzyć wyłącznie w lokalizacjach, w których pomiar istnieje, i dlatego potrzebna jest walidacja: wydzielenie zbioru testowego albo kroswalidacja.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="podsumowanie" class="level2" data-number="11.6">
+<h2 data-number="11.6" class="anchored" data-anchor-id="podsumowanie"><span class="header-section-number">11.6</span> Podsumowanie</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Metoda / statystyka</th>
+<th>Funkcja</th>
+<th>Co mówi o estymacji</th>
+<th>Warunek poprawnego odczytu</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>walidacja podzbiorem</td>
+<td><code>initial_split()</code> + <code>predict()</code></td>
+<td>błąd estymacji na danych <strong>niezależnych</strong> od modelu</td>
+<td>model budowany wyłącznie na zbiorze treningowym; wymaga dużego zbioru</td>
+</tr>
+<tr class="even">
+<td>kroswalidacja</td>
+<td><code>krige.cv()</code></td>
+<td>błąd estymacji dla <strong>wszystkich</strong> obserwacji</td>
+<td>ten sam zbiór służy modelowaniu i walidacji</td>
+</tr>
+<tr class="odd">
+<td>błąd estymacji</td>
+<td><code>obserwowane - estymowane</code></td>
+<td>kierunek i wielkość odchylenia w pojedynczej lokalizacji</td>
+<td>dodatni = estymacja zaniżona, ujemny = zawyżona</td>
+</tr>
+<tr class="even">
+<td>średni błąd estymacji (MPE)</td>
+<td><code>mean(blad)</code></td>
+<td>czy estymacja jest obciążona</td>
+<td>bliskie zera także wtedy, gdy pojedyncze błędy są duże — czytać z RMSE</td>
+</tr>
+<tr class="odd">
+<td>pierwiastek błędu średniokwadratowego (RMSE)</td>
+<td><code>sqrt(mean(blad^2))</code></td>
+<td>typową wielkość pojedynczego błędu</td>
+<td>duże odchylenia ważą więcej niż małe</td>
+</tr>
+<tr class="even">
+<td>współczynnik determinacji (<span class="math inline">\(r^2\)</span>)</td>
+<td><code>cor(obs, est)^2</code></td>
+<td>siłę zależności między obserwacjami a estymacjami</td>
+<td>wartość bliska 1 nie wyklucza obciążenia estymacji</td>
+</tr>
+<tr class="odd">
+<td>rozkład błędu</td>
+<td>histogram, <code>summary()</code></td>
+<td>symetrię i obecność wartości skrajnych</td>
+<td>rozkład niesymetryczny wskazuje na obciążenie</td>
+</tr>
+</tbody>
+</table>
+<p>Trzy zasady, do których wracamy w projekcie:</p>
+<ol type="1">
+<li><strong>MPE i RMSE czytamy razem.</strong> MPE mówi o obciążeniu, RMSE o wielkości błędów. MPE bliskie zera przy dużym RMSE oznacza estymację nieobciążoną, ale niedokładną.</li>
+<li><strong>Statystyki jakości służą przede wszystkim do porównywania.</strong> Jedna wartość RMSE niewiele mówi; ta sama wartość zestawiona z RMSE innego wariantu krigingu albo innego modelu semiwariogramu rozstrzyga, który jest lepszy.</li>
+<li><strong>Wariancja krigingowa i błąd estymacji to dwie różne wielkości.</strong> Pierwsza opisuje geometrię sieci pomiarowej, druga — trafność oszacowań.</li>
+</ol>
+</section>
+<section id="pełny-kod-analizy" class="level2" data-number="11.7">
+<h2 data-number="11.7" class="anchored" data-anchor-id="pełny-kod-analizy"><span class="header-section-number">11.7</span> Pełny kod analizy</h2>
+<p>Poniżej zebrany jest cały kod Kroków 1–7 w kolejności wykonania — do skopiowania do własnego skryptu zamiast przeklejania pojedynczych fragmentów. Nie ma w nim kodu objaśniającego: to dokładnie ta ścieżka, która prowadzi od danych wejściowych do pliku <code>out/kriging_oceniony.tif</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstat)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rsample)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1111</span>)</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>interpolate_gstat <span class="ot">=</span> <span class="cf">function</span>(model, x, ...) {</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>  v <span class="ot">=</span> <span class="fu">st_as_sf</span>(x, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="fu">st_crs</span>(model<span class="sc">$</span>data[[<span class="dv">1</span>]]<span class="sc">$</span>data), <span class="at">remove =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">=</span> <span class="fu">predict</span>(model, v, ...)</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>(p)</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>punkty <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"data/punkty.csv"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(temp)) <span class="sc">|&gt;</span></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="st">"EPSG:2180"</span>)</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>granica <span class="ot">=</span> <span class="fu">vect</span>(<span class="st">"data/granica.gpkg"</span>)</span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>podzial <span class="ot">=</span> <span class="fu">initial_split</span>(punkty, <span class="at">prop =</span> <span class="fl">0.75</span>, <span class="at">strata =</span> temp)</span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>train <span class="ot">=</span> <span class="fu">training</span>(podzial)</span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>test <span class="ot">=</span> <span class="fu">testing</span>(podzial)</span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">wszystkie =</span> <span class="fu">nrow</span>(punkty), <span class="at">treningowy =</span> <span class="fu">nrow</span>(train), <span class="at">testowy =</span> <span class="fu">nrow</span>(test))</span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(granica) <span class="sc">+</span></span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>() <span class="sc">+</span></span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(train) <span class="sc">+</span></span>
+<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_dots</span>(<span class="at">fill =</span> <span class="st">"steelblue"</span>, <span class="at">size =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(test) <span class="sc">+</span></span>
+<span id="cb26-30"><a href="#cb26-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_dots</span>(<span class="at">fill =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="fl">0.3</span>)</span>
+<span id="cb26-31"><a href="#cb26-31" aria-hidden="true" tabindex="-1"></a>vario <span class="ot">=</span> <span class="fu">variogram</span>(temp <span class="sc">~</span> <span class="dv">1</span>, <span class="at">locations =</span> train)</span>
+<span id="cb26-32"><a href="#cb26-32" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">fit.variogram</span>(vario, <span class="fu">vgm</span>(<span class="at">psill =</span> <span class="dv">10</span>, <span class="at">model =</span> <span class="st">"Sph"</span>, <span class="at">range =</span> <span class="dv">3000</span>, <span class="at">nugget =</span> <span class="fl">0.5</span>))</span>
+<span id="cb26-33"><a href="#cb26-33" aria-hidden="true" tabindex="-1"></a>model</span>
+<span id="cb26-34"><a href="#cb26-34" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(vario, <span class="at">model =</span> model)</span>
+<span id="cb26-35"><a href="#cb26-35" aria-hidden="true" tabindex="-1"></a>ok_param <span class="ot">=</span> <span class="fu">gstat</span>(<span class="at">formula =</span> temp <span class="sc">~</span> <span class="dv">1</span>, <span class="at">locations =</span> train, <span class="at">model =</span> model, <span class="at">nmax =</span> <span class="dv">30</span>)</span>
+<span id="cb26-36"><a href="#cb26-36" aria-hidden="true" tabindex="-1"></a>ok_test <span class="ot">=</span> <span class="fu">predict</span>(ok_param, test, <span class="at">debug.level =</span> <span class="dv">0</span>)</span>
+<span id="cb26-37"><a href="#cb26-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-38"><a href="#cb26-38" aria-hidden="true" tabindex="-1"></a><span class="co"># wartość obserwowana i błąd estymacji</span></span>
+<span id="cb26-39"><a href="#cb26-39" aria-hidden="true" tabindex="-1"></a>ok_test<span class="sc">$</span>temp_obs <span class="ot">=</span> test<span class="sc">$</span>temp</span>
+<span id="cb26-40"><a href="#cb26-40" aria-hidden="true" tabindex="-1"></a>ok_test<span class="sc">$</span>blad <span class="ot">=</span> ok_test<span class="sc">$</span>temp_obs <span class="sc">-</span> ok_test<span class="sc">$</span>var1.pred</span>
+<span id="cb26-41"><a href="#cb26-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-42"><a href="#cb26-42" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ok_test)</span>
+<span id="cb26-43"><a href="#cb26-43" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(granica) <span class="sc">+</span></span>
+<span id="cb26-44"><a href="#cb26-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>() <span class="sc">+</span></span>
+<span id="cb26-45"><a href="#cb26-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(ok_test) <span class="sc">+</span></span>
+<span id="cb26-46"><a href="#cb26-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_symbols</span>(<span class="at">fill =</span> <span class="st">"blad"</span>,</span>
+<span id="cb26-47"><a href="#cb26-47" aria-hidden="true" tabindex="-1"></a>             <span class="at">fill.scale =</span> <span class="fu">tm_scale_continuous</span>(<span class="at">values =</span> <span class="st">"-brewer.rd_bu"</span>, <span class="at">midpoint =</span> <span class="dv">0</span>),</span>
+<span id="cb26-48"><a href="#cb26-48" aria-hidden="true" tabindex="-1"></a>             <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"Błąd estymacji [°C]"</span>),</span>
+<span id="cb26-49"><a href="#cb26-49" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="fl">0.5</span>)</span>
+<span id="cb26-50"><a href="#cb26-50" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ok_test, <span class="fu">aes</span>(blad)) <span class="sc">+</span></span>
+<span id="cb26-51"><a href="#cb26-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">20</span>, <span class="at">fill =</span> <span class="st">"grey70"</span>, <span class="at">colour =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
+<span id="cb26-52"><a href="#cb26-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb26-53"><a href="#cb26-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Błąd estymacji [°C]"</span>) <span class="sc">+</span></span>
+<span id="cb26-54"><a href="#cb26-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Liczebność"</span>) <span class="sc">+</span></span>
+<span id="cb26-55"><a href="#cb26-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb26-56"><a href="#cb26-56" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ok_test, <span class="fu">aes</span>(var1.pred, temp_obs)) <span class="sc">+</span></span>
+<span id="cb26-57"><a href="#cb26-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb26-58"><a href="#cb26-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb26-59"><a href="#cb26-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>() <span class="sc">+</span></span>
+<span id="cb26-60"><a href="#cb26-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Wartość estymowana [°C]"</span>) <span class="sc">+</span></span>
+<span id="cb26-61"><a href="#cb26-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Wartość obserwowana [°C]"</span>) <span class="sc">+</span></span>
+<span id="cb26-62"><a href="#cb26-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb26-63"><a href="#cb26-63" aria-hidden="true" tabindex="-1"></a>MPE <span class="ot">=</span> <span class="fu">mean</span>(ok_test<span class="sc">$</span>blad)</span>
+<span id="cb26-64"><a href="#cb26-64" aria-hidden="true" tabindex="-1"></a>RMSE <span class="ot">=</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>(ok_test<span class="sc">$</span>blad <span class="sc">^</span> <span class="dv">2</span>))</span>
+<span id="cb26-65"><a href="#cb26-65" aria-hidden="true" tabindex="-1"></a>r2 <span class="ot">=</span> <span class="fu">cor</span>(ok_test<span class="sc">$</span>temp_obs, ok_test<span class="sc">$</span>var1.pred) <span class="sc">^</span> <span class="dv">2</span></span>
+<span id="cb26-66"><a href="#cb26-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-67"><a href="#cb26-67" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">MPE =</span> MPE, <span class="at">RMSE =</span> RMSE, <span class="at">r2 =</span> r2)</span>
+<span id="cb26-68"><a href="#cb26-68" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ok_test<span class="sc">$</span>blad)</span>
+<span id="cb26-69"><a href="#cb26-69" aria-hidden="true" tabindex="-1"></a>vario_cv <span class="ot">=</span> <span class="fu">variogram</span>(temp <span class="sc">~</span> <span class="dv">1</span>, <span class="at">locations =</span> punkty)</span>
+<span id="cb26-70"><a href="#cb26-70" aria-hidden="true" tabindex="-1"></a>model_cv <span class="ot">=</span> <span class="fu">fit.variogram</span>(vario_cv, <span class="fu">vgm</span>(<span class="at">psill =</span> <span class="dv">10</span>, <span class="at">model =</span> <span class="st">"Sph"</span>, <span class="at">range =</span> <span class="dv">3000</span>, <span class="at">nugget =</span> <span class="fl">0.5</span>))</span>
+<span id="cb26-71"><a href="#cb26-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-72"><a href="#cb26-72" aria-hidden="true" tabindex="-1"></a>cv <span class="ot">=</span> <span class="fu">krige.cv</span>(temp <span class="sc">~</span> <span class="dv">1</span>, <span class="at">locations =</span> punkty, <span class="at">model =</span> model_cv, <span class="at">nmax =</span> <span class="dv">30</span>, <span class="at">debug.level =</span> <span class="dv">0</span>)</span>
+<span id="cb26-73"><a href="#cb26-73" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cv)</span>
+<span id="cb26-74"><a href="#cb26-74" aria-hidden="true" tabindex="-1"></a>MPE_cv <span class="ot">=</span> <span class="fu">mean</span>(cv<span class="sc">$</span>residual)</span>
+<span id="cb26-75"><a href="#cb26-75" aria-hidden="true" tabindex="-1"></a>RMSE_cv <span class="ot">=</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>(cv<span class="sc">$</span>residual <span class="sc">^</span> <span class="dv">2</span>))</span>
+<span id="cb26-76"><a href="#cb26-76" aria-hidden="true" tabindex="-1"></a>r2_cv <span class="ot">=</span> <span class="fu">cor</span>(cv<span class="sc">$</span>observed, cv<span class="sc">$</span>var1.pred) <span class="sc">^</span> <span class="dv">2</span></span>
+<span id="cb26-77"><a href="#cb26-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-78"><a href="#cb26-78" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">MPE =</span> MPE_cv, <span class="at">RMSE =</span> RMSE_cv, <span class="at">r2 =</span> r2_cv)</span>
+<span id="cb26-79"><a href="#cb26-79" aria-hidden="true" tabindex="-1"></a>siatka <span class="ot">=</span> <span class="fu">rast</span>(<span class="at">ext =</span> granica, <span class="at">res =</span> <span class="dv">90</span>, <span class="at">crs =</span> <span class="fu">crs</span>(granica))</span>
+<span id="cb26-80"><a href="#cb26-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-81"><a href="#cb26-81" aria-hidden="true" tabindex="-1"></a>ok_pelny <span class="ot">=</span> <span class="fu">gstat</span>(<span class="at">formula =</span> temp <span class="sc">~</span> <span class="dv">1</span>, <span class="at">locations =</span> punkty, <span class="at">model =</span> model_cv, <span class="at">nmax =</span> <span class="dv">30</span>)</span>
+<span id="cb26-82"><a href="#cb26-82" aria-hidden="true" tabindex="-1"></a>ok_mapa <span class="ot">=</span> <span class="fu">mask</span>(<span class="fu">interpolate</span>(siatka, ok_pelny, <span class="at">fun =</span> interpolate_gstat, <span class="at">debug.level =</span> <span class="dv">0</span>),</span>
+<span id="cb26-83"><a href="#cb26-83" aria-hidden="true" tabindex="-1"></a>               granica)</span>
+<span id="cb26-84"><a href="#cb26-84" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(ok_mapa) <span class="sc">+</span></span>
+<span id="cb26-85"><a href="#cb26-85" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_raster</span>(<span class="at">col =</span> <span class="st">"var1.pred"</span>,</span>
+<span id="cb26-86"><a href="#cb26-86" aria-hidden="true" tabindex="-1"></a>            <span class="at">col.scale =</span> <span class="fu">tm_scale_continuous</span>(<span class="at">values =</span> <span class="st">"-brewer.spectral"</span>),</span>
+<span id="cb26-87"><a href="#cb26-87" aria-hidden="true" tabindex="-1"></a>            <span class="at">col.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"Temperatura [°C]"</span>))</span>
+<span id="cb26-88"><a href="#cb26-88" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"out"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb26-89"><a href="#cb26-89" aria-hidden="true" tabindex="-1"></a><span class="fu">writeRaster</span>(ok_mapa, <span class="st">"out/kriging_oceniony.tif"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Skopiowano!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Skopiowano!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./15_pola_estymacja.html" class="pagination-link" aria-label="Geostatystyczne metody estymacji">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Geostatystyczne metody estymacji</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./17_zadania_samodzielne.html" class="pagination-link" aria-label="Zadania samodzielne">
+        <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Zadania samodzielne</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

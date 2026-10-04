@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pl" xml:lang="pl"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>10&nbsp; Geostatystyczne metody estymacji – Statystyka przestrzenna</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./16_pola_ocena.html" rel="next">
+<link href="./14_pola_semiwariogram.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-c852b7e71cc1c09f55f367b2512aabbd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Brak wyników",
+    "search-matching-documents-text": "dopasowane dokumenty",
+    "search-copy-link-title": "Kopiuj link do wyszukiwania",
+    "search-hide-matches-text": "Ukryj dodatkowe dopasowania",
+    "search-more-match-text": "więcej dopasowań w tym dokumencie",
+    "search-more-matches-text": "więcej dopasowań w tym dokumencie",
+    "search-clear-button-title": "Wyczyść",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Anuluj",
+    "search-submit-button-title": "Zatwierdź",
+    "search-label": "Szukaj"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Przełącz pasek boczny" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./12_pola_teoria.html">DANE POWIERZCHNIOWE CIĄGŁE PRZESTRZENNIE</a></li><li class="breadcrumb-item"><a href="./15_pola_estymacja.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Geostatystyczne metody estymacji</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Przełącz pasek boczny" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Szukaj" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Statystyka przestrzenna</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Szukaj"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">O skrypcie</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./01_wstep.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">WSTĘP</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_dane_przestrzenne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Dane przestrzenne w R</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./03_eksploracja_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">EKSPLORACYJNA ANALIZA DANYCH</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_eksploracja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Eksploracyjna analiza danych</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./05_punkty_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE PUNKTOWE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_punkty_centrograficzne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Statystyki centrograficzne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_punkty_intensywnosc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Metody oparte na analizie intensywności</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_punkty_odleglosc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Metody oparte na odległości</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./09_obszarowe_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE OBSZAROWE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_obszarowe_sasiedztwo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Określanie sąsiedztwa danych obszarowych</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_obszarowe_autokorelacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Miary autokorelacji danych obszarowych</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./12_pola_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE POWIERZCHNIOWE CIĄGŁE PRZESTRZENNIE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13_pola_interpolacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Metody interpolacji</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14_pola_semiwariogram.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Analiza i modelowanie struktury przestrzennej</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15_pola_estymacja.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Geostatystyczne metody estymacji</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_pola_ocena.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Ocena jakości estymacji</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">ZADANIA I PROJEKTY</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_zadania_samodzielne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Zadania samodzielne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18_projekt1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Projekt 1: przestępczość a zmienne społeczno-ekonomiczne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19_projekt2_geostatystyka.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Projekt 2: Geostatystyka</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Załączniki</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./A_pakiety.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Pakiety</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./B_funkcje.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Funkcje</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./C_operacje.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Operacje na danych przestrzennych</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./D_slownik.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Słownik pojęć</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bibliografia</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Spis treści</h2>
+   
+  <ul>
+  <li><a href="#wprowadzenie" id="toc-wprowadzenie" class="nav-link active" data-scroll-target="#wprowadzenie"><span class="header-section-number">10.1</span> Wprowadzenie</a></li>
+  <li><a href="#struktura-obiektów-siatka-i-wynik-krigingu" id="toc-struktura-obiektów-siatka-i-wynik-krigingu" class="nav-link" data-scroll-target="#struktura-obiektów-siatka-i-wynik-krigingu"><span class="header-section-number">10.2</span> Struktura obiektów: siatka i wynik krigingu</a></li>
+  <li><a href="#warianty-krigingu-w-r" id="toc-warianty-krigingu-w-r" class="nav-link" data-scroll-target="#warianty-krigingu-w-r"><span class="header-section-number">10.3</span> Warianty krigingu w R</a></li>
+  <li><a href="#przykład-temperatura-powietrza" id="toc-przykład-temperatura-powietrza" class="nav-link" data-scroll-target="#przykład-temperatura-powietrza"><span class="header-section-number">10.4</span> Przykład: temperatura powietrza</a>
+  <ul class="collapse">
+  <li><a href="#krok-1-dane-i-model-semiwariogramu" id="toc-krok-1-dane-i-model-semiwariogramu" class="nav-link" data-scroll-target="#krok-1-dane-i-model-semiwariogramu">Krok 1: dane i model semiwariogramu</a></li>
+  <li><a href="#krok-2-siatka-interpolacyjna" id="toc-krok-2-siatka-interpolacyjna" class="nav-link" data-scroll-target="#krok-2-siatka-interpolacyjna">Krok 2: siatka interpolacyjna</a></li>
+  <li><a href="#krok-3-kriging-prosty" id="toc-krok-3-kriging-prosty" class="nav-link" data-scroll-target="#krok-3-kriging-prosty">Krok 3: kriging prosty</a></li>
+  <li><a href="#krok-4-kriging-zwykły" id="toc-krok-4-kriging-zwykły" class="nav-link" data-scroll-target="#krok-4-kriging-zwykły">Krok 4: kriging zwykły</a></li>
+  <li><a href="#krok-5-wizualizacja-estymacji-i-wariancji-krigingowej" id="toc-krok-5-wizualizacja-estymacji-i-wariancji-krigingowej" class="nav-link" data-scroll-target="#krok-5-wizualizacja-estymacji-i-wariancji-krigingowej">Krok 5: wizualizacja estymacji i wariancji krigingowej</a></li>
+  <li><a href="#krok-6-zapis-wyniku" id="toc-krok-6-zapis-wyniku" class="nav-link" data-scroll-target="#krok-6-zapis-wyniku">Krok 6: zapis wyniku</a></li>
+  <li><a href="#interpretacja-wyniku" id="toc-interpretacja-wyniku" class="nav-link" data-scroll-target="#interpretacja-wyniku">Interpretacja wyniku</a></li>
+  </ul></li>
+  <li><a href="#pytania-kontrolne" id="toc-pytania-kontrolne" class="nav-link" data-scroll-target="#pytania-kontrolne"><span class="header-section-number">10.5</span> Pytania kontrolne</a></li>
+  <li><a href="#podsumowanie" id="toc-podsumowanie" class="nav-link" data-scroll-target="#podsumowanie"><span class="header-section-number">10.6</span> Podsumowanie</a></li>
+  <li><a href="#pełny-kod-analizy" id="toc-pełny-kod-analizy" class="nav-link" data-scroll-target="#pełny-kod-analizy"><span class="header-section-number">10.7</span> Pełny kod analizy</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./12_pola_teoria.html">DANE POWIERZCHNIOWE CIĄGŁE PRZESTRZENNIE</a></li><li class="breadcrumb-item"><a href="./15_pola_estymacja.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Geostatystyczne metody estymacji</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-pola-estymacja" class="quarto-section-identifier"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Geostatystyczne metody estymacji</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Czego się nauczysz
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Po tym rozdziale potrafisz wykonać w R:</strong></p>
+<ul>
+<li>przygotować parametry krigingu obiektem <code>gstat()</code>,</li>
+<li>wykonać <strong>kriging prosty</strong> z zadaną średnią (<code>beta</code>),</li>
+<li>wykonać <strong>kriging zwykły</strong> z sąsiedztwem szukania (<code>nmax</code>),</li>
+<li>wykonać estymację w siatce (<code>interpolate()</code>) oraz w wybranych lokalizacjach (<code>predict()</code>),</li>
+<li>przedstawić na mapie estymację i wariancję krigingową,</li>
+<li>zapisać wynik estymacji do pliku.</li>
+</ul>
+<p><strong>Rozumiesz i umiesz zinterpretować:</strong></p>
+<ul>
+<li>czym różnią się trzy warianty krigingu w założeniu o średniej,</li>
+<li>czym jest <strong>sąsiedztwo szukania</strong> i dlaczego dotyczy wszystkich wariantów krigingu,</li>
+<li>co mierzy <strong>wariancja krigingowa</strong> i od czego zależy jej wartość,</li>
+<li>dlaczego wariancja krigingowa jest najmniejsza przy punktach pomiarowych,</li>
+<li><strong>kriging z trendem</strong> — czytasz jego wynik, nie liczysz go samodzielnie.</li>
+</ul>
+<p><strong>Teoria:</strong> <a href="./12_pola_teoria.html#najwazniejsze-pola">Najważniejsze informacje</a>. <strong>Funkcje:</strong> <a href="B_funkcje.html" class="quarto-xref"><span>Załącznik B</span></a>. <strong>Słownik:</strong> <a href="D_slownik.html" class="quarto-xref"><span>Załącznik D</span></a>.</p>
+</div>
+</div>
+<section id="wprowadzenie" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="wprowadzenie"><span class="header-section-number">10.1</span> Wprowadzenie</h2>
+<p><a href="14_pola_semiwariogram.html" class="quarto-xref"><span>Rozdział 9</span></a> zakończył się dopasowanym modelem semiwariogramu — ciągłym opisem struktury przestrzennej zmiennej. Ten rozdział używa tego opisu do <strong>estymacji</strong>: szacowania wartości zmiennej w lokalizacjach, w których pomiaru nie wykonano.</p>
+<p>Grupa metod, które to robią, nosi nazwę <strong>kriging</strong>. Tak jak IDW z <a href="13_pola_interpolacja.html" class="quarto-xref"><span>Rozdział 8</span></a>, kriging liczy średnią ważoną wartości punktów pomiarowych — ale wagi nie pochodzą z arbitralnie przyjętego wzoru, lecz <strong>z modelu semiwariogramu</strong>, czyli z opisu zmienności wyprowadzonego z danych. Stąd druga różnica: wynikiem krigingu są <strong>dwie</strong> wielkości, estymacja i wariancja krigingowa.</p>
+<p>Kriging przebiega w pięciu krokach: semiwariogram empiryczny, dopasowanie modelu, obliczenie wag, estymacja, wizualizacja. Dwa pierwsze wykonaliśmy w <a href="14_pola_semiwariogram.html" class="quarto-xref"><span>Rozdział 9</span></a>, trzeci wykonuje za nas funkcja, więc tutaj zaczynamy od czwartego. Ocena, <strong>jak dokładna</strong> jest uzyskana estymacja, należy do <a href="16_pola_ocena.html" class="quarto-xref"><span>Rozdział 11</span></a>.</p>
+</section>
+<section id="struktura-obiektów-siatka-i-wynik-krigingu" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="struktura-obiektów-siatka-i-wynik-krigingu"><span class="header-section-number">10.2</span> Struktura obiektów: siatka i wynik krigingu</h2>
+<p>Estymacja w siatce działa tak samo jak interpolacja deterministyczna z <a href="13_pola_interpolacja.html" class="quarto-xref"><span>Rozdział 8</span></a>: siatką jest pusty <code>SpatRaster</code> o zadanej rozdzielczości, a funkcja <code>interpolate()</code> wypełnia go wartościami policzonymi przez model.</p>
+<p>Wynik krigingu ma <strong>dwie warstwy</strong>:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Warstwa</th>
+<th>Zawartość</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>var1.pred</code></td>
+<td><strong>estymacja</strong> — oszacowana wartość cechy w komórce</td>
+</tr>
+<tr class="even">
+<td><code>var1.var</code></td>
+<td><strong>wariancja krigingowa</strong> — ocena niepewności tej estymacji</td>
+</tr>
+</tbody>
+</table>
+<blockquote class="blockquote">
+<p><strong>Wariancja krigingowa</strong> jest względną oceną błędu (niepewności) estymacji w danym punkcie, wynikającą z niepewności związanej <strong>z rozmieszczeniem punktów pomiarowych oraz z przyjętym modelem, a nie z konkretnych wartości badanej cechy</strong>.</p>
+</blockquote>
+<p>Konsekwencja tego sformułowania jest istotna i wrócimy do niej w interpretacji: wariancja krigingowa <strong>nie jest</strong> miarą błędu estymacji. Zależy od geometrii — od tego, jak gęsto i jak równomiernie rozmieszczone są punkty pomiarowe wokół szacowanej lokalizacji — oraz od parametrów modelu. Rzeczywisty błąd estymacji ocenia się walidacją, czym zajmuje się <a href="16_pola_ocena.html" class="quarto-xref"><span>Rozdział 11</span></a>.</p>
+</section>
+<section id="warianty-krigingu-w-r" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="warianty-krigingu-w-r"><span class="header-section-number">10.3</span> Warianty krigingu w R</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Wariant</th>
+<th>Założenie o średniej</th>
+<th>Argument <code>gstat()</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>kriging prosty</strong> (ang. <em>simple kriging</em>, SK)</td>
+<td>średnia jest <strong>znana i stała</strong> na całym obszarze</td>
+<td><code>beta =</code></td>
+</tr>
+<tr class="even">
+<td><strong>kriging zwykły</strong> (ang. <em>ordinary kriging</em>, OK)</td>
+<td>średnia jest <strong>nieznana</strong>; lokalne fluktuacje średniej wyznaczane są w ruchomym oknie</td>
+<td><code>nmax =</code> lub <code>maxdist =</code></td>
+</tr>
+<tr class="odd">
+<td><strong>kriging z trendem</strong> (ang. <em>kriging with a trend</em>, KT)</td>
+<td>średnia zmienia się systematycznie wraz z położeniem</td>
+<td>formuła <code>temp ~ x + y</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sąsiedztwo szukania</strong> (ang. <em>search neighborhood</em>) to ograniczenie obliczeń do pewnej liczby najbliższych punktów pomiarowych (<code>nmax</code>) albo do punktów w zadanej odległości (<code>maxdist</code>). Jest to <strong>parametr obliczeń wspólny dla wszystkich wariantów krigingu</strong>, a nie cecha odróżniająca kriging zwykły od pozostałych. W krigingu zwykłym używa się go dodatkowo do wyznaczania lokalnej średniej, stąd jego szczególna rola w tym wariancie.</p>
+<p>Pełne zestawienie funkcji — <a href="B_funkcje.html" class="quarto-xref"><span>Załącznik B</span></a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstat)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>interpolate_gstat <span class="ot">=</span> <span class="cf">function</span>(model, x, ...) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># x to tabela współrzędnych komórek siatki przekazana przez interpolate();</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># remove = FALSE zachowuje kolumny x i y, potrzebne modelom używającym współrzędnych</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  v <span class="ot">=</span> <span class="fu">st_as_sf</span>(x, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="fu">st_crs</span>(model<span class="sc">$</span>data[[<span class="dv">1</span>]]<span class="sc">$</span>data), <span class="at">remove =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">=</span> <span class="fu">predict</span>(model, v, ...)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>(p)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="przykład-temperatura-powietrza" class="level2" data-number="10.4">
+<h2 data-number="10.4" class="anchored" data-anchor-id="przykład-temperatura-powietrza"><span class="header-section-number">10.4</span> Przykład: temperatura powietrza</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Kroki analizy
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Dane i model semiwariogramu — <code>read.csv()</code>, <code>filter()</code>, <code>st_as_sf()</code>, <code>variogram()</code>, <code>fit.variogram()</code>.</li>
+<li>Siatka interpolacyjna — <code>rast()</code>.</li>
+<li>Kriging prosty — <code>gstat(beta = )</code>, <code>interpolate()</code>, <code>mask()</code>.</li>
+<li>Kriging zwykły — <code>gstat(nmax = )</code>, <code>interpolate()</code>, <code>mask()</code>.</li>
+<li>Wizualizacja estymacji i wariancji krigingowej — <code>tmap_arrange()</code>.</li>
+<li>Zapis wyniku — <code>writeRaster()</code>.</li>
+</ol>
+<p>Kod spoza tych sześciu kroków jest objaśnieniem: nie trzeba go uruchamiać, żeby wykonać analizę.</p>
+</div>
+</div>
+<section id="krok-1-dane-i-model-semiwariogramu" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-1-dane-i-model-semiwariogramu">Krok 1: dane i model semiwariogramu</h3>
+<p>Pracujemy na danych z <a href="14_pola_semiwariogram.html" class="quarto-xref"><span>Rozdział 9</span></a> i powtarzamy na nich dwa pierwsze kroki krigingu: semiwariogram empiryczny i dopasowanie modelu. Rozdział jest dzięki temu samodzielny — model można też wczytać z pliku zapisanego w poprzednim rozdziale (<code>readRDS("out/model_semiwariogramu.rds")</code>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>punkty <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"data/punkty.csv"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(temp)) <span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="st">"EPSG:2180"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>granica <span class="ot">=</span> <span class="fu">vect</span>(<span class="st">"data/granica.gpkg"</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>vario <span class="ot">=</span> <span class="fu">variogram</span>(temp <span class="sc">~</span> <span class="dv">1</span>, <span class="at">locations =</span> punkty)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">fit.variogram</span>(vario, <span class="fu">vgm</span>(<span class="at">psill =</span> <span class="dv">10</span>, <span class="at">model =</span> <span class="st">"Sph"</span>, <span class="at">range =</span> <span class="dv">3000</span>, <span class="at">nugget =</span> <span class="fl">0.5</span>))</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>model</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  model      psill  range
+1   Nug  0.6755637    0.0
+2   Sph 13.6466875 5479.9</code></pre>
+</div>
+</div>
+</section>
+<section id="krok-2-siatka-interpolacyjna" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-2-siatka-interpolacyjna">Krok 2: siatka interpolacyjna</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>siatka <span class="ot">=</span> <span class="fu">rast</span>(<span class="at">ext =</span> granica, <span class="at">res =</span> <span class="dv">90</span>, <span class="at">crs =</span> <span class="fu">crs</span>(granica))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>siatka</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster 
+size        : 96, 127, 1  (nrow, ncol, nlyr)
+resolution  : 90, 90  (x, y)
+extent      : 745541.7, 756971.7, 712651.6, 721291.6  (xmin, xmax, ymin, ymax)
+coord. ref. : ETRF2000-PL / CS92 (EPSG:2180) </code></pre>
+</div>
+</div>
+</section>
+<section id="krok-3-kriging-prosty" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-3-kriging-prosty">Krok 3: kriging prosty</h3>
+<p>Kriging prosty zakłada, że <strong>średnia jest znana i stała</strong> na całym obszarze, więc trzeba ją podać. Podajemy średnią z pomiarów.</p>
+<p>Obiekt <code>gstat()</code> zbiera parametry estymacji: formułę (<code>temp ~ 1</code> — zmienna bez zmiennych objaśniających), punkty pomiarowe, model semiwariogramu i wartość średniej.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>sk_param <span class="ot">=</span> <span class="fu">gstat</span>(<span class="at">formula =</span> temp <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">locations =</span> punkty,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">model =</span> model,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">beta =</span> <span class="fu">mean</span>(punkty<span class="sc">$</span>temp))</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>sk <span class="ot">=</span> <span class="fu">interpolate</span>(siatka, sk_param, <span class="at">fun =</span> interpolate_gstat, <span class="at">debug.level =</span> <span class="dv">0</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>sk_granica <span class="ot">=</span> <span class="fu">mask</span>(sk, granica)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>sk_granica</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster 
+size        : 96, 127, 2  (nrow, ncol, nlyr)
+resolution  : 90, 90  (x, y)
+extent      : 745541.7, 756971.7, 712651.6, 721291.6  (xmin, xmax, ymin, ymax)
+coord. ref. : ETRF2000-PL / CS92 (EPSG:2180) 
+source(s)   : memory
+names       : var1.pred,  var1.var 
+min values  :  8.769768, 0.9865931 
+max values  : 23.604351, 3.7707150 </code></pre>
+</div>
+</div>
+<p>Wypis obiektu <code>SpatRaster</code> pokazuje dwie warstwy — <code>var1.pred</code> i <code>var1.var</code> — wraz z zakresem wartości każdej z nich. Zakres <code>var1.pred</code> to zakres oszacowań temperatury, zakres <code>var1.var</code> — zakres wariancji krigingowej.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Objaśnienie — poza ścieżką zadania
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Ten sam obiekt <code>gstat()</code> wykonuje estymację nie tylko w siatce, lecz także w <strong>wybranych lokalizacjach</strong>. Wystarczy zamiast <code>interpolate()</code> użyć <code>predict()</code> i podać warstwę punktową.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>nowe_lokalizacje <span class="ot">=</span> <span class="fu">st_sfc</span>(<span class="fu">st_point</span>(<span class="fu">c</span>(<span class="dv">750000</span>, <span class="dv">716000</span>)),</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">st_point</span>(<span class="fu">c</span>(<span class="dv">753000</span>, <span class="dv">719000</span>)),</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">crs =</span> <span class="st">"EPSG:2180"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>()</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(sk_param, nowe_lokalizacje, <span class="at">debug.level =</span> <span class="dv">0</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 2 features and 2 fields
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: 750000 ymin: 716000 xmax: 753000 ymax: 719000
+Projected CRS: ETRF2000-PL / CS92
+  var1.pred var1.var              geometry
+1  14.71631 2.500479 POINT (750000 716000)
+2  13.18594 2.115704 POINT (753000 719000)</code></pre>
+</div>
+</div>
+<p>Wynik ma te same dwie kolumny co raster: <code>var1.pred</code> i <code>var1.var</code>. Różni się tylko postacią — jest warstwą punktową zamiast rastra.</p>
+</div>
+</div>
+</section>
+<section id="krok-4-kriging-zwykły" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-4-kriging-zwykły">Krok 4: kriging zwykły</h3>
+<p>Kriging zwykły traktuje średnią jako <strong>wartość nieznaną</strong> i wyznacza jej lokalne fluktuacje w ruchomym oknie. Zamiast <code>beta</code> podajemy więc rozmiar tego okna: <code>nmax = 30</code> oznacza, że do estymacji każdej komórki użytych zostanie 30 najbliższych punktów pomiarowych.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>ok_param <span class="ot">=</span> <span class="fu">gstat</span>(<span class="at">formula =</span> temp <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">locations =</span> punkty,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">model =</span> model,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">nmax =</span> <span class="dv">30</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>ok <span class="ot">=</span> <span class="fu">interpolate</span>(siatka, ok_param, <span class="at">fun =</span> interpolate_gstat, <span class="at">debug.level =</span> <span class="dv">0</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>ok_granica <span class="ot">=</span> <span class="fu">mask</span>(ok, granica)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="krok-5-wizualizacja-estymacji-i-wariancji-krigingowej" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-5-wizualizacja-estymacji-i-wariancji-krigingowej">Krok 5: wizualizacja estymacji i wariancji krigingowej</h3>
+<p>Estymacje obu wariantów przedstawiamy w <strong>tej samej skali barw</strong>, żeby mapy dało się porównać.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>skala_temp <span class="ot">=</span> <span class="fu">tm_scale_continuous</span>(<span class="at">values =</span> <span class="st">"-brewer.spectral"</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">8</span>, <span class="dv">24</span>))</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>m_sk <span class="ot">=</span> <span class="fu">tm_shape</span>(sk_granica) <span class="sc">+</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_raster</span>(<span class="at">col =</span> <span class="st">"var1.pred"</span>, <span class="at">col.scale =</span> skala_temp,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">col.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"Temperatura [°C]"</span>)) <span class="sc">+</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_title</span>(<span class="st">"Kriging prosty"</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>m_ok <span class="ot">=</span> <span class="fu">tm_shape</span>(ok_granica) <span class="sc">+</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_raster</span>(<span class="at">col =</span> <span class="st">"var1.pred"</span>, <span class="at">col.scale =</span> skala_temp,</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">col.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"Temperatura [°C]"</span>)) <span class="sc">+</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_title</span>(<span class="st">"Kriging zwykły"</span>)</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_arrange</span>(m_sk, m_ok, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="15_pola_estymacja_files/figure-html/mapy-estymacji-1.png" class="img-fluid figure-img" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Wariancję krigingową mapujemy osobno — jest wielkością innego rodzaju niż estymacja, więc wymaga własnej skali. Na mapę nanosimy punkty pomiarowe.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(ok_granica) <span class="sc">+</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_raster</span>(<span class="at">col =</span> <span class="st">"var1.var"</span>,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">col.scale =</span> <span class="fu">tm_scale_continuous</span>(<span class="at">values =</span> <span class="st">"viridis"</span>),</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">col.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"Wariancja</span><span class="sc">\n</span><span class="st">krigingowa"</span>)) <span class="sc">+</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(punkty) <span class="sc">+</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_dots</span>(<span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">size =</span> <span class="fl">0.15</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="15_pola_estymacja_files/figure-html/mapa-wariancji-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="krok-6-zapis-wyniku" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-6-zapis-wyniku">Krok 6: zapis wyniku</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"out"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">writeRaster</span>(ok_granica, <span class="st">"out/kriging_zwykly.tif"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="interpretacja-wyniku" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="interpretacja-wyniku">Interpretacja wyniku</h3>
+<p><strong>Obie metody dały niemal identyczne estymacje.</strong> Kriging prosty szacuje temperaturę w przedziale 8.77–23.6 °C, kriging zwykły 8.75–23.6 °C. Średnia bezwzględna różnica między mapami wynosi 0.068 °C, a największa 0.385 °C.</p>
+<p>Zgodność ta nie jest regułą — wynika z tego, że punkty pomiarowe są w tym obszarze gęste i rozmieszczone w miarę równomiernie, więc lokalna średnia wyznaczana przez kriging zwykły jest blisko średniej globalnej podanej krigingowi prostemu (15.27 °C). Przy rzadkiej lub nierównomiernej sieci pomiarowej różnice między wariantami rosną, a kriging prosty staje się wrażliwy na trafność przyjętej średniej.</p>
+<p><strong>Wariancja krigingowa układa się w regularny wzór związany z rozmieszczeniem punktów.</strong> Dla krigingu zwykłego mieści się w przedziale 0.987–3.871. Wartości najniższe występują <strong>w miejscach punktów pomiarowych i w ich bezpośrednim otoczeniu</strong>, najwyższe — tam, gdzie punktów brak, a więc przy brzegach obszaru i w lukach sieci pomiarowej. Na mapie wariancji widać wręcz rozmieszczenie sieci pomiarowej.</p>
+<p>Jest to bezpośrednia konsekwencja definicji: wariancja krigingowa zależy od <strong>rozmieszczenia punktów pomiarowych i od przyjętego modelu</strong>, a nie od wartości badanej cechy. Komórka otoczona gęsto punktami ma niską wariancję krigingową niezależnie od tego, czy wartości tych punktów są do siebie podobne, czy nie. <strong>Nie wolno więc czytać mapy wariancji krigingowej jako mapy błędu estymacji</strong> — rzeczywisty błąd ocenia się przez porównanie wartości estymowanych z obserwowanymi, czyli walidacją (<a href="16_pola_ocena.html" class="quarto-xref"><span>Rozdział 11</span></a>).</p>
+<p>Najniższa wariancja krigingowa w siatce nie spada do zera, lecz zatrzymuje się na poziomie 0.987. Nie wynika to z efektu samorodka: w <strong>samej lokalizacji pomiaru</strong> wariancja krigingowa wynosi zero, bo kriging w domyślnej parametryzacji <code>gstat</code> jest estymatorem dokładnym. Minimum na mapie bierze się z <strong>rozdzielczości siatki</strong> — żaden środek komórki nie pokrywa się dokładnie z punktem pomiarowym, a przy komórce 90 m środek najbliższej komórki może leżeć nawet 64 m od pomiaru. Na takim dystansie wariancja krigingowa przekroczyła już wartość efektu samorodka (0.676); wracamy do tego w pytaniu kontrolnym 6.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Objaśnienie — poza ścieżką zadania
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Kriging z trendem</strong> zakłada, że średnia zmienia się systematycznie wraz z położeniem, i uwzględnia w estymacji współrzędne punktów. Wymaga osobnej ścieżki: semiwariogram liczy się dla formuły <code>temp ~ x + y</code>, czyli na odchyleniach od trendu liniowego, a nie na surowych wartościach.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># współrzędne muszą być dostępne jako kolumny, nie tylko jako geometria</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>punkty_xy <span class="ot">=</span> punkty <span class="sc">|&gt;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">x =</span> <span class="fu">st_coordinates</span>(punkty)[, <span class="dv">1</span>],</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="fu">st_coordinates</span>(punkty)[, <span class="dv">2</span>])</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>vario_kt <span class="ot">=</span> <span class="fu">variogram</span>(temp <span class="sc">~</span> x <span class="sc">+</span> y, <span class="at">locations =</span> punkty_xy)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>model_kt <span class="ot">=</span> <span class="fu">fit.variogram</span>(vario_kt, <span class="fu">vgm</span>(<span class="at">psill =</span> <span class="dv">5</span>, <span class="at">model =</span> <span class="st">"Sph"</span>, <span class="at">range =</span> <span class="dv">3000</span>, <span class="at">nugget =</span> <span class="fl">0.5</span>))</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>model_kt</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  model     psill    range
+1   Nug 0.2822711    0.000
+2   Sph 6.9271885 2193.736</code></pre>
+</div>
+</div>
+<p>Semiwariancja progowa cząstkowa tego modelu (6.93) jest <strong>niemal dwukrotnie mniejsza</strong> niż w modelu bez trendu (13.65), a zasięg krótszy (2194 m wobec 5480 m). Oznacza to, że znaczną część zmienności przestrzennej przejął trend liniowy — temperatura zmienia się systematycznie w pewnym kierunku, a semiwariogram opisuje już tylko odchylenia od tego kierunku.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>kt_param <span class="ot">=</span> <span class="fu">gstat</span>(<span class="at">formula =</span> temp <span class="sc">~</span> x <span class="sc">+</span> y, <span class="at">locations =</span> punkty_xy, <span class="at">model =</span> model_kt)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>kt_granica <span class="ot">=</span> <span class="fu">mask</span>(<span class="fu">interpolate</span>(siatka, kt_param, <span class="at">fun =</span> interpolate_gstat, <span class="at">debug.level =</span> <span class="dv">0</span>),</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                  granica)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(kt_granica) <span class="sc">+</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_raster</span>(<span class="at">col =</span> <span class="st">"var1.pred"</span>, <span class="at">col.scale =</span> skala_temp,</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">col.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"Temperatura [°C]"</span>)) <span class="sc">+</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_title</span>(<span class="st">"Kriging z trendem"</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="15_pola_estymacja_files/figure-html/mapa-trend-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Estymacja mieści się w przedziale 8.6–23.88 °C.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="pytania-kontrolne" class="level2" data-number="10.5">
+<h2 data-number="10.5" class="anchored" data-anchor-id="pytania-kontrolne"><span class="header-section-number">10.5</span> Pytania kontrolne</h2>
+<blockquote class="blockquote">
+<p><strong>1.</strong> Od czego zależy waga przypisywana punktowi pomiarowemu w krigingu?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Od odległości oraz od podobieństwa wartości między sąsiednimi punktami</strong>, czyli od autokorelacji przestrzennej opisanej modelem semiwariogramu.</p>
+<p>To odróżnia kriging od IDW (<a href="13_pola_interpolacja.html" class="quarto-xref"><span>Rozdział 8</span></a>), gdzie waga zależy <strong>wyłącznie od odległości</strong>, a tempo jej spadku ustala arbitralnie analityk wykładnikiem potęgowym. W krigingu tempo spadku wagi wynika z modelu dopasowanego do danych.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>2.</strong> Czym kriging prosty różni się od krigingu zwykłego?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Założeniem o średniej.</strong> Kriging prosty przyjmuje, że średnia jest <strong>znana i stała</strong> na całym obszarze — trzeba ją podać argumentem <code>beta</code>. Kriging zwykły traktuje średnią jako <strong>nieznaną</strong> i wyznacza jej lokalne fluktuacje w ruchomym oknie.</p>
+<p>Oba należą do <strong>geostatystycznych</strong> metod interpolacji przestrzennej: ich parametry wynikają z modelu semiwariogramu, a wynik zawiera oszacowanie niepewności.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>3.</strong> Czym jest sąsiedztwo szukania i którego wariantu krigingu dotyczy?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>To ograniczenie obliczeń do części punktów pomiarowych: określonej liczby najbliższych (<code>nmax</code>) albo punktów położonych w zadanej odległości (<code>maxdist</code>). Służy skróceniu obliczeń — estymacja każdej komórki wymagałaby inaczej rozwiązania układu równań dla wszystkich punktów zbioru.</p>
+<p>Dotyczy <strong>wszystkich wariantów krigingu</strong>, nie tylko zwykłego. W krigingu zwykłym pełni dodatkową rolę, bo w tym samym oknie wyznaczana jest lokalna średnia.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>4.</strong> Co mierzy wariancja krigingowa?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Względną ocenę niepewności estymacji w danym punkcie</strong>, wynikającą z rozmieszczenia punktów pomiarowych oraz z przyjętego modelu semiwariogramu — <strong>a nie z konkretnych wartości badanej cechy</strong>.</p>
+<p>Dlatego mapa wariancji krigingowej odzwierciedla geometrię sieci pomiarowej: niskie wartości w otoczeniu punktów, wysokie w lukach i przy brzegach obszaru. Dwie komórki o identycznym rozmieszczeniu sąsiadów mają tę samą wariancję krigingową, choćby wartości w tych sąsiadach były skrajnie różne.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>5.</strong> Czy mapa wariancji krigingowej jest mapą błędu estymacji?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Nie.</strong> Wariancja krigingowa nie korzysta z wartości badanej cechy, więc nie może mierzyć, o ile estymacja rozminęła się z rzeczywistością.</p>
+<p>Błąd estymacji to <strong>różnica między wartością obserwowaną a oszacowaną</strong>, więc do jego policzenia potrzebne są obie. Uzyskuje się je metodami walidacji — przez wydzielenie zbioru testowego albo przez kroswalidację (<a href="16_pola_ocena.html" class="quarto-xref"><span>Rozdział 11</span></a>).</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>6.</strong> Dlaczego najniższa wariancja krigingowa na mapie nie wynosi zera, skoro w lokalizacji punktu pomiarowego kriging zwraca wartość zmierzoną?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Ponieważ <strong>żaden środek komórki siatki nie pokrywa się dokładnie z punktem pomiarowym</strong>. Wariancja krigingowa spada do zera wyłącznie w samej lokalizacji pomiaru; już kilka metrów dalej jest wyraźnie dodatnia, a przy rozdzielczości siatki 90 m środek najbliższej komórki może leżeć nawet 64 m od pomiaru.</p>
+<p>W tym rozdziale najniższa wariancja krigingowa w siatce wynosi 0.987. Nie jest to wartość efektu samorodka, która wynosi 0.676 — wariancja krigingowa przy punkcie pomiarowym rośnie z odległością od niego i szybko przekracza efekt samorodka.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>7.</strong> Dla formuły <code>temp ~ x + y</code> semiwariogram ma mniejszą semiwariancję progową niż dla <code>temp ~ 1</code>. Dlaczego?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Ponieważ semiwariogram liczony jest wtedy <strong>na odchyleniach od trendu</strong>, a nie na surowych wartościach. Trend liniowy zależny od współrzędnych przejmuje część zmienności przestrzennej, więc tej części nie ma już w semiwariogramie.</p>
+<p>Dla danych tego rozdziału semiwariancja progowa cząstkowa spada z 13.65 do 6.93, a zasięg z 5480 m do 2194 m.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="podsumowanie" class="level2" data-number="10.6">
+<h2 data-number="10.6" class="anchored" data-anchor-id="podsumowanie"><span class="header-section-number">10.6</span> Podsumowanie</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Metoda</th>
+<th>Funkcja i argument</th>
+<th>Co daje</th>
+<th>Warunek poprawnego użycia</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>kriging prosty</td>
+<td><code>gstat(beta = )</code></td>
+<td>estymację przy znanej, stałej średniej</td>
+<td>wartość <code>beta</code> trzeba podać; wrażliwy na jej trafność przy rzadkiej sieci pomiarowej</td>
+</tr>
+<tr class="even">
+<td>kriging zwykły</td>
+<td><code>gstat(nmax = )</code> lub <code>gstat(maxdist = )</code></td>
+<td>estymację przy średniej wyznaczanej lokalnie</td>
+<td>rozmiar okna podajemy razem z wynikiem</td>
+</tr>
+<tr class="odd">
+<td>kriging z trendem</td>
+<td>formuła <code>temp ~ x + y</code></td>
+<td>estymację uwzględniającą systematyczną zmianę średniej z położeniem</td>
+<td>wymaga semiwariogramu na tej samej formule; współrzędne jako kolumny</td>
+</tr>
+<tr class="even">
+<td>estymacja w siatce</td>
+<td><code>interpolate(fun = interpolate_gstat)</code></td>
+<td>raster o dwóch warstwach</td>
+<td>siatka <code>SpatRaster</code>; wynik przycinamy <code>mask()</code></td>
+</tr>
+<tr class="odd">
+<td>estymacja w lokalizacjach</td>
+<td><code>predict()</code></td>
+<td>warstwę punktową o tych samych dwóch kolumnach</td>
+<td>ten sam obiekt <code>gstat()</code> co dla siatki</td>
+</tr>
+<tr class="even">
+<td>wariancja krigingowa</td>
+<td>warstwa <code>var1.var</code></td>
+<td>niepewność wynikającą z geometrii sieci pomiarowej i modelu</td>
+<td><strong>nie jest</strong> miarą błędu estymacji — ten ocenia <a href="16_pola_ocena.html" class="quarto-xref"><span>Rozdział 11</span></a></td>
+</tr>
+</tbody>
+</table>
+<p>Trzy zasady, do których wracamy w kolejnym rozdziale:</p>
+<ol type="1">
+<li><strong>Wariant krigingu wybiera się przez założenie o średniej</strong>, nie przez sposób ograniczania obliczeń. Sąsiedztwo szukania (<code>nmax</code>, <code>maxdist</code>) dotyczy wszystkich wariantów.</li>
+<li><strong>Wariancja krigingowa opisuje geometrię, nie trafność.</strong> Jej mapa pokazuje rozmieszczenie sieci pomiarowej; ocena błędu wymaga porównania z wartościami obserwowanymi.</li>
+<li><strong>Formuła semiwariogramu i formuła estymacji muszą być identyczne.</strong> Model policzony dla <code>temp ~ 1</code> nie pasuje do estymacji <code>temp ~ x + y</code>.</li>
+</ol>
+</section>
+<section id="pełny-kod-analizy" class="level2" data-number="10.7">
+<h2 data-number="10.7" class="anchored" data-anchor-id="pełny-kod-analizy"><span class="header-section-number">10.7</span> Pełny kod analizy</h2>
+<p>Poniżej zebrany jest cały kod Kroków 1–6 w kolejności wykonania — do skopiowania do własnego skryptu zamiast przeklejania pojedynczych fragmentów. Nie ma w nim kodu objaśniającego: to dokładnie ta ścieżka, która prowadzi od danych wejściowych do pliku <code>out/kriging_zwykly.tif</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstat)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>interpolate_gstat <span class="ot">=</span> <span class="cf">function</span>(model, x, ...) {</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># x to tabela współrzędnych komórek siatki przekazana przez interpolate();</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># remove = FALSE zachowuje kolumny x i y, potrzebne modelom używającym współrzędnych</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  v <span class="ot">=</span> <span class="fu">st_as_sf</span>(x, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="fu">st_crs</span>(model<span class="sc">$</span>data[[<span class="dv">1</span>]]<span class="sc">$</span>data), <span class="at">remove =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">=</span> <span class="fu">predict</span>(model, v, ...)</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>(p)</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>punkty <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"data/punkty.csv"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(temp)) <span class="sc">|&gt;</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="st">"EPSG:2180"</span>)</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>granica <span class="ot">=</span> <span class="fu">vect</span>(<span class="st">"data/granica.gpkg"</span>)</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>vario <span class="ot">=</span> <span class="fu">variogram</span>(temp <span class="sc">~</span> <span class="dv">1</span>, <span class="at">locations =</span> punkty)</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">fit.variogram</span>(vario, <span class="fu">vgm</span>(<span class="at">psill =</span> <span class="dv">10</span>, <span class="at">model =</span> <span class="st">"Sph"</span>, <span class="at">range =</span> <span class="dv">3000</span>, <span class="at">nugget =</span> <span class="fl">0.5</span>))</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>model</span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>siatka <span class="ot">=</span> <span class="fu">rast</span>(<span class="at">ext =</span> granica, <span class="at">res =</span> <span class="dv">90</span>, <span class="at">crs =</span> <span class="fu">crs</span>(granica))</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>siatka</span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>sk_param <span class="ot">=</span> <span class="fu">gstat</span>(<span class="at">formula =</span> temp <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>                 <span class="at">locations =</span> punkty,</span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>                 <span class="at">model =</span> model,</span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>                 <span class="at">beta =</span> <span class="fu">mean</span>(punkty<span class="sc">$</span>temp))</span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>sk <span class="ot">=</span> <span class="fu">interpolate</span>(siatka, sk_param, <span class="at">fun =</span> interpolate_gstat, <span class="at">debug.level =</span> <span class="dv">0</span>)</span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>sk_granica <span class="ot">=</span> <span class="fu">mask</span>(sk, granica)</span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>sk_granica</span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a>ok_param <span class="ot">=</span> <span class="fu">gstat</span>(<span class="at">formula =</span> temp <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a>                 <span class="at">locations =</span> punkty,</span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a>                 <span class="at">model =</span> model,</span>
+<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a>                 <span class="at">nmax =</span> <span class="dv">30</span>)</span>
+<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a>ok <span class="ot">=</span> <span class="fu">interpolate</span>(siatka, ok_param, <span class="at">fun =</span> interpolate_gstat, <span class="at">debug.level =</span> <span class="dv">0</span>)</span>
+<span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a>ok_granica <span class="ot">=</span> <span class="fu">mask</span>(ok, granica)</span>
+<span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a>skala_temp <span class="ot">=</span> <span class="fu">tm_scale_continuous</span>(<span class="at">values =</span> <span class="st">"-brewer.spectral"</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">8</span>, <span class="dv">24</span>))</span>
+<span id="cb18-40"><a href="#cb18-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-41"><a href="#cb18-41" aria-hidden="true" tabindex="-1"></a>m_sk <span class="ot">=</span> <span class="fu">tm_shape</span>(sk_granica) <span class="sc">+</span></span>
+<span id="cb18-42"><a href="#cb18-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_raster</span>(<span class="at">col =</span> <span class="st">"var1.pred"</span>, <span class="at">col.scale =</span> skala_temp,</span>
+<span id="cb18-43"><a href="#cb18-43" aria-hidden="true" tabindex="-1"></a>            <span class="at">col.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"Temperatura [°C]"</span>)) <span class="sc">+</span></span>
+<span id="cb18-44"><a href="#cb18-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_title</span>(<span class="st">"Kriging prosty"</span>)</span>
+<span id="cb18-45"><a href="#cb18-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-46"><a href="#cb18-46" aria-hidden="true" tabindex="-1"></a>m_ok <span class="ot">=</span> <span class="fu">tm_shape</span>(ok_granica) <span class="sc">+</span></span>
+<span id="cb18-47"><a href="#cb18-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_raster</span>(<span class="at">col =</span> <span class="st">"var1.pred"</span>, <span class="at">col.scale =</span> skala_temp,</span>
+<span id="cb18-48"><a href="#cb18-48" aria-hidden="true" tabindex="-1"></a>            <span class="at">col.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"Temperatura [°C]"</span>)) <span class="sc">+</span></span>
+<span id="cb18-49"><a href="#cb18-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_title</span>(<span class="st">"Kriging zwykły"</span>)</span>
+<span id="cb18-50"><a href="#cb18-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-51"><a href="#cb18-51" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_arrange</span>(m_sk, m_ok, <span class="at">ncol =</span> <span class="dv">2</span>)</span>
+<span id="cb18-52"><a href="#cb18-52" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(ok_granica) <span class="sc">+</span></span>
+<span id="cb18-53"><a href="#cb18-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_raster</span>(<span class="at">col =</span> <span class="st">"var1.var"</span>,</span>
+<span id="cb18-54"><a href="#cb18-54" aria-hidden="true" tabindex="-1"></a>            <span class="at">col.scale =</span> <span class="fu">tm_scale_continuous</span>(<span class="at">values =</span> <span class="st">"viridis"</span>),</span>
+<span id="cb18-55"><a href="#cb18-55" aria-hidden="true" tabindex="-1"></a>            <span class="at">col.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"Wariancja</span><span class="sc">\n</span><span class="st">krigingowa"</span>)) <span class="sc">+</span></span>
+<span id="cb18-56"><a href="#cb18-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(punkty) <span class="sc">+</span></span>
+<span id="cb18-57"><a href="#cb18-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_dots</span>(<span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">size =</span> <span class="fl">0.15</span>)</span>
+<span id="cb18-58"><a href="#cb18-58" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"out"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb18-59"><a href="#cb18-59" aria-hidden="true" tabindex="-1"></a><span class="fu">writeRaster</span>(ok_granica, <span class="st">"out/kriging_zwykly.tif"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Skopiowano!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Skopiowano!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./14_pola_semiwariogram.html" class="pagination-link" aria-label="Analiza i modelowanie struktury przestrzennej">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Analiza i modelowanie struktury przestrzennej</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./16_pola_ocena.html" class="pagination-link" aria-label="Ocena jakości estymacji">
+        <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Ocena jakości estymacji</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

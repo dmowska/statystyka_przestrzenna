@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pl" xml:lang="pl"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Załącznik A — Pakiety – Statystyka przestrzenna</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./B_funkcje.html" rel="next">
+<link href="./19_projekt2_geostatystyka.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-c852b7e71cc1c09f55f367b2512aabbd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Brak wyników",
+    "search-matching-documents-text": "dopasowane dokumenty",
+    "search-copy-link-title": "Kopiuj link do wyszukiwania",
+    "search-hide-matches-text": "Ukryj dodatkowe dopasowania",
+    "search-more-match-text": "więcej dopasowań w tym dokumencie",
+    "search-more-matches-text": "więcej dopasowań w tym dokumencie",
+    "search-clear-button-title": "Wyczyść",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Anuluj",
+    "search-submit-button-title": "Zatwierdź",
+    "search-label": "Szukaj"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Przełącz pasek boczny" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./A_pakiety.html">Załączniki</a></li><li class="breadcrumb-item"><a href="./A_pakiety.html"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Pakiety</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Przełącz pasek boczny" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Szukaj" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Statystyka przestrzenna</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Szukaj"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">O skrypcie</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./01_wstep.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">WSTĘP</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_dane_przestrzenne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Dane przestrzenne w R</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./03_eksploracja_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">EKSPLORACYJNA ANALIZA DANYCH</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_eksploracja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Eksploracyjna analiza danych</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./05_punkty_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE PUNKTOWE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_punkty_centrograficzne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Statystyki centrograficzne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_punkty_intensywnosc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Metody oparte na analizie intensywności</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_punkty_odleglosc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Metody oparte na odległości</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./09_obszarowe_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE OBSZAROWE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_obszarowe_sasiedztwo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Określanie sąsiedztwa danych obszarowych</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_obszarowe_autokorelacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Miary autokorelacji danych obszarowych</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./12_pola_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE POWIERZCHNIOWE CIĄGŁE PRZESTRZENNIE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13_pola_interpolacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Metody interpolacji</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14_pola_semiwariogram.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Analiza i modelowanie struktury przestrzennej</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15_pola_estymacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Geostatystyczne metody estymacji</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_pola_ocena.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Ocena jakości estymacji</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">ZADANIA I PROJEKTY</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_zadania_samodzielne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Zadania samodzielne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18_projekt1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Projekt 1: przestępczość a zmienne społeczno-ekonomiczne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19_projekt2_geostatystyka.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Projekt 2: Geostatystyka</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Załączniki</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./A_pakiety.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Pakiety</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./B_funkcje.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Funkcje</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./C_operacje.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Operacje na danych przestrzennych</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./D_slownik.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Słownik pojęć</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bibliografia</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Spis treści</h2>
+   
+  <ul>
+  <li><a href="#pakiety-używane-w-skrypcie" id="toc-pakiety-używane-w-skrypcie" class="nav-link active" data-scroll-target="#pakiety-używane-w-skrypcie"><span class="header-section-number">A.1</span> Pakiety używane w skrypcie</a></li>
+  <li><a href="#opis-pakietów" id="toc-opis-pakietów" class="nav-link" data-scroll-target="#opis-pakietów"><span class="header-section-number">A.2</span> Opis pakietów</a>
+  <ul class="collapse">
+  <li><a href="#sf" id="toc-sf" class="nav-link" data-scroll-target="#sf"><span class="header-section-number">A.2.1</span> sf</a></li>
+  <li><a href="#terra" id="toc-terra" class="nav-link" data-scroll-target="#terra"><span class="header-section-number">A.2.2</span> terra</a></li>
+  <li><a href="#tmap" id="toc-tmap" class="nav-link" data-scroll-target="#tmap"><span class="header-section-number">A.2.3</span> tmap</a></li>
+  <li><a href="#dplyr-i-ggplot2" id="toc-dplyr-i-ggplot2" class="nav-link" data-scroll-target="#dplyr-i-ggplot2"><span class="header-section-number">A.2.4</span> dplyr i ggplot2</a></li>
+  <li><a href="#sfdep" id="toc-sfdep" class="nav-link" data-scroll-target="#sfdep"><span class="header-section-number">A.2.5</span> sfdep</a></li>
+  <li><a href="#spatstat" id="toc-spatstat" class="nav-link" data-scroll-target="#spatstat"><span class="header-section-number">A.2.6</span> spatstat</a></li>
+  <li><a href="#spdep" id="toc-spdep" class="nav-link" data-scroll-target="#spdep"><span class="header-section-number">A.2.7</span> spdep</a></li>
+  <li><a href="#gstat" id="toc-gstat" class="nav-link" data-scroll-target="#gstat"><span class="header-section-number">A.2.8</span> gstat</a></li>
+  <li><a href="#pakiety-pomocnicze" id="toc-pakiety-pomocnicze" class="nav-link" data-scroll-target="#pakiety-pomocnicze"><span class="header-section-number">A.2.9</span> Pakiety pomocnicze</a></li>
+  </ul></li>
+  <li><a href="#biblioteki-zewnętrzne" id="toc-biblioteki-zewnętrzne" class="nav-link" data-scroll-target="#biblioteki-zewnętrzne"><span class="header-section-number">A.3</span> Biblioteki zewnętrzne</a></li>
+  <li><a href="#instalacja" id="toc-instalacja" class="nav-link" data-scroll-target="#instalacja"><span class="header-section-number">A.4</span> Instalacja</a>
+  <ul class="collapse">
+  <li><a href="#pakiet-spdatalarge" id="toc-pakiet-spdatalarge" class="nav-link" data-scroll-target="#pakiet-spdatalarge"><span class="header-section-number">A.4.1</span> Pakiet spDataLarge</a></li>
+  <li><a href="#sprawdzenie-instalacji" id="toc-sprawdzenie-instalacji" class="nav-link" data-scroll-target="#sprawdzenie-instalacji"><span class="header-section-number">A.4.2</span> Sprawdzenie instalacji</a></li>
+  </ul></li>
+  <li><a href="#sec-typowe-bledy" id="toc-sec-typowe-bledy" class="nav-link" data-scroll-target="#sec-typowe-bledy"><span class="header-section-number">A.5</span> Typowe błędy i komunikaty</a>
+  <ul class="collapse">
+  <li><a href="#zera-wiodące-w-kodach-teryt" id="toc-zera-wiodące-w-kodach-teryt" class="nav-link" data-scroll-target="#zera-wiodące-w-kodach-teryt"><span class="header-section-number">A.5.1</span> Zera wiodące w kodach TERYT</a></li>
+  <li><a href="#brakujące-wartości-na-a-tworzenie-obiektu-przestrzennego" id="toc-brakujące-wartości-na-a-tworzenie-obiektu-przestrzennego" class="nav-link" data-scroll-target="#brakujące-wartości-na-a-tworzenie-obiektu-przestrzennego"><span class="header-section-number">A.5.2</span> Brakujące wartości (NA) a tworzenie obiektu przestrzennego</a></li>
+  <li><a href="#niezgodność-układów-współrzędnych" id="toc-niezgodność-układów-współrzędnych" class="nav-link" data-scroll-target="#niezgodność-układów-współrzędnych"><span class="header-section-number">A.5.3</span> Niezgodność układów współrzędnych</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./A_pakiety.html">Załączniki</a></li><li class="breadcrumb-item"><a href="./A_pakiety.html"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Pakiety</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-pakiety" class="quarto-section-identifier">Załącznik A — Pakiety</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Zestawienie pakietów R używanych w skrypcie wraz z instrukcją instalacji oraz opisem najczęstszych błędów. Do tego załącznika warto wracać w trakcie semestru i przy pracy nad projektami.</p>
+<section id="pakiety-używane-w-skrypcie" class="level2" data-number="A.1">
+<h2 data-number="A.1" class="anchored" data-anchor-id="pakiety-używane-w-skrypcie"><span class="header-section-number">A.1</span> Pakiety używane w skrypcie</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pakiet</th>
+<th>Do czego służy</th>
+<th>Rozdziały</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>sf</code></td>
+<td>dane wektorowe: wczytywanie, zapis, układy współrzędnych, operacje geometryczne</td>
+<td>wszystkie</td>
+</tr>
+<tr class="even">
+<td><code>terra</code></td>
+<td>dane rastrowe oraz wektorowe: wczytywanie, przycinanie, agregacja, interpolacja</td>
+<td><a href="02_dane_przestrzenne.html" class="quarto-xref"><span>Rozdział 1</span></a>, <a href="13_pola_interpolacja.html" class="quarto-xref"><span>Rozdział 8</span></a>, <a href="15_pola_estymacja.html" class="quarto-xref"><span>Rozdział 10</span></a></td>
+</tr>
+<tr class="odd">
+<td><code>tmap</code></td>
+<td>wizualizacja danych przestrzennych (mapy)</td>
+<td>wszystkie</td>
+</tr>
+<tr class="even">
+<td><code>dplyr</code></td>
+<td>przetwarzanie tabel atrybutów: selekcja, filtrowanie, złączenia</td>
+<td>wszystkie</td>
+</tr>
+<tr class="odd">
+<td><code>ggplot2</code></td>
+<td>wykresy nieprzestrzenne: histogramy, wykresy pudełkowe, wykresy rozrzutu</td>
+<td><a href="04_eksploracja.html" class="quarto-xref"><span>Rozdział 2</span></a> i dalsze</td>
+</tr>
+<tr class="even">
+<td><code>sfdep</code></td>
+<td>statystyki centrograficzne</td>
+<td><a href="06_punkty_centrograficzne.html" class="quarto-xref"><span>Rozdział 3</span></a></td>
+</tr>
+<tr class="odd">
+<td><code>spatstat</code></td>
+<td>analiza rozkładu przestrzennego punktów: intensywność, odległości, funkcje G i K</td>
+<td><a href="07_punkty_intensywnosc.html" class="quarto-xref"><span>Rozdział 4</span></a>, <a href="08_punkty_odleglosc.html" class="quarto-xref"><span>Rozdział 5</span></a></td>
+</tr>
+<tr class="even">
+<td><code>spdep</code></td>
+<td>sąsiedztwo i miary autokorelacji przestrzennej danych obszarowych</td>
+<td><a href="10_obszarowe_sasiedztwo.html" class="quarto-xref"><span>Rozdział 6</span></a>, <a href="11_obszarowe_autokorelacja.html" class="quarto-xref"><span>Rozdział 7</span></a></td>
+</tr>
+<tr class="odd">
+<td><code>gstat</code></td>
+<td>geostatystyka: semiwariogram, modelowanie, kriging</td>
+<td><a href="14_pola_semiwariogram.html" class="quarto-xref"><span>Rozdział 9</span></a>, <a href="15_pola_estymacja.html" class="quarto-xref"><span>Rozdział 10</span></a>, <a href="16_pola_ocena.html" class="quarto-xref"><span>Rozdział 11</span></a></td>
+</tr>
+<tr class="even">
+<td><code>rsample</code></td>
+<td>podział zbioru na treningowy i testowy</td>
+<td><a href="16_pola_ocena.html" class="quarto-xref"><span>Rozdział 11</span></a></td>
+</tr>
+<tr class="odd">
+<td><code>e1071</code></td>
+<td>skośność i kurtoza</td>
+<td><a href="04_eksploracja.html" class="quarto-xref"><span>Rozdział 2</span></a></td>
+</tr>
+<tr class="even">
+<td><code>PerformanceAnalytics</code></td>
+<td>macierz wykresów rozrzutu</td>
+<td><a href="04_eksploracja.html" class="quarto-xref"><span>Rozdział 2</span></a></td>
+</tr>
+<tr class="odd">
+<td><code>spDataLarge</code></td>
+<td>zbiory danych do zadań samodzielnych; nie ma go na CRAN</td>
+<td><a href="17_zadania_samodzielne.html" class="quarto-xref"><span>Rozdział 12</span></a></td>
+</tr>
+<tr class="even">
+<td><code>crimedata</code></td>
+<td>pobranie danych o przestępstwach w miastach USA</td>
+<td><a href="18_projekt1.html" class="quarto-xref"><span>Rozdział 13</span></a></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="opis-pakietów" class="level2" data-number="A.2">
+<h2 data-number="A.2" class="anchored" data-anchor-id="opis-pakietów"><span class="header-section-number">A.2</span> Opis pakietów</h2>
+<section id="sf" class="level3" data-number="A.2.1">
+<h3 data-number="A.2.1" class="anchored" data-anchor-id="sf"><span class="header-section-number">A.2.1</span> sf</h3>
+<p>Pakiet do obsługi danych <strong>wektorowych</strong>. Definiuje klasę <code>sf</code>, będącą sposobem reprezentacji przestrzennych danych wektorowych w R.</p>
+<ul>
+<li>oparty jest na standardzie <em>Simple Features</em> organizacji OGC, dzięki czemu poszczególne typy geometrii (np. <code>POLYGON</code> i <code>MULTIPOLYGON</code>) stanowią odrębne klasy;</li>
+<li>obsługuje przestrzenne bazy danych, takie jak PostGIS;</li>
+<li>większość funkcji ma prefiks <code>st_</code> (od <em>spatial type</em>);</li>
+<li>jest wykorzystywany przez kilkadziesiąt innych pakietów R.</li>
+</ul>
+<p>Dokumentacja: <a href="https://r-spatial.github.io/sf/" class="uri">https://r-spatial.github.io/sf/</a> · opis standardu <em>Simple Features</em>: <a href="https://r-spatial.github.io/sf/articles/sf1.html" class="uri">https://r-spatial.github.io/sf/articles/sf1.html</a> · CRAN: <a href="https://cran.r-project.org/package=sf" class="uri">https://cran.r-project.org/package=sf</a></p>
+</section>
+<section id="terra" class="level3" data-number="A.2.2">
+<h3 data-number="A.2.2" class="anchored" data-anchor-id="terra"><span class="header-section-number">A.2.2</span> terra</h3>
+<p>Pakiet do obsługi danych <strong>rastrowych</strong> oraz wektorowych. Definiuje klasy <code>SpatRaster</code> (dane rastrowe) i <code>SpatVector</code> (dane wektorowe).</p>
+<ul>
+<li>metody analizy danych rastrowych obejmują funkcje lokalne, sąsiedztwa, globalne, strefowe oraz operacje geometryczne;</li>
+<li>metody dla danych wektorowych obejmują operacje geometryczne, m.in. <em>intersect</em> i <em>buffer</em>;</li>
+<li>zastąpił wcześniejszy pakiet <code>raster</code>.</li>
+</ul>
+<p>Dokumentacja: <a href="https://rspatial.github.io/terra/" class="uri">https://rspatial.github.io/terra/</a> · materiały wprowadzające: <a href="https://rspatial.org/" class="uri">https://rspatial.org/</a> · CRAN: <a href="https://cran.r-project.org/package=terra" class="uri">https://cran.r-project.org/package=terra</a></p>
+</section>
+<section id="tmap" class="level3" data-number="A.2.3">
+<h3 data-number="A.2.3" class="anchored" data-anchor-id="tmap"><span class="header-section-number">A.2.3</span> tmap</h3>
+<p>Pakiet do <strong>wizualizacji</strong> danych przestrzennych. Mapę buduje się z elementów łączonych znakiem <code>+</code>, podobnie jak wykres w pakiecie <code>ggplot2</code> — składnia została jednak dostosowana do tworzenia map, a nie wykresów.</p>
+<p>W skrypcie stosowana jest składnia wersji 4 pakietu (argumenty <code>fill</code>, <code>fill.scale</code>, <code>fill.legend</code>, <code>col.scale</code>, funkcje <code>tm_scale_*()</code> oraz <code>tm_legend()</code>). Materiały oparte na wersji 3 używają składni, która w wersji 4 jest wycofywana.</p>
+<p>Dokumentacja: <a href="https://r-tmap.github.io/tmap/" class="uri">https://r-tmap.github.io/tmap/</a> · wprowadzenie: <a href="https://r-tmap.github.io/tmap/articles/tmap-getstarted.html" class="uri">https://r-tmap.github.io/tmap/articles/tmap-getstarted.html</a> · CRAN: <a href="https://cran.r-project.org/package=tmap" class="uri">https://cran.r-project.org/package=tmap</a></p>
+</section>
+<section id="dplyr-i-ggplot2" class="level3" data-number="A.2.4">
+<h3 data-number="A.2.4" class="anchored" data-anchor-id="dplyr-i-ggplot2"><span class="header-section-number">A.2.4</span> dplyr i ggplot2</h3>
+<p>Pakiety z kolekcji <strong>tidyverse</strong>, znane z wcześniejszych zajęć ze statystyki i wizualizacji danych. <code>dplyr</code> służy do przetwarzania tabel atrybutów (<code>filter()</code>, <code>select()</code>, <code>mutate()</code>, <code>left_join()</code>), a <code>ggplot2</code> — do tworzenia wykresów nieprzestrzennych. Funkcje <code>dplyr</code> działają na obiektach klasy <code>sf</code>, zachowując kolumnę geometrii.</p>
+<p>Dokumentacja: <a href="https://dplyr.tidyverse.org/" class="uri">https://dplyr.tidyverse.org/</a> · <a href="https://ggplot2.tidyverse.org/" class="uri">https://ggplot2.tidyverse.org/</a></p>
+</section>
+<section id="sfdep" class="level3" data-number="A.2.5">
+<h3 data-number="A.2.5" class="anchored" data-anchor-id="sfdep"><span class="header-section-number">A.2.5</span> sfdep</h3>
+<p>Pakiet udostępniający metody statystyki przestrzennej w sposób zgodny ze składnią tidyverse. W skrypcie wykorzystywany do obliczania statystyk centrograficznych (<code>center_mean()</code>, <code>std_distance()</code>, <code>std_dev_ellipse()</code>).</p>
+<p>Dokumentacja: <a href="https://sfdep.josiahparry.com/" class="uri">https://sfdep.josiahparry.com/</a> · CRAN: <a href="https://cran.r-project.org/package=sfdep" class="uri">https://cran.r-project.org/package=sfdep</a></p>
+</section>
+<section id="spatstat" class="level3" data-number="A.2.6">
+<h3 data-number="A.2.6" class="anchored" data-anchor-id="spatstat"><span class="header-section-number">A.2.6</span> spatstat</h3>
+<p>Pakiet do analizy rozkładu przestrzennego danych punktowych. Definiuje klasy <code>ppp</code> (zbiór punktów) oraz <code>owin</code> (obszar analizy). Udostępnia metody oparte na intensywności (<code>quadratcount()</code>, <code>quadrat.test()</code>, <code>density()</code>) oraz na odległości (<code>nndist()</code>, <code>Gest()</code>, <code>Kest()</code>, <code>clarkevans()</code>, <code>envelope()</code>).</p>
+<p>Dokumentacja: <a href="https://spatstat.org/" class="uri">https://spatstat.org/</a> · CRAN: <a href="https://cran.r-project.org/package=spatstat" class="uri">https://cran.r-project.org/package=spatstat</a></p>
+</section>
+<section id="spdep" class="level3" data-number="A.2.7">
+<h3 data-number="A.2.7" class="anchored" data-anchor-id="spdep"><span class="header-section-number">A.2.7</span> spdep</h3>
+<p>Pakiet do analizy danych obszarowych. Umożliwia określanie sąsiedztwa (<code>poly2nb()</code>, <code>dnearneigh()</code>, <code>knearneigh()</code>), tworzenie macierzy wag przestrzennych (<code>nb2listw()</code>) oraz obliczanie globalnych i lokalnych miar autokorelacji przestrzennej (<code>moran.test()</code>, <code>moran.mc()</code>, <code>geary.test()</code>, <code>globalG.test()</code>, <code>localmoran()</code>, <code>localC_perm()</code>, <code>localG_perm()</code>) oraz klasyfikację klastrów na ich podstawie (<code>hotspot()</code>).</p>
+<p>Dokumentacja: <a href="https://r-spatial.github.io/spdep/" class="uri">https://r-spatial.github.io/spdep/</a> · CRAN: <a href="https://cran.r-project.org/package=spdep" class="uri">https://cran.r-project.org/package=spdep</a></p>
+</section>
+<section id="gstat" class="level3" data-number="A.2.8">
+<h3 data-number="A.2.8" class="anchored" data-anchor-id="gstat"><span class="header-section-number">A.2.8</span> gstat</h3>
+<p>Pakiet geostatystyczny. Umożliwia analizę i modelowanie struktury przestrzennej (<code>variogram()</code>, <code>vgm()</code>, <code>fit.variogram()</code>), estymację metodą krigingu (<code>gstat()</code>, <code>krige()</code>) oraz kroswalidację (<code>krige.cv()</code>).</p>
+<p>Dokumentacja: <a href="https://r-spatial.github.io/gstat/" class="uri">https://r-spatial.github.io/gstat/</a> · CRAN: <a href="https://cran.r-project.org/package=gstat" class="uri">https://cran.r-project.org/package=gstat</a></p>
+</section>
+<section id="pakiety-pomocnicze" class="level3" data-number="A.2.9">
+<h3 data-number="A.2.9" class="anchored" data-anchor-id="pakiety-pomocnicze"><span class="header-section-number">A.2.9</span> Pakiety pomocnicze</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Pakiet</th>
+<th>Zastosowanie w skrypcie</th>
+<th>Dokumentacja</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>rsample</code></td>
+<td>podział zbioru na treningowy i testowy (<code>initial_split()</code>)</td>
+<td><a href="https://rsample.tidymodels.org/" class="uri">https://rsample.tidymodels.org/</a></td>
+</tr>
+<tr class="even">
+<td><code>e1071</code></td>
+<td>skośność i kurtoza (<code>skewness()</code>, <code>kurtosis()</code>)</td>
+<td><a href="https://cran.r-project.org/package=e1071" class="uri">https://cran.r-project.org/package=e1071</a></td>
+</tr>
+<tr class="odd">
+<td><code>PerformanceAnalytics</code></td>
+<td>macierz wykresów rozrzutu (<code>chart.Correlation()</code>)</td>
+<td><a href="https://cran.r-project.org/package=PerformanceAnalytics" class="uri">https://cran.r-project.org/package=PerformanceAnalytics</a></td>
+</tr>
+<tr class="even">
+<td><code>viridis</code></td>
+<td>palety barw przyjazne osobom z zaburzeniami widzenia barw</td>
+<td><a href="https://sjmgarnier.github.io/viridis/" class="uri">https://sjmgarnier.github.io/viridis/</a></td>
+</tr>
+<tr class="odd">
+<td><code>spDataLarge</code></td>
+<td>zbiory danych do zadań samodzielnych</td>
+<td><a href="https://github.com/Nowosad/spDataLarge" class="uri">https://github.com/Nowosad/spDataLarge</a></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="biblioteki-zewnętrzne" class="level2" data-number="A.3">
+<h2 data-number="A.3" class="anchored" data-anchor-id="biblioteki-zewnętrzne"><span class="header-section-number">A.3</span> Biblioteki zewnętrzne</h2>
+<p>Pakiety przestrzenne w R nie implementują wszystkich operacji samodzielnie — korzystają z trzech bibliotek używanych również przez programy QGIS i ArcGIS. Komunikaty o ich wersjach pojawiają się przy pierwszym wywołaniu <code>library(sf)</code>.</p>
+<p><strong>GDAL/OGR</strong> — odczyt i zapis danych rastrowych (GDAL) oraz wektorowych (OGR). Dzięki tej bibliotece funkcje <code>read_sf()</code> i <code>rast()</code> obsługują kilkadziesiąt formatów plików.</p>
+<p><strong>GEOS</strong> — operacje przestrzenne: tworzenie buforów, wyznaczanie centroidów, określanie relacji topologicznych (przecina, zawiera itd.).</p>
+<p><strong>PROJ</strong> — definiowanie i przeliczanie układów współrzędnych. Układy identyfikuje się kodami EPSG (ang. <em>European Petroleum Survey Group</em>), na przykład <code>EPSG:2180</code> oznacza układ PUWG 1992, a <code>EPSG:4326</code> — WGS 84. Dane mogą przechowywać opis układu również w rozbudowanej formie WKT2, wypisywanej przez funkcję <code>st_crs()</code>. Bazę kodów zawiera strona <a href="https://epsg.org/" class="uri">https://epsg.org/</a>.</p>
+</section>
+<section id="instalacja" class="level2" data-number="A.4">
+<h2 data-number="A.4" class="anchored" data-anchor-id="instalacja"><span class="header-section-number">A.4</span> Instalacja</h2>
+<p>Większość pakietów pochodzi z repozytorium CRAN i instaluje się standardowo. Poniższy blok wystarczy uruchomić <strong>raz, przed rozpoczęciem zajęć</strong>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"sf"</span>, <span class="st">"terra"</span>, <span class="st">"tmap"</span>, <span class="st">"dplyr"</span>, <span class="st">"ggplot2"</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"sfdep"</span>, <span class="st">"spatstat"</span>, <span class="st">"spdep"</span>, <span class="st">"gstat"</span>, <span class="st">"rsample"</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"e1071"</span>, <span class="st">"PerformanceAnalytics"</span>, <span class="st">"crimedata"</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>))</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="pakiet-spdatalarge" class="level3" data-number="A.4.1">
+<h3 data-number="A.4.1" class="anchored" data-anchor-id="pakiet-spdatalarge"><span class="header-section-number">A.4.1</span> Pakiet spDataLarge</h3>
+<p>Pakiet <code>spDataLarge</code> zawiera zbiory danych używane w zadaniach samodzielnych i <strong>nie jest dostępny na CRAN</strong>. Instaluje się go z repozytorium r-universe:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"spDataLarge"</span>, <span class="at">repos =</span> <span class="st">"https://geocompr.r-universe.dev"</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="sprawdzenie-instalacji" class="level3" data-number="A.4.2">
+<h3 data-number="A.4.2" class="anchored" data-anchor-id="sprawdzenie-instalacji"><span class="header-section-number">A.4.2</span> Sprawdzenie instalacji</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># jeśli którykolwiek pakiet nie jest zainstalowany, funkcja zwróci jego nazwę</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>potrzebne <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"sf"</span>, <span class="st">"terra"</span>, <span class="st">"tmap"</span>, <span class="st">"dplyr"</span>, <span class="st">"ggplot2"</span>, <span class="st">"sfdep"</span>, <span class="st">"spatstat"</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>              <span class="st">"spdep"</span>, <span class="st">"gstat"</span>, <span class="st">"rsample"</span>, <span class="st">"e1071"</span>, <span class="st">"PerformanceAnalytics"</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>              <span class="st">"crimedata"</span>, <span class="st">"spDataLarge"</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">setdiff</span>(potrzebne, <span class="fu">rownames</span>(<span class="fu">installed.packages</span>()))</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="sec-typowe-bledy" class="level2" data-number="A.5">
+<h2 data-number="A.5" class="anchored" data-anchor-id="sec-typowe-bledy"><span class="header-section-number">A.5</span> Typowe błędy i komunikaty</h2>
+<section id="zera-wiodące-w-kodach-teryt" class="level3" data-number="A.5.1">
+<h3 data-number="A.5.1" class="anchored" data-anchor-id="zera-wiodące-w-kodach-teryt"><span class="header-section-number">A.5.1</span> Zera wiodące w kodach TERYT</h3>
+<p>Identyfikatory jednostek administracyjnych (TERYT) zapisane w plikach tekstowych zaczynają się czasem od zera (np. <code>"0201"</code> dla powiatu bolesławieckiego). Funkcja <code>read.csv()</code> rozpoznaje taką kolumnę jako <strong>liczbę</strong> i zero wiodące znika — <code>"0201"</code> staje się <code>201</code>. Przy próbie złączenia z warstwą przestrzenną, gdzie TERYT jest zapisany jako tekst, klucze przestają się zgadzać.</p>
+<p>Rozwiązanie: wymusić wczytanie kolumny jako tekstu.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read.csv</span>(<span class="st">"data/powiaty_klasyfikacje.csv"</span>, <span class="at">colClasses =</span> <span class="fu">c</span>(<span class="at">TERYT =</span> <span class="st">"character"</span>))</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Dlaczego to groźne
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Funkcja <code>merge()</code> z base R dopasuje liczbę do tekstu, po cichu <strong>pomijając wiersze, których nie dopasowała</strong> — bez błędu i bez ostrzeżenia. Dla powiatów w Polsce oznacza to utratę 91 z 380 powiatów (wszystkich z województw o kodzie 02, 04, 06 i 08) i mapę z dziurą w południowo-zachodniej Polsce.</p>
+<p>Funkcja <code>left_join()</code> z pakietu <code>dplyr</code> w tej samej sytuacji <strong>odmawia złączenia</strong> i wypisuje komunikat <code>Can't join x$TERYT with y$TERYT due to incompatible types</code>. Dlatego w skrypcie używamy <code>left_join()</code>, nie <code>merge()</code>.</p>
+</div>
+</div>
+<p>Po każdym złączeniu warto sprawdzić, czy się udało:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(powiaty<span class="sc">$</span>SB2023))  <span class="co"># powinno wynosić 0</span></span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="brakujące-wartości-na-a-tworzenie-obiektu-przestrzennego" class="level3" data-number="A.5.2">
+<h3 data-number="A.5.2" class="anchored" data-anchor-id="brakujące-wartości-na-a-tworzenie-obiektu-przestrzennego"><span class="header-section-number">A.5.2</span> Brakujące wartości (NA) a tworzenie obiektu przestrzennego</h3>
+<p>Indeksowanie z base R zwraca dla brakujących wartości <strong>wiersze widma</strong> wypełnione <code>NA</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>punkty <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"data/punkty.csv"</span>)   <span class="co"># 248 wierszy, w tym jeden NA w kolumnie temp</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(punkty[punkty<span class="sc">$</span>temp <span class="sc">&gt;</span> <span class="dv">20</span>, ])       <span class="co"># 38 - o jeden za dużo</span></span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Taki wiersz ma <code>NA</code> również we współrzędnych, więc <code>st_as_sf()</code> przerywa działanie komunikatem <code>missing values in coordinates not allowed</code>. Funkcja <code>filter()</code> z pakietu <code>dplyr</code> pomija brakujące wartości:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(dplyr<span class="sc">::</span><span class="fu">filter</span>(punkty, temp <span class="sc">&gt;</span> <span class="dv">20</span>))  <span class="co"># 37 - poprawnie</span></span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="niezgodność-układów-współrzędnych" class="level3" data-number="A.5.3">
+<h3 data-number="A.5.3" class="anchored" data-anchor-id="niezgodność-układów-współrzędnych"><span class="header-section-number">A.5.3</span> Niezgodność układów współrzędnych</h3>
+<p>Operacje łączące dwie warstwy (złączenia przestrzenne, przycinanie, wizualizacja) wymagają tego samego układu współrzędnych. Przed każdą taką operacją warto sprawdzić:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(warstwa_1) <span class="sc">==</span> <span class="fu">st_crs</span>(warstwa_2)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Jeśli układy się różnią, należy przekształcić jedną z warstw funkcją <code>st_transform()</code>:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>warstwa_2 <span class="ot">=</span> <span class="fu">st_transform</span>(warstwa_2, <span class="fu">st_crs</span>(warstwa_1))</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Dane w skrypcie zapisane są najczęściej w układzie PUWG 1992 (<code>EPSG:2180</code>), a dane pobierane z serwisów internetowych — w WGS 84 (<code>EPSG:4326</code>).</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Skopiowano!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Skopiowano!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./19_projekt2_geostatystyka.html" class="pagination-link" aria-label="Projekt 2: Geostatystyka">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Projekt 2: Geostatystyka</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./B_funkcje.html" class="pagination-link" aria-label="Funkcje">
+        <span class="nav-page-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Funkcje</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

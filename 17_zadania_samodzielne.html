@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pl" xml:lang="pl"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>12&nbsp; Zadania samodzielne – Statystyka przestrzenna</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./18_projekt1.html" rel="next">
+<link href="./16_pola_ocena.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-c852b7e71cc1c09f55f367b2512aabbd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Brak wyników",
+    "search-matching-documents-text": "dopasowane dokumenty",
+    "search-copy-link-title": "Kopiuj link do wyszukiwania",
+    "search-hide-matches-text": "Ukryj dodatkowe dopasowania",
+    "search-more-match-text": "więcej dopasowań w tym dokumencie",
+    "search-more-matches-text": "więcej dopasowań w tym dokumencie",
+    "search-clear-button-title": "Wyczyść",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Anuluj",
+    "search-submit-button-title": "Zatwierdź",
+    "search-label": "Szukaj"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Przełącz pasek boczny" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./17_zadania_samodzielne.html">ZADANIA I PROJEKTY</a></li><li class="breadcrumb-item"><a href="./17_zadania_samodzielne.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Zadania samodzielne</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Przełącz pasek boczny" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Szukaj" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Statystyka przestrzenna</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Szukaj"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">O skrypcie</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./01_wstep.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">WSTĘP</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_dane_przestrzenne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Dane przestrzenne w R</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./03_eksploracja_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">EKSPLORACYJNA ANALIZA DANYCH</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_eksploracja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Eksploracyjna analiza danych</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./05_punkty_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE PUNKTOWE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_punkty_centrograficzne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Statystyki centrograficzne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_punkty_intensywnosc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Metody oparte na analizie intensywności</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_punkty_odleglosc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Metody oparte na odległości</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./09_obszarowe_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE OBSZAROWE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_obszarowe_sasiedztwo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Określanie sąsiedztwa danych obszarowych</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_obszarowe_autokorelacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Miary autokorelacji danych obszarowych</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./12_pola_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE POWIERZCHNIOWE CIĄGŁE PRZESTRZENNIE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13_pola_interpolacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Metody interpolacji</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14_pola_semiwariogram.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Analiza i modelowanie struktury przestrzennej</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15_pola_estymacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Geostatystyczne metody estymacji</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_pola_ocena.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Ocena jakości estymacji</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">ZADANIA I PROJEKTY</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_zadania_samodzielne.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Zadania samodzielne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18_projekt1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Projekt 1: przestępczość a zmienne społeczno-ekonomiczne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19_projekt2_geostatystyka.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Projekt 2: Geostatystyka</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Załączniki</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./A_pakiety.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Pakiety</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./B_funkcje.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Funkcje</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./C_operacje.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Operacje na danych przestrzennych</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./D_slownik.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Słownik pojęć</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bibliografia</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Spis treści</h2>
+   
+  <ul>
+  <li><a href="#dane-przestrzenne-w-r" id="toc-dane-przestrzenne-w-r" class="nav-link active" data-scroll-target="#dane-przestrzenne-w-r"><span class="header-section-number">12.1</span> Dane przestrzenne w R</a>
+  <ul class="collapse">
+  <li><a href="#cel" id="toc-cel" class="nav-link" data-scroll-target="#cel">Cel</a></li>
+  <li><a href="#dane" id="toc-dane" class="nav-link" data-scroll-target="#dane">Dane</a></li>
+  <li><a href="#zadanie" id="toc-zadanie" class="nav-link" data-scroll-target="#zadanie">Zadanie</a></li>
+  <li><a href="#rozszerzenie" id="toc-rozszerzenie" class="nav-link" data-scroll-target="#rozszerzenie">Rozszerzenie</a></li>
+  <li><a href="#co-oddać" id="toc-co-oddać" class="nav-link" data-scroll-target="#co-oddać">Co oddać</a></li>
+  </ul></li>
+  <li><a href="#eksploracyjna-analiza-danych" id="toc-eksploracyjna-analiza-danych" class="nav-link" data-scroll-target="#eksploracyjna-analiza-danych"><span class="header-section-number">12.2</span> Eksploracyjna analiza danych</a>
+  <ul class="collapse">
+  <li><a href="#cel-1" id="toc-cel-1" class="nav-link" data-scroll-target="#cel-1">Cel</a></li>
+  <li><a href="#dane-1" id="toc-dane-1" class="nav-link" data-scroll-target="#dane-1">Dane</a></li>
+  <li><a href="#zadanie-1" id="toc-zadanie-1" class="nav-link" data-scroll-target="#zadanie-1">Zadanie</a></li>
+  <li><a href="#rozszerzenie-1" id="toc-rozszerzenie-1" class="nav-link" data-scroll-target="#rozszerzenie-1">Rozszerzenie</a></li>
+  <li><a href="#co-oddać-1" id="toc-co-oddać-1" class="nav-link" data-scroll-target="#co-oddać-1">Co oddać</a></li>
+  </ul></li>
+  <li><a href="#punkty-statystyki-centrograficzne-i-intensywność" id="toc-punkty-statystyki-centrograficzne-i-intensywność" class="nav-link" data-scroll-target="#punkty-statystyki-centrograficzne-i-intensywność"><span class="header-section-number">12.3</span> Punkty: statystyki centrograficzne i intensywność</a>
+  <ul class="collapse">
+  <li><a href="#cel-2" id="toc-cel-2" class="nav-link" data-scroll-target="#cel-2">Cel</a></li>
+  <li><a href="#dane-2" id="toc-dane-2" class="nav-link" data-scroll-target="#dane-2">Dane</a></li>
+  <li><a href="#zadanie-2" id="toc-zadanie-2" class="nav-link" data-scroll-target="#zadanie-2">Zadanie</a></li>
+  <li><a href="#rozszerzenie-2" id="toc-rozszerzenie-2" class="nav-link" data-scroll-target="#rozszerzenie-2">Rozszerzenie</a></li>
+  <li><a href="#co-oddać-2" id="toc-co-oddać-2" class="nav-link" data-scroll-target="#co-oddać-2">Co oddać</a></li>
+  </ul></li>
+  <li><a href="#punkty-metody-oparte-na-odległości" id="toc-punkty-metody-oparte-na-odległości" class="nav-link" data-scroll-target="#punkty-metody-oparte-na-odległości"><span class="header-section-number">12.4</span> Punkty: metody oparte na odległości</a>
+  <ul class="collapse">
+  <li><a href="#cel-3" id="toc-cel-3" class="nav-link" data-scroll-target="#cel-3">Cel</a></li>
+  <li><a href="#dane-3" id="toc-dane-3" class="nav-link" data-scroll-target="#dane-3">Dane</a></li>
+  <li><a href="#zadanie-3" id="toc-zadanie-3" class="nav-link" data-scroll-target="#zadanie-3">Zadanie</a></li>
+  <li><a href="#rozszerzenie-3" id="toc-rozszerzenie-3" class="nav-link" data-scroll-target="#rozszerzenie-3">Rozszerzenie</a></li>
+  <li><a href="#co-oddać-3" id="toc-co-oddać-3" class="nav-link" data-scroll-target="#co-oddać-3">Co oddać</a></li>
+  </ul></li>
+  <li><a href="#miary-autokorelacji-danych-obszarowych" id="toc-miary-autokorelacji-danych-obszarowych" class="nav-link" data-scroll-target="#miary-autokorelacji-danych-obszarowych"><span class="header-section-number">12.5</span> Miary autokorelacji danych obszarowych</a>
+  <ul class="collapse">
+  <li><a href="#cel-4" id="toc-cel-4" class="nav-link" data-scroll-target="#cel-4">Cel</a></li>
+  <li><a href="#dane-4" id="toc-dane-4" class="nav-link" data-scroll-target="#dane-4">Dane</a></li>
+  <li><a href="#zadanie-4" id="toc-zadanie-4" class="nav-link" data-scroll-target="#zadanie-4">Zadanie</a></li>
+  <li><a href="#rozszerzenie-4" id="toc-rozszerzenie-4" class="nav-link" data-scroll-target="#rozszerzenie-4">Rozszerzenie</a></li>
+  <li><a href="#co-oddać-4" id="toc-co-oddać-4" class="nav-link" data-scroll-target="#co-oddać-4">Co oddać</a></li>
+  </ul></li>
+  <li><a href="#metody-interpolacji" id="toc-metody-interpolacji" class="nav-link" data-scroll-target="#metody-interpolacji"><span class="header-section-number">12.6</span> Metody interpolacji</a>
+  <ul class="collapse">
+  <li><a href="#cel-5" id="toc-cel-5" class="nav-link" data-scroll-target="#cel-5">Cel</a></li>
+  <li><a href="#dane-5" id="toc-dane-5" class="nav-link" data-scroll-target="#dane-5">Dane</a></li>
+  <li><a href="#zadanie-1-obliczenie-wartości-idw-ze-wzoru" id="toc-zadanie-1-obliczenie-wartości-idw-ze-wzoru" class="nav-link" data-scroll-target="#zadanie-1-obliczenie-wartości-idw-ze-wzoru">Zadanie 1: obliczenie wartości IDW ze wzoru</a></li>
+  <li><a href="#zadanie-2-interpolacja-w-siatce" id="toc-zadanie-2-interpolacja-w-siatce" class="nav-link" data-scroll-target="#zadanie-2-interpolacja-w-siatce">Zadanie 2: interpolacja w siatce</a></li>
+  <li><a href="#rozszerzenie-5" id="toc-rozszerzenie-5" class="nav-link" data-scroll-target="#rozszerzenie-5">Rozszerzenie</a></li>
+  <li><a href="#co-oddać-5" id="toc-co-oddać-5" class="nav-link" data-scroll-target="#co-oddać-5">Co oddać</a></li>
+  </ul></li>
+  <li><a href="#geostatystyka-analiza-i-modelowanie-struktury-przestrzennej" id="toc-geostatystyka-analiza-i-modelowanie-struktury-przestrzennej" class="nav-link" data-scroll-target="#geostatystyka-analiza-i-modelowanie-struktury-przestrzennej"><span class="header-section-number">12.7</span> Geostatystyka: analiza i modelowanie struktury przestrzennej</a>
+  <ul class="collapse">
+  <li><a href="#cel-6" id="toc-cel-6" class="nav-link" data-scroll-target="#cel-6">Cel</a></li>
+  <li><a href="#dane-6" id="toc-dane-6" class="nav-link" data-scroll-target="#dane-6">Dane</a></li>
+  <li><a href="#zadanie-5" id="toc-zadanie-5" class="nav-link" data-scroll-target="#zadanie-5">Zadanie</a></li>
+  <li><a href="#rozszerzenie-6" id="toc-rozszerzenie-6" class="nav-link" data-scroll-target="#rozszerzenie-6">Rozszerzenie</a></li>
+  <li><a href="#co-oddać-6" id="toc-co-oddać-6" class="nav-link" data-scroll-target="#co-oddać-6">Co oddać</a></li>
+  </ul></li>
+  <li><a href="#geostatystyka-estymacja" id="toc-geostatystyka-estymacja" class="nav-link" data-scroll-target="#geostatystyka-estymacja"><span class="header-section-number">12.8</span> Geostatystyka: estymacja</a>
+  <ul class="collapse">
+  <li><a href="#cel-7" id="toc-cel-7" class="nav-link" data-scroll-target="#cel-7">Cel</a></li>
+  <li><a href="#dane-7" id="toc-dane-7" class="nav-link" data-scroll-target="#dane-7">Dane</a></li>
+  <li><a href="#zadanie-6" id="toc-zadanie-6" class="nav-link" data-scroll-target="#zadanie-6">Zadanie</a></li>
+  <li><a href="#rozszerzenie-7" id="toc-rozszerzenie-7" class="nav-link" data-scroll-target="#rozszerzenie-7">Rozszerzenie</a></li>
+  <li><a href="#co-oddać-7" id="toc-co-oddać-7" class="nav-link" data-scroll-target="#co-oddać-7">Co oddać</a></li>
+  </ul></li>
+  <li><a href="#geostatystyka-ocena-jakości-estymacji" id="toc-geostatystyka-ocena-jakości-estymacji" class="nav-link" data-scroll-target="#geostatystyka-ocena-jakości-estymacji"><span class="header-section-number">12.9</span> Geostatystyka: ocena jakości estymacji</a>
+  <ul class="collapse">
+  <li><a href="#cel-8" id="toc-cel-8" class="nav-link" data-scroll-target="#cel-8">Cel</a></li>
+  <li><a href="#dane-8" id="toc-dane-8" class="nav-link" data-scroll-target="#dane-8">Dane</a></li>
+  <li><a href="#zadanie-7" id="toc-zadanie-7" class="nav-link" data-scroll-target="#zadanie-7">Zadanie</a></li>
+  <li><a href="#rozszerzenie-8" id="toc-rozszerzenie-8" class="nav-link" data-scroll-target="#rozszerzenie-8">Rozszerzenie</a></li>
+  <li><a href="#co-oddać-8" id="toc-co-oddać-8" class="nav-link" data-scroll-target="#co-oddać-8">Co oddać</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./17_zadania_samodzielne.html">ZADANIA I PROJEKTY</a></li><li class="breadcrumb-item"><a href="./17_zadania_samodzielne.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Zadania samodzielne</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-zadania" class="quarto-section-identifier"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Zadania samodzielne</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Każde zadanie wykonujesz na zajęciach, na podstawie rozdziału przeczytanego w domu. Metryczka na początku sekcji podaje <strong>materiał</strong> do przeczytania, <strong>dane</strong> i <strong>pakiety</strong> potrzebne do wykonania zadania.</p>
+<p>Część zadania oznaczona jako <strong>Rozszerzenie</strong> jest nieobowiązkowa — przeznaczona dla osób, które skończą wcześniej.</p>
+<section id="dane-przestrzenne-w-r" class="level2" data-number="12.1">
+<h2 data-number="12.1" class="anchored" data-anchor-id="dane-przestrzenne-w-r"><span class="header-section-number">12.1</span> Dane przestrzenne w R</h2>
+<p><strong>Materiał:</strong> <a href="02_dane_przestrzenne.html" class="quarto-xref"><span>Rozdział 1</span></a> · <strong>Dane:</strong> <code>punkty.csv</code>, <code>clc.tif</code> · <strong>Pakiety:</strong> <code>sf</code>, <code>terra</code>, <code>tmap</code>, <code>dplyr</code></p>
+<section id="cel" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="cel">Cel</h3>
+<p>Przejście od tabeli ze współrzędnymi do warstwy przestrzennej i zestawienie jej z rastrem pokrycia terenu.</p>
+</section>
+<section id="dane" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="dane">Dane</h3>
+<ul>
+<li><code>punkty.csv</code> — pomiary wykonane w Suwalskim Parku Krajobrazowym. Kolumny <code>x</code> i <code>y</code> zawierają współrzędne w układzie <strong>EPSG:2180</strong>, kolumna <code>temp</code> — temperaturę powietrza w °C, a <code>srtm</code>, <code>clc</code>, <code>ndvi</code>, <code>savi</code> — wysokość terenu, klasę pokrycia terenu i dwa wskaźniki roślinności.</li>
+<li><code>clc.tif</code> — raster pokrycia terenu (Corine Land Cover).</li>
+</ul>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Uwaga na brakujące wartości
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Kolumna <code>temp</code> zawiera jeden brak (<code>NA</code>). Do wyboru wierszy użyj funkcji <code>filter()</code> z pakietu <code>dplyr</code>, <strong>nie indeksowania podstawowego</strong>. Zapis <code>punkty[punkty$temp &gt; 20, ]</code> zwraca wiersz widmo z brakami we wszystkich kolumnach, przez co <code>st_as_sf()</code> przerywa działanie komunikatem <code>missing values in coordinates not allowed</code>.</p>
+</div>
+</div>
+</section>
+<section id="zadanie" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="zadanie">Zadanie</h3>
+<ol type="1">
+<li><p>Wczytaj tabelę z pliku <code>punkty.csv</code> (<code>read.csv()</code>) i wybierz punkty o temperaturze <strong>powyżej 20 °C</strong> (<code>filter()</code>). Ile wierszy ma wynik?</p></li>
+<li><p>Zamień tabelę na obiekt przestrzenny <code>punkty20</code> (<code>st_as_sf(coords = c("x", "y"), crs = "EPSG:2180")</code>). Wypisz obiekt i odpowiedz: jaki ma typ geometrii, jaki zasięg przestrzenny i jaki układ współrzędnych?</p></li>
+<li><p>Wyznacz obwiednię warstwy punktowej i przypisz ją do obiektu <code>punkty20_bb</code> (<code>st_bbox()</code>).</p></li>
+<li><p>Wczytaj raster <code>clc.tif</code> (<code>rast()</code>) i przytnij go do obwiedni (<code>crop()</code>), tworząc obiekt <code>clc20</code>.</p>
+<ul>
+<li>Porównaj liczbę komórek przed przycięciem i po nim (<code>ncell()</code>).</li>
+<li>Sprawdź, czy układy współrzędnych warstwy punktowej i rastra są zgodne (<code>st_crs()</code>, <code>crs()</code>).</li>
+</ul></li>
+<li><p>Stwórz mapę: raster <code>clc20</code> w tle, punkty <code>punkty20</code> na wierzchu. Pokrycie terenu jest zmienną <strong>jakościową</strong>, więc przed mapowaniem zamień raster na zmienną jakościową (<code>as.factor()</code>) i użyj skali <code>tm_scale_categorical()</code>.</p></li>
+<li><p>Zapisz wyniki: warstwę punktową (<code>write_sf()</code>) do <code>out/punkty20.gpkg</code>, raster (<code>writeRaster()</code>) do <code>out/clc20.tif</code> oraz mapę (<code>tmap_save()</code>) do <code>out/punkty20_clc.png</code>.</p></li>
+</ol>
+</section>
+<section id="rozszerzenie" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="rozszerzenie">Rozszerzenie</h3>
+<p>Powtórz kroki 1–5 dla punktów o temperaturze <strong>poniżej 12 °C</strong>. Jak zmienia się zasięg obwiedni i które klasy pokrycia terenu dominują w każdym z dwóch wycinków?</p>
+</section>
+<section id="co-oddać" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="co-oddać">Co oddać</h3>
+<ul>
+<li>plik <code>.qmd</code> z kodem rozwiązania,</li>
+<li>plik <code>.html</code> wygenerowany z tego <code>.qmd</code>,</li>
+<li><code>out/punkty20.gpkg</code>, <code>out/clc20.tif</code>, <code>out/punkty20_clc.png</code>,</li>
+<li>dwa–trzy zdania interpretacji: w jakim typie pokrycia terenu leżą punkty o najwyższej temperaturze?</li>
+</ul>
+</section>
+</section>
+<section id="eksploracyjna-analiza-danych" class="level2" data-number="12.2">
+<h2 data-number="12.2" class="anchored" data-anchor-id="eksploracyjna-analiza-danych"><span class="header-section-number">12.2</span> Eksploracyjna analiza danych</h2>
+<p><strong>Materiał:</strong> <a href="04_eksploracja.html" class="quarto-xref"><span>Rozdział 2</span></a> · <strong>Dane:</strong> <code>out/powiaty_attr.gpkg</code> (przygotowany kodem poniżej), <code>wojewodztwa.gpkg</code> · <strong>Pakiety:</strong> <code>sf</code>, <code>dplyr</code>, <code>ggplot2</code>, <code>tmap</code>, <code>e1071</code></p>
+<section id="cel-1" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="cel-1">Cel</h3>
+<p>Eksploracja stopy bezrobocia w powiatach w Polsce w 2023 roku: rozkład zmiennej, wartości odstające, zróżnicowanie między makroregionami i rozkład przestrzenny.</p>
+</section>
+<section id="dane-1" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="dane-1">Dane</h3>
+<p>Dane pochodzą z Banku Danych Lokalnych GUS. Obiekt <code>powiaty</code> powstaje z czterech plików i zawiera <strong>380 powiatów</strong> oraz kolumny:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Kolumna</th>
+<th>Zawartość</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Kod</code>, <code>Nazwa</code></td>
+<td>identyfikator i nazwa powiatu</td>
+</tr>
+<tr class="even">
+<td><code>SB2004</code>, <code>SB2010</code>, <code>SB2021</code>, <code>SB2023</code></td>
+<td>stopa bezrobocia rejestrowanego w kolejnych latach [%]</td>
+</tr>
+<tr class="odd">
+<td><code>NUTS3_ID</code></td>
+<td>identyfikator regionu NUTS3</td>
+</tr>
+<tr class="even">
+<td><code>MAKROREGION</code></td>
+<td>makroregion wg klasyfikacji NUTS1</td>
+</tr>
+<tr class="odd">
+<td><code>URBN_TYPE</code></td>
+<td>typologia miejsko-wiejska: <em>przeważająco miejskie</em> (co najmniej 80% ludności w klastrach miejskich), <em>pośrednie</em> (50–80%), <em>przeważająco wiejskie</em> (co najmniej 50% ludności w komórkach siatki obszarów wiejskich)</td>
+</tr>
+</tbody>
+</table>
+<p>Granice województw (<code>wojewodztwa.gpkg</code>) służą wyłącznie jako tło map.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Przygotowanie danych — kod gotowy do uruchomienia
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Poniższy kod łączy dane atrybutowe z geometrią i zapisuje wynik do <code>out/powiaty_attr.gpkg</code>. Uruchom go raz, na początku zajęć; właściwe zadanie zaczyna się od wczytania zapisanego pliku.</p>
+<p>Identyfikator powiatu jest w trzech plikach zapisany na trzy sposoby: w <code>bezrobocie_pl.csv</code> jako liczba siedmiocyfrowa (<code>201000</code>), w <code>powiaty_klasyfikacje.csv</code> jako ta sama liczba bez trzech końcowych zer (<code>201</code>), a w <code>powiaty_pl.gpkg</code> jako <strong>tekst</strong> z zerem wiodącym (<code>"0201"</code>). Kod doprowadza wszystkie trzy do wspólnej postaci.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># stopa bezrobocia: Kod to siedmiocyfrowy identyfikator powiatu (201000)</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>bezrobocie <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"data/bezrobocie_pl.csv"</span>, <span class="at">sep =</span> <span class="st">";"</span>, <span class="at">dec =</span> <span class="st">"."</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># klasyfikacje: TERYT to ten sam identyfikator bez trzech końcowych zer (201)</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>klasyfikacje <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"data/powiaty_klasyfikacje.csv"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Kod =</span> TERYT <span class="sc">*</span> <span class="dv">1000</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">URBN_TYPE =</span> <span class="fu">factor</span>(URBN_TYPE,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                            <span class="at">levels =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>                            <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"przeważająco miejskie"</span>, <span class="st">"pośrednie"</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">"przeważająco wiejskie"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Kod, NUTS3_ID, URBN_TYPE, MAKROREGION)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># złączenie obu tabel atrybutowych</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>powiaty_attr <span class="ot">=</span> <span class="fu">left_join</span>(bezrobocie, klasyfikacje, <span class="at">by =</span> <span class="st">"Kod"</span>)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co"># granice powiatów: TERYT to tekst z zerem wiodącym ("0201")</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>powiaty <span class="ot">=</span> <span class="fu">read_sf</span>(<span class="st">"data/powiaty_pl.gpkg"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Kod =</span> <span class="fu">as.integer</span>(<span class="fu">paste0</span>(TERYT, <span class="st">"000"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Kod) <span class="sc">|&gt;</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(powiaty_attr, <span class="at">by =</span> <span class="st">"Kod"</span>)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"out"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="fu">write_sf</span>(powiaty, <span class="st">"out/powiaty_attr.gpkg"</span>, <span class="at">delete_dsn =</span> <span class="cn">TRUE</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Po wczytaniu pliku sprawdź, czy przygotowanie danych się powiodło: obiekt powinien mieć <strong>380 wierszy</strong> i <strong>zero braków</strong> w kolumnach <code>SB2023</code>, <code>MAKROREGION</code> i <code>URBN_TYPE</code> (<code>nrow()</code>, <code>sum(is.na())</code>).</p>
+<p>Geopaczka nie przechowuje typu <code>factor</code>, więc po ponownym wczytaniu <code>URBN_TYPE</code> jest <strong>tekstem</strong>. Jeśli potrzebujesz ustalonej kolejności klas na wykresie, odtwórz ją funkcją <code>factor(levels = )</code>.</p>
+</div>
+</div>
+</section>
+<section id="zadanie-1" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="zadanie-1">Zadanie</h3>
+<ol type="1">
+<li><p>Oblicz statystyki opisowe zmiennej <code>SB2023</code> (<code>summary()</code>) oraz współczynnik skośności (<code>e1071::skewness()</code>). Scharakteryzuj na ich podstawie stopę bezrobocia w 2023 roku.</p></li>
+<li><p>Przedstaw rozkład zmiennej <code>SB2023</code> na histogramie i wykresie pudełkowym (<code>ggplot()</code> + <code>geom_histogram()</code>, <code>geom_boxplot()</code>). Czy w zbiorze są wartości <strong>globalnie odstające</strong>? Jeśli tak, wypisz nazwy tych powiatów (<code>filter()</code>).</p></li>
+<li><p>Sprawdź, czy stopa bezrobocia różni się między makroregionami (<code>MAKROREGION</code>):</p>
+<ul>
+<li>oblicz średnią, medianę, wartość minimalną i maksymalną w grupach (<code>group_by()</code>, <code>summarise()</code>),</li>
+<li>wykonaj wykres pudełkowy,</li>
+<li>wykonaj test różnic między grupami (<code>aov()</code>) oraz test <em>post hoc</em> wskazujący, między którymi makroregionami różnice są istotne (<code>TukeyHSD()</code>).</li>
+</ul></li>
+<li><p>Stwórz mapę rozkładu przestrzennego zmiennej <code>SB2023</code> w powiatach, z granicami województw w tle (<code>tm_shape()</code>, <code>tm_polygons()</code>, <code>tm_borders()</code>). Zapisz ją do pliku <code>.png</code>.</p></li>
+<li><p>Stwórz drugą mapę: ta sama zmienna, a dodatkowo zaznacz punktami w kolorze czerwonym <strong>5% powiatów o najwyższej stopie bezrobocia</strong> (<code>quantile()</code>, <code>filter()</code>, <code>tm_symbols()</code>). Zapisz do pliku <code>.png</code>.</p></li>
+</ol>
+</section>
+<section id="rozszerzenie-1" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="rozszerzenie-1">Rozszerzenie</h3>
+<ol start="6" type="1">
+<li><p>Powtórz krok 3 dla typologii miejsko-wiejskiej (<code>URBN_TYPE</code>).</p></li>
+<li><p>Stwórz mapę zmiany stopy bezrobocia między 2004 a 2023 rokiem (<code>mutate(zmiana = SB2023 - SB2004)</code>). Jaką paletę barw wybierzesz do przedstawienia zmian i dlaczego?</p></li>
+</ol>
+</section>
+<section id="co-oddać-1" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="co-oddać-1">Co oddać</h3>
+<ul>
+<li>plik <code>.qmd</code> z kodem rozwiązania,</li>
+<li>plik <code>.html</code> wygenerowany z tego <code>.qmd</code>,</li>
+<li><code>out/powiaty_attr.gpkg</code> oraz pliki <code>.png</code> z mapami,</li>
+<li>dwa–trzy zdania interpretacji: gdzie w Polsce bezrobocie jest najwyższe i czy różnica między makroregionami jest istotna statystycznie?</li>
+</ul>
+</section>
+</section>
+<section id="punkty-statystyki-centrograficzne-i-intensywność" class="level2" data-number="12.3">
+<h2 data-number="12.3" class="anchored" data-anchor-id="punkty-statystyki-centrograficzne-i-intensywność"><span class="header-section-number">12.3</span> Punkty: statystyki centrograficzne i intensywność</h2>
+<p><strong>Materiał:</strong> <a href="06_punkty_centrograficzne.html" class="quarto-xref"><span>Rozdział 3</span></a>, <a href="07_punkty_intensywnosc.html" class="quarto-xref"><span>Rozdział 4</span></a> · <strong>Dane:</strong> <code>poznan_budynki.gpkg</code> · <strong>Pakiety:</strong> <code>sf</code>, <code>sfdep</code>, <code>spatstat</code>, <code>terra</code>, <code>tmap</code>, <code>dplyr</code></p>
+<section id="cel-2" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="cel-2">Cel</h3>
+<p>Opis rozkładu przestrzennego przedszkoli w Poznaniu: położenie środkowe, rozproszenie, kierunek oraz zmienność intensywności w obszarze miasta.</p>
+</section>
+<section id="dane-2" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="dane-2">Dane</h3>
+<p>Geopaczka <code>poznan_budynki.gpkg</code> zawiera cztery warstwy w układzie EPSG:2180:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Warstwa</th>
+<th>Zawartość</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>poznan</code></td>
+<td>granica miasta (1 poligon)</td>
+</tr>
+<tr class="even">
+<td><code>przedszkole</code></td>
+<td>budynki przedszkoli (171 poligonów)</td>
+</tr>
+<tr class="odd">
+<td><code>kosciol</code></td>
+<td>budynki kościołów (90 poligonów)</td>
+</tr>
+<tr class="even">
+<td><code>szpital</code></td>
+<td>budynki szpitali (64 poligony)</td>
+</tr>
+</tbody>
+</table>
+<p>Warstwy obiektów są <strong>poligonowe</strong>, a metody analizy rozkładu punktów wymagają warstwy punktowej — pierwszym krokiem jest wyznaczenie centroidów.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Kolejność ładowania pakietów
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Pakiet <code>terra</code> zasłania funkcje <code>rescale()</code>, <code>density()</code> i <code>area()</code> z pakietu <code>spatstat</code>. Funkcję skalującą wywołuj z przedrostkiem: <code>spatstat.geom::rescale()</code>.</p>
+</div>
+</div>
+</section>
+<section id="zadanie-2" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="zadanie-2">Zadanie</h3>
+<ol type="1">
+<li><p>Wczytaj warstwę granicy miasta oraz warstwę przedszkoli (<code>read_sf(layer = )</code>), zamień budynki na punkty (<code>st_centroid()</code>) i zapisz warstwę punktową do <code>out/punkty_poznan.gpkg</code> (<code>write_sf(layer = "przedszkole")</code>). <strong>Plik ten będzie potrzebny na następnych zajęciach.</strong></p></li>
+<li><p>Oblicz statystyki centrograficzne przedszkoli: średnią centralną (<code>center_mean()</code>), medianę centralną (<code>center_median()</code>), odległość standardową (<code>std_distance()</code>) oraz elipsę odchylenia standardowego (<code>std_dev_ellipse()</code> + <code>st_ellipse()</code>).</p>
+<ul>
+<li>O ile metrów średnia centralna różni się od mediany centralnej (<code>st_distance()</code>)?</li>
+<li>Jaki jest stosunek dłuższej osi elipsy do krótszej?</li>
+</ul></li>
+<li><p>Przedstaw na jednej mapie: granicę miasta, punkty, średnią centralną, medianę centralną, okrąg o promieniu równym odległości standardowej (<code>st_buffer()</code>) oraz elipsę.</p></li>
+<li><p>Utwórz obiekt klasy <code>ppp</code> (<code>as.owin()</code>, <code>as.ppp()</code>) i oblicz <strong>średnią intensywność</strong> przedszkoli na km² (<code>spatstat.geom::rescale(ppp, 1000)</code>, <code>summary()$intensity</code>).</p></li>
+<li><p>Wykonaj test zliczania w kwadratach dla siatki 4 × 4 (<code>quadrat.test()</code>) i przedstaw zliczenia na rycinie (<code>quadratcount()</code>, <code>plot()</code>). Co oznacza wynik testu?</p></li>
+<li><p>Wykonaj analizę gęstości jądra dla dwóch wartości pasma: <code>sigma = 500</code> i <code>sigma = 1500</code> (<code>density()</code>, <code>terra::rast()</code>). Przedstaw obie mapy obok siebie i porównaj.</p></li>
+</ol>
+</section>
+<section id="rozszerzenie-2" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="rozszerzenie-2">Rozszerzenie</h3>
+<p>Powtórz kroki 1–6 dla <strong>kościołów</strong> i porównaj oba zbiory. Statystyka centrograficzna nabiera znaczenia dopiero przez porównanie: który zbiór jest bardziej rozproszony i czy kierunki elips są zgodne?</p>
+</section>
+<section id="co-oddać-2" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="co-oddać-2">Co oddać</h3>
+<ul>
+<li>plik <code>.qmd</code> z kodem rozwiązania,</li>
+<li>plik <code>.html</code> wygenerowany z tego <code>.qmd</code>,</li>
+<li><code>out/punkty_poznan.gpkg</code> oraz ryciny <code>.png</code>,</li>
+<li>dwa–trzy zdania interpretacji: czy intensywność przedszkoli jest stała w obszarze miasta?</li>
+</ul>
+</section>
+</section>
+<section id="punkty-metody-oparte-na-odległości" class="level2" data-number="12.4">
+<h2 data-number="12.4" class="anchored" data-anchor-id="punkty-metody-oparte-na-odległości"><span class="header-section-number">12.4</span> Punkty: metody oparte na odległości</h2>
+<p><strong>Materiał:</strong> <a href="08_punkty_odleglosc.html" class="quarto-xref"><span>Rozdział 5</span></a> · <strong>Dane:</strong> <code>out/punkty_poznan.gpkg</code>, <code>poznan_budynki.gpkg</code> (warstwa <code>poznan</code>) · <strong>Pakiety:</strong> <code>sf</code>, <code>spatstat</code>, <code>ggplot2</code></p>
+<section id="cel-3" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="cel-3">Cel</h3>
+<p>Sprawdzenie, czy rozmieszczenie przedszkoli w Poznaniu odbiega od losowego i na jakiej odległości.</p>
+</section>
+<section id="dane-3" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="dane-3">Dane</h3>
+<p>Warstwa punktowa <code>przedszkole</code> z pliku <code>out/punkty_poznan.gpkg</code> przygotowanego na poprzednich zajęciach oraz granica miasta z <code>poznan_budynki.gpkg</code>.</p>
+</section>
+<section id="zadanie-3" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="zadanie-3">Zadanie</h3>
+<ol type="1">
+<li><p>Wczytaj dane, utwórz obiekt klasy <code>ppp</code> i oblicz odległości do najbliższego sąsiada (<code>nndist()</code>). Podaj statystyki opisowe tych odległości (<code>summary()</code>) oraz ich decyle (<code>quantile(probs = seq(0, 1, 0.1))</code>).</p></li>
+<li><p>Przedstaw rozkład odległości do najbliższego sąsiada na <strong>dystrybuancie empirycznej</strong> (<code>ggplot()</code> + <code>stat_ecdf()</code>). Jaki odsetek przedszkoli ma sąsiada bliżej niż 500 m?</p></li>
+<li><p>Oblicz wskaźnik Clarka-Evansa <strong>z jawnie podaną korektą brzegową</strong>: <code>clarkevans(ppp, correction = "cdf")</code>. Jak zinterpretujesz otrzymaną wartość?</p></li>
+<li><p>Wykonaj test Clarka-Evansa dla trzech hipotez alternatywnych: <code>clarkevans.test(ppp, correction = "cdf", alternative = )</code> z wartościami <code>"clustered"</code>, <code>"regular"</code> i <code>"two.sided"</code>. Dlaczego jedna z nich daje <em>p</em> bliskie 1?</p></li>
+<li><p>Wyznacz funkcję G (<code>Gest(correction = "none")</code>) oraz <strong>obwiednię jednoczesną</strong>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1111</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">envelope</span>(ppp, Gest, <span class="at">correction =</span> <span class="st">"none"</span>, <span class="at">global =</span> <span class="cn">TRUE</span>, <span class="at">nrank =</span> <span class="dv">5</span>, <span class="at">nsim =</span> <span class="dv">99</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Przedstaw wynik na wykresie. Czy krzywa empiryczna wychodzi poza obwiednię? Jaki poziom istotności odpowiada ustawieniu <code>nrank = 5</code> przy <code>nsim = 99</code>?</p></li>
+</ol>
+</section>
+<section id="rozszerzenie-3" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="rozszerzenie-3">Rozszerzenie</h3>
+<p><strong>Brak.</strong> Obwiednia jest najdłuższym obliczeniem tego bloku — jeśli skończysz wcześniej, sprawdź, jak zmienia się wynik przy <code>nsim = 199</code>.</p>
+</section>
+<section id="co-oddać-3" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="co-oddać-3">Co oddać</h3>
+<ul>
+<li>plik <code>.qmd</code> z kodem rozwiązania,</li>
+<li>plik <code>.html</code> wygenerowany z tego <code>.qmd</code>,</li>
+<li>ryciny <code>.png</code> (dystrybuanta, funkcja G z obwiednią),</li>
+<li>dwa–trzy zdania interpretacji: czy rozmieszczenie przedszkoli jest skupione, losowe czy regularne i na jakiej podstawie tak twierdzisz?</li>
+</ul>
+</section>
+</section>
+<section id="miary-autokorelacji-danych-obszarowych" class="level2" data-number="12.5">
+<h2 data-number="12.5" class="anchored" data-anchor-id="miary-autokorelacji-danych-obszarowych"><span class="header-section-number">12.5</span> Miary autokorelacji danych obszarowych</h2>
+<p><strong>Materiał:</strong> <a href="11_obszarowe_autokorelacja.html" class="quarto-xref"><span>Rozdział 7</span></a> · <strong>Dane:</strong> <code>pol_pres15</code> z pakietu <code>spDataLarge</code> · <strong>Pakiety:</strong> <code>sf</code>, <code>spdep</code>, <code>tmap</code>, <code>dplyr</code>, <code>spDataLarge</code></p>
+<section id="cel-4" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="cel-4">Cel</h3>
+<p>Sprawdzenie, czy frekwencja w II turze wyborów prezydenckich w 2015 roku wykazuje autokorelację przestrzenną, i wskazanie, gdzie leżą zgrupowania gmin o podobnych wartościach.</p>
+</section>
+<section id="dane-4" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="dane-4">Dane</h3>
+<p>Zbiór <code>pol_pres15</code> zawiera wyniki wyborów prezydenckich z 2015 roku na poziomie <strong>2495 gmin</strong>. Zmienna <code>II_turnout</code> to frekwencja w II turze, wyrażona jako <strong>ułamek</strong> (zakres 0,34–0,75).</p>
+<p>Pakiet <code>spDataLarge</code> nie jest dostępny na CRAN — instrukcja instalacji z r-universe znajduje się w <a href="A_pakiety.html" class="quarto-xref"><span>Załącznik A</span></a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spDataLarge)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(pol_pres15, <span class="at">package =</span> <span class="st">"spDataLarge"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>?pol_pres15</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="zadanie-4" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="zadanie-4">Zadanie</h3>
+<ol type="1">
+<li><p>Utwórz obiekt przestrzenny <code>wybory</code> zawierający kolumny <code>name</code>, <code>II_turnout</code> oraz geometrię (<code>select()</code>). Stwórz mapę zmiennej <code>II_turnout</code>.</p></li>
+<li><p>Zbuduj macierz wag przestrzennych: listę sąsiadów regułą <em>queen</em> (<code>poly2nb()</code>) oraz dwa warianty wag — standaryzowany wierszami (<code>nb2listw(style = "W")</code>) i binarny (<code>nb2listw(style = "B")</code>).</p></li>
+<li><p>Oblicz <strong>globalne</strong> miary autokorelacji:</p>
+<ul>
+<li>I Morana (<code>moran.test()</code>) i C Geary’ego (<code>geary.test()</code>) na wagach <code>"W"</code>,</li>
+<li>G Getisa &amp; Orda (<code>globalG.test()</code>) na wagach <strong>binarnych</strong>.</li>
+</ul>
+<p>Czy wszystkie trzy prowadzą do tego samego wniosku?</p></li>
+<li><p>Oblicz <strong>lokalną statystykę I Morana</strong> (<code>localmoran()</code>) i wydziel klastry:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hotspot</span>(locm, <span class="at">Prname =</span> <span class="st">"Pr(z != E(Ii))"</span>, <span class="at">cutoff =</span> <span class="fl">0.05</span>, <span class="at">p.adjust =</span> <span class="st">"none"</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Podaj liczebności klastrów (<code>table()</code>) i przedstaw je na mapie.</p></li>
+<li><p>Wskaż obszary wysokich i niskich wartości lokalną statystyką G Getisa &amp; Orda: <code>localG_perm(nsim = 999, iseed = 1111)</code> + <code>hotspot(Prname = "Pr(z != E(Gi)) Sim", cutoff = 0.05, p.adjust = "none")</code>. Podaj liczebności i przedstaw na mapie.</p></li>
+<li><p>Zapisz obiekt <code>wybory</code> wraz z dopisanymi kolumnami klastrów do <code>out/wybory.gpkg</code>.</p></li>
+</ol>
+</section>
+<section id="rozszerzenie-4" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="rozszerzenie-4">Rozszerzenie</h3>
+<p>Sporządź wykres rozrzutu Morana (<code>moran.plot()</code>) i wskaż, w której ćwiartce leżą gminy sklasyfikowane jako <code>High-Low</code>.</p>
+</section>
+<section id="co-oddać-4" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="co-oddać-4">Co oddać</h3>
+<ul>
+<li>plik <code>.qmd</code> z kodem rozwiązania,</li>
+<li>plik <code>.html</code> wygenerowany z tego <code>.qmd</code>,</li>
+<li><code>out/wybory.gpkg</code> oraz mapy <code>.png</code>,</li>
+<li>dwa–trzy zdania interpretacji: gdzie leżą zgrupowania gmin o wysokiej frekwencji, a gdzie o niskiej?</li>
+</ul>
+</section>
+</section>
+<section id="metody-interpolacji" class="level2" data-number="12.6">
+<h2 data-number="12.6" class="anchored" data-anchor-id="metody-interpolacji"><span class="header-section-number">12.6</span> Metody interpolacji</h2>
+<p><strong>Materiał:</strong> <a href="13_pola_interpolacja.html" class="quarto-xref"><span>Rozdział 8</span></a> · <strong>Dane:</strong> <code>punkty_pref.gpkg</code>, <code>granica.gpkg</code> · <strong>Pakiety:</strong> <code>sf</code>, <code>terra</code>, <code>gstat</code>, <code>tmap</code></p>
+<section id="cel-5" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="cel-5">Cel</h3>
+<p>Wykonanie interpolacji wysokości terenu trzema metodami deterministycznymi i porównanie uzyskanych powierzchni.</p>
+</section>
+<section id="dane-5" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="dane-5">Dane</h3>
+<ul>
+<li><code>punkty_pref.gpkg</code> — <strong>264 punkty</strong> pomiarowe w Suwalskim Parku Krajobrazowym, zmienne <code>srtm</code> (wysokość terenu [m]), <code>temp</code>, <code>ndvi</code>, <code>savi</code>, <code>clc</code>. Zbiór nie zawiera braków.</li>
+<li><code>granica.gpkg</code> — granica parku (63,4 km²).</li>
+</ul>
+</section>
+<section id="zadanie-1-obliczenie-wartości-idw-ze-wzoru" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="zadanie-1-obliczenie-wartości-idw-ze-wzoru">Zadanie 1: obliczenie wartości IDW ze wzoru</h3>
+<p>Tabela zawiera wartości punktów pomiarowych i ich odległości od lokalizacji, dla której szacujemy wartość:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Odległość <em>d</em> [m]</th>
+<th>Wartość <em>z<sub>i</sub></em></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>100</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<td>150</td>
+<td>15</td>
+</tr>
+<tr class="odd">
+<td>300</td>
+<td>15</td>
+</tr>
+<tr class="even">
+<td>400</td>
+<td>20</td>
+</tr>
+<tr class="odd">
+<td>500</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<td>600</td>
+<td>20</td>
+</tr>
+<tr class="odd">
+<td>1000</td>
+<td>10</td>
+</tr>
+</tbody>
+</table>
+<p>Wykorzystując poniższą funkcję, oblicz wartość w nieznanej lokalizacji dla sześciu wariantów: <strong>3 najbliższe punkty</strong> i <strong>5 najbliższych punktów</strong>, każdorazowo przy wykładniku potęgowym <code>power</code> równym 0, 1 i 2.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>idw <span class="ot">=</span> <span class="cf">function</span>(wartosc, d, <span class="at">power =</span> <span class="dv">2</span>) {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  wagi <span class="ot">=</span> <span class="dv">1</span> <span class="sc">/</span> (d <span class="sc">^</span> power)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>(wagi <span class="sc">*</span> wartosc) <span class="sc">/</span> <span class="fu">sum</span>(wagi)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Który wariant daje wartość najniższą, a który najwyższą? Jak zmiana wykładnika wpływa na wynik?</p>
+</section>
+<section id="zadanie-2-interpolacja-w-siatce" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="zadanie-2-interpolacja-w-siatce">Zadanie 2: interpolacja w siatce</h3>
+<ol type="1">
+<li><p>Wczytaj dane i utwórz siatkę interpolacyjną o rozdzielczości <strong>200 m</strong> dla obszaru parku (<code>rast(ext = , res = 200, crs = )</code>). Ile komórek ma siatka?</p></li>
+<li><p>Wykonaj interpolację zmiennej <code>srtm</code> trzema metodami:</p>
+<ul>
+<li>diagramy Woronoja (<code>voronoi()</code>, <code>crop()</code>),</li>
+<li>metoda średniej ważonej odwrotnością odległości (<code>gstat(set = list(idp = 2))</code> + <code>interpolate(fun = interpolate_gstat)</code> + <code>mask()</code>),</li>
+<li>funkcja wielomianowa 1. stopnia (<code>gstat(degree = 1)</code> + <code>interpolate()</code> + <code>mask()</code>).</li>
+</ul>
+<p>Funkcję pomocniczą <code>interpolate_gstat()</code> znajdziesz w <a href="13_pola_interpolacja.html" class="quarto-xref"><span>Rozdział 8</span></a>.</p></li>
+<li><p>Przedstaw trzy wyniki na jednej rycinie, <strong>we wspólnej skali barw</strong> (<code>tmap_arrange()</code>). Czym różnią się uzyskane powierzchnie?</p></li>
+<li><p>Wykonaj interpolację <code>srtm</code> metodą IDW przy trzech wartościach wykładnika: <code>idp = 1</code>, <code>idp = 2</code> i <code>idp = 5</code>. Podaj zakres wartości każdej z powierzchni i porównaj go z zakresem pomiarów. Jak wykładnik wpływa na wygładzenie powierzchni?</p></li>
+</ol>
+</section>
+<section id="rozszerzenie-5" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="rozszerzenie-5">Rozszerzenie</h3>
+<p><strong>Brak.</strong></p>
+</section>
+<section id="co-oddać-5" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="co-oddać-5">Co oddać</h3>
+<ul>
+<li>plik <code>.qmd</code> z kodem rozwiązania,</li>
+<li>plik <code>.html</code> wygenerowany z tego <code>.qmd</code>,</li>
+<li><code>out/interpolacja_srtm.tif</code> oraz rycinę porównawczą <code>.png</code>,</li>
+<li>dwa–trzy zdania interpretacji: która metoda najlepiej oddaje rzeźbę terenu i dlaczego?</li>
+</ul>
+</section>
+</section>
+<section id="geostatystyka-analiza-i-modelowanie-struktury-przestrzennej" class="level2" data-number="12.7">
+<h2 data-number="12.7" class="anchored" data-anchor-id="geostatystyka-analiza-i-modelowanie-struktury-przestrzennej"><span class="header-section-number">12.7</span> Geostatystyka: analiza i modelowanie struktury przestrzennej</h2>
+<p><strong>Materiał:</strong> <a href="14_pola_semiwariogram.html" class="quarto-xref"><span>Rozdział 9</span></a> · <strong>Dane:</strong> <code>punkty_pref.gpkg</code>, <code>granica.gpkg</code> · <strong>Pakiety:</strong> <code>sf</code>, <code>gstat</code></p>
+<section id="cel-6" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="cel-6">Cel</h3>
+<p>Opisanie struktury przestrzennej wysokości terenu semiwariogramem i dopasowanie do niego modelu.</p>
+</section>
+<section id="dane-6" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="dane-6">Dane</h3>
+<p><code>punkty_pref.gpkg</code> (264 punkty, zmienna <code>srtm</code>) oraz <code>granica.gpkg</code> — potrzebna do obliczenia powierzchni obszaru.</p>
+</section>
+<section id="zadanie-5" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="zadanie-5">Zadanie</h3>
+<ol type="1">
+<li><p>Stwórz wykres rozrzutu z przesunięciem dla zmiennej <code>srtm</code>, dla odstępów od 0 do 5000 m co 625 m (<code>hscat(breaks = seq(0, 5000, by = 625))</code>). Jak zmienia się współczynnik korelacji wraz z odległością?</p></li>
+<li><p>Wykonaj obliczenia pomocnicze: liczbę wszystkich par obserwacji, średnią odległość między punktami oraz połowę pierwiastka z powierzchni obszaru (<code>st_area()</code>).</p></li>
+<li><p>Stwórz semiwariogram empiryczny zmiennej <code>srtm</code> (<code>variogram()</code>) i wyświetl go z liczbą par w każdym odstępie (<code>plot(plot.numbers = TRUE)</code>). Ile par posłużyło do wyliczenia pierwszego odstępu?</p></li>
+<li><p>Zmodyfikuj semiwariogram tak, by jego maksymalny zasięg wynosił <strong>3,5 km</strong> (<code>variogram(cutoff = 3500)</code>). Sprawdź w kolumnie <code>np</code>, czy w każdym odstępie jest co najmniej 30 par.</p></li>
+<li><p>Dopasuj do semiwariogramu empirycznego <strong>model sferyczny</strong>: najpierw podaj parametry startowe odczytane z wykresu (<code>vgm(psill = , model = "Sph", range = , nugget = )</code>), potem dopasuj je funkcją <code>fit.variogram()</code>. Porównaj graficznie model startowy i dopasowany.</p></li>
+<li><p>Dopasuj do tego samego semiwariogramu <strong>model wykładniczy</strong> (<code>"Exp"</code>) i <strong>gaussowski</strong> (<code>"Gau"</code>). Porównaj trzy modele graficznie oraz pod względem miary dopasowania <code>attr(model, "SSErr")</code>. Który dopasowuje się najlepiej?</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Adnotacja
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Zasięgi modeli wykładniczego i gaussowskiego to <strong>zasięgi praktyczne</strong> — odległość, na której model osiąga 95% semiwariancji progowej. Nie są więc wprost porównywalne z zasięgiem modelu sferycznego, który osiąga semiwariancję progową dokładnie na odległości równej zasięgowi.</p>
+</div>
+</div></li>
+<li><p>Zapisz wybrany model do pliku <code>out/model_srtm.rds</code> (<code>saveRDS()</code>).</p></li>
+</ol>
+</section>
+<section id="rozszerzenie-6" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="rozszerzenie-6">Rozszerzenie</h3>
+<p>Dopasuj <strong>model potęgowy</strong> (<code>"Pow"</code>).</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ostrzeżenie
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>W modelu potęgowym argument <code>range</code> oznacza <strong>wykładnik potęgowy</strong>, a nie odległość, i nie może przekraczać 2. Wywołanie <code>fit.variogram(vario, vgm(model = "Pow", nugget = 1))</code> przerywa działanie komunikatem <code>power model range (parameter) cannot exceed 2.0</code>. Podaj wartość startową mniejszą od 2, na przykład <code>vgm(model = "Pow", range = 1)</code>.</p>
+</div>
+</div>
+</section>
+<section id="co-oddać-6" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="co-oddać-6">Co oddać</h3>
+<ul>
+<li>plik <code>.qmd</code> z kodem rozwiązania,</li>
+<li>plik <code>.html</code> wygenerowany z tego <code>.qmd</code>,</li>
+<li><code>out/model_srtm.rds</code> oraz wykresy <code>.png</code>,</li>
+<li>dwa–trzy zdania interpretacji: jaki jest zasięg autokorelacji wysokości terenu i co oznacza wartość efektu samorodka?</li>
+</ul>
+</section>
+</section>
+<section id="geostatystyka-estymacja" class="level2" data-number="12.8">
+<h2 data-number="12.8" class="anchored" data-anchor-id="geostatystyka-estymacja"><span class="header-section-number">12.8</span> Geostatystyka: estymacja</h2>
+<p><strong>Materiał:</strong> <a href="15_pola_estymacja.html" class="quarto-xref"><span>Rozdział 10</span></a> · <strong>Dane:</strong> <code>punkty_pref.gpkg</code>, <code>granica.gpkg</code> · <strong>Pakiety:</strong> <code>sf</code>, <code>terra</code>, <code>gstat</code>, <code>tmap</code></p>
+<section id="cel-7" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="cel-7">Cel</h3>
+<p>Wykonanie estymacji wysokości terenu krigingiem prostym i zwykłym oraz sprawdzenie, jak sąsiedztwo szukania wpływa na wynik.</p>
+</section>
+<section id="dane-7" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="dane-7">Dane</h3>
+<p><code>punkty_pref.gpkg</code> (264 punkty, zmienna <code>srtm</code>) oraz <code>granica.gpkg</code>.</p>
+</section>
+<section id="zadanie-6" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="zadanie-6">Zadanie</h3>
+<ol type="1">
+<li><p>Wczytaj dane, stwórz semiwariogram empiryczny zmiennej <code>srtm</code> i dopasuj model sferyczny (<code>variogram()</code>, <code>fit.variogram()</code>). Model z poprzednich zajęć możesz też wczytać: <code>readRDS("out/model_srtm.rds")</code>.</p></li>
+<li><p>Utwórz siatkę interpolacyjną o rozdzielczości <strong>200 m</strong> dla obszaru parku.</p></li>
+<li><p>Wykonaj estymację <strong>krigingiem prostym</strong>, podając jako średnią wartość średnią zmiennej (<code>gstat(beta = mean(punkty$srtm))</code>, <code>interpolate(fun = interpolate_gstat)</code>, <code>mask()</code>).</p></li>
+<li><p>Wykonaj estymację <strong>krigingiem zwykłym</strong> w trzech ustawieniach sąsiedztwa szukania:</p>
+<ul>
+<li><code>nmax = 10</code> — dziesięć najbliższych punktów,</li>
+<li><code>nmax = 30</code> — trzydzieści najbliższych punktów,</li>
+<li><code>maxdist = 2000</code> — punkty położone w odległości do 2 km.</li>
+</ul></li>
+<li><p>Porównaj wyniki na dwóch rycinach: <strong>cztery mapy estymacji</strong> (<code>var1.pred</code>) oraz <strong>cztery mapy wariancji krigingowej</strong> (<code>var1.var</code>), każda grupa we wspólnej skali barw (<code>tmap_arrange()</code>).</p></li>
+<li><p>Odpowiedz: dlaczego mapy estymacji są do siebie bardzo podobne, a mapy wariancji krigingowej nie? W którym wariancie wariancja krigingowa osiąga najwyższe wartości i w jakich miejscach obszaru?</p></li>
+<li><p>Zapisz wynik krigingu zwykłego z <code>nmax = 30</code> do <code>out/kriging_srtm.tif</code> (<code>writeRaster()</code>).</p></li>
+</ol>
+</section>
+<section id="rozszerzenie-7" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="rozszerzenie-7">Rozszerzenie</h3>
+<p><strong>Brak.</strong> Rdzeń obejmuje cztery estymacje i osiem map.</p>
+</section>
+<section id="co-oddać-7" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="co-oddać-7">Co oddać</h3>
+<ul>
+<li>plik <code>.qmd</code> z kodem rozwiązania,</li>
+<li>plik <code>.html</code> wygenerowany z tego <code>.qmd</code>,</li>
+<li><code>out/kriging_srtm.tif</code> oraz dwie ryciny porównawcze <code>.png</code>,</li>
+<li>dwa–trzy zdania interpretacji: od czego zależy wariancja krigingowa i czy jest ona miarą błędu estymacji?</li>
+</ul>
+</section>
+</section>
+<section id="geostatystyka-ocena-jakości-estymacji" class="level2" data-number="12.9">
+<h2 data-number="12.9" class="anchored" data-anchor-id="geostatystyka-ocena-jakości-estymacji"><span class="header-section-number">12.9</span> Geostatystyka: ocena jakości estymacji</h2>
+<p><strong>Materiał:</strong> <a href="16_pola_ocena.html" class="quarto-xref"><span>Rozdział 11</span></a> · <strong>Dane:</strong> <code>punkty_pref.gpkg</code>, <code>granica.gpkg</code> · <strong>Pakiety:</strong> <code>sf</code>, <code>terra</code>, <code>gstat</code>, <code>rsample</code>, <code>tmap</code>, <code>ggplot2</code></p>
+<section id="cel-8" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="cel-8">Cel</h3>
+<p>Ocena jakości estymacji wysokości terenu dwiema metodami walidacji i porównanie ich wyników.</p>
+</section>
+<section id="dane-8" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="dane-8">Dane</h3>
+<p><code>punkty_pref.gpkg</code> (264 punkty, zmienna <code>srtm</code>) oraz <code>granica.gpkg</code>.</p>
+<p><strong>Przed wykonaniem zadania ustaw <code>set.seed(1111)</code>.</strong> Podział zbioru i kroswalidacja są procedurami losowymi — bez ustawionego ziarna wynik zmienia się przy każdym uruchomieniu.</p>
+</section>
+<section id="zadanie-7" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="zadanie-7">Zadanie</h3>
+<ol type="1">
+<li><p>Podziel zbiór na część treningową i testową w proporcji 75/25 (<code>initial_split(prop = 0.75, strata = srtm)</code>, <code>training()</code>, <code>testing()</code>). Podaj liczebności obu podzbiorów i przedstaw je na mapie dwoma kolorami.</p></li>
+<li><p>Na <strong>zbiorze treningowym</strong> zbuduj semiwariogram empiryczny i dopasuj model sferyczny (<code>variogram()</code>, <code>fit.variogram()</code>).</p></li>
+<li><p>Wykonaj estymację dla punktów <strong>zbioru testowego</strong> krigingiem zwykłym (<code>gstat(locations = train, nmax = 30)</code>, <code>predict()</code>). Dopisz do wyniku wartość obserwowaną i oblicz <strong>błąd estymacji</strong> jako różnicę <code>obserwowane - estymowane</code>.</p></li>
+<li><p>Przeanalizuj błąd estymacji na trzy sposoby:</p>
+<ul>
+<li>mapa błędu ze skalą rozbieżną i punktem środkowym w zerze (<code>tm_scale_continuous(values = "-brewer.rd_bu", midpoint = 0)</code>),</li>
+<li>histogram (<code>geom_histogram()</code>) — czy rozkład jest symetryczny?</li>
+<li>wykres rozrzutu wartości obserwowanych względem estymowanych, z prostą <span class="math inline">\(y = x\)</span> (<code>geom_abline(slope = 1, intercept = 0)</code>).</li>
+</ul></li>
+<li><p>Oblicz trzy statystyki jakości estymacji:</p>
+<ul>
+<li>średni błąd estymacji — <code>mean(blad)</code>,</li>
+<li>pierwiastek błędu średniokwadratowego — <code>sqrt(mean(blad ^ 2))</code>,</li>
+<li>współczynnik determinacji — <code>cor(obserwowane, estymowane) ^ 2</code>.</li>
+</ul>
+<p>Czy estymacja jest obciążona? Jak duży jest typowy pojedynczy błąd?</p></li>
+<li><p>Wykonaj <strong>kroswalidację</strong> na pełnym zbiorze danych (<code>krige.cv(nmax = 30)</code>) i oblicz te same trzy statystyki, korzystając z kolumny <code>residual</code>. Zestaw wyniki obu metod w tabeli i porównaj je. Czy niższa wartość pierwiastka błędu średniokwadratowego oznacza, że model jest lepszy?</p></li>
+</ol>
+</section>
+<section id="rozszerzenie-8" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="rozszerzenie-8">Rozszerzenie</h3>
+<p><strong>Brak.</strong> Rdzeń obejmuje dwie procedury walidacji, trzy statystyki i cztery ryciny.</p>
+</section>
+<section id="co-oddać-8" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="co-oddać-8">Co oddać</h3>
+<ul>
+<li>plik <code>.qmd</code> z kodem rozwiązania,</li>
+<li>plik <code>.html</code> wygenerowany z tego <code>.qmd</code>,</li>
+<li>tabelę porównawczą statystyk obu metod oraz ryciny <code>.png</code>,</li>
+<li>dwa–trzy zdania interpretacji: czy estymacja jest obciążona i czym różnią się wyniki obu metod walidacji?</li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Skopiowano!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Skopiowano!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./16_pola_ocena.html" class="pagination-link" aria-label="Ocena jakości estymacji">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Ocena jakości estymacji</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./18_projekt1.html" class="pagination-link" aria-label="Projekt 1: przestępczość a zmienne społeczno-ekonomiczne">
+        <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Projekt 1: przestępczość a zmienne społeczno-ekonomiczne</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

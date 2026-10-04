@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pl" xml:lang="pl"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.6.42">
@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>6&nbsp; Metody oparte na odległości – Statystyka przestrzenna</title>
+<title>5&nbsp; Metody oparte na odległości – Statystyka przestrzenna</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -64,8 +64,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./09_punkty_intensywnosc.html" rel="next">
-<link href="./07_punkty_centrograficzne.html" rel="prev">
+<link href="./09_obszarowe_teoria.html" rel="next">
+<link href="./07_punkty_intensywnosc.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -89,17 +89,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   ],
   "show-item-context": false,
   "language": {
-    "search-no-results-text": "No results",
-    "search-matching-documents-text": "matching documents",
-    "search-copy-link-title": "Copy link to search",
-    "search-hide-matches-text": "Hide additional matches",
-    "search-more-match-text": "more match in this document",
-    "search-more-matches-text": "more matches in this document",
-    "search-clear-button-title": "Clear",
+    "search-no-results-text": "Brak wyników",
+    "search-matching-documents-text": "dopasowane dokumenty",
+    "search-copy-link-title": "Kopiuj link do wyszukiwania",
+    "search-hide-matches-text": "Ukryj dodatkowe dopasowania",
+    "search-more-match-text": "więcej dopasowań w tym dokumencie",
+    "search-more-matches-text": "więcej dopasowań w tym dokumencie",
+    "search-clear-button-title": "Wyczyść",
     "search-text-placeholder": "",
-    "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit",
-    "search-label": "Search"
+    "search-detached-cancel-button-title": "Anuluj",
+    "search-submit-button-title": "Zatwierdź",
+    "search-label": "Szukaj"
   }
 }</script>
 
@@ -141,13 +141,13 @@ window.Quarto = {
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Przełącz pasek boczny" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./06_punkty.html">DANE PUNKTOWE</a></li><li class="breadcrumb-item"><a href="./08_punkty_odleglosc.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Metody oparte na odległości</span></a></li></ol></nav>
-        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./05_punkty_teoria.html">DANE PUNKTOWE</a></li><li class="breadcrumb-item"><a href="./08_punkty_odleglosc.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Metody oparte na odległości</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Przełącz pasek boczny" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
-      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+      <button type="button" class="btn quarto-search-button" aria-label="Szukaj" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
@@ -164,7 +164,7 @@ window.Quarto = {
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
-        <div id="quarto-search" class="" title="Search"></div>
+        <div id="quarto-search" class="" title="Szukaj"></div>
         </div>
         </div>
     <div class="sidebar-menu-container"> 
@@ -179,149 +179,189 @@ window.Quarto = {
       <div class="sidebar-item-container"> 
             <a href="./01_wstep.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">WSTĘP</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./02_wprowadzenie.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Wprowadzenie</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./03_zastosowanie.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Zastosowania statystyki przestrzennej</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./04_daneprzestrzenne.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Dane przestrzenne w R</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./05_eksploracja.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Eksploracyjna analiza danych przestrzennych</span></span></a>
+  <a href="./02_dane_przestrzenne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Dane przestrzenne w R</span></span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./06_punkty.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">DANE PUNKTOWE</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <a href="./03_eksploracja_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">EKSPLORACYJNA ANALIZA DANYCH</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./07_punkty_centrograficzne.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Statystyki centrograficzne</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./08_punkty_odleglosc.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Metody oparte na odległości</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./09_punkty_intensywnosc.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Metody oparte na analizie intensywności</span></span></a>
+  <a href="./04_eksploracja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Eksploracyjna analiza danych</span></span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./10_poligony.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">DANE OBSZAROWE</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <a href="./05_punkty_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE PUNKTOWE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./11_poligony_sasiedztwo.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Określanie sąsiedztwa danych obszarowych</span></span></a>
+  <a href="./06_punkty_centrograficzne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Statystyki centrograficzne</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./12_poligony_autokorelacja.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Miary autokorelacji danych obszarowych</span></span></a>
+  <a href="./07_punkty_intensywnosc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Metody oparte na analizie intensywności</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_punkty_odleglosc.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Metody oparte na odległości</span></span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./13_pola.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">DANE POWIERZCHNIOWE CIĄGŁE PRZESTRZENNIE</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <a href="./09_obszarowe_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE OBSZAROWE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./14_pola_interpolacja.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Metody interpolacji</span></span></a>
+  <a href="./10_obszarowe_sasiedztwo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Określanie sąsiedztwa danych obszarowych</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./15_pola_modelowanie.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Geostatystyka: Analiza i modelowanie autokorelacji przestrzennej</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./16_pola_estymacja.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Geostatystyczne metody estymacji</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./17_pola_ocena.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Ocena jakości estymacji</span></span></a>
+  <a href="./11_obszarowe_autokorelacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Miary autokorelacji danych obszarowych</span></span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
- <span class="menu-text">ZADANIA</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <a href="./12_pola_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE POWIERZCHNIOWE CIĄGŁE PRZESTRZENNIE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./18_zadania_samodzielne.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Zadania samodzielne</span></span></a>
+  <a href="./13_pola_interpolacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Metody interpolacji</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./19_projekt.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Projekt</span></span></a>
+  <a href="./14_pola_semiwariogram.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Analiza i modelowanie struktury przestrzennej</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./20_projekt_geostatystyka.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Projekt 2: Geostatytyka</span></span></a>
+  <a href="./15_pola_estymacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Geostatystyczne metody estymacji</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_pola_ocena.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Ocena jakości estymacji</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">ZADANIA I PROJEKTY</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_zadania_samodzielne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Zadania samodzielne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18_projekt1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Projekt 1: przestępczość a zmienne społeczno-ekonomiczne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19_projekt2_geostatystyka.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Projekt 2: Geostatystyka</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Załączniki</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./A_pakiety.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Pakiety</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./B_funkcje.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Funkcje</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./C_operacje.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Operacje na danych przestrzennych</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./D_slownik.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Słownik pojęć</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bibliografia</span></a>
   </div>
 </li>
       </ul>
@@ -333,34 +373,44 @@ window.Quarto = {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
+    <h2 id="toc-title">Spis treści</h2>
    
   <ul>
-  <li><a href="#statystyki-najbliższego-sąsiada" id="toc-statystyki-najbliższego-sąsiada" class="nav-link active" data-scroll-target="#statystyki-najbliższego-sąsiada"><span class="header-section-number">6.1</span> Statystyki najbliższego sąsiada</a></li>
-  <li><a href="#wskaźnik-clarka-evansa" id="toc-wskaźnik-clarka-evansa" class="nav-link" data-scroll-target="#wskaźnik-clarka-evansa"><span class="header-section-number">6.2</span> Wskaźnik Clarka-Evansa</a></li>
-  <li><a href="#funkcje-podsumowujące-g-k-ripleya" id="toc-funkcje-podsumowujące-g-k-ripleya" class="nav-link" data-scroll-target="#funkcje-podsumowujące-g-k-ripleya"><span class="header-section-number">6.3</span> Funkcje podsumowujące G, K Ripley’a</a></li>
-  <li><a href="#metody-oparte-na-odległości-w-r" id="toc-metody-oparte-na-odległości-w-r" class="nav-link" data-scroll-target="#metody-oparte-na-odległości-w-r"><span class="header-section-number">6.4</span> Metody oparte na odległości w R</a></li>
-  <li><a href="#przykład-1-przestępczość-w-poznaniu" id="toc-przykład-1-przestępczość-w-poznaniu" class="nav-link" data-scroll-target="#przykład-1-przestępczość-w-poznaniu"><span class="header-section-number">6.5</span> Przykład 1: Przestępczość w Poznaniu</a>
+  <li><a href="#wprowadzenie" id="toc-wprowadzenie" class="nav-link active" data-scroll-target="#wprowadzenie"><span class="header-section-number">5.1</span> Wprowadzenie</a></li>
+  <li><a href="#metody-oparte-na-odległości-w-r" id="toc-metody-oparte-na-odległości-w-r" class="nav-link" data-scroll-target="#metody-oparte-na-odległości-w-r"><span class="header-section-number">5.2</span> Metody oparte na odległości w R</a></li>
+  <li><a href="#przykład-1-przestępczość-w-poznaniu" id="toc-przykład-1-przestępczość-w-poznaniu" class="nav-link" data-scroll-target="#przykład-1-przestępczość-w-poznaniu"><span class="header-section-number">5.3</span> Przykład 1: Przestępczość w Poznaniu</a>
   <ul class="collapse">
-  <li><a href="#statystyki-najbliższego-sąsiada-1" id="toc-statystyki-najbliższego-sąsiada-1" class="nav-link" data-scroll-target="#statystyki-najbliższego-sąsiada-1"><span class="header-section-number">6.5.1</span> Statystyki najbliższego sąsiada</a></li>
-  <li><a href="#funkcje-podsumowujące-g-oraz-k-ripleya" id="toc-funkcje-podsumowujące-g-oraz-k-ripleya" class="nav-link" data-scroll-target="#funkcje-podsumowujące-g-oraz-k-ripleya"><span class="header-section-number">6.5.2</span> Funkcje podsumowujące G oraz K Ripley’a</a></li>
-  <li><a href="#wskaźnik-clarka-evansa-1" id="toc-wskaźnik-clarka-evansa-1" class="nav-link" data-scroll-target="#wskaźnik-clarka-evansa-1"><span class="header-section-number">6.5.3</span> Wskaźnik Clarka-Evansa</a></li>
+  <li><a href="#dane" id="toc-dane" class="nav-link" data-scroll-target="#dane">Dane</a></li>
+  <li><a href="#krok-1-odległości-między-punktami" id="toc-krok-1-odległości-między-punktami" class="nav-link" data-scroll-target="#krok-1-odległości-między-punktami">Krok 1: odległości między punktami</a></li>
+  <li><a href="#krok-2-statystyki-najbliższego-sąsiada" id="toc-krok-2-statystyki-najbliższego-sąsiada" class="nav-link" data-scroll-target="#krok-2-statystyki-najbliższego-sąsiada">Krok 2: statystyki najbliższego sąsiada</a></li>
+  <li><a href="#krok-3-wskaźnik-clarka-evansa" id="toc-krok-3-wskaźnik-clarka-evansa" class="nav-link" data-scroll-target="#krok-3-wskaźnik-clarka-evansa">Krok 3: wskaźnik Clarka-Evansa</a></li>
+  <li><a href="#krok-4-test-clarka-evansa" id="toc-krok-4-test-clarka-evansa" class="nav-link" data-scroll-target="#krok-4-test-clarka-evansa">Krok 4: test Clarka-Evansa</a></li>
+  <li><a href="#krok-5-funkcja-g" id="toc-krok-5-funkcja-g" class="nav-link" data-scroll-target="#krok-5-funkcja-g">Krok 5: funkcja G</a></li>
+  <li><a href="#krok-6-obwiednia" id="toc-krok-6-obwiednia" class="nav-link" data-scroll-target="#krok-6-obwiednia">Krok 6: obwiednia</a></li>
+  <li><a href="#krok-7-funkcja-k-ripleya" id="toc-krok-7-funkcja-k-ripleya" class="nav-link" data-scroll-target="#krok-7-funkcja-k-ripleya">Krok 7: funkcja K Ripleya</a></li>
+  <li><a href="#interpretacja-wyniku" id="toc-interpretacja-wyniku" class="nav-link" data-scroll-target="#interpretacja-wyniku">Interpretacja wyniku</a></li>
   </ul></li>
-  <li><a href="#przykład-2-rozkład-przestrzenny-szkół-w-poznaniu" id="toc-przykład-2-rozkład-przestrzenny-szkół-w-poznaniu" class="nav-link" data-scroll-target="#przykład-2-rozkład-przestrzenny-szkół-w-poznaniu"><span class="header-section-number">6.6</span> Przykład 2: Rozkład przestrzenny szkół w Poznaniu</a>
+  <li><a href="#przykład-2-szkoły-podstawowe-w-poznaniu" id="toc-przykład-2-szkoły-podstawowe-w-poznaniu" class="nav-link" data-scroll-target="#przykład-2-szkoły-podstawowe-w-poznaniu"><span class="header-section-number">5.4</span> Przykład 2: Szkoły podstawowe w Poznaniu</a>
   <ul class="collapse">
-  <li><a href="#statystyki-najbliższego-sąsiada-2" id="toc-statystyki-najbliższego-sąsiada-2" class="nav-link" data-scroll-target="#statystyki-najbliższego-sąsiada-2"><span class="header-section-number">6.6.1</span> Statystyki najbliższego sąsiada</a></li>
-  <li><a href="#funkcje-podsumowujące-g-k-ripleya-1" id="toc-funkcje-podsumowujące-g-k-ripleya-1" class="nav-link" data-scroll-target="#funkcje-podsumowujące-g-k-ripleya-1"><span class="header-section-number">6.6.2</span> Funkcje podsumowujące G, K Ripley’a</a></li>
-  <li><a href="#wskaźnik-clarka-evansa-2" id="toc-wskaźnik-clarka-evansa-2" class="nav-link" data-scroll-target="#wskaźnik-clarka-evansa-2"><span class="header-section-number">6.6.3</span> Wskaźnik Clarka-Evansa</a></li>
+  <li><a href="#dane-1" id="toc-dane-1" class="nav-link" data-scroll-target="#dane-1">Dane</a></li>
+  <li><a href="#krok-1-statystyki-najbliższego-sąsiada" id="toc-krok-1-statystyki-najbliższego-sąsiada" class="nav-link" data-scroll-target="#krok-1-statystyki-najbliższego-sąsiada">Krok 1: statystyki najbliższego sąsiada</a></li>
+  <li><a href="#krok-2-wskaźnik-i-test-clarka-evansa" id="toc-krok-2-wskaźnik-i-test-clarka-evansa" class="nav-link" data-scroll-target="#krok-2-wskaźnik-i-test-clarka-evansa">Krok 2: wskaźnik i test Clarka-Evansa</a></li>
+  <li><a href="#krok-3-funkcja-g-z-obwiednią" id="toc-krok-3-funkcja-g-z-obwiednią" class="nav-link" data-scroll-target="#krok-3-funkcja-g-z-obwiednią">Krok 3: funkcja G z obwiednią</a></li>
+  <li><a href="#sprawdź-swoją-interpretację" id="toc-sprawdź-swoją-interpretację" class="nav-link" data-scroll-target="#sprawdź-swoją-interpretację">Sprawdź swoją interpretację</a></li>
   </ul></li>
+  <li><a href="#pytania-kontrolne" id="toc-pytania-kontrolne" class="nav-link" data-scroll-target="#pytania-kontrolne"><span class="header-section-number">5.5</span> Pytania kontrolne</a></li>
+  <li><a href="#podsumowanie" id="toc-podsumowanie" class="nav-link" data-scroll-target="#podsumowanie"><span class="header-section-number">5.6</span> Podsumowanie</a></li>
+  <li><a href="#trzy-grupy-metod-analizy-rozkładu-punktów" id="toc-trzy-grupy-metod-analizy-rozkładu-punktów" class="nav-link" data-scroll-target="#trzy-grupy-metod-analizy-rozkładu-punktów"><span class="header-section-number">5.7</span> Trzy grupy metod analizy rozkładu punktów</a></li>
+  <li><a href="#pełny-kod-analizy" id="toc-pełny-kod-analizy" class="nav-link" data-scroll-target="#pełny-kod-analizy"><span class="header-section-number">5.8</span> Pełny kod analizy</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./06_punkty.html">DANE PUNKTOWE</a></li><li class="breadcrumb-item"><a href="./08_punkty_odleglosc.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Metody oparte na odległości</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./05_punkty_teoria.html">DANE PUNKTOWE</a></li><li class="breadcrumb-item"><a href="./08_punkty_odleglosc.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Metody oparte na odległości</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Metody oparte na odległości</span></h1>
+<h1 class="title"><span id="sec-punkty-odleglosc" class="quarto-section-identifier"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Metody oparte na odległości</span></span></h1>
 </div>
 
 
@@ -377,91 +427,125 @@ window.Quarto = {
 </header>
 
 
-<!--    W4, U3  Wykład, Ćwiczenia w salach komputerowych-->
-<!-- compare two groups? -->
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spatstat)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
-<p>Metody oparte na odległości wykorzystują informację o odległości między każdą lokalizacją pomiaru/obserwacji, a najbliższym innym pomiarem/obserwacją.</p>
-<section id="statystyki-najbliższego-sąsiada" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="statystyki-najbliższego-sąsiada"><span class="header-section-number">6.1</span> Statystyki najbliższego sąsiada</h2>
-<p>Statystyki najbliższego sąsiada wykorzystywane są do określenia rozkładu odległości pomiędzy każdą lokalizacją pomiaru/obserwacji, a najbliższym innym pomiarem/obserwacją.</p>
+<div class="callout-title-container flex-fill">
+Czego się nauczysz
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Po tym rozdziale potrafisz wykonać w R:</strong></p>
+<ul>
+<li>obliczyć odległości do najbliższego sąsiada i podsumować je statystykami opisowymi,</li>
+<li>przedstawić rozkład tych odległości na histogramie i na dystrybuancie,</li>
+<li>obliczyć wskaźnik Clarka-Evansa z korektą brzegową,</li>
+<li>przeprowadzić test Clarka-Evansa dla trzech różnych hipotez alternatywnych,</li>
+<li>wyznaczyć funkcję G i obwiednię oraz odczytać z nich wniosek.</li>
+</ul>
+<p><strong>Rozumiesz i umiesz zinterpretować:</strong></p>
+<ul>
+<li>czym jest <strong>efekt brzegowy</strong> i dlaczego bez korekty wskaźnik Clarka-Evansa jest obciążony,</li>
+<li>różnicę między wartością wskaźnika a wynikiem testu,</li>
+<li>znaczenie argumentu <code>alternative</code> i dlaczego dla jednej z hipotez wychodzi <em>p</em> = 1,</li>
+<li>co oznacza położenie krzywej empirycznej względem teoretycznej i względem obwiedni, oraz <strong>w jakim zakresie odległości</strong> porównanie jest informacyjne,</li>
+<li>funkcję K Ripleya i jej związek z funkcją G,</li>
+<li>dlaczego metody odległościowe są najczulsze na to, <strong>jak zdefiniowano punkt</strong>.</li>
+</ul>
+<p><strong>Teoria:</strong> <a href="./05_punkty_teoria.html#najwazniejsze-punkty">Najważniejsze informacje</a>. <strong>Funkcje:</strong> <a href="B_funkcje.html" class="quarto-xref"><span>Załącznik B</span></a>.</p>
+</div>
+</div>
+<section id="wprowadzenie" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="wprowadzenie"><span class="header-section-number">5.1</span> Wprowadzenie</h2>
+<p>Metody oparte na intensywności (<a href="07_punkty_intensywnosc.html" class="quarto-xref"><span>Rozdział 4</span></a>) dzieliły obszar na fragmenty — oczka siatki albo ruchome okno — i pytały, ile punktów wypada na jednostkę powierzchni. Metody oparte na odległości podchodzą do rozkładu punktów z drugiej strony: pytają <strong>jak daleko od siebie leżą punkty</strong>, bez dzielenia obszaru na cokolwiek.</p>
+<p>Ma to dwie konsekwencje. Pierwsza korzystna: wynik nie zależy od wyboru siatki ani szerokości pasma, czyli od decyzji, które w poprzednim rozdziale okazały się rozstrzygające. Druga — przeciwna: skoro metodą pomiaru jest odległość między punktami, to <strong>wszystko zależy od tego, co uznaliśmy za punkt</strong>. Dwa budynki tej samej szkoły oddalone o 50 m dają odległość 50 m, niezależnie od tego, że reprezentują jedną instytucję. Do tej czułości wracamy w interpretacji Przykładu 2.</p>
+<p>Pojawia się tu także zagadnienie, którego w poprzednich rozdziałach nie było: <strong>efekt brzegowy</strong>. Punkt leżący blisko granicy obszaru badań może mieć swojego prawdziwego najbliższego sąsiada <strong>poza</strong> tym obszarem — a wtedy nie zostanie on uwzględniony i zapisana odległość będzie zawyżona. Wszystkie metody tego rozdziału wymagają decyzji, jak ten efekt uwzględnić.</p>
 </section>
-<section id="wskaźnik-clarka-evansa" class="level2" data-number="6.2">
-<h2 data-number="6.2" class="anchored" data-anchor-id="wskaźnik-clarka-evansa"><span class="header-section-number">6.2</span> Wskaźnik Clarka-Evansa</h2>
-<p>Wskaźnik Clarka-Evansa (1954) określa stosunek między rzeczywistą średnią odległością od najbliższego sąsiada, a oczekiwaną dla rozkładu losowego.</p>
-<ul>
-<li>Wartości niższe od 1 wskazują na występowanie skupień punktów</li>
-<li>Wartość równa 1 wskazuje na losowy rozkład punktów</li>
-<li>Wartości wyższe od 1 wskazują na bardziej regularny ich rozkład (np., dla regularnej siatki heksagonalnej wartość wskaźnika wynosi 2,15)</li>
-</ul>
+<section id="metody-oparte-na-odległości-w-r" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="metody-oparte-na-odległości-w-r"><span class="header-section-number">5.2</span> Metody oparte na odległości w R</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Funkcja</th>
+<th>Co zwraca</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>spatstat::pairdist()</code></td>
+<td>macierz odległości między <strong>wszystkimi parami</strong> punktów</td>
+</tr>
+<tr class="even">
+<td><code>spatstat::nndist()</code></td>
+<td>wektor odległości od każdego punktu do jego najbliższego sąsiada</td>
+</tr>
+<tr class="odd">
+<td><code>spatstat::distmap()</code></td>
+<td>raster odległości od każdej komórki do najbliższego punktu</td>
+</tr>
+<tr class="even">
+<td><code>spatstat::clarkevans()</code></td>
+<td>wskaźnik Clarka-Evansa <em>R</em> — jedna liczba</td>
+</tr>
+<tr class="odd">
+<td><code>spatstat::clarkevans.test()</code></td>
+<td>test oparty na wskaźniku: wartość <em>R</em> oraz poziom istotności</td>
+</tr>
+<tr class="even">
+<td><code>spatstat::Gest()</code></td>
+<td>funkcja G — dystrybuanta odległości do najbliższego sąsiada</td>
+</tr>
+<tr class="odd">
+<td><code>spatstat::Kest()</code></td>
+<td>funkcja K Ripleya</td>
+</tr>
+<tr class="even">
+<td><code>spatstat::envelope()</code></td>
+<td>obwiednia dla funkcji G lub K</td>
+</tr>
+</tbody>
+</table>
+<p>Pełne zestawienie funkcji — <a href="B_funkcje.html" class="quarto-xref"><span>Załącznik B</span></a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spatstat)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
-<section id="funkcje-podsumowujące-g-k-ripleya" class="level2" data-number="6.3">
-<h2 data-number="6.3" class="anchored" data-anchor-id="funkcje-podsumowujące-g-k-ripleya"><span class="header-section-number">6.3</span> Funkcje podsumowujące G, K Ripley’a</h2>
+<section id="przykład-1-przestępczość-w-poznaniu" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="przykład-1-przestępczość-w-poznaniu"><span class="header-section-number">5.3</span> Przykład 1: Przestępczość w Poznaniu</h2>
+<section id="dane" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="dane">Dane</h3>
 <ul>
-<li><p><strong>funkcja G</strong> - podsumowuje rozkład odległości do najbliższego sąsiada w postaci dystrybuanty, wykorzystywana do porównania odległości teoretycznych wynikających z losowego rozkładu punktów z odległościami empirycznymi obliczonymi na podstawie danych.</p></li>
-<li><p><strong>funkcja K Ripley’a</strong> - wykorzystywana do porównania odległości teoretycznych wynikających z losowego rozkładu punktów z odległościami empirycznymi obliczonymi na podstawie danych.</p></li>
+<li><code>data/przestepstwa_2019.gpkg</code> — lokalizacje przestępstw w Poznaniu w 2019 roku,</li>
+<li><code>data/out_poznan_szkoly.gpkg</code>, warstwa <code>granica</code> — granica miasta; ta sama w obu przykładach oraz w <a href="06_punkty_centrograficzne.html" class="quarto-xref"><span>Rozdział 3</span></a> i <a href="07_punkty_intensywnosc.html" class="quarto-xref"><span>Rozdział 4</span></a>.</li>
 </ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>p2019 <span class="ot">=</span> <span class="fu">read_sf</span>(<span class="st">"data/przestepstwa_2019.gpkg"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>granica <span class="ot">=</span> <span class="fu">read_sf</span>(<span class="st">"data/out_poznan_szkoly.gpkg"</span>, <span class="at">layer =</span> <span class="st">"granica"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>p2019_ppp <span class="ot">=</span> <span class="fu">as.ppp</span>(<span class="fu">st_geometry</span>(p2019), <span class="at">W =</span> <span class="fu">as.owin</span>(granica))</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>p2019_ppp</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Planar point pattern: 1661 points
+window: polygonal boundary
+enclosing rectangle: [345943.2, 368927.8] x [493660, 517878.9] units</code></pre>
+</div>
+</div>
 </section>
-<section id="metody-oparte-na-odległości-w-r" class="level2" data-number="6.4">
-<h2 data-number="6.4" class="anchored" data-anchor-id="metody-oparte-na-odległości-w-r"><span class="header-section-number">6.4</span> Metody oparte na odległości w R</h2>
-<p>Pakiet <code>spatstat()</code> dostarcza kilku funkcji pozwalających na wykorzystanie metod opartych na odległości do analizy rozkładu przestrzennego punktów.</p>
-<ul>
-<li><code>pairdist()</code> - zwraca macierz z odległościami między wszystkimi parami punktów w zbiorze danych</li>
-<li><code>nndist()</code> - zwraca wektor odległości od punktu do najbliżego sąsiada; odległości te są uzyskiwane przez sortowanie odległości między parami punktów i wybierana jest minimalna wartości dla każdego punktu</li>
-<li><code>distmap()</code> - oblicza odległość od każdej komórki do najbliższego punktu i zwraca mapę rastrową.</li>
-<li><code>clarkevans()</code> - obliczenie wskaźnika Clarka-Evansa</li>
-<li><code>Gest()</code> - obliczenie funkcji G</li>
-<li><code>Kest()</code> - obliczenie funkcji K</li>
-<li><code>envelope()</code> - estowania hipotezy zerowej dla funkcji G, K</li>
-</ul>
-<p>Wykorzystanie funkcji z pakietu <code>spatstat</code> wymaga najpierw przekształcenia danych do obiektu klasy <em>ppp</em> (<strong>p</strong>lannar <strong>p</strong>oint <strong>p</strong>attern).</p>
-<ul>
-<li>funkcja <code>ppp()</code> jest używana do tworzenia obiektu punktowego klasy <em>ppp</em> na podstawie ramki danych zawierającej współrzędne x oraz y.</li>
-<li>funkcja <code>as.ppp()</code> pozwala na przekształcenie obiektu przestrzennego do klasy <em>ppp</em></li>
-</ul>
-</section>
-<section id="przykład-1-przestępczość-w-poznaniu" class="level2" data-number="6.5">
-<h2 data-number="6.5" class="anchored" data-anchor-id="przykład-1-przestępczość-w-poznaniu"><span class="header-section-number">6.5</span> Przykład 1: Przestępczość w Poznaniu</h2>
-<p>W przykładzie 1 wykorzystano dane dotyczące przestępczości w Poznaniu (plik <em>przestepstwa_2019.gpkg</em>) wraz z granicą miasta Poznania (plik <em>pzn_borders.gpkg</em>). Do podsumowania rozkładu przestępczości wykorzystano statystyki centrograficzne. Plik <code>przestepstwa_2019.gpkg</code> zawiera tylko kolumnę <em>geom</em> bez dodatkowych atrybutów.</p>
+<section id="krok-1-odległości-między-punktami" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-1-odległości-między-punktami">Krok 1: odległości między punktami</h3>
+<p>Pakiet <code>spatstat</code> udostępnia trzy funkcje odległości, różniące się tym, co zwracają.</p>
+<p>Funkcja <code>pairdist()</code> zwraca pełną macierz odległości między wszystkimi parami punktów. Pierwszy wiersz zawiera odległości od punktu nr 1 do wszystkich pozostałych.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># dane punktowe</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>p2019 <span class="ot">=</span> <span class="fu">read_sf</span>(<span class="st">"data/przestepstwa_2019.gpkg"</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#granica miasta Poznań</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>pzn <span class="ot">=</span> <span class="fu">read_sf</span>(<span class="st">"data/pzn_borders.gpkg"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(pzn) <span class="sc">+</span> </span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_borders</span>() <span class="sc">+</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_shape</span>(p2019) <span class="sc">+</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_dots</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="08_punkty_odleglosc_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Wykorzystanie funkcji z pakietu <code>spatstat</code> wymaga najpierw przekształcenia danych do obiektu klasy <em>ppp</em>. W tym celu wykorzystuje się funkcję <code>as.ppp()</code>, która pozwala na przekształcenie obiektu przestrzennego do klasy <em>ppp</em>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spatstat)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>p2019_ppp <span class="ot">=</span> <span class="fu">as.ppp</span>(<span class="fu">st_geometry</span>(p2019))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<section id="statystyki-najbliższego-sąsiada-1" class="level3" data-number="6.5.1">
-<h3 data-number="6.5.1" class="anchored" data-anchor-id="statystyki-najbliższego-sąsiada-1"><span class="header-section-number">6.5.1</span> Statystyki najbliższego sąsiada</h3>
-<section id="obliczenie-odległości-między-punktami" class="level4" data-number="6.5.1.1">
-<h4 data-number="6.5.1.1" class="anchored" data-anchor-id="obliczenie-odległości-między-punktami"><span class="header-section-number">6.5.1.1</span> Obliczenie odległości między punktami</h4>
-<p>Wyliczenie statystyk najbliższego sąsiada wymaga obliczenia odległości między punktami. Pakiet <code>spatstat</code> dostarcza 3 funkcje do obliczania odległości euklidesowych:</p>
-<ul>
-<li><code>pairdist()</code>: zwraca macierz z odległościami między wszystkimi parami punktów w zbiorze danych.</li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>p2019_pair <span class="ot">=</span> <span class="fu">pairdist</span>(p2019_ppp)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>p2019_pair[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>p2019_pair <span class="ot">=</span> <span class="fu">pairdist</span>(p2019_ppp)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>p2019_pair[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          [,1]      [,2]     [,3]     [,4]      [,5]
 [1,]    0.0000  345.3003 2862.262 8306.265  412.9845
@@ -471,376 +555,799 @@ window.Quarto = {
 [5,]  412.9845  389.4981 3215.613 8662.631    0.0000</code></pre>
 </div>
 </div>
-<p>W macierzy wyznaczonej za pomocą funkcji <code>pairdist()</code> pierwszy wiersz zawiera odległości między punktem id = 1 a wszystkimi innymi. Jeśli posortujemy te wartości otrzymamy ciąg od 0 (odległość między punktem 1 i 1 jest równa 0). Druga wartość w tym posortowanym wektorze to odległość do najbliższego sąsiada.</p>
+<p>Po posortowaniu pierwszego wiersza otrzymujemy ciąg zaczynający się od zera — odległość punktu od siebie samego. <strong>Druga wartość to odległość do najbliższego sąsiada.</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span>(p2019_pair[<span class="dv">1</span>,])[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span>(p2019_pair[<span class="dv">1</span>, ])[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1]   0.00000  42.45441  59.10611  73.24603 137.13290</code></pre>
 </div>
 </div>
-<ul>
-<li><code>nndist()</code>: zwraca wektor odległości od punktu do najbliżego sąsiada; odległości te są uzyskiwane przez sortowanie odległości między parami punktów i wybierana jest minimalna wartości dla każdego punktu</li>
-</ul>
+<p>Macierz dla 1661 punktów ma 2 758 921 elementów, więc przy większych zbiorach staje się niewygodna. Funkcja <code>nndist()</code> zwraca od razu to, co nas interesuje: wektor odległości do najbliższego sąsiada dla każdego punktu.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>p2019_nn1 <span class="ot">=</span> <span class="fu">nndist</span>(p2019_ppp)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>p2019_nn1[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>p2019_nn <span class="ot">=</span> <span class="fu">nndist</span>(p2019_ppp)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>p2019_nn[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1]  42.45441  32.89107  69.73521  56.48927 243.91727</code></pre>
 </div>
 </div>
-<p><strong>Wektor ten można następnie podsumować za pomocą statystyk opisowych otrzymując wartości statystyk najbliższego sąsiada</strong>.</p>
-<ul>
-<li><code>distmap()</code> - oblicza odległość od każdej komórki do najbliższego punktu i zwraca mapę rastrową.</li>
-</ul>
+<p>Funkcja <code>distmap()</code> zwraca co innego: raster, w którym każda komórka ma przypisaną odległość do najbliższego punktu zbioru. Nie służy do statystyk najbliższego sąsiada, ale dobrze pokazuje, gdzie w obszarze jest „pusto”.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">distmap</span>(p2019_ppp))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">distmap</span>(p2019_ppp), <span class="at">main =</span> <span class="st">"Odległość do najbliższego przestępstwa"</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="08_punkty_odleglosc_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="08_punkty_odleglosc_files/figure-html/p1-krok1d-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="analiza-statystyk-najbliższego-sąsiada" class="level4" data-number="6.5.1.2">
-<h4 data-number="6.5.1.2" class="anchored" data-anchor-id="analiza-statystyk-najbliższego-sąsiada"><span class="header-section-number">6.5.1.2</span> Analiza statystyk najbliższego sąsiada</h4>
-<p>Funkcja <code>nndist()</code> dla każdego punktu zwraca odległość do najbliższego punktu - sąsiada. Na tej podstawie możemy obliczyć statystyki opisowe oraz przeanalizować jak rozkładają się te odległości w analizowanym zbiorze danych.</p>
+<section id="krok-2-statystyki-najbliższego-sąsiada" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-2-statystyki-najbliższego-sąsiada">Krok 2: statystyki najbliższego sąsiada</h3>
+<p>Wektor zwrócony przez <code>nndist()</code> podsumowujemy statystykami opisowymi — tak jak każdą inną zmienną ilościową (<a href="04_eksploracja.html" class="quarto-xref"><span>Rozdział 2</span></a>).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>p2019_nn1 <span class="ot">=</span> <span class="fu">nndist</span>(p2019_ppp)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">#przekształcenie na ramkę danych jest potrzebne do wizualizacji wyników z wykorzystaniem pakietu ggplot2</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>p2019_nn1_df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">shortest_distance =</span> p2019_nn1)</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(p2019_nn1_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  shortest_distance
-1          42.45441
-2          32.89107
-3          69.73521
-4          56.48927
-5         243.91727
-6         178.30293</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(p2019_nn1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(p2019_nn)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
    2.669   42.324   78.596  122.883  148.820 3045.719 </code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">quantile</span>(p2019_nn1, <span class="at">probs =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.1</span>)), <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">quantile</span>(p2019_nn, <span class="at">probs =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.1</span>)))</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>     0%     10%     20%     30%     40%     50%     60%     70%     80%     90% 
-   2.67   22.39   35.75   47.97   63.84   78.60  100.06  128.50  171.23  250.91 
-   100% 
-3045.72 </code></pre>
+<pre><code>  0%  10%  20%  30%  40%  50%  60%  70%  80%  90% 100% 
+   3   22   36   48   64   79  100  128  171  251 3046 </code></pre>
 </div>
 </div>
-<p><strong>Podsumowanie wyników dotyczących statystyk najbliższego sąsiada</strong></p>
-<ul>
-<li>50% punktów znajduje się w odległości mniejszej lub równiej ok. 79 m od najbliższej próbki</li>
-<li>90% punktów w odległości mniejszej lub równiej ok. 251 m od najbliższej próbki</li>
-</ul>
-<p>Odległości między najbliższymi punktami:</p>
-<ul>
-<li>Minimalna: 3 m</li>
-<li>Maksymalna: 3046 m</li>
-<li>Średnia: 123 m</li>
-</ul>
-<p>Rozkład wartości odległości można także przeanalizować za pomocą histogramu.</p>
+<p>Rozkład tych odległości przedstawiamy na histogramie.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(p2019_nn1_df, <span class="fu">aes</span>(<span class="at">x =</span> shortest_distance)) <span class="sc">+</span> </span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">100</span>) <span class="sc">+</span> </span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Odległość do najbliższego sąsiada [m]"</span>) <span class="sc">+</span> </span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>p2019_nn_df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">odleglosc =</span> p2019_nn)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(p2019_nn_df, <span class="fu">aes</span>(<span class="at">x =</span> odleglosc)) <span class="sc">+</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">100</span>) <span class="sc">+</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Odległość do najbliższego sąsiada [m]"</span>, <span class="at">y =</span> <span class="st">"Liczba punktów"</span>) <span class="sc">+</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="08_punkty_odleglosc_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="08_punkty_odleglosc_files/figure-html/p1-krok2c-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>Odległości do najbliższego sąsiada można także przedstawić w postaci dystrybuanty (CDF, <em>cumulative distribution function</em>). Na osi x przedstawiona jest odległość, a na osi y procentowy udział punktów w zbiorze danych. Z wykresu można odczytać, jaki procent punktów ma najbliższego sąsiada w odległości mniejszej lub równej podanej wartości.</p>
+<p>Wygodniejsza do odczytywania jest <strong>dystrybuanta</strong> (ang. <em>cumulative distribution function</em>): na osi poziomej odległość, na osi pionowej udział punktów, których najbliższy sąsiad leży nie dalej niż ta odległość.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cumulative distribution funcion </span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="do">## stat_ecdf - oblicza cdf (cumulative distribution funcion)</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(p2019_nn1_df, <span class="fu">aes</span>(shortest_distance)) <span class="sc">+</span> </span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_ecdf</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> <span class="dv">0</span>, <span class="at">ymax =</span> <span class="fu">after_stat</span>(y)), <span class="at">geom =</span> <span class="st">"ribbon"</span>, <span class="at">fill =</span> <span class="st">"grey95"</span>)<span class="sc">+</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_ecdf</span>() <span class="sc">+</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Odległość do najbliższego sąsiada (m)"</span>,</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Udział punktów w zbiorze danyh (%)"</span>) <span class="sc">+</span></span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span> </span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(p2019_nn_df, <span class="fu">aes</span>(odleglosc)) <span class="sc">+</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_ecdf</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> <span class="dv">0</span>, <span class="at">ymax =</span> <span class="fu">after_stat</span>(y)), <span class="at">geom =</span> <span class="st">"ribbon"</span>, <span class="at">fill =</span> <span class="st">"grey95"</span>) <span class="sc">+</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_ecdf</span>() <span class="sc">+</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Odległość do najbliższego sąsiada [m]"</span>,</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Udział punktów w zbiorze"</span>) <span class="sc">+</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="08_punkty_odleglosc_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="08_punkty_odleglosc_files/figure-html/p1-krok2d-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
-</section>
-<section id="funkcje-podsumowujące-g-oraz-k-ripleya" class="level3" data-number="6.5.2">
-<h3 data-number="6.5.2" class="anchored" data-anchor-id="funkcje-podsumowujące-g-oraz-k-ripleya"><span class="header-section-number">6.5.2</span> Funkcje podsumowujące G oraz K Ripley’a</h3>
-<section id="funkcja-g" class="level4" data-number="6.5.2.1">
-<h4 data-number="6.5.2.1" class="anchored" data-anchor-id="funkcja-g"><span class="header-section-number">6.5.2.1</span> Funkcja G</h4>
-<p>Funkcje G podsumowuje rozkład odległości do najbliższego sąsiada w postaci dystrybuanty (CDF, <em>cumulative distribution function</em>). Wykorzystywana jest do porównania odległości teoretycznych (<span class="math inline">\(G_t\)</span>) wynikających z losowego rozkładu punktów z odległościami empirycznymi (<span class="math inline">\(G_{emp}\)</span>) obliczonymi na podstawie danych.</p>
-<p>Funkcja G obliczana jest z wykorzystaniem funkcji <code>Gest()</code> z pakietu <code>spatstat</code>. Wykres pokazuje empiryczną funkcję G (<span class="math inline">\(\hat{G}_{raw}\)</span>) obliczoną na podstawie danych (czarna linia) oraz teoretyczną wygenerowaną na podstawie rozkładu Poissona (<span class="math inline">\(G_{pois}\)</span>, odpowiadająca losowemu rozkładowi punktów, czerwona przerywana linia).</p>
+<section id="krok-3-wskaźnik-clarka-evansa" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-3-wskaźnik-clarka-evansa">Krok 3: wskaźnik Clarka-Evansa</h3>
+<p><strong>Wskaźnik Clarka-Evansa</strong> <em>R</em> to stosunek obserwowanej średniej odległości do najbliższego sąsiada do wartości oczekiwanej przy rozmieszczeniu losowym o tej samej intensywności:</p>
 <ul>
-<li><span class="math inline">\(\hat{G}_{raw} &gt; G_{pois}\)</span> - punkty zlokalizowane bliżej niż to wynika z rozkładu losowego (może wskazywać na istnienie klastrów)</li>
-<li><span class="math inline">\(\hat{G}_{raw} &lt; G_{pois}\)</span> - punkty zlokalizowane dalej niż to wynika z rozkładu losowego (może wskazywać na rozkład regularny lub rozproszony)</li>
+<li><em>R</em> &lt; 1 — punkty leżą bliżej siebie, niż wynikałoby z przypadku (skupienie),</li>
+<li><em>R</em> = 1 — rozmieszczenie losowe,</li>
+<li><em>R</em> &gt; 1 — punkty leżą dalej od siebie, niż wynikałoby z przypadku (rozmieszczenie regularne); dla idealnej siatki heksagonalnej <em>R</em> = 2,15.</li>
 </ul>
+<p>Przy obliczaniu wskaźnika trzeba zdecydować, jak uwzględnić <strong>efekt brzegowy</strong>. Bez korekty zapisane odległości są zawyżone — dla punktów przy granicy prawdziwy najbliższy sąsiad może leżeć poza obszarem badań i nie zostaje uwzględniony. Wskaźnik jest wtedy <strong>obciążony w górę</strong>, czyli przesunięty w stronę wniosku „regularny”.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>p2019_g <span class="ot">=</span> <span class="fu">Gest</span>(p2019_ppp, <span class="at">correction =</span> <span class="st">"none"</span>)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(p2019_g)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="08_punkty_odleglosc_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>W przykładzie funkcja empiryczna (<span class="math inline">\(\hat{G}_{raw}\)</span>) przyjmuje wyższe wartości niż funkcja teoretyczna (czarna linia znajduje się powyżej czerwonej) - wskazuje to, że punkty zlokalizowane są bliżej siebie niż to wynika z rozkładu losowego (może wskazywać na istnienie klastrów w danych).</p>
-</section>
-<section id="funkcja-k-ripleya" class="level4" data-number="6.5.2.2">
-<h4 data-number="6.5.2.2" class="anchored" data-anchor-id="funkcja-k-ripleya"><span class="header-section-number">6.5.2.2</span> Funkcja K Ripley’a</h4>
-<p>Funkcja K Ripley’a wykorzystywana jest do porównania odległości teoretycznych wynikających z losowego rozkładu punktów z odległościami empirycznymi obliczonymi na podstawie danych. Funkcja K Ripley’a obliczana jest z wykorzystaniem funkcji <code>Kest()</code> z pakietu <code>spatstat</code>. Wykres pokazuje empiryczną funkcję K Ripley’a (<span class="math inline">\(\hat{K}_{un}\)</span>) obliczoną na podstawie danych (czarna linia) oraz teoretyczną wygenerowaną na podstawie rozkładu Poissona (<span class="math inline">\(K_{pois}\)</span>; odpowiadająca losowemu rozkładowi punktów). <span class="math inline">\(\hat{K}_{un} &lt; K_{pois}\)</span> wskazuje na rozrzut punktów, punkty są otoczone przez mniejszą liczbę punktów niż można by oczekiwać w porównaniu do rozkładu losowego.</p>
-<p>W poniższym przykładzie funkcja empiryczna (<span class="math inline">\(\hat{K}_{un}\)</span>) przyjmuje wyższe wartości niż funkcja teoretyczna (czarna linia znajduje się powyżej czerwonej) - wskazuje to, że punkty zlokalizowane są bliżej siebie niż to wynika z rozkładu losowego (może wskazywać na istnienie klastrów w danych).</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>p2019_k <span class="ot">=</span> <span class="fu">Kest</span>(p2019_ppp, <span class="at">correction =</span> <span class="st">"none"</span>)</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(p2019_k)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="08_punkty_odleglosc_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="testowanie-istotności-hipotezy-dotyczącej-rozkładu" class="level4" data-number="6.5.2.3">
-<h4 data-number="6.5.2.3" class="anchored" data-anchor-id="testowanie-istotności-hipotezy-dotyczącej-rozkładu"><span class="header-section-number">6.5.2.3</span> Testowanie istotności hipotezy dotyczącej rozkładu</h4>
-<p>W przypadku przestrzennej analizy rozkładów punktów istotne jest przetestowanie hipotezy dotyczącej rozkładu danych.</p>
-<ul>
-<li>Hipoteza zerowa zakłada, że zdarzenia są rozłożone losowo - tj. wykazują przestrzenną przypadkowość (<em>spatial randomeness -&gt; absence of pattern</em>).</li>
-<li>Odrzucenie hipotezy zerowej wskazuje na istnienie jakiś struktur/wzroców przestrzennych (np. skupienia punktów).</li>
-</ul>
-<p>Dla funkcji G oraz K Ripley’a nie ma formalnego schematu testowania. Wykorzystuje się w tym celu obwiednię (ang. <em>envelope</em>). Stosując symulacje konstruuje się obszar “nieodrzucania hipotezy zerowej”, a następnie sprawdza się czy krzywa empiryczna mieści się w tym przedziale (nazywanym obwiednią). Jeśli krzywa empiryczna znajduje się poza obwiednią, oznacza to, że dane nie wykazują rozkładu losowego.</p>
-<p>Funkcja <code>envelope()</code> z pakietu <code>spatstat</code> tworzy obwiednie dla funkcji G oraz K Ripley’a. Funkcja ta wymaga zdefiniowania:</p>
-<ul>
-<li>obiektu klasy ppp (w przykładzie p2019_ppp);</li>
-<li>funkcji dla której ma być wyznaczona obwiednia (np. Gest);</li>
-<li>liczby symulacji <em>nsim</em> (domyślnie 99);</li>
-<li>dodatkowych argumentów funkcji.</li>
-</ul>
-<p>W poniższym przykładzie krzywa empiryczna (czarna linia) znajduje się poza zakresem obwiedni (szary kolor), zatem odrzucamy hipotezę o rozkładzie losowym.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>p2019_env2 <span class="ot">=</span> <span class="fu">envelope</span>(p2019_ppp, Gest, <span class="at">nsim =</span> <span class="dv">99</span>, </span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">funargs =</span> <span class="fu">list</span>(<span class="at">correction =</span> <span class="st">"none"</span>))</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(p2019_env2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="08_punkty_odleglosc_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>p2019_env1 <span class="ot">=</span> <span class="fu">envelope</span>(p2019_ppp, Kest, <span class="at">nsim =</span> <span class="dv">99</span>, </span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">funargs =</span> <span class="fu">list</span>(<span class="at">correction =</span> <span class="st">"none"</span>))</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(p2019_env1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="08_punkty_odleglosc_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-</section>
-<section id="wskaźnik-clarka-evansa-1" class="level3" data-number="6.5.3">
-<h3 data-number="6.5.3" class="anchored" data-anchor-id="wskaźnik-clarka-evansa-1"><span class="header-section-number">6.5.3</span> Wskaźnik Clarka-Evansa</h3>
-<p>Wskaźnik Clarka-Evansa <em>R</em> (1954) określa stosunek między rzeczywistą średnią odległością od najbliższego sąsiada, a oczekiwaną dla rozkładu losowego.</p>
-<ul>
-<li>Wartości niższe od 1 wskazują na występowanie skupień punktów</li>
-<li>Wartość równa 1 wskazuje na losowy rozkład punktów</li>
-<li>Wartości wyższe od 1 wskazują na bardziej regularny ich rozkład (np., dla regularnej siatki heksagonalnej wartość wskaźnika wynosi 2,15)</li>
-</ul>
-<p>Wskaźnik Clarka-Evansa (1954) obliczany jest wykorzystując funkcję <code>clarkevans()</code> z pakietu <code>spatstat()</code>. W wyniku otrzymuje się 3 wartości w zależności czy została zastosowana</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">clarkevans</span>(p2019_ppp)[[<span class="dv">1</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">clarkevans</span>(p2019_ppp, <span class="at">correction =</span> <span class="st">"none"</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.5152518</code></pre>
+<pre><code>[1] 0.6191933</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">clarkevans</span>(p2019_ppp, <span class="at">correction =</span> <span class="st">"cdf"</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.5616117</code></pre>
 </div>
 </div>
-<p>Wartość wskaźnika wskazuje na występowanie skupień punktów.</p>
-<p>Funkcja <code>clarkevans.test()</code> z pakietu <code>spatstat()</code> pozwala na przeprowadzenie testu dotyczącego agregacji danych w oparciu o wskaźnik Clarka-Evansa.</p>
-<ul>
-<li><p>Hipoteza zerowa zakłada, że zdarzenia są rozłożone losowo - tj. wykazują przestrzenną przypadkowość (<em>spatial randomeness -&gt; absence of pattern</em>).</p></li>
-<li><p>Hipoteza alternatywna (określana przez argument <em>alternative</em>) zakłada:</p>
-<ul>
-<li><p>alternative=“less” lub alternative=“clustered”: hipozeta alternatywna zakłada, że wartość wskaźnika Clarka-Evansa jest mniejsza od 1 (R&lt;1) co wskazuje na występowanie skupień punktów</p></li>
-<li><p>alternative=“greater” lub alternative=“regular”: hipozeta alternatywna zakłada, że wartość wskaźnika Clarka-Evansa jest większa od 1 (R&gt;1) co wskazuje na regularny rozkład punktów.</p></li>
-<li><p>alternative=“two.sided”: hipoteza alternatywna zakłada, że wartość wskaźnika Clarka-Evansa jest różna od 1 co wskazuje, że rozkład nie jest losowy (może być skupiony lub regularny).</p></li>
-</ul></li>
-</ul>
-<p>W poniższym przykładzie założono hipotezę altenatywną (alternative = “two.sided”), zakładającą, że rozkład punktów nie jest losowy. Wynik testu Clarka-Evansa wskazuje na wartość wskaźnika (R) równą 0.51. Wartość p-value (p-value &lt; 2.2e-16) wskazuje na możliwość odrzucenia hipotezy zerowej (rozkład losowy) - punkty nie mają rozkładu losowego.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Którą korektę wybrać
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Funkcja <code>clarkevans()</code> wywołana <strong>bez argumentu <code>correction</code></strong> nie zwraca jednej liczby, lecz wektor z wszystkimi dostępnymi korektami. Pisanie <code>clarkevans(x)[[1]]</code> wybiera z niego pierwszy element, czyli wariant <strong>bez korekty</strong> — i jest to wybór przypadkowy, nie metodyczny.</p>
+<p>Dostępne korekty to <code>"none"</code> (brak), <code>"Donnelly"</code> — <strong>tylko dla okien prostokątnych</strong>, więc dla granicy miasta niedostępna — oraz <code>"cdf"</code>, oparta na dystrybuancie odległości. Funkcja <code>clarkevans.test()</code> domyślnie używa <code>"cdf"</code>.</p>
+<p>W tym rozdziale podajemy <code>correction = "cdf"</code> <strong>jawnie w obu funkcjach</strong>. Dzięki temu wskaźnik i test podają tę samą liczbę, a korekta jest wyborem świadomym.</p>
+</div>
+</div>
+</section>
+<section id="krok-4-test-clarka-evansa" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-4-test-clarka-evansa">Krok 4: test Clarka-Evansa</h3>
+<p>Sam wskaźnik mówi, w którą stronę odbiega rozmieszczenie od losowego, ale nie mówi, czy odbiega <strong>istotnie</strong>. Do tego służy <code>clarkevans.test()</code>. Hipoteza zerowa zakłada rozmieszczenie losowe; hipotezę alternatywną wskazuje argument <code>alternative</code>.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><code>alternative</code></th>
+<th>Hipoteza alternatywna</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>"two.sided"</code></td>
+<td><em>R</em> ≠ 1 — rozmieszczenie nie jest losowe (skupione albo regularne)</td>
+</tr>
+<tr class="even">
+<td><code>"clustered"</code> (lub <code>"less"</code>)</td>
+<td><em>R</em> &lt; 1 — rozmieszczenie skupione</td>
+</tr>
+<tr class="odd">
+<td><code>"regular"</code> (lub <code>"greater"</code>)</td>
+<td><em>R</em> &gt; 1 — rozmieszczenie regularne</td>
+</tr>
+</tbody>
+</table>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">clarkevans.test</span>(p2019_ppp, <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">clarkevans.test</span>(p2019_ppp, <span class="at">correction =</span> <span class="st">"cdf"</span>, <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Clark-Evans test
-    Donnelly correction
+    CDF correction
     Z-test
 
 data:  p2019_ppp
-R = 0.51, p-value &lt; 2.2e-16
+R = 0.56161, p-value &lt; 2.2e-16
 alternative hypothesis: two-sided</code></pre>
 </div>
 </div>
-<p>W poniższym przykładzie założono hipotezę altenatywną (alternative = “clustered”), zakładającą, że rozkład punktów jest skupiony. W tym przypadku wynik testu Clarka-Evansa wskazuje na wartość wskaźnika (R) równą 0.51. Wartość p-value (p-value &lt; 2.2e-16) wskazuje na możliwość odrzucenia hipotezy zerowej (rozkład losowy), na rzecz hipotezy alternatywnej - skupiony rozkład punktów.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">clarkevans.test</span>(p2019_ppp, <span class="at">alternative =</span> <span class="st">"clustered"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">clarkevans.test</span>(p2019_ppp, <span class="at">correction =</span> <span class="st">"cdf"</span>, <span class="at">alternative =</span> <span class="st">"clustered"</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Clark-Evans test
-    Donnelly correction
+    CDF correction
     Z-test
 
 data:  p2019_ppp
-R = 0.51, p-value &lt; 2.2e-16
+R = 0.56161, p-value &lt; 2.2e-16
 alternative hypothesis: clustered (R &lt; 1)</code></pre>
 </div>
 </div>
-<p>W poniższym przykładzie założono hipotezę altenatywną (alternative = “clustered”), zakładającą, że rozkład punktów jest regularny. W tym przypadku wynik testu Clarka-Evansa wskazuje na wartość wskaźnika (R) równą 0.51. Wartość p-value (p-value = 1) wskazuje na brak podstaw do odrzucena hipotezy zerowej. Innymi słowy, nie możemy przyjąć hipotezy alternatywnej wskazującej na regularny rozkładu punktów.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">clarkevans.test</span>(p2019_ppp, <span class="at">alternative =</span> <span class="st">"regular"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">clarkevans.test</span>(p2019_ppp, <span class="at">correction =</span> <span class="st">"cdf"</span>, <span class="at">alternative =</span> <span class="st">"regular"</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Clark-Evans test
-    Donnelly correction
+    CDF correction
     Z-test
 
 data:  p2019_ppp
-R = 0.51, p-value = 1
+R = 0.56161, p-value = 1
 alternative hypothesis: regular (R &gt; 1)</code></pre>
 </div>
 </div>
 </section>
-</section>
-<section id="przykład-2-rozkład-przestrzenny-szkół-w-poznaniu" class="level2" data-number="6.6">
-<h2 data-number="6.6" class="anchored" data-anchor-id="przykład-2-rozkład-przestrzenny-szkół-w-poznaniu"><span class="header-section-number">6.6</span> Przykład 2: Rozkład przestrzenny szkół w Poznaniu</h2>
-<p>W poniższym przykładzie przeanalizowano przestrzenny rozkład szkół podstawowych w Poznaniu wykorzystując metody oparte na odległości:</p>
+<section id="krok-5-funkcja-g" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-5-funkcja-g">Krok 5: funkcja G</h3>
+<p><strong>Funkcja G</strong> to dystrybuanta odległości do najbliższego sąsiada — ta sama krzywa, którą narysowaliśmy w kroku 2, ale zestawiona z krzywą teoretyczną wynikającą z rozmieszczenia losowego. Pozwala to porównać obserwacje z przypadkiem <strong>na każdej odległości osobno</strong>, a nie tylko przez jedną liczbę, jak wskaźnik Clarka-Evansa.</p>
 <ul>
-<li>statystyki najbliższego sąsiada</li>
-<li>funkcje podsumowujące G, K Ripley’a</li>
-<li>wskaźnik Clarka-Evansa</li>
+<li><span class="math inline">\(\hat{G}\)</span> <strong>powyżej</strong> <span class="math inline">\(G_{pois}\)</span> — na danej odległości więcej punktów ma już swojego sąsiada, niż wynikałoby z przypadku, czyli punkty leżą bliżej siebie (skupienie),</li>
+<li><span class="math inline">\(\hat{G}\)</span> <strong>poniżej</strong> <span class="math inline">\(G_{pois}\)</span> — punkty leżą dalej od siebie (rozmieszczenie regularne).</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spatstat)</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="co">#wczytanie danych przestrzennych. Granica jest wykorzystywana wyłącznie do wizualizacji danych. </span></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>szkoly <span class="ot">=</span> <span class="fu">read_sf</span>(<span class="st">"data/out_poznan_szkoly.gpkg"</span>, <span class="at">layer =</span> <span class="st">"szkoly"</span>)</span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>granica <span class="ot">=</span> <span class="fu">read_sf</span>(<span class="st">"data/out_poznan_szkoly.gpkg"</span>, <span class="at">layer =</span> <span class="st">"granica"</span>)</span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="co">#konwersja do obiektu klasy ppp </span></span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>szkoly_ppp <span class="ot">=</span> <span class="fu">as.ppp</span>(szkoly)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>p2019_g <span class="ot">=</span> <span class="fu">Gest</span>(p2019_ppp, <span class="at">correction =</span> <span class="st">"none"</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(p2019_g, <span class="at">main =</span> <span class="st">"Funkcja G dla przestępstw"</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="08_punkty_odleglosc_files/figure-html/p1-krok5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
-<section id="statystyki-najbliższego-sąsiada-2" class="level3" data-number="6.6.1">
-<h3 data-number="6.6.1" class="anchored" data-anchor-id="statystyki-najbliższego-sąsiada-2"><span class="header-section-number">6.6.1</span> Statystyki najbliższego sąsiada</h3>
-<p>Wykorzystując funkcję <code>nndist</code> tworzony jest wektor wartości zawierający odległość do najbliższego sąsiada. Wektor ten następnie podsumowywany jest za pomocą statystyk opisowych oraz wykresów (histogramu, dystrybuanty).</p>
+</div>
+</div>
+</section>
+<section id="krok-6-obwiednia" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-6-obwiednia">Krok 6: obwiednia</h3>
+<p>Porównanie krzywej empirycznej z teoretyczną mówi, w którą stronę odbiega rozmieszczenie, ale nie mówi, czy odchylenie jest większe od tego, co daje sama zmienność losowania. Krzywa teoretyczna opisuje bowiem wartość <strong>przeciętną</strong> przy rozmieszczeniu losowym, a pojedyncza realizacja takiego rozmieszczenia od tej przeciętnej odbiega.</p>
+<p>Odpowiada na to <strong>obwiednia</strong> (ang. <em>envelope</em>), wyznaczana przez symulację. Stosujemy jej wariant <strong>jednoczesny</strong> (<code>global = TRUE</code>), który zgodnie z dokumentacją funkcji <code>envelope()</code> konstruowany jest tak: dla każdej z <code>nsim</code> symulacji rozmieszczenia losowego liczy się <strong>maksymalne odchylenie bezwzględne</strong> krzywej symulowanej od teoretycznej, bierze się <code>nrank</code>-tą największą z tych wartości (oznaczaną <code>dcrit</code>), a pas wyznacza się jako krzywa teoretyczna ± <code>dcrit</code>. Pas ma więc <strong>stałą szerokość</strong> na całym zakresie.</p>
+<p>Test oparty na tym pasie odrzuca hipotezę o rozmieszczeniu losowym, jeśli krzywa empiryczna leży poza pasem <strong>przy którejkolwiek</strong> wartości <em>r</em>, i ma dokładny poziom istotności <code>alpha = nrank/(1 + nsim)</code>. Przyjmujemy <code>nsim = 99</code> i <code>nrank = 5</code>, czyli α = 5/100 = 0,05.</p>
+<p>Ponieważ symulacja jest <strong>procedurą losową</strong>, przed nią ustawiamy <code>set.seed()</code> — bez tego pas byłby inny przy każdym uruchomieniu.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># obliczenie odległości do najbliższego sąsiada </span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>szkoly_nn <span class="ot">=</span> <span class="fu">nndist</span>(szkoly_ppp)</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>szkoly_nn_df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">shortest_distance =</span> szkoly_nn)</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(szkoly_nn)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2026</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>p2019_env <span class="ot">=</span> <span class="fu">envelope</span>(p2019_ppp, Gest, <span class="at">nsim =</span> <span class="dv">99</span>, <span class="at">nrank =</span> <span class="dv">5</span>, <span class="at">global =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">funargs =</span> <span class="fu">list</span>(<span class="at">correction =</span> <span class="st">"none"</span>))</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(p2019_env, <span class="at">main =</span> <span class="st">"Funkcja G z obwiednią jednoczesną (alfa = 0,05)"</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="08_punkty_odleglosc_files/figure-html/p1-krok6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Dolna granica pasa schodzi na części zakresu poniżej zera. Jest to konsekwencja konstrukcji „krzywa teoretyczna ± <code>dcrit</code>” przy stałej szerokości pasa, a nie wartość mająca znaczenie — funkcja G jest udziałem punktów, więc nie może być ujemna.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Dlaczego <code>global = TRUE</code>, a nie obwiednia domyślna
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Wywołana bez argumentu <code>global</code>, funkcja <code>envelope()</code> zwraca obwiednię <strong>punktową</strong>: dla każdej wartości <em>r</em> osobno bierze najmniejszą i największą wartość spośród symulacji. Dokumentacja funkcji stwierdza wprost, że obwiednie punktowe <strong>nie są przedziałami ufności</strong> dla funkcji, lecz wyznaczają punkty krytyczne testu Monte Carlo, który konstruuje się „przez wybór <strong>ustalonej</strong> wartości <em>r</em> i odrzucenie hipotezy zerowej, jeśli obserwowana wartość funkcji leży poza obwiednią <strong>przy tej wartości</strong> <em>r</em>”.</p>
+<p>Czytanie obwiedni punktowej jako „krzywa wychodzi poza pas gdziekolwiek, więc odrzucamy” jest <strong>innym testem</strong>, który dokumentacja nazywa <em>the „wrong” test</em> i którego rzeczywisty poziom istotności można oszacować argumentem <code>do.pwrong</code>. Dla danych z tego rozdziału wynosi on <strong>0,71 dla przestępstw i 0,86 dla szkół</strong> przy poziomie nominalnym 0,02 — czyli przy danych całkowicie losowych taki „test” wykryłby strukturę w większości przypadków.</p>
+<p>Obwiednia jednoczesna jest zbudowana właśnie tak, aby wolno było czytać <strong>całą krzywę</strong>. Ten sam test można wykonać funkcją <code>mad.test()</code>, otrzymując wartość <em>p</em>.</p>
+</div>
+</div>
+</section>
+<section id="krok-7-funkcja-k-ripleya" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-7-funkcja-k-ripleya">Krok 7: funkcja K Ripleya</h3>
+<p><strong>Funkcja K Ripleya</strong> odpowiada na pokrewne pytanie przy innej definicji sąsiedztwa. Funkcja G patrzy wyłącznie na <strong>najbliższego</strong> sąsiada, więc opisuje strukturę na małych odległościach. Funkcja K zlicza <strong>wszystkie</strong> punkty w otoczeniu o promieniu <em>r</em>, więc uwzględnia też sąsiadów dalszych i opisuje strukturę na wielu skalach jednocześnie.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>p2019_k <span class="ot">=</span> <span class="fu">Kest</span>(p2019_ppp, <span class="at">correction =</span> <span class="st">"none"</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(p2019_k, <span class="at">main =</span> <span class="st">"Funkcja K Ripleya dla przestępstw"</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="08_punkty_odleglosc_files/figure-html/p1-krok7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Interpretacja jest analogiczna: <span class="math inline">\(\hat{K}\)</span> powyżej <span class="math inline">\(K_{pois}\)</span> oznacza, że punkty są otoczone większą liczbą innych punktów, niż wynikałoby z przypadku. Obwiednię dla funkcji K wyznacza się tą samą funkcją <code>envelope()</code>, podając <code>Kest</code> zamiast <code>Gest</code>.</p>
+</section>
+<section id="interpretacja-wyniku" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="interpretacja-wyniku">Interpretacja wyniku</h3>
+<p><strong>Odległości do najbliższego sąsiada.</strong> Połowa przestępstw ma najbliższe inne przestępstwo w odległości nie większej niż 79 m, a 90% — nie większej niż 251 m. Średnia (123 m) jest wyraźnie wyższa od mediany, a maksimum wynosi 3046 m: rozkład jest silnie prawoskośny, bo pojedyncze przestępstwa na obrzeżach miasta leżą bardzo daleko od pozostałych. Dla takiego rozkładu <strong>medianą opisujemy typową odległość</strong>, nie średnią — tak samo jak w <a href="04_eksploracja.html" class="quarto-xref"><span>Rozdział 2</span></a>.</p>
+<p><strong>Wskaźnik Clarka-Evansa.</strong> Z korektą <code>cdf</code> wskaźnik wynosi 0.562, czyli wyraźnie mniej niż 1 — przestępstwa leżą bliżej siebie, niż wynikałoby z rozmieszczenia losowego. Bez korekty otrzymalibyśmy 0.619, czyli wartość o 10.3% wyższą — obciążenie w stronę wniosku „regularny” jest tu całkiem wymierne.</p>
+<p><strong>Test.</strong> Dla hipotezy alternatywnej <code>"two.sided"</code> i <code>"clustered"</code> test daje <em>p</em> &lt; 0,001, więc odrzucamy hipotezę o rozmieszczeniu losowym na rzecz skupienia. Dla <code>"regular"</code> wychodzi <em>p</em> = 1 — i <strong>nie jest to błąd</strong>. Hipoteza alternatywna brzmi wtedy „rozmieszczenie jest regularne”, a dane wskazują dokładnie przeciwnie, więc nie ma żadnych podstaw do jej przyjęcia. Wartość <em>p</em> = 1 oznacza: „to, co widzisz, jest najdalsze od tej hipotezy, jak to możliwe”.</p>
+<p><strong>Funkcja G.</strong> Krzywa empiryczna leży wyraźnie powyżej teoretycznej na małych i średnich odległościach — przy <em>r</em> = 100 m wynosi 0,60 wobec 0,18 teoretycznej, przy <em>r</em> = 250 m 0,90 wobec 0,71. Oznacza to, że punkty mają swoich sąsiadów znacznie bliżej, niż wynikałoby z przypadku.</p>
+<p>Powyżej około 400 m krzywe się przecinają i empiryczna biegnie nieco poniżej teoretycznej. <strong>Nie jest to oznaka regularności</strong> — na tych odległościach obie krzywe zbliżają się już do 1 (przy <em>r</em> = 500 m: 0,98 wobec 0,99), bo prawie każdy punkt ma swojego najbliższego sąsiada bliżej. Porównanie przestaje tam nieść informację. <strong>Funkcję G czyta się na odległościach małych względem rozmiarów obszaru</strong>, nie na całym zakresie wykresu.</p>
+<p><strong>Obwiednia.</strong> Krzywa empiryczna wychodzi poza pas, więc <strong>odrzucamy hipotezę o rozmieszczeniu losowym</strong> na poziomie istotności 0,05. Przy <em>r</em> = 100 m krzywa przyjmuje wartość 0,60, podczas gdy górna granica pasa wynosi tam 0,22 — odchylenie jest zatem wielokrotnie większe niż to, które daje sama zmienność losowania.</p>
+<p>Wniosek testu jest <strong>binarny</strong>: krzywa wychodzi poza pas, więc rozmieszczenie nie jest losowe. Obwiednia jednoczesna nie odpowiada natomiast na pytanie, <strong>przy jakich odległościach</strong> występuje odstępstwo — test dotyczy całej krzywej, a nie poszczególnych wartości <em>r</em>. Odczytywanie z pasa „skali, na której pojawia się skupienie” byłoby wnioskiem, którego ten test nie uprawnia.</p>
+<p><strong>Funkcja K.</strong> Krzywa empiryczna przebiega powyżej teoretycznej, co prowadzi do tego samego wniosku co funkcja G: punkty są otoczone większą liczbą innych punktów, niż wynikałoby z przypadku. Zgodność obu funkcji nie jest przypadkiem — opisują tę samą strukturę, tylko patrząc na nią przez inną definicję sąsiedztwa.</p>
+<p><strong>Wniosek.</strong> Wszystkie cztery narzędzia zgodnie wskazują <strong>skupienie</strong>: przestępstwa w Poznaniu nie są rozmieszczone losowo, lecz koncentrują się, i to na odległościach rzędu setek metrów. Jest to spójne z wynikami z <a href="07_punkty_intensywnosc.html" class="quarto-xref"><span>Rozdział 4</span></a>, gdzie test zliczania odrzucił hipotezę o stałej intensywności, oraz z <a href="06_punkty_centrograficzne.html" class="quarto-xref"><span>Rozdział 3</span></a>, gdzie odległość standardowa była znacznie mniejsza od promienia miasta.</p>
+</section>
+</section>
+<section id="przykład-2-szkoły-podstawowe-w-poznaniu" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="przykład-2-szkoły-podstawowe-w-poznaniu"><span class="header-section-number">5.4</span> Przykład 2: Szkoły podstawowe w Poznaniu</h2>
+<p>W tym przykładzie kod i wyniki są podane, natomiast <strong>interpretacji nie ma w tekście</strong>. Przeczytaj wyniki samodzielnie, odpowiedz na pytania zamieszczone na końcu przykładu, a następnie rozwiń bloki z odpowiedziami i sprawdź poprawność swojej interpretacji.</p>
+<section id="dane-1" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="dane-1">Dane</h3>
+<p>Warstwa <code>szkoly</code> zawiera 51 szkół podstawowych — po jednym punkcie na szkołę. Sposób jej przygotowania z warstwy budynków BDOT10k pokazuje <a href="06_punkty_centrograficzne.html" class="quarto-xref"><span>Rozdział 3</span></a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>szkoly <span class="ot">=</span> <span class="fu">read_sf</span>(<span class="st">"data/out_poznan_szkoly.gpkg"</span>, <span class="at">layer =</span> <span class="st">"szkoly"</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>szkoly_ppp <span class="ot">=</span> <span class="fu">as.ppp</span>(<span class="fu">st_geometry</span>(szkoly), <span class="at">W =</span> <span class="fu">as.owin</span>(granica))</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="fu">npoints</span>(szkoly_ppp)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 51</code></pre>
+</div>
+</div>
+</section>
+<section id="krok-1-statystyki-najbliższego-sąsiada" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-1-statystyki-najbliższego-sąsiada">Krok 1: statystyki najbliższego sąsiada</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>szkoly_nn <span class="ot">=</span> <span class="fu">nndist</span>(szkoly_ppp)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(szkoly_nn)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-  11.56   25.36   54.13  372.06  497.66 2902.80 </code></pre>
+  69.06  404.56  644.02  858.12 1136.34 2961.56 </code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(szkoly_nn_df, <span class="fu">aes</span>(<span class="at">x =</span> shortest_distance)) <span class="sc">+</span> </span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span> </span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Odległość do najbliższego sąsiada [km]"</span>) <span class="sc">+</span> </span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="08_punkty_odleglosc_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cumulative distribution funcion </span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="do">## stat_ecdf - oblicza cdf (cumulative distribution funcion)</span></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(szkoly_nn_df, <span class="fu">aes</span>(shortest_distance)) <span class="sc">+</span> </span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_ecdf</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> <span class="dv">0</span>, <span class="at">ymax =</span> <span class="fu">after_stat</span>(y)), <span class="at">geom =</span> <span class="st">"ribbon"</span>, <span class="at">fill =</span> <span class="st">"grey95"</span>)<span class="sc">+</span></span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_ecdf</span>() <span class="sc">+</span></span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Odległość do najbliższego sąsiada (km)"</span>,</span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Udział punktów w zbiorze danyh (%)"</span>) <span class="sc">+</span></span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span> </span>
-<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="08_punkty_odleglosc_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="funkcje-podsumowujące-g-k-ripleya-1" class="level3" data-number="6.6.2">
-<h3 data-number="6.6.2" class="anchored" data-anchor-id="funkcje-podsumowujące-g-k-ripleya-1"><span class="header-section-number">6.6.2</span> Funkcje podsumowujące G, K Ripley’a</h3>
-<p>Wykorzystując funkcje <code>Gest()</code>, <code>Kest()</code> oraz <code>envelope()</code> obliczane są funkcje podsumowujące G oraz K Ripley’a oraz testowana jest dla nich hipoteza dotycząca rozkładu przestrzennego punktów.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>szkoly_env_g <span class="ot">=</span> <span class="fu">envelope</span>(szkoly_ppp, Gest, <span class="at">nsim =</span> <span class="dv">99</span>, </span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">funargs =</span> <span class="fu">list</span>(<span class="at">correction =</span> <span class="st">"none"</span>))</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(szkoly_env_g)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="08_punkty_odleglosc_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>szkoly_env_k <span class="ot">=</span> <span class="fu">envelope</span>(szkoly_ppp, Kest, <span class="at">nsim =</span> <span class="dv">99</span>, </span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">funargs =</span> <span class="fu">list</span>(<span class="at">correction =</span> <span class="st">"none"</span>))</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(szkoly_env_k)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="08_punkty_odleglosc_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="wskaźnik-clarka-evansa-2" class="level3" data-number="6.6.3">
-<h3 data-number="6.6.3" class="anchored" data-anchor-id="wskaźnik-clarka-evansa-2"><span class="header-section-number">6.6.3</span> Wskaźnik Clarka-Evansa</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">clarkevans</span>(szkoly_ppp)[[<span class="dv">1</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">quantile</span>(szkoly_nn, <span class="at">probs =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.1</span>)))</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.5404279</code></pre>
+<pre><code>  0%  10%  20%  30%  40%  50%  60%  70%  80%  90% 100% 
+  69  199  387  446  625  644  798  941 1326 1841 2962 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>szkoly_nn_df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">odleglosc =</span> szkoly_nn)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(szkoly_nn_df, <span class="fu">aes</span>(odleglosc)) <span class="sc">+</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_ecdf</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> <span class="dv">0</span>, <span class="at">ymax =</span> <span class="fu">after_stat</span>(y)), <span class="at">geom =</span> <span class="st">"ribbon"</span>, <span class="at">fill =</span> <span class="st">"grey95"</span>) <span class="sc">+</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_ecdf</span>() <span class="sc">+</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Odległość do najbliższej szkoły [m]"</span>, <span class="at">y =</span> <span class="st">"Udział szkół"</span>) <span class="sc">+</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="08_punkty_odleglosc_files/figure-html/p2-krok1c-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="krok-2-wskaźnik-i-test-clarka-evansa" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-2-wskaźnik-i-test-clarka-evansa">Krok 2: wskaźnik i test Clarka-Evansa</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">clarkevans</span>(szkoly_ppp, <span class="at">correction =</span> <span class="st">"cdf"</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6498492</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">clarkevans.test</span>(szkoly_ppp, <span class="at">correction =</span> <span class="st">"cdf"</span>, <span class="at">alternative =</span> <span class="st">"clustered"</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Clark-Evans test
+    CDF correction
+    Z-test
+
+data:  szkoly_ppp
+R = 0.64985, p-value = 8.603e-07
+alternative hypothesis: clustered (R &lt; 1)</code></pre>
+</div>
+</div>
+</section>
+<section id="krok-3-funkcja-g-z-obwiednią" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-3-funkcja-g-z-obwiednią">Krok 3: funkcja G z obwiednią</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2026</span>)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>szkoly_env <span class="ot">=</span> <span class="fu">envelope</span>(szkoly_ppp, Gest, <span class="at">nsim =</span> <span class="dv">99</span>, <span class="at">nrank =</span> <span class="dv">5</span>, <span class="at">global =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">funargs =</span> <span class="fu">list</span>(<span class="at">correction =</span> <span class="st">"none"</span>))</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(szkoly_env, <span class="at">main =</span> <span class="st">"Funkcja G z obwiednią jednoczesną dla szkół (alfa = 0,05)"</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="08_punkty_odleglosc_files/figure-html/p2-krok3a-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Pas obwiedni jednoczesnej ma stałą szerokość, więc <code>unique()</code> zwraca dla każdego zbioru jedną wartość. Pozwala to porównać oba zbiory jedną liczbą.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(<span class="fu">round</span>(szkoly_env<span class="sc">$</span>hi <span class="sc">-</span> szkoly_env<span class="sc">$</span>lo, <span class="dv">3</span>))</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.546</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(<span class="fu">round</span>(p2019_env<span class="sc">$</span>hi <span class="sc">-</span> p2019_env<span class="sc">$</span>lo, <span class="dv">3</span>))</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.09</code></pre>
+</div>
+</div>
+</section>
+<section id="sprawdź-swoją-interpretację" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="sprawdź-swoją-interpretację">Sprawdź swoją interpretację</h3>
+<blockquote class="blockquote">
+<p><strong>Pytanie 1.</strong> Mediana odległości do najbliższej szkoły wynosi 644 m, a minimum 69 m. Na wykresie funkcji G krzywa empiryczna jest równa zeru aż do około 70 m. Dlaczego?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Ponieważ funkcja G to dystrybuanta odległości do najbliższego sąsiada, a <strong>żadna szkoła nie ma innej szkoły bliżej niż 69 m</strong>. Dla odległości mniejszych od tego minimum udział szkół mających sąsiada w takim zasięgu wynosi dokładnie zero, więc krzywa leży na osi.</p>
+<p>Nie jest to artefakt obliczeń, lecz realna cecha danych: szkoły podstawowe nie stoją obok siebie, bo każda obsługuje swój obwód. W zbiorze przestępstw minimum wynosiło 3 m i krzywa G rośnie od samego początku.</p>
+</div>
 </div>
 </div>
 <blockquote class="blockquote">
-<p>Jaki jest rozkład szkół w Poznaniu? Zintepretuj powyższe wyniki.</p>
+<p><strong>Pytanie 2.</strong> Wskaźnik Clarka-Evansa dla szkół wynosi 0.65, a dla przestępstw 0.562. Oba są mniejsze od 1. Czy to znaczy, że oba zjawiska są skupione w tym samym sensie?</p>
 </blockquote>
-
-
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Oba wskaźniki są mniejsze od 1, więc w obu przypadkach punkty leżą bliżej siebie, niż wynikałoby z rozmieszczenia losowego — i w obu test to potwierdza. Ale <strong>skala i siła zjawiska są różne</strong>.</p>
+<p>Dla przestępstw wskaźnik wynosi 0.562, a typowa odległość do najbliższego sąsiada 79 m. Dla szkół wskaźnik jest <strong>bliższy jedności</strong> (0.65), a typowa odległość 644 m — czyli ponad 8 razy większa.</p>
+<p>Przestępstwa tworzą ciasne ogniska na przestrzeni kilkudziesięciu metrów. Szkoły są rozłożone po całym mieście i ich „skupienie” polega na tym, że jest ich więcej w gęściej zaludnionych częściach miasta — czyli na nierównomierności w skali kilometrów, nie metrów. Sam wskaźnik Clarka-Evansa tej różnicy nie pokazuje; pokazuje ją dopiero funkcja G (pytanie 3) oraz typowa odległość.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>Pytanie 3.</strong> Pas obwiedni dla szkół ma szerokość 0.546, a dla przestępstw 0.09 — czyli jest ponad sześciokrotnie szerszy. Skąd ta różnica i co z niej wynika?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Szerokość pasa to podwojona wartość <code>dcrit</code>, czyli <code>nrank</code>-te największe maksymalne odchylenie krzywych symulowanych od teoretycznej. Zależy więc wyłącznie od tego, <strong>jak bardzo krzywe symulowane różnią się między sobą</strong> — a przy 51 punktach różnią się znacznie bardziej niż przy 1661. Każda z 51 szkół to około 2% zbioru, więc przesunięcie kilku punktów wyraźnie zmienia całą krzywą; przy ponad tysiącu punktów taki wpływ jest znikomy.</p>
+<p>Konsekwencja jest praktyczna: <strong>przy małej liczbie punktów trzeba znacznie większego odstępstwa, żeby je wykryć</strong>. Krzywa dla szkół wychodzi poza pas, więc hipotezę o losowości odrzucamy również tutaj — ale wychodzi niewiele i na krótkim odcinku, podczas gdy dla przestępstw przekracza pas wielokrotnie. Ten sam wniosek („rozmieszczenie nie jest losowe”) opiera się więc na dowodzie o bardzo różnej sile.</p>
+<p>Jest to ta sama zależność, co przy elipsie odchylenia standardowego w <a href="06_punkty_centrograficzne.html" class="quarto-xref"><span>Rozdział 3</span></a> i przy wykresie pudełkowym w <a href="04_eksploracja.html" class="quarto-xref"><span>Rozdział 2</span></a>: wynik wyliczony z kilkudziesięciu obserwacji trzeba czytać razem z ich liczbą.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>Pytanie 4.</strong> Dane zawierają 51 szkół, powstałych ze scalenia 84 budynków. Gdyby analizę wykonać na centroidach budynków, mediana odległości do najbliższego sąsiada wyniosłaby 54 m, a wskaźnik Clarka-Evansa 0,39. Dlaczego ta różnica jest tak duża i dlaczego nie ujawniła się w <a href="06_punkty_centrograficzne.html" class="quarto-xref"><span>Rozdział 3</span></a>?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Bo metody oparte na odległości mierzą <strong>odległości między punktami</strong>, a odległości między budynkami tej samej szkoły to kilkadziesiąt metrów. Przy 84 centroidach budynków 62% punktów miałoby sąsiada bliżej niż 100 m — i to te odległości zdominowałyby wynik. Mediana 644 m spadłaby do 54 m, a wskaźnik z 0.65 do 0,39, czyli pozornie w stronę silnego skupienia.</p>
+<p>W <a href="06_punkty_centrograficzne.html" class="quarto-xref"><span>Rozdział 3</span></a> ta sama zmiana przesunęła odległość standardową o 0,4% (4206 wobec 4188 m). Statystyki centrograficzne opisują bowiem <strong>rozproszenie całego zbioru wokół jego środka</strong> — dodanie kilku punktów obok już istniejących prawie go nie zmienia.</p>
+<p>Ogólna zasada: <strong>im metoda bardziej opiera się na odległościach lokalnych, tym bardziej jest czuła na definicję punktu</strong>. Statystyki centrograficzne są odporne, metody intensywnościowe średnio czułe, metody odległościowe najczulsze. Przed analizą odległościową zawsze sprawdzamy, czy jeden obiekt rzeczywistości odpowiada jednemu punktowi w danych — najprościej przez <code>summary(nndist(x))</code>: mediana znacznie mniejsza od średniej jest sygnałem ostrzegawczym.</p>
+</div>
+</div>
+</div>
 </section>
+</section>
+<section id="pytania-kontrolne" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="pytania-kontrolne"><span class="header-section-number">5.5</span> Pytania kontrolne</h2>
+<blockquote class="blockquote">
+<p><strong>1.</strong> Czym różnią się funkcje <code>pairdist()</code>, <code>nndist()</code> i <code>distmap()</code>?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>pairdist()</code> zwraca macierz odległości między <strong>wszystkimi parami</strong> punktów — dla <em>n</em> punktów jest to <em>n</em>² wartości, więc przy dużych zbiorach staje się niewygodna.</p>
+<p><code>nndist()</code> zwraca wektor odległości od każdego punktu do jego <strong>najbliższego sąsiada</strong> — to na nim opierają się statystyki najbliższego sąsiada i funkcja G.</p>
+<p><code>distmap()</code> zwraca <strong>raster</strong>, w którym każda komórka ma odległość do najbliższego punktu zbioru. Nie służy do statystyk, ale pokazuje, gdzie w obszarze punktów nie ma.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>2.</strong> Czym jest efekt brzegowy i w którą stronę obciąża wskaźnik Clarka-Evansa?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Punkt leżący blisko granicy obszaru badań może mieć swojego prawdziwego najbliższego sąsiada <strong>poza</strong> tym obszarem. Sąsiad ten nie znajduje się w zbiorze danych, więc zapisana odległość jest <strong>zawyżona</strong>.</p>
+<p>Wskaźnik Clarka-Evansa to iloraz obserwowanej średniej odległości do oczekiwanej, więc zawyżenie licznika zawyża wskaźnik — obciążenie idzie <strong>w górę</strong>, czyli w stronę wniosku „rozmieszczenie regularne”. Dla przestępstw w Poznaniu wskaźnik bez korekty wynosi 0.619 wobec 0.562 z korektą.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>3.</strong> Dlaczego <code>clarkevans(x)[[1]]</code> jest złym sposobem odczytania wskaźnika?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Ponieważ <code>clarkevans()</code> wywołana bez argumentu <code>correction</code> zwraca <strong>wektor wszystkich dostępnych korekt</strong>, a <code>[[1]]</code> wybiera z niego pierwszy element, czyli wariant <strong>bez korekty</strong>. Jest to wybór przypadkowy — wynika z kolejności w wektorze, nie z decyzji metodycznej. Dodatkowo <code>clarkevans.test()</code> domyślnie używa korekty <code>"cdf"</code>, więc wskaźnik i test podawałyby <strong>różne liczby</strong> dla tych samych danych.</p>
+<p>Poprawnie podaje się korektę jawnie, w obu funkcjach: <code>correction = "cdf"</code>.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>4.</strong> Test Clarka-Evansa z <code>alternative = "regular"</code> dał <em>p</em> = 1. Czy to błąd?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Nie. Hipoteza alternatywna brzmi wtedy „rozmieszczenie jest regularne” (<em>R</em> &gt; 1), a dane wskazują dokładnie przeciwnie — wskaźnik wynosi 0.562, czyli znacznie poniżej 1. Wartość <em>p</em> = 1 oznacza, że nie ma <strong>żadnych</strong> podstaw do przyjęcia tej hipotezy alternatywnej.</p>
+<p>Lekcja ogólna: hipotezę alternatywną wybiera się <strong>przed</strong> analizą, na podstawie pytania badawczego. Wykonanie testu dla wszystkich trzech wariantów i wybranie tego z najmniejszą wartością <em>p</em> nie jest testowaniem hipotezy.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>5.</strong> Co oznacza położenie krzywej empirycznej funkcji G powyżej krzywej teoretycznej?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Że na danej odległości <strong>więcej punktów ma już swojego najbliższego sąsiada</strong>, niż wynikałoby z rozmieszczenia losowego — czyli punkty leżą bliżej siebie. Jest to oznaka skupienia. Położenie poniżej krzywej teoretycznej oznaczałoby, że punkty leżą dalej od siebie, czyli rozmieszczenie regularne.</p>
+<p>Zastrzeżenie: porównanie jest informacyjne <strong>na odległościach małych względem rozmiarów obszaru</strong>. Na dużych odległościach obie krzywe zbliżają się do 1, bo prawie każdy punkt ma już sąsiada bliżej, i ich wzajemne położenie przestaje coś znaczyć.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>6.</strong> Po co obwiednia, jeśli mamy już porównanie z krzywą teoretyczną?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Krzywa teoretyczna mówi, jaka byłaby funkcja G <strong>przeciętnie</strong> przy rozmieszczeniu losowym. Nie mówi natomiast, jak bardzo pojedyncza realizacja takiego rozmieszczenia może od tej przeciętnej odbiegać. Niewielkie odchylenie krzywej empirycznej może więc być zupełnie zwykłą zmiennością losowania.</p>
+<p>Obwiednia odpowiada na to pytanie: powstaje z symulacji rozmieszczenia losowego w tym samym obszarze i wyznacza pas, w którym krzywa powinna się mieścić, jeśli rozmieszczenie jest losowe. Dopiero wyjście poza pas jest przesłanką odstępstwa od losowości.</p>
+<p>Obwiednia <strong>nie mówi natomiast, przy jakich odległościach</strong> odstępstwo występuje — wniosek testu jest binarny i dotyczy całej krzywej.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>7.</strong> Czym różni się obwiednia punktowa od jednoczesnej i dlaczego używamy <code>global = TRUE</code>?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Obwiednia punktowa</strong> (wariant domyślny) bierze dla każdej wartości <em>r</em> osobno najmniejszą i największą wartość spośród symulacji. Zgodnie z dokumentacją funkcji <code>envelope()</code> wyznacza ona punkty krytyczne testu Monte Carlo, który konstruuje się <strong>przez wybór ustalonej wartości <em>r</em></strong> i odrzucenie hipotezy, jeśli obserwowana wartość leży poza obwiednią przy tej jednej wartości.</p>
+<p><strong>Obwiednia jednoczesna</strong> (<code>global = TRUE</code>) ma stałą szerokość, wyznaczoną z maksymalnych odchyleń krzywych symulowanych od teoretycznej. Pozwala odrzucić hipotezę, jeśli krzywa leży poza pasem <strong>przy którejkolwiek</strong> wartości <em>r</em> — a więc wolno ją czytać jako całość.</p>
+<p>Używamy jej dlatego, że naturalne wzrokowe czytanie wykresu („czy krzywa mieści się w pasie?“) jest poprawne tylko dla wariantu jednoczesnego. Zastosowanie tego czytania do obwiedni punktowej daje test, którego rzeczywisty poziom istotności jest wielokrotnie wyższy od nominalnego — dla danych z tego rozdziału 0,71 i 0,86 przy nominalnym 0,02.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>8.</strong> Czym różni się funkcja K Ripleya od funkcji G?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Definicją sąsiedztwa. Funkcja G patrzy wyłącznie na <strong>najbliższego</strong> sąsiada każdego punktu, więc opisuje strukturę na najmniejszych odległościach. Funkcja K zlicza <strong>wszystkie</strong> punkty w otoczeniu o promieniu <em>r</em>, więc uwzględnia także sąsiadów dalszych i opisuje strukturę na wielu skalach jednocześnie.</p>
+<p>Dla przestępstw w Poznaniu obie prowadzą do tego samego wniosku o skupieniu — opisują tę samą strukturę, tylko z innej strony. Rozbieżność między nimi byłaby informacją samą w sobie: oznaczałaby, że struktura na najmniejszych odległościach jest inna niż na większych.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="podsumowanie" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="podsumowanie"><span class="header-section-number">5.6</span> Podsumowanie</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Metoda</th>
+<th>Funkcja</th>
+<th>Co mówi o danych</th>
+<th>Warunek poprawnego odczytu</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>statystyki najbliższego sąsiada</td>
+<td><code>nndist()</code> + <code>summary()</code></td>
+<td>typowa odległość między punktami i rozkład tych odległości</td>
+<td>opis bez testu — istotność dają <code>clarkevans.test()</code> i obwiednia</td>
+</tr>
+<tr class="even">
+<td>wskaźnik Clarka-Evansa</td>
+<td><code>clarkevans(correction = "cdf")</code></td>
+<td>w którą stronę i jak silnie rozmieszczenie odbiega od losowego</td>
+<td>jedna liczba dla wszystkich skal; korektę podajemy jawnie</td>
+</tr>
+<tr class="odd">
+<td>test Clarka-Evansa</td>
+<td><code>clarkevans.test()</code></td>
+<td>czy odstępstwo od losowości jest istotne</td>
+<td>wniosek dotyczy całego obszaru; skalę pokazuje funkcja G</td>
+</tr>
+<tr class="even">
+<td>funkcja G</td>
+<td><code>Gest()</code></td>
+<td>jak rozmieszczenie odbiega od losowego <strong>na każdej odległości</strong></td>
+<td>czytana na odległościach małych względem obszaru; istotność daje obwiednia</td>
+</tr>
+<tr class="odd">
+<td>obwiednia jednoczesna</td>
+<td><code>envelope(global = TRUE)</code></td>
+<td>czy odstępstwo od losowości przekracza zmienność losowania; poziom istotności <code>nrank/(1 + nsim)</code></td>
+<td>wniosek dotyczy całej krzywej łącznie; wymaga <code>set.seed()</code></td>
+</tr>
+<tr class="even">
+<td>funkcja K Ripleya</td>
+<td><code>Kest()</code></td>
+<td>to samo co G, ale z uwzględnieniem dalszych sąsiadów</td>
+<td>czytana tak samo jak funkcja G</td>
+</tr>
+</tbody>
+</table>
+<p>Trzy zasady, do których wracamy w kolejnych rozdziałach:</p>
+<ol type="1">
+<li><strong>Korektę brzegową wybiera się świadomie.</strong> Bez korekty wskaźnik Clarka-Evansa jest obciążony w stronę „regularny”. Podajemy <code>correction</code> jawnie, nie bierzemy <code>[[1]]</code>.</li>
+<li><strong>Hipotezę alternatywną wybiera się przed analizą.</strong> Wykonanie testu dla wszystkich wariantów i wybranie najmniejszej wartości <em>p</em> nie jest testowaniem hipotezy.</li>
+<li><strong>Metody odległościowe są najczulsze na definicję punktu.</strong> Przed analizą sprawdzamy, czy jeden obiekt rzeczywistości odpowiada jednemu punktowi w danych. Mediana odległości znacznie mniejsza od średniej jest sygnałem ostrzegawczym.</li>
+<li><strong>Obwiednię czytamy tak, jak została zbudowana.</strong> Wariant domyślny (punktowy) jest testem przy jednej, z góry ustalonej odległości; całą krzywą wolno oceniać tylko przy <code>global = TRUE</code>.</li>
+</ol>
+</section>
+<section id="trzy-grupy-metod-analizy-rozkładu-punktów" class="level2" data-number="5.7">
+<h2 data-number="5.7" class="anchored" data-anchor-id="trzy-grupy-metod-analizy-rozkładu-punktów"><span class="header-section-number">5.7</span> Trzy grupy metod analizy rozkładu punktów</h2>
+<p>Metody z tego rozdziału odpowiadają na pytanie, <strong>czy</strong> i <strong>na jakiej odległości</strong> rozmieszczenie punktów odbiega od losowego. Pytanie <strong>gdzie</strong> należy do metod opartych na intensywności.</p>
+<p>Wskaźnik Clarka-Evansa jest jedną liczbą dla całego obszaru. Funkcja G i obwiednia opisują strukturę jako funkcję odległości, również dla całego obszaru łącznie. Położenie miejsc zagęszczonych wskazują metody z <a href="07_punkty_intensywnosc.html" class="quarto-xref"><span>Rozdział 4</span></a>: mapa gęstości jądra pokazuje ogniska, a test zliczania w kwadratach — które części obszaru odbiegają od wartości oczekiwanej.</p>
+<p>Trzy grupy metod uzupełniają się więc, a nie zastępują:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pytanie</th>
+<th>Grupa metod</th>
+<th>Rozdział</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Gdzie leży środek zbioru i jak szerokie jest rozproszenie?</td>
+<td>statystyki centrograficzne</td>
+<td><a href="06_punkty_centrograficzne.html" class="quarto-xref"><span>Rozdział 3</span></a></td>
+</tr>
+<tr class="even">
+<td>Gdzie punktów jest więcej, a gdzie mniej?</td>
+<td>metody oparte na intensywności</td>
+<td><a href="07_punkty_intensywnosc.html" class="quarto-xref"><span>Rozdział 4</span></a></td>
+</tr>
+<tr class="odd">
+<td>Czy i na jakiej odległości rozmieszczenie odbiega od losowego?</td>
+<td>metody oparte na odległości</td>
+<td>ten rozdział</td>
+</tr>
+</tbody>
+</table>
+<p>Pytanie <strong>dlaczego</strong> należy do osobnej grupy zagadnień: wyjaśnienie wymaga odniesienia rozkładu punktów do innych zmiennych, czym zajmuje się analiza danych obszarowych (<a href="11_obszarowe_autokorelacja.html" class="quarto-xref"><span>Rozdział 7</span></a>) oraz modelowanie przestrzenne.</p>
+</section>
+<section id="pełny-kod-analizy" class="level2" data-number="5.8">
+<h2 data-number="5.8" class="anchored" data-anchor-id="pełny-kod-analizy"><span class="header-section-number">5.8</span> Pełny kod analizy</h2>
+<p>Poniżej zebrany jest cały kod obu przykładów, w kolejności wykonania — do skopiowania do własnego skryptu zamiast przeklejania pojedynczych fragmentów. Nie ma w nim kodu objaśniającego: to dokładnie ta ścieżka, która prowadzi od danych wejściowych do wyniku. Przykład 2 korzysta z obiektów utworzonych w Przykładzie 1, więc kod uruchamia się w całości, od początku.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spatstat)</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>p2019 <span class="ot">=</span> <span class="fu">read_sf</span>(<span class="st">"data/przestepstwa_2019.gpkg"</span>)</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>granica <span class="ot">=</span> <span class="fu">read_sf</span>(<span class="st">"data/out_poznan_szkoly.gpkg"</span>, <span class="at">layer =</span> <span class="st">"granica"</span>)</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>p2019_ppp <span class="ot">=</span> <span class="fu">as.ppp</span>(<span class="fu">st_geometry</span>(p2019), <span class="at">W =</span> <span class="fu">as.owin</span>(granica))</span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>p2019_ppp</span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>p2019_pair <span class="ot">=</span> <span class="fu">pairdist</span>(p2019_ppp)</span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>p2019_pair[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span>(p2019_pair[<span class="dv">1</span>, ])[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>p2019_nn <span class="ot">=</span> <span class="fu">nndist</span>(p2019_ppp)</span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>p2019_nn[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span>
+<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">distmap</span>(p2019_ppp), <span class="at">main =</span> <span class="st">"Odległość do najbliższego przestępstwa"</span>)</span>
+<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(p2019_nn)</span>
+<span id="cb46-16"><a href="#cb46-16" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">quantile</span>(p2019_nn, <span class="at">probs =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.1</span>)))</span>
+<span id="cb46-17"><a href="#cb46-17" aria-hidden="true" tabindex="-1"></a>p2019_nn_df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">odleglosc =</span> p2019_nn)</span>
+<span id="cb46-18"><a href="#cb46-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-19"><a href="#cb46-19" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(p2019_nn_df, <span class="fu">aes</span>(<span class="at">x =</span> odleglosc)) <span class="sc">+</span></span>
+<span id="cb46-20"><a href="#cb46-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">100</span>) <span class="sc">+</span></span>
+<span id="cb46-21"><a href="#cb46-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Odległość do najbliższego sąsiada [m]"</span>, <span class="at">y =</span> <span class="st">"Liczba punktów"</span>) <span class="sc">+</span></span>
+<span id="cb46-22"><a href="#cb46-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb46-23"><a href="#cb46-23" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(p2019_nn_df, <span class="fu">aes</span>(odleglosc)) <span class="sc">+</span></span>
+<span id="cb46-24"><a href="#cb46-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_ecdf</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> <span class="dv">0</span>, <span class="at">ymax =</span> <span class="fu">after_stat</span>(y)), <span class="at">geom =</span> <span class="st">"ribbon"</span>, <span class="at">fill =</span> <span class="st">"grey95"</span>) <span class="sc">+</span></span>
+<span id="cb46-25"><a href="#cb46-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_ecdf</span>() <span class="sc">+</span></span>
+<span id="cb46-26"><a href="#cb46-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Odległość do najbliższego sąsiada [m]"</span>,</span>
+<span id="cb46-27"><a href="#cb46-27" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Udział punktów w zbiorze"</span>) <span class="sc">+</span></span>
+<span id="cb46-28"><a href="#cb46-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
+<span id="cb46-29"><a href="#cb46-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb46-30"><a href="#cb46-30" aria-hidden="true" tabindex="-1"></a><span class="fu">clarkevans</span>(p2019_ppp, <span class="at">correction =</span> <span class="st">"none"</span>)</span>
+<span id="cb46-31"><a href="#cb46-31" aria-hidden="true" tabindex="-1"></a><span class="fu">clarkevans</span>(p2019_ppp, <span class="at">correction =</span> <span class="st">"cdf"</span>)</span>
+<span id="cb46-32"><a href="#cb46-32" aria-hidden="true" tabindex="-1"></a><span class="fu">clarkevans.test</span>(p2019_ppp, <span class="at">correction =</span> <span class="st">"cdf"</span>, <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span>
+<span id="cb46-33"><a href="#cb46-33" aria-hidden="true" tabindex="-1"></a><span class="fu">clarkevans.test</span>(p2019_ppp, <span class="at">correction =</span> <span class="st">"cdf"</span>, <span class="at">alternative =</span> <span class="st">"clustered"</span>)</span>
+<span id="cb46-34"><a href="#cb46-34" aria-hidden="true" tabindex="-1"></a><span class="fu">clarkevans.test</span>(p2019_ppp, <span class="at">correction =</span> <span class="st">"cdf"</span>, <span class="at">alternative =</span> <span class="st">"regular"</span>)</span>
+<span id="cb46-35"><a href="#cb46-35" aria-hidden="true" tabindex="-1"></a>p2019_g <span class="ot">=</span> <span class="fu">Gest</span>(p2019_ppp, <span class="at">correction =</span> <span class="st">"none"</span>)</span>
+<span id="cb46-36"><a href="#cb46-36" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(p2019_g, <span class="at">main =</span> <span class="st">"Funkcja G dla przestępstw"</span>)</span>
+<span id="cb46-37"><a href="#cb46-37" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2026</span>)</span>
+<span id="cb46-38"><a href="#cb46-38" aria-hidden="true" tabindex="-1"></a>p2019_env <span class="ot">=</span> <span class="fu">envelope</span>(p2019_ppp, Gest, <span class="at">nsim =</span> <span class="dv">99</span>, <span class="at">nrank =</span> <span class="dv">5</span>, <span class="at">global =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb46-39"><a href="#cb46-39" aria-hidden="true" tabindex="-1"></a>                     <span class="at">funargs =</span> <span class="fu">list</span>(<span class="at">correction =</span> <span class="st">"none"</span>))</span>
+<span id="cb46-40"><a href="#cb46-40" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(p2019_env, <span class="at">main =</span> <span class="st">"Funkcja G z obwiednią jednoczesną (alfa = 0,05)"</span>)</span>
+<span id="cb46-41"><a href="#cb46-41" aria-hidden="true" tabindex="-1"></a>p2019_k <span class="ot">=</span> <span class="fu">Kest</span>(p2019_ppp, <span class="at">correction =</span> <span class="st">"none"</span>)</span>
+<span id="cb46-42"><a href="#cb46-42" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(p2019_k, <span class="at">main =</span> <span class="st">"Funkcja K Ripleya dla przestępstw"</span>)</span>
+<span id="cb46-43"><a href="#cb46-43" aria-hidden="true" tabindex="-1"></a>szkoly <span class="ot">=</span> <span class="fu">read_sf</span>(<span class="st">"data/out_poznan_szkoly.gpkg"</span>, <span class="at">layer =</span> <span class="st">"szkoly"</span>)</span>
+<span id="cb46-44"><a href="#cb46-44" aria-hidden="true" tabindex="-1"></a>szkoly_ppp <span class="ot">=</span> <span class="fu">as.ppp</span>(<span class="fu">st_geometry</span>(szkoly), <span class="at">W =</span> <span class="fu">as.owin</span>(granica))</span>
+<span id="cb46-45"><a href="#cb46-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-46"><a href="#cb46-46" aria-hidden="true" tabindex="-1"></a><span class="fu">npoints</span>(szkoly_ppp)</span>
+<span id="cb46-47"><a href="#cb46-47" aria-hidden="true" tabindex="-1"></a>szkoly_nn <span class="ot">=</span> <span class="fu">nndist</span>(szkoly_ppp)</span>
+<span id="cb46-48"><a href="#cb46-48" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(szkoly_nn)</span>
+<span id="cb46-49"><a href="#cb46-49" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">quantile</span>(szkoly_nn, <span class="at">probs =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.1</span>)))</span>
+<span id="cb46-50"><a href="#cb46-50" aria-hidden="true" tabindex="-1"></a>szkoly_nn_df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">odleglosc =</span> szkoly_nn)</span>
+<span id="cb46-51"><a href="#cb46-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-52"><a href="#cb46-52" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(szkoly_nn_df, <span class="fu">aes</span>(odleglosc)) <span class="sc">+</span></span>
+<span id="cb46-53"><a href="#cb46-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_ecdf</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> <span class="dv">0</span>, <span class="at">ymax =</span> <span class="fu">after_stat</span>(y)), <span class="at">geom =</span> <span class="st">"ribbon"</span>, <span class="at">fill =</span> <span class="st">"grey95"</span>) <span class="sc">+</span></span>
+<span id="cb46-54"><a href="#cb46-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_ecdf</span>() <span class="sc">+</span></span>
+<span id="cb46-55"><a href="#cb46-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Odległość do najbliższej szkoły [m]"</span>, <span class="at">y =</span> <span class="st">"Udział szkół"</span>) <span class="sc">+</span></span>
+<span id="cb46-56"><a href="#cb46-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
+<span id="cb46-57"><a href="#cb46-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb46-58"><a href="#cb46-58" aria-hidden="true" tabindex="-1"></a><span class="fu">clarkevans</span>(szkoly_ppp, <span class="at">correction =</span> <span class="st">"cdf"</span>)</span>
+<span id="cb46-59"><a href="#cb46-59" aria-hidden="true" tabindex="-1"></a><span class="fu">clarkevans.test</span>(szkoly_ppp, <span class="at">correction =</span> <span class="st">"cdf"</span>, <span class="at">alternative =</span> <span class="st">"clustered"</span>)</span>
+<span id="cb46-60"><a href="#cb46-60" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2026</span>)</span>
+<span id="cb46-61"><a href="#cb46-61" aria-hidden="true" tabindex="-1"></a>szkoly_env <span class="ot">=</span> <span class="fu">envelope</span>(szkoly_ppp, Gest, <span class="at">nsim =</span> <span class="dv">99</span>, <span class="at">nrank =</span> <span class="dv">5</span>, <span class="at">global =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb46-62"><a href="#cb46-62" aria-hidden="true" tabindex="-1"></a>                      <span class="at">funargs =</span> <span class="fu">list</span>(<span class="at">correction =</span> <span class="st">"none"</span>))</span>
+<span id="cb46-63"><a href="#cb46-63" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(szkoly_env, <span class="at">main =</span> <span class="st">"Funkcja G z obwiednią jednoczesną dla szkół (alfa = 0,05)"</span>)</span>
+<span id="cb46-64"><a href="#cb46-64" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(<span class="fu">round</span>(szkoly_env<span class="sc">$</span>hi <span class="sc">-</span> szkoly_env<span class="sc">$</span>lo, <span class="dv">3</span>))</span>
+<span id="cb46-65"><a href="#cb46-65" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(<span class="fu">round</span>(p2019_env<span class="sc">$</span>hi <span class="sc">-</span> p2019_env<span class="sc">$</span>lo, <span class="dv">3</span>))</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
 </section>
 
 </main> <!-- /main -->
@@ -887,12 +1394,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // flash "checked"
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
+    button.setAttribute("title", "Skopiowano!");
     let tooltip;
     if (window.bootstrap) {
       button.setAttribute("data-bs-toggle", "tooltip");
       button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
+      button.setAttribute("data-bs-title", "Skopiowano!");
       tooltip = new bootstrap.Tooltip(button, 
         { trigger: "manual", 
           customClass: "code-copy-button-tooltip",
@@ -1263,13 +1770,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./07_punkty_centrograficzne.html" class="pagination-link" aria-label="Statystyki centrograficzne">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Statystyki centrograficzne</span></span>
+      <a href="./07_punkty_intensywnosc.html" class="pagination-link" aria-label="Metody oparte na analizie intensywności">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Metody oparte na analizie intensywności</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./09_punkty_intensywnosc.html" class="pagination-link" aria-label="Metody oparte na analizie intensywności">
-        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Metody oparte na analizie intensywności</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./09_obszarowe_teoria.html" class="pagination-link" aria-label="DANE OBSZAROWE">
+        <span class="nav-page-text">DANE OBSZAROWE</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

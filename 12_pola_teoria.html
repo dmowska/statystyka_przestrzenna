@@ -1,0 +1,2012 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pl" xml:lang="pl"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>DANE POWIERZCHNIOWE CIĄGŁE PRZESTRZENNIE – Statystyka przestrzenna</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./13_pola_interpolacja.html" rel="next">
+<link href="./11_obszarowe_autokorelacja.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-c852b7e71cc1c09f55f367b2512aabbd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Brak wyników",
+    "search-matching-documents-text": "dopasowane dokumenty",
+    "search-copy-link-title": "Kopiuj link do wyszukiwania",
+    "search-hide-matches-text": "Ukryj dodatkowe dopasowania",
+    "search-more-match-text": "więcej dopasowań w tym dokumencie",
+    "search-more-matches-text": "więcej dopasowań w tym dokumencie",
+    "search-clear-button-title": "Wyczyść",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Anuluj",
+    "search-submit-button-title": "Zatwierdź",
+    "search-label": "Szukaj"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Przełącz pasek boczny" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./12_pola_teoria.html">DANE POWIERZCHNIOWE CIĄGŁE PRZESTRZENNIE</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Przełącz pasek boczny" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Szukaj" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Statystyka przestrzenna</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Szukaj"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">O skrypcie</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./01_wstep.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">WSTĘP</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_dane_przestrzenne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Dane przestrzenne w R</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./03_eksploracja_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">EKSPLORACYJNA ANALIZA DANYCH</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_eksploracja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Eksploracyjna analiza danych</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./05_punkty_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE PUNKTOWE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_punkty_centrograficzne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Statystyki centrograficzne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_punkty_intensywnosc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Metody oparte na analizie intensywności</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_punkty_odleglosc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Metody oparte na odległości</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./09_obszarowe_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE OBSZAROWE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_obszarowe_sasiedztwo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Określanie sąsiedztwa danych obszarowych</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_obszarowe_autokorelacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Miary autokorelacji danych obszarowych</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./12_pola_teoria.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">DANE POWIERZCHNIOWE CIĄGŁE PRZESTRZENNIE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13_pola_interpolacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Metody interpolacji</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14_pola_semiwariogram.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Analiza i modelowanie struktury przestrzennej</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15_pola_estymacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Geostatystyczne metody estymacji</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_pola_ocena.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Ocena jakości estymacji</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">ZADANIA I PROJEKTY</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_zadania_samodzielne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Zadania samodzielne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18_projekt1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Projekt 1: przestępczość a zmienne społeczno-ekonomiczne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19_projekt2_geostatystyka.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Projekt 2: Geostatystyka</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Załączniki</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./A_pakiety.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Pakiety</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./B_funkcje.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Funkcje</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./C_operacje.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Operacje na danych przestrzennych</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./D_slownik.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Słownik pojęć</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bibliografia</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Spis treści</h2>
+   
+  <ul>
+  <li><a href="#wprowadzenie" id="toc-wprowadzenie" class="nav-link active" data-scroll-target="#wprowadzenie">Wprowadzenie</a></li>
+  <li><a href="#pojęcia-podstawowe" id="toc-pojęcia-podstawowe" class="nav-link" data-scroll-target="#pojęcia-podstawowe">Pojęcia podstawowe</a>
+  <ul class="collapse">
+  <li><a href="#interpolacja-przestrzenna" id="toc-interpolacja-przestrzenna" class="nav-link" data-scroll-target="#interpolacja-przestrzenna">Interpolacja przestrzenna</a></li>
+  <li><a href="#powierzchnia-statystyczna-i-siatka-interpolacyjna" id="toc-powierzchnia-statystyczna-i-siatka-interpolacyjna" class="nav-link" data-scroll-target="#powierzchnia-statystyczna-i-siatka-interpolacyjna">Powierzchnia statystyczna i siatka interpolacyjna</a></li>
+  <li><a href="#sąsiedztwo-szukania" id="toc-sąsiedztwo-szukania" class="nav-link" data-scroll-target="#sąsiedztwo-szukania">Sąsiedztwo szukania</a></li>
+  <li><a href="#oznaczenia" id="toc-oznaczenia" class="nav-link" data-scroll-target="#oznaczenia">Oznaczenia</a></li>
+  </ul></li>
+  <li><a href="#klasyfikacja-metod-interpolacji" id="toc-klasyfikacja-metod-interpolacji" class="nav-link" data-scroll-target="#klasyfikacja-metod-interpolacji">Klasyfikacja metod interpolacji</a></li>
+  <li><a href="#metody-deterministyczne" id="toc-metody-deterministyczne" class="nav-link" data-scroll-target="#metody-deterministyczne">Metody deterministyczne</a>
+  <ul class="collapse">
+  <li><a href="#diagramy-woronoja" id="toc-diagramy-woronoja" class="nav-link" data-scroll-target="#diagramy-woronoja">Diagramy Woronoja</a></li>
+  <li><a href="#metoda-średniej-ważonej-odwrotnością-odległości-idw" id="toc-metoda-średniej-ważonej-odwrotnością-odległości-idw" class="nav-link" data-scroll-target="#metoda-średniej-ważonej-odwrotnością-odległości-idw">Metoda średniej ważonej odwrotnością odległości (IDW)</a></li>
+  <li><a href="#funkcje-wielomianowe" id="toc-funkcje-wielomianowe" class="nav-link" data-scroll-target="#funkcje-wielomianowe">Funkcje wielomianowe</a></li>
+  <li><a href="#funkcje-sklejane" id="toc-funkcje-sklejane" class="nav-link" data-scroll-target="#funkcje-sklejane">Funkcje sklejane</a></li>
+  </ul></li>
+  <li><a href="#geostatystyka" id="toc-geostatystyka" class="nav-link" data-scroll-target="#geostatystyka">Geostatystyka</a>
+  <ul class="collapse">
+  <li><a href="#cztery-funkcje-geostatystyki" id="toc-cztery-funkcje-geostatystyki" class="nav-link" data-scroll-target="#cztery-funkcje-geostatystyki">Cztery funkcje geostatystyki</a></li>
+  <li><a href="#ścieżka-postępowania" id="toc-ścieżka-postępowania" class="nav-link" data-scroll-target="#ścieżka-postępowania">Ścieżka postępowania</a></li>
+  <li><a href="#założenia-geostatystyki" id="toc-założenia-geostatystyki" class="nav-link" data-scroll-target="#założenia-geostatystyki">Założenia geostatystyki</a></li>
+  <li><a href="#założenia-dotyczące-danych" id="toc-założenia-dotyczące-danych" class="nav-link" data-scroll-target="#założenia-dotyczące-danych">Założenia dotyczące danych</a></li>
+  </ul></li>
+  <li><a href="#analiza-struktury-przestrzennej" id="toc-analiza-struktury-przestrzennej" class="nav-link" data-scroll-target="#analiza-struktury-przestrzennej">Analiza struktury przestrzennej</a>
+  <ul class="collapse">
+  <li><a href="#wykres-rozrzutu-z-przesunięciem" id="toc-wykres-rozrzutu-z-przesunięciem" class="nav-link" data-scroll-target="#wykres-rozrzutu-z-przesunięciem">Wykres rozrzutu z przesunięciem</a></li>
+  <li><a href="#semiwariancja" id="toc-semiwariancja" class="nav-link" data-scroll-target="#semiwariancja">Semiwariancja</a></li>
+  <li><a href="#chmura-semiwariogramu" id="toc-chmura-semiwariogramu" class="nav-link" data-scroll-target="#chmura-semiwariogramu">Chmura semiwariogramu</a></li>
+  <li><a href="#semiwariogram-empiryczny" id="toc-semiwariogram-empiryczny" class="nav-link" data-scroll-target="#semiwariogram-empiryczny">Semiwariogram empiryczny</a></li>
+  </ul></li>
+  <li><a href="#modelowanie-struktury-przestrzennej" id="toc-modelowanie-struktury-przestrzennej" class="nav-link" data-scroll-target="#modelowanie-struktury-przestrzennej">Modelowanie struktury przestrzennej</a>
+  <ul class="collapse">
+  <li><a href="#dlaczego-semiwariogram-empiryczny-nie-wystarcza" id="toc-dlaczego-semiwariogram-empiryczny-nie-wystarcza" class="nav-link" data-scroll-target="#dlaczego-semiwariogram-empiryczny-nie-wystarcza">Dlaczego semiwariogram empiryczny nie wystarcza</a></li>
+  <li><a href="#trzy-elementy-modelu" id="toc-trzy-elementy-modelu" class="nav-link" data-scroll-target="#trzy-elementy-modelu">Trzy elementy modelu</a></li>
+  <li><a href="#dlaczego-nie-używamy-dowolnych-funkcji" id="toc-dlaczego-nie-używamy-dowolnych-funkcji" class="nav-link" data-scroll-target="#dlaczego-nie-używamy-dowolnych-funkcji">Dlaczego nie używamy dowolnych funkcji</a></li>
+  <li><a href="#modele-podstawowe" id="toc-modele-podstawowe" class="nav-link" data-scroll-target="#modele-podstawowe">Modele podstawowe</a></li>
+  <li><a href="#model-złożony" id="toc-model-złożony" class="nav-link" data-scroll-target="#model-złożony">Model złożony</a></li>
+  <li><a href="#wybór-modelu-zmienia-wynik-estymacji" id="toc-wybór-modelu-zmienia-wynik-estymacji" class="nav-link" data-scroll-target="#wybór-modelu-zmienia-wynik-estymacji">Wybór modelu zmienia wynik estymacji</a></li>
+  </ul></li>
+  <li><a href="#estymacja-kriging" id="toc-estymacja-kriging" class="nav-link" data-scroll-target="#estymacja-kriging">Estymacja: kriging</a>
+  <ul class="collapse">
+  <li><a href="#skąd-biorą-się-wagi" id="toc-skąd-biorą-się-wagi" class="nav-link" data-scroll-target="#skąd-biorą-się-wagi">Skąd biorą się wagi</a></li>
+  <li><a href="#pięć-kroków-estymacji" id="toc-pięć-kroków-estymacji" class="nav-link" data-scroll-target="#pięć-kroków-estymacji">Pięć kroków estymacji</a></li>
+  <li><a href="#dwa-wyniki-krigingu" id="toc-dwa-wyniki-krigingu" class="nav-link" data-scroll-target="#dwa-wyniki-krigingu">Dwa wyniki krigingu</a></li>
+  <li><a href="#wariancja-krigingowa" id="toc-wariancja-krigingowa" class="nav-link" data-scroll-target="#wariancja-krigingowa">Wariancja krigingowa</a></li>
+  <li><a href="#warianty-krigingu" id="toc-warianty-krigingu" class="nav-link" data-scroll-target="#warianty-krigingu">Warianty krigingu</a></li>
+  <li><a href="#porównanie-wariantów" id="toc-porównanie-wariantów" class="nav-link" data-scroll-target="#porównanie-wariantów">Porównanie wariantów</a></li>
+  </ul></li>
+  <li><a href="#ocena-jakości-estymacji" id="toc-ocena-jakości-estymacji" class="nav-link" data-scroll-target="#ocena-jakości-estymacji">Ocena jakości estymacji</a>
+  <ul class="collapse">
+  <li><a href="#błąd-estymacji" id="toc-błąd-estymacji" class="nav-link" data-scroll-target="#błąd-estymacji">Błąd estymacji</a></li>
+  <li><a href="#statystyki-jakości-estymacji" id="toc-statystyki-jakości-estymacji" class="nav-link" data-scroll-target="#statystyki-jakości-estymacji">Statystyki jakości estymacji</a></li>
+  <li><a href="#walidacja-wyników-estymacji" id="toc-walidacja-wyników-estymacji" class="nav-link" data-scroll-target="#walidacja-wyników-estymacji">Walidacja wyników estymacji</a></li>
+  <li><a href="#zakres-wniosków" id="toc-zakres-wniosków" class="nav-link" data-scroll-target="#zakres-wniosków">Zakres wniosków</a></li>
+  </ul></li>
+  <li><a href="#powiązanie-z-ćwiczeniami" id="toc-powiązanie-z-ćwiczeniami" class="nav-link" data-scroll-target="#powiązanie-z-ćwiczeniami">Powiązanie z ćwiczeniami</a></li>
+  <li><a href="#literatura" id="toc-literatura" class="nav-link" data-scroll-target="#literatura">Literatura</a></li>
+  <li><a href="#pytania-kontrolne" id="toc-pytania-kontrolne" class="nav-link" data-scroll-target="#pytania-kontrolne">Pytania kontrolne</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">DANE POWIERZCHNIOWE CIĄGŁE PRZESTRZENNIE</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Czego się nauczysz
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Po tym rozdziale potrafisz:</strong></p>
+<ul>
+<li>wyjaśnić, na jakie pytanie odpowiada interpolacja przestrzenna i kiedy jej zastosowanie ma sens,</li>
+<li>wskazać metody deterministyczne i metody geostatystyczne oraz podać własność, która je odróżnia,</li>
+<li>wymienić cztery funkcje geostatystyki i dwa założenia, na których się opiera,</li>
+<li>odczytać wzór semiwariancji, semiwariogramu empirycznego oraz pięciu modeli podstawowych,</li>
+<li>opisać pięć kroków estymacji geostatystycznej i wskazać, czym różnią się trzy warianty krigingu.</li>
+</ul>
+<p><strong>Rozumiesz i umiesz zinterpretować:</strong></p>
+<ul>
+<li>wpływ wykładnika potęgowego na powierzchnię uzyskaną metodą średniej ważonej odwrotnością odległości,</li>
+<li>wykres rozrzutu z przesunięciem, chmurę semiwariogramu i semiwariogram empiryczny,</li>
+<li>trzy elementy modelu semiwariogramu: efekt samorodka, semiwariancję progową i zasięg,</li>
+<li>przebieg pięciu modeli podstawowych oraz to, jaką zmienność przestrzenną każdy z nich opisuje,</li>
+<li>wariancję krigingową i to, czym różni się od błędu estymacji,</li>
+<li>wartości optymalne średniego błędu estymacji, pierwiastka błędu średniokwadratowego i współczynnika determinacji,</li>
+<li>różnicę między walidacją podzbiorem a kroswalidacją.</li>
+</ul>
+<p><strong>Część praktyczna:</strong> <a href="13_pola_interpolacja.html" class="quarto-xref"><span>8&nbsp; Metody interpolacji</span></a>, <a href="14_pola_semiwariogram.html" class="quarto-xref"><span>9&nbsp; Analiza i modelowanie struktury przestrzennej</span></a>, <a href="15_pola_estymacja.html" class="quarto-xref"><span>10&nbsp; Geostatystyczne metody estymacji</span></a>, <a href="16_pola_ocena.html" class="quarto-xref"><span>11&nbsp; Ocena jakości estymacji</span></a>. <strong>Słownik pojęć:</strong> <a href="D_slownik.html" class="quarto-xref"><span>Załącznik D — Słownik pojęć</span></a>. <strong>Pakiety:</strong> <a href="A_pakiety.html" class="quarto-xref"><span>Załącznik A — Pakiety</span></a>. <strong>Funkcje:</strong> <a href="B_funkcje.html" class="quarto-xref"><span>Załącznik B — Funkcje</span></a>.</p>
+</div>
+</div>
+<section id="wprowadzenie" class="level2">
+<h2 class="anchored" data-anchor-id="wprowadzenie">Wprowadzenie</h2>
+<p><strong>Dane powierzchniowe ciągłe przestrzennie</strong> (ang. <em>surface data</em>, <em>spatially continuous data</em>), zwane też danymi geostatystycznymi, opisują zjawiska występujące w sposób ciągły w przestrzeni dwuwymiarowej: temperaturę powietrza, sumę opadów, wysokość terenu, zawartość metali ciężkich w glebie, stężenie zanieczyszczeń powietrza. Zjawisko ma wartość w <strong>każdej</strong> lokalizacji obszaru badań, ale pomiaru dokonuje się wyłącznie w wybranym, skończonym zbiorze lokalizacji — zbieranie danych jest kosztowne, a sieć pomiarowa zawsze pozostaje rzadsza niż obszar, który ma opisywać.</p>
+<p>Z tej różnicy bierze się pytanie badawcze całej części: <strong>jaka jest wartość badanej cechy w lokalizacjach, w których pomiaru nie wykonano?</strong> Odpowiedzi udziela <strong>interpolacja przestrzenna</strong>.</p>
+<p>Wykonanie mapy rozkładu temperatury dla całego kraju wymaga interpolacji, ponieważ stacje meteorologiczne nie pokrywają równomiernie całego obszaru. Na podstawie odczytów z pobliskich stacji szacuje się temperaturę w lokalizacjach, w których nie ma żadnego posterunku.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/interpolacja_stacje.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<figcaption>Mapa temperatury powietrza interpolowana na podstawie sieci posterunków meteorologicznych w Republice Południowej Afryki.</figcaption>
+</figure>
+</div>
+<p>Druga grupa pytań dotyczy nie samej wartości, lecz <strong>struktury zmienności przestrzennej</strong>: na jaką odległość wartości pozostają do siebie podobne, jak szybko to podobieństwo maleje i czy jest ono jednakowe we wszystkich kierunkach. Odpowiedzi na te pytania udziela <strong>geostatystyka</strong> — i to ona dostarcza również najlepszej odpowiedzi na pytanie pierwsze, bo szacuje wartość wraz z oceną własnej niepewności.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Przykład przewijający się przez rozdział
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Wszystkie ryciny oparte na danych pomiarowych przedstawiają <strong>temperaturę powietrza</strong> zmierzoną w <strong>247 lokalizacjach</strong> na obszarze o rozmiarach około 11,4 × 8,6 km; granica obszaru badań obejmuje 63,4 km². Dane są w układzie współrzędnych PL-1992, wyrażonym w metrach, więc wszystkie odległości podane niżej to metry, a temperatury — stopnie Celsjusza. Zmierzone wartości mieszczą się w przedziale od 7,88 do 24,94 °C, a wariancja próby wynosi 15,79.</p>
+<p>Ten sam zbiór danych jest używany w czterech rozdziałach praktycznych tej części.</p>
+</div>
+</div>
+</section>
+<section id="pojęcia-podstawowe" class="level2">
+<h2 class="anchored" data-anchor-id="pojęcia-podstawowe">Pojęcia podstawowe</h2>
+<section id="interpolacja-przestrzenna" class="level3">
+<h3 class="anchored" data-anchor-id="interpolacja-przestrzenna">Interpolacja przestrzenna</h3>
+<p><strong>Interpolacja przestrzenna</strong> (ang. <em>spatial interpolation</em>) to szacowanie wartości analizowanej cechy w punkcie, dla którego nie ma danych pomiarowych. Opiera się na zbiorze punktów pomiarowych oraz na <strong>zidentyfikowanych na ich podstawie regułach</strong> podobieństwa przestrzennego, malejącego wraz z odległością.</p>
+<p>Sformułowanie to jest mocniejsze, niż się na pierwszy rzut oka wydaje: reguły podobieństwa nie są przyjmowane z góry, lecz <strong>wyprowadzane z danych</strong>. Jak dokładnie — zależy od metody, i właśnie ta różnica dzieli metody interpolacji na dwie grupy.</p>
+<p>Interpolacja ma sens tylko wtedy, gdy interpolowana cecha charakteryzuje się <strong>ciągłością zmienności przestrzennej</strong>, rozumianą jako tendencja wzrostu zróżnicowania wartości wraz ze wzrostem odległości pomiędzy punktami. Chwilowa temperatura powietrza tę własność ma; wysokość chwilowego opadu — już nie, bo między punktem w strefie opadu a punktem poza nią różnica jest skokowa, niezależnie od dzielącej je odległości.</p>
+</section>
+<section id="powierzchnia-statystyczna-i-siatka-interpolacyjna" class="level3">
+<h3 class="anchored" data-anchor-id="powierzchnia-statystyczna-i-siatka-interpolacyjna">Powierzchnia statystyczna i siatka interpolacyjna</h3>
+<p>Wynikiem interpolacji jest zwykle <strong>mapa rastrowa</strong>, nazywana też <strong>powierzchnią statystyczną</strong> (ang. <em>statistical surface</em>). Wartości oblicza się najczęściej w <strong>centrach poszczególnych komórek rastra</strong>: każda komórka jest jednym punktem estymacji, a zbiór tych punktów nazywany jest <strong>siatką interpolacyjną</strong> (ang. <em>interpolation grid</em>).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/interpolacja_komorki.png" class="img-fluid figure-img"></p>
+<figcaption>Interpolacja oblicza wartość cechy w centrum każdej komórki rastra na podstawie wartości otaczających punktów pomiarowych.</figcaption>
+</figure>
+</div>
+<p>Rozdzielczość siatki jest decyzją analityka, a nie własnością danych: im mniejsza komórka, tym więcej punktów estymacji i dłuższe obliczenia, przy niezmienionej liczbie pomiarów.</p>
+</section>
+<section id="sąsiedztwo-szukania" class="level3">
+<h3 class="anchored" data-anchor-id="sąsiedztwo-szukania">Sąsiedztwo szukania</h3>
+<p>Oszacowania w danej lokalizacji zazwyczaj nie liczy się na całym zbiorze danych, lecz na ograniczonej liczbie najbliższych punktów pomiarowych. Ten ograniczony zbiór nazywany jest <strong>sąsiedztwem szukania</strong> (ang. <em>search neighborhood</em>) i definiuje go analityk, podając:</p>
+<ul>
+<li>maksymalną liczbę najbliższych obserwacji, które mogą zostać użyte w obliczeniach,</li>
+<li>maksymalny promień uwzględnianego sąsiedztwa, czyli rozmiar ruchomego okna,</li>
+<li>minimalną liczbę obserwacji wymaganych w zadanym promieniu — jeżeli jest ich mniej, obliczeń w tym oknie nie wykonuje się.</li>
+</ul>
+<p>Sąsiedztwo szukania nie jest własnością żadnej konkretnej metody. Dotyczy zarówno metod deterministycznych, jak i <strong>wszystkich</strong> wariantów krigingu.</p>
+</section>
+<section id="oznaczenia" class="level3">
+<h3 class="anchored" data-anchor-id="oznaczenia">Oznaczenia</h3>
+<p>Opis zmienności przestrzennej posługuje się czterema symbolami, które powracają we wszystkich wzorach tego rozdziału:</p>
+<ul>
+<li><span class="math inline">\(u_{\alpha}\)</span> — wektor współrzędnych, czyli lokalizacja punktu pomiarowego,</li>
+<li><span class="math inline">\(z(u_{\alpha})\)</span> — wartość badanej cechy <span class="math inline">\(z\)</span> w lokalizacji <span class="math inline">\(u_{\alpha}\)</span>, określana jako <strong>ogon</strong> (ang. <em>tail</em>),</li>
+<li><span class="math inline">\(h\)</span> — <strong>odstęp</strong> (ang. <em>lag</em>), czyli wektor przesunięcia pomiędzy dwiema lokalizacjami,</li>
+<li><span class="math inline">\(z(u_{\alpha}+h)\)</span> — wartość cechy w lokalizacji odległej od <span class="math inline">\(u_{\alpha}\)</span> o odstęp <span class="math inline">\(h\)</span>, określana jako <strong>głowa</strong> (ang. <em>head</em>).</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/geostat_glowa_ogon.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<figcaption>Para lokalizacji odległych o odstęp <span class="math inline">\(h\)</span>: ogon i głowa.</figcaption>
+</figure>
+</div>
+<p>Nazwy „głowa” i „ogon” wskazują zwrot wektora <span class="math inline">\(h\)</span> i mają znaczenie wtedy, gdy zmienność przestrzenna zależy nie tylko od odległości, ale także od kierunku.</p>
+</section>
+</section>
+<section id="klasyfikacja-metod-interpolacji" class="level2">
+<h2 class="anchored" data-anchor-id="klasyfikacja-metod-interpolacji">Klasyfikacja metod interpolacji</h2>
+<p>Metody interpolacji dzielą się na <strong>deterministyczne</strong> i <strong>(geo)statystyczne</strong>. Podział ten nie dotyczy wyglądu wyniku, lecz tego, skąd biorą się parametry metody i co metoda zwraca.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Metody deterministyczne</th>
+<th>Metody (geo)statystyczne</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Parametry są zazwyczaj ustalane w oparciu o określaną często arbitralnie funkcję odległości lub powierzchni</td>
+<td>Parametry określane są w oparciu o teorię prawdopodobieństwa</td>
+</tr>
+<tr class="even">
+<td>Brak szacunków oceny błędu modelu</td>
+<td>Wynik estymacji zawiera także oszacowanie błędu</td>
+</tr>
+<tr class="odd">
+<td>Prostota oraz krótki czas obliczeń</td>
+<td>Wymagają większych zasobów sprzętowych</td>
+</tr>
+<tr class="even">
+<td>Metoda diagramów Woronoja, metoda średniej ważonej odwrotnością odległości (IDW), funkcje wielomianowe, funkcje sklejane</td>
+<td>Kriging</td>
+</tr>
+</tbody>
+</table>
+<p>Dwa wiersze środkowe są rozstrzygające. Metoda deterministyczna zwraca <strong>jedną liczbę</strong> — oszacowanie — i nie mówi nic o tym, jak bardzo można mu ufać. Metoda geostatystyczna zwraca <strong>dwie</strong>: oszacowanie oraz miarę niepewności tego oszacowania. Za tę informację płaci się czasem obliczeń oraz koniecznością wcześniejszego opisania struktury przestrzennej danych.</p>
+</section>
+<section id="metody-deterministyczne" class="level2">
+<h2 class="anchored" data-anchor-id="metody-deterministyczne">Metody deterministyczne</h2>
+<section id="diagramy-woronoja" class="level3">
+<h3 class="anchored" data-anchor-id="diagramy-woronoja">Diagramy Woronoja</h3>
+<p><strong>Metoda diagramów Woronoja</strong> (ang. <em>Voronoi diagram</em>) polega na stworzeniu nieregularnych poligonów na podstawie analizowanych punktów, a następnie wpisaniu w każdy poligon wartości odpowiadającego mu punktu. Każdy poligon obejmuje obszar, dla którego dany punkt pomiarowy jest najbliższy.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/woronoj.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<figcaption>Poligony Woronoja wyznaczone na podstawie punktów pomiarowych; w każdym poligonie obowiązuje wartość jego punktu.</figcaption>
+</figure>
+</div>
+<p>W systemach informacji geograficznej metoda ta znana jest także jako <strong>metoda poligonów Thiessena</strong> — od nazwiska amerykańskiego meteorologa Alfreda Thiessena, który zastosował ją do wyznaczania średniej sumy opadów w zlewni na podstawie wyników z kilku posterunków pomiarowych.</p>
+<p>Wynik jest <strong>powierzchnią skokową</strong>: wartość pozostaje stała wewnątrz poligonu i zmienia się nagle na jego krawędzi. Zbiór wartości na mapie jest dokładnie zbiorem wartości zmierzonych — metoda nie liczy żadnych wartości pośrednich, lecz przepisuje pomiary.</p>
+<p>Jedno z wczesnych zastosowań diagramów Woronoja wdrożył John Snow, badając epidemię cholery w londyńskiej dzielnicy Soho w 1854 roku. Wyznaczył obszary, dla których poszczególne pompy wodne były najbliższym źródłem zaopatrzenia w wodę, i porównał je z rozmieszczeniem zgonów.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/woronoj_snow.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<figcaption>Poligony Woronoja wokół publicznych pomp wodnych a rozmieszczenie zgonów na cholerę, Soho 1854.</figcaption>
+</figure>
+</div>
+<p>Metoda jest stosowana także poza interpolacją: do przyspieszania obliczeń wyznaczających najbliższego sąsiada, w badaniach wzorców wzrostu koron drzew, do wyznaczania najbliższego lotniska zapasowego na trasie lotu nad oceanem oraz do wyznaczania zasięgu potencjalnego rynku sieci sklepów lub obwodów szkolnych.</p>
+</section>
+<section id="metoda-średniej-ważonej-odwrotnością-odległości-idw" class="level3">
+<h3 class="anchored" data-anchor-id="metoda-średniej-ważonej-odwrotnością-odległości-idw">Metoda średniej ważonej odwrotnością odległości (IDW)</h3>
+<p><strong>Metoda średniej ważonej odwrotnością odległości</strong> (ang. <em>inverse distance weighted</em>, IDW) jest jedną z najczęściej stosowanych metod interpolacji. Wartość analizowanej cechy w punkcie interpolacji wyznaczana jest jako <strong>średnia ważona</strong> z otaczających punktów pomiarowych, przy czym waga przypisana punktowi jest <strong>odwrotnie proporcjonalna do odległości</strong>. Im punkt bardziej oddalony, tym mniejszy jego wpływ na interpolowaną wartość.</p>
+<p>Wartość w nieznanej lokalizacji obliczana jest ze wzoru:</p>
+<p><span class="math display">\[z = \frac{\sum_{i=1}^{n} w_i z_i}{\sum_{i=1}^{n} w_i}\]</span></p>
+<p>a waga <span class="math inline">\(w_i\)</span> dla danego punktu — ze wzoru:</p>
+<p><span class="math display">\[w_i = \frac{1}{d_{i}^{\,p}}\]</span></p>
+<p>gdzie <span class="math inline">\(w_i\)</span> to waga przypisana punktowi w lokalizacji <span class="math inline">\(i\)</span>, <span class="math inline">\(z_i\)</span> — wartość cechy w lokalizacji <span class="math inline">\(i\)</span>, <span class="math inline">\(d_i\)</span> — odległość tego punktu od lokalizacji szacowanej, a <span class="math inline">\(p\)</span> — <strong>wykładnik potęgowy</strong>. Po podstawieniu wag do wzoru pierwszego otrzymujemy postać:</p>
+<p><span class="math display">\[z = \frac{\sum_{i=1}^{n} \dfrac{z_i}{d_{i}^{\,p}}}{\sum_{i=1}^{n} \dfrac{1}{d_{i}^{\,p}}}\]</span></p>
+<section id="przykład-rachunkowy" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="przykład-rachunkowy">Przykład rachunkowy</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/idw.png" class="img-fluid figure-img" style="width:40.0%"></p>
+<figcaption>Trzy punkty pomiarowe o wartościach 10, 15 i 20, oddalone od lokalizacji szacowanej odpowiednio o 100, 150 i 600 m.</figcaption>
+</figure>
+</div>
+<p>Dla wykładnika potęgowego równego 1:</p>
+<p><span class="math display">\[z = \frac{10/100 + 15/150 + 20/600}{1/100 + 1/150 + 1/600} =
+\frac{\frac{60 + 60 + 20}{600}}{\frac{6 + 4 + 1}{600}} =
+\frac{\frac{140}{600}}{\frac{11}{600}} = \frac{140}{11} = 12{,}7272\]</span></p>
+<p>Oszacowanie leży bliżej wartości 10 niż 20, mimo że 10 jest wartością skrajną — decyduje o tym odległość, nie wielkość pomiaru: punkt o wartości 10 leży sześciokrotnie bliżej niż punkt o wartości 20.</p>
+</section>
+<section id="wykładnik-potęgowy" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="wykładnik-potęgowy">Wykładnik potęgowy</h4>
+<p>Wartość wykładnika ustalana jest <strong>arbitralnie</strong>. Domyślnie stosuje się 2, co oznacza, że wagi maleją z kwadratem odległości, więc punkty dwa razy dalsze mają wpływ <strong>czterokrotnie mniejszy</strong>. Wartość 0 oznacza, że wszystkie punkty mają taką samą wagę, a oszacowanie staje się zwykłą średnią arytmetyczną.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/idw_power.png" class="img-fluid figure-img" style="width:60.0%"></p>
+<figcaption>Spadek wpływu punktu pomiarowego wraz z odległością dla różnych wartości wykładnika potęgowego.</figcaption>
+</figure>
+</div>
+<p><strong>Wyższa wartość wykładnika</strong> oznacza, że:</p>
+<ul>
+<li>największy wpływ mają najbliższe punkty pomiarowe,</li>
+<li>powierzchnia jest bardziej szczegółowa, czyli mniej wygładzona,</li>
+<li>wraz ze wzrostem wykładnika wartość nieznanego punktu zbliża się do wartości najbliższego punktu pomiarowego.</li>
+</ul>
+<p><strong>Niższa wartość wykładnika</strong> oznacza większy wpływ punktów bardziej odległych i powierzchnię bardziej wygładzoną.</p>
+<p>Dla przykładu powyżej wykładnik 0 daje 15, wykładnik 1 — 12,7272, a wykładnik 2 — 11,6981. Oszacowanie przesuwa się w stronę wartości punktu najbliższego, czyli 10.</p>
+</section>
+<section id="ograniczenia-metody" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="ograniczenia-metody">Ograniczenia metody</h4>
+<ul>
+<li>Jakość wyniku może się obniżyć, jeśli punkty pomiarowe są rozłożone nierównomiernie.</li>
+<li>Wartość minimalna oraz maksymalna może wystąpić <strong>tylko w lokalizacji punktów pomiarowych</strong>.</li>
+<li>Wartość w punkcie interpolacji mieści się w zakresie wartości punktów pomiarowych uwzględnionych w obliczeniu: średnia ważona nie może być większa niż najwyższa ani mniejsza niż najniższa wartość wejściowa.</li>
+<li>Metoda nie odzwierciedla zagłębień, wzniesień ani grzbietów, zatem <strong>nie pozwala oszacować wartości ekstremalnych wykraczających poza te, które zostały zmierzone</strong>.</li>
+</ul>
+</section>
+</section>
+<section id="funkcje-wielomianowe" class="level3">
+<h3 class="anchored" data-anchor-id="funkcje-wielomianowe">Funkcje wielomianowe</h3>
+<p><strong>Funkcje wielomianowe</strong> (ang. <em>polynomials</em>) to globalna interpolacja dopasowująca <strong>jedną gładką powierzchnię</strong>, zdefiniowaną funkcją matematyczną, do wszystkich danych punktowych. Stopień wielomianu określa, jak bardzo powierzchnia może się wyginać: stopień pierwszy daje płaszczyznę, wyższe stopnie dopuszczają wygięcia.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/wielomian.png" class="img-fluid figure-img"></p>
+<figcaption>Powierzchnie dopasowane wielomianami różnych stopni. Źródło: dokumentacja ArcGIS Pro.</figcaption>
+</figure>
+</div>
+<p>Ponieważ dopasowywana jest jedna funkcja do całego obszaru, każdy punkt pomiarowy wpływa na kształt powierzchni <strong>wszędzie</strong>. Stąd bierze się podstawowe ograniczenie metody: jest ona <strong>czuła na występowanie wartości odstających</strong> — pojedynczy nietypowy pomiar przechyla całą powierzchnię.</p>
+<p>Metodę stosuje się tam, gdzie interpolowana wartość zmienia się stopniowo z regionu na region, na przykład przy rozprzestrzenianiu się zanieczyszczeń powietrza w obszarze przemysłowym, oraz do <strong>usuwania z danych trendu</strong> globalnego lub długodystansowego.</p>
+</section>
+<section id="funkcje-sklejane" class="level3">
+<h3 class="anchored" data-anchor-id="funkcje-sklejane">Funkcje sklejane</h3>
+<p><strong>Funkcje sklejane</strong> (ang. <em>splines</em>) dopasowują do wartości analizowanych punktów krzywą powierzchnię. W wyniku otrzymuje się powierzchnię gładką, przechodzącą <strong>dokładnie przez punkty wejściowe</strong> — i to odróżnia je od funkcji wielomianowych, które przez punkty pomiarowe zwykle nie przechodzą, oraz od metody IDW, która punkty pomiarowe odtwarza, ale między nimi nie może wyjść poza zakres ich wartości.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/splajny.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<figcaption>Powierzchnia dopasowana funkcjami sklejanymi przechodzi przez wszystkie punkty wejściowe.</figcaption>
+</figure>
+</div>
+<p>Metodę stosuje się do generowania delikatnie zmieniających się powierzchni: wysokości terenu, wysokości zwierciadła wody, stężenia zanieczyszczeń.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Funkcje sklejane w części praktycznej
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Funkcje sklejane są jedyną metodą deterministyczną, której część praktyczna nie wykonuje. Rozdziały ćwiczeniowe pokazują diagramy Woronoja, metodę IDW i funkcje wielomianowe (<a href="13_pola_interpolacja.html" class="quarto-xref"><span>8&nbsp; Metody interpolacji</span></a>). Funkcje sklejane pozostają na poziomie interpretacyjnym: trzeba znać ich własność — przejście dokładnie przez punkty wejściowe — oraz ich miejsce w klasyfikacji metod.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="geostatystyka" class="level2">
+<h2 class="anchored" data-anchor-id="geostatystyka">Geostatystyka</h2>
+<p><strong>Geostatystyka</strong> jest to zbiór narzędzi statystycznych uwzględniających w analizie danych ich przestrzenną i czasową lokalizację, a opartych o teorię funkcji losowych <span class="citation" data-cites="goovaerts1997">(<a href="references.html#ref-goovaerts1997" role="doc-biblioref">Goovaerts 1997</a>)</span>.</p>
+<section id="cztery-funkcje-geostatystyki" class="level3">
+<h3 class="anchored" data-anchor-id="cztery-funkcje-geostatystyki">Cztery funkcje geostatystyki</h3>
+<ol type="1">
+<li><strong>Identyfikacja i modelowanie struktury przestrzennej lub czasowej</strong> badanych cech. Polega na rozpoznawaniu i matematycznym opisywaniu prawidłowości w rozkładzie przestrzennym lub czasowym analizowanych cech. Wykorzystuje do tego między innymi semiwariogramy empiryczne, które pozwalają ocenić stopień autokorelacji danych.</li>
+<li><strong>Estymacja</strong> — szacowanie wartości badanej cechy w nieopróbowanym miejscu lub momencie czasu. Najważniejszą grupą algorytmów estymacji jest <strong>kriging</strong>.</li>
+<li><strong>Symulacja</strong> — generowanie sekwencji wielu alternatywnych, równie prawdopodobnych obrazów (realizacji) zmienności przestrzennej lub czasowej analizowanej cechy. Wykorzystuje mechanizmy losowe ograniczone koniecznością zachowania właściwości statystycznych danych, w tym ich semiwariogramu. Symulowane rozkłady służą do oceny niepewności.</li>
+<li><strong>Optymalizacja próbkowania</strong> przestrzennego, czasowego lub czasoprzestrzennego. Polega na takim planowaniu rozmieszczenia punktów pomiarowych, aby zminimalizować koszty badań przy jednoczesnej maksymalizacji ilości i dokładności uzyskiwanych informacji. Wykorzystuje znaną lub zakładaną autokorelację przestrzenną badanej cechy, a czasem także wiedzę uprzednią.</li>
+</ol>
+<p>Celem geostatystyki nie musi być zatem wyłącznie interpolacja. Może nim być również zrozumienie genezy zmienności przestrzennej lub czasowej analizowanej cechy, symulowanie wartości w celu oceny zakresu ich niepewności oraz optymalizacja sieci pomiarowej. Wszystkie trzy cele służą dostarczaniu informacji umożliwiających podejmowanie decyzji dotyczących wykorzystywania zasobów oraz ochrony środowiska i społeczeństwa przed skażeniami i katastrofami naturalnymi. Decyzje te podejmowane są najczęściej na podstawie niekompletnych i niepewnych danych — geostatystyka minimalizuje ryzyko decyzji złych.</p>
+</section>
+<section id="ścieżka-postępowania" class="level3">
+<h3 class="anchored" data-anchor-id="ścieżka-postępowania">Ścieżka postępowania</h3>
+<p>Estymacja geostatystyczna, zwana inaczej interpolacją geostatystyczną, przebiega według stałego schematu: od pomiarów przez opis i modelowanie struktury przestrzennej po oszacowanie wartości w całym obszarze.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/geostat_analiza_danych.png" class="img-fluid figure-img"></p>
+<figcaption>Cztery etapy geostatystycznej analizy danych: dane punktowe, semiwariogram empiryczny, model semiwariogramu, estymacja.</figcaption>
+</figure>
+</div>
+<p>Pełna ścieżka postępowania składa się z siedmiu elementów:</p>
+<ol type="1">
+<li>Zaprojektowanie sposobu (typu) próbkowania oraz organizacji zadań.</li>
+<li>Wykonanie pomiarów lub analiza laboratoryjna próbek.</li>
+<li>Wstępna eksploracja danych i ocena ich jakości.</li>
+<li>Analiza i modelowanie semiwariogramu na podstawie dostępnych danych, a czasem także wiedzy uprzedniej.</li>
+<li>Estymacja badanej cechy.</li>
+<li>Porównanie i ocena alternatywnych modeli.</li>
+<li>Stworzenie wynikowego produktu i jego dystrybucja.</li>
+</ol>
+<p>Część praktyczna tej części skryptu obejmuje elementy od trzeciego do szóstego. Elementy pierwszy i drugi należą do zaprojektowania badania, a siódmy — do jego zamknięcia; obydwa stają się istotne przy samodzielnym doborze danych do projektu.</p>
+</section>
+<section id="założenia-geostatystyki" class="level3">
+<h3 class="anchored" data-anchor-id="założenia-geostatystyki">Założenia geostatystyki</h3>
+<p>Metody geostatystyczne opierają się na dwóch założeniach dotyczących analizowanej cechy.</p>
+<ol type="1">
+<li><strong>Przestrzenna ciągłość.</strong> Przestrzenna korelacja między wartościami analizowanej cechy w dwóch lokalizacjach zależy tylko od ich odległości, a czasem również od kierunku — lecz nie od tego, gdzie te lokalizacje są położone. Oznacza to także, że w obrębie obszaru analizy w każdej lokalizacji można określić wartość cechy i że nie ulega ona gwałtownym, skokowym zmianom.</li>
+<li><strong>Stacjonarność.</strong> Lokalne średnie i wariancje, określane na podzbiorach danych, są na całym badanym obszarze względnie stałe — brak jest ich kierunkowych zmian, czyli trendów.</li>
+</ol>
+<p>Naruszenie stacjonarności nie unieważnia obliczeń, ale zmienia sens ich wyniku: jeżeli w danych jest trend, semiwariogram opisuje łącznie trend i zmienność lokalną, a jego semiwariancja progowa rośnie, zamiast ustabilizować się na poziomie zbliżonym do wariancji próby.</p>
+</section>
+<section id="założenia-dotyczące-danych" class="level3">
+<h3 class="anchored" data-anchor-id="założenia-dotyczące-danych">Założenia dotyczące danych</h3>
+<p>Jednym z najważniejszych ograniczeń stosowania metod geostatystycznych jest spełnienie założeń dotyczących danych wejściowych. Dane te muszą:</p>
+<ul>
+<li>mieć dostateczną liczebność — minimalnie powyżej 30 obserwacji, ale zazwyczaj więcej niż 100–150,</li>
+<li>być reprezentatywne dla całego analizowanego obszaru,</li>
+<li>być stworzone przy zastosowaniu jednolitej metodyki,</li>
+<li>być wystarczająco dokładne.</li>
+</ul>
+<p>Dane wejściowe <strong>nie mogą mieć tej samej lokalizacji</strong>, czyli tych samych współrzędnych. Dwa pomiary o identycznych współrzędnych dają parę punktów o odstępie zerowym, której semiwariancja nie daje się odróżnić od zmienności opisywanej efektem samorodka, a w obliczeniach estymacji prowadzi do układu równań bez jednoznacznego rozwiązania.</p>
+</section>
+</section>
+<section id="analiza-struktury-przestrzennej" class="level2">
+<h2 class="anchored" data-anchor-id="analiza-struktury-przestrzennej">Analiza struktury przestrzennej</h2>
+<section id="wykres-rozrzutu-z-przesunięciem" class="level3">
+<h3 class="anchored" data-anchor-id="wykres-rozrzutu-z-przesunięciem">Wykres rozrzutu z przesunięciem</h3>
+<p>W klasycznej statystyce relację między wartościami <strong>dwóch cech</strong> określa się za pomocą korelacji, na przykład współczynnika korelacji liniowej Pearsona. W geostatystyce badamy <strong>tę samą cechę, ale pomiędzy dwoma lokalizacjami</strong> odległymi od siebie o pewien odstęp <span class="math inline">\(h\)</span>. Narzędziem jest <strong>wykres rozrzutu z przesunięciem</strong> (ang. <em>h-scatterplot</em>, <em>lagged scatterplot</em>).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/semiwariogram_rozrzut.png" class="img-fluid figure-img" style="width:55.0%"></p>
+<figcaption>Wykres rozrzutu z przesunięciem dla temperatury powietrza: wartości w danej lokalizacji wobec wartości w lokalizacjach oddalonych o nie więcej niż 200 m. Współczynnik korelacji dla tych par wynosi 0,963.</figcaption>
+</figure>
+</div>
+<p>Punkty układają się blisko prostej: na dystansie do 200 m wartości cechy są niemal identyczne. Sporządzając taki wykres dla kolejnych, coraz większych przedziałów odległości, otrzymujemy obraz tego, jak szybko zanika to podobieństwo.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/semiwariogram_rozrzuty.png" class="img-fluid figure-img"></p>
+<figcaption>Wykresy rozrzutu z przesunięciem dla kolejnych przedziałów odległości: 0–500, 500–1000, 1000–1500 m i dalej, aż do 4000 m. Liczba w lewym górnym rogu każdego panelu to współczynnik korelacji par z danego przedziału.</figcaption>
+</figure>
+</div>
+<p>Dla temperatury powietrza współczynnik korelacji w pierwszym przedziale wynosi 0,865, a następnie maleje z każdym kolejnym przedziałem: 0,715, 0,615, 0,486, 0,398, 0,300, 0,195, aż do 0,175 w przedziale 3500–4000 m. Pozwala to stwierdzić, że cecha wykazuje <strong>regularną zmienność przestrzenną</strong> — podobieństwo jej wartości zmniejsza się wraz z odległością. Jest to dokładnie ta własność, której wymaga interpolacja.</p>
+</section>
+<section id="semiwariancja" class="level3">
+<h3 class="anchored" data-anchor-id="semiwariancja">Semiwariancja</h3>
+<p>Zmienność przestrzenną analizowanej cechy określa się za pomocą <strong>semiwariancji</strong>. Semiwariancja <span class="math inline">\(\gamma(h)\)</span> to połowa kwadratu różnicy pomiędzy wartościami badanej cechy <span class="math inline">\(z\)</span> w dwóch lokalizacjach odległych o wektor <span class="math inline">\(h\)</span>:</p>
+<p><span class="math display">\[\gamma(h) = \frac{1}{2}\left(z(u_{\alpha}) - z(u_{\alpha} + h)\right)^{2}\]</span></p>
+<p>Semiwariancja jest miarą <strong>niepodobieństwa</strong>: rośnie wtedy, gdy wartości w dwóch lokalizacjach różnią się od siebie. Jest więc przeciwieństwem korelacji — i dlatego semiwariogram cechy o regularnej zmienności przestrzennej <strong>rośnie</strong> wraz z odległością, podczas gdy korelacja maleje.</p>
+<section id="przykład-rachunkowy-1" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="przykład-rachunkowy-1">Przykład rachunkowy</h4>
+<p>Aby obliczyć semiwariancję dla pary punktów, trzeba znać wartość cechy w obu lokalizacjach. W danych temperatury pierwsza para punktów ma wartości <span class="math inline">\(z(u_{\alpha}) = 13{,}85\)</span> °C oraz <span class="math inline">\(z(u_{\alpha}+h) = 15{,}48\)</span> °C:</p>
+<p><span class="math display">\[\gamma(h) = \frac{1}{2}\left(13{,}85 - 15{,}48\right)^{2} = \frac{1}{2}\left(-1{,}63\right)^{2}
+= \frac{1}{2} \times 2{,}6569 = 1{,}3285 \approx 1{,}33\]</span></p>
+<p>Odległość między tymi punktami wynosi około 3240,89 m, możemy zatem w uproszczeniu stwierdzić, że dla tej pary punktów, odległych o 3240 m, wartość semiwariancji wynosi około 1,33.</p>
+</section>
+</section>
+<section id="chmura-semiwariogramu" class="level3">
+<h3 class="anchored" data-anchor-id="chmura-semiwariogramu">Chmura semiwariogramu</h3>
+<p>Jeżeli w badanej próbie mamy <span class="math inline">\(n\)</span> obserwacji, to możemy zaobserwować <span class="math inline">\(\frac{1}{2}n(n-1)\)</span> par obserwacji. Dla temperatury powietrza, zmierzonej w 247 lokalizacjach, daje to 30 381 par. Dla każdej pary obliczana jest semiwariancja, a wynik można przedstawić na wykresie zwanym <strong>chmurą semiwariogramu</strong> (ang. <em>variogram cloud</em>). Położenie każdego punktu chmury określają dwie współrzędne: odległość między dwoma punktami oraz wartość semiwariancji dla tej pary.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/chmura_semiwariogramu.png" class="img-fluid figure-img" style="width:60.0%"></p>
+<figcaption>Chmura semiwariogramu dla temperatury powietrza. Każdy punkt odpowiada jednej parze lokalizacji.</figcaption>
+</figure>
+</div>
+<p>Chmura jest nieczytelna jako opis zmienności — przy trzydziestu tysiącach par trudno z niej odczytać prawidłowość. Jej wartość polega na czym innym: pozwala wskazać <strong>pary odstające</strong>, czyli pary bliskich sobie lokalizacji o bardzo wysokiej semiwariancji, które mogą sygnalizować błąd pomiaru lub wartość odstającą lokalnie.</p>
+</section>
+<section id="semiwariogram-empiryczny" class="level3">
+<h3 class="anchored" data-anchor-id="semiwariogram-empiryczny">Semiwariogram empiryczny</h3>
+<p><strong>Semiwariogram empiryczny</strong>, czyli oparty na danych, jest wykresem pokazującym relację pomiędzy odległością a <strong>przeciętną</strong> wartością semiwariancji. Dla kolejnych odstępów wartość semiwariancji jest uśredniana i przedstawiana w odniesieniu do średniej odległości zbioru par punktów zawierających się w danym przedziale:</p>
+<p><span class="math display">\[\hat{\gamma}(h) = \frac{1}{2N(h)}\sum_{\alpha=1}^{N(h)}
+\left(z(u_{\alpha}) - z(u_{\alpha}+h)\right)^{2}\]</span></p>
+<p>gdzie <span class="math inline">\(N(h)\)</span> oznacza liczbę par punktów zawartych w odstępie <span class="math inline">\(h\)</span>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/semiwariogram_empiryczny.png" class="img-fluid figure-img" style="width:60.0%"></p>
+<figcaption>Semiwariogram empiryczny dla temperatury powietrza. Każdy punkt odpowiada uśrednionej semiwariancji par z jednego przedziału odległości.</figcaption>
+</figure>
+</div>
+<p>Semiwariancja rośnie od około 1,21 dla odstępu 214 m do około 15,37 dla odstępu 4596 m. Wartości cechy w lokalizacjach bliskich są więc do siebie znacznie bardziej podobne niż w lokalizacjach odległych — ta sama prawidłowość, którą pokazały wykresy rozrzutu z przesunięciem, wyrażona miarą niepodobieństwa zamiast miarą podobieństwa.</p>
+</section>
+</section>
+<section id="modelowanie-struktury-przestrzennej" class="level2">
+<h2 class="anchored" data-anchor-id="modelowanie-struktury-przestrzennej">Modelowanie struktury przestrzennej</h2>
+<section id="dlaczego-semiwariogram-empiryczny-nie-wystarcza" class="level3">
+<h3 class="anchored" data-anchor-id="dlaczego-semiwariogram-empiryczny-nie-wystarcza">Dlaczego semiwariogram empiryczny nie wystarcza</h3>
+<p>Semiwariogram wyliczony z danych punktowych jest:</p>
+<ul>
+<li><strong>nieciągły</strong> — wartości semiwariancji są średnimi przedziałowymi, więc istnieją tylko dla tych odstępów, które w danych wystąpiły,</li>
+<li><strong>chaotyczny</strong> — badana próba jest jedynie przybliżeniem rzeczywistości, często dodatkowo obciążonym błędami. Źródłem błędu jest zarówno pomiar analizowanej cechy, czyli dokładność określenia wartości <span class="math inline">\(z(u_{\alpha})\)</span>, jak i błąd lokalizacji, czyli dokładność określenia wektora przesunięcia <span class="math inline">\(h\)</span>.</li>
+</ul>
+<p>Estymacje i symulacje przestrzenne wymagają natomiast znajomości wartości semiwariancji dla <strong>każdej sensownej kombinacji odległości i kierunku</strong>, również takiej, która w danych pomiarowych nie wystąpiła. <strong>Modelowanie struktury przestrzennej</strong> polega więc na zastąpieniu dyskretnych miar empirycznych <strong>ciągłą funkcją matematyczną</strong>. Przy okazji modelowanie wygładza chaotyczne fluktuacje danych empirycznych.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/semiwariogram_model.png" class="img-fluid figure-img" style="width:60.0%"></p>
+<figcaption>Semiwariogram empiryczny (punkty) z naniesionym modelem (linia ciągła).</figcaption>
+</figure>
+</div>
+</section>
+<section id="trzy-elementy-modelu" class="level3">
+<h3 class="anchored" data-anchor-id="trzy-elementy-modelu">Trzy elementy modelu</h3>
+<p>Na podstawie modelu semiwariogramu można zazwyczaj określić trzy charakterystyki zmienności przestrzennej analizowanej cechy.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/variogram_text.png" class="img-fluid figure-img"></p>
+<figcaption>Trzy elementy modelu semiwariogramu odczytane na danych temperatury.</figcaption>
+</figure>
+</div>
+<p><strong>Efekt samorodka</strong> (ang. <em>nugget</em>) to szacowana wariancja dla odstępu <span class="math inline">\(h = 0\)</span>. W teorii dwa pomiary wykonane w tym samym miejscu i czasie powinny być identyczne, a semiwariancja dla zerowego odstępu powinna wynosić zero. Zazwyczaj tak nie jest — ze względu na błędy pomiarowe, nieznaną zmienność wartości analizowanej cechy w skali mniejszej niż najkrótszy odstęp między punktami pomiarowymi oraz zmienność w obrębie samej próbki.</p>
+<p><strong>Semiwariancja progowa</strong> (ang. <em>sill</em>) to maksymalny poziom zmienności danych w kontekście przestrzennym. Najczęściej, jeśli analizowana cecha jest stacjonarna, jest to wartość zbliżona do wariancji całej próby.</p>
+<p><strong>Zasięg</strong> (ang. <em>range</em>) to odległość, na której semiwariogram osiąga wartość semiwariancji progowej. Określa maksymalny zasięg autokorelacji danych: pary lokalizacji odległe o więcej niż zasięg nie są już do siebie bardziej podobne niż dwie lokalizacje wybrane losowo.</p>
+<p>Dla temperatury powietrza model sferyczny daje efekt samorodka 0,68, semiwariancję progową 14,32 i zasięg 5480 m. Semiwariancja progowa jest tu zbliżona do wariancji próby wynoszącej 15,79, ale nie jest jej równa — różnica wynosi około 9%.</p>
+</section>
+<section id="dlaczego-nie-używamy-dowolnych-funkcji" class="level3">
+<h3 class="anchored" data-anchor-id="dlaczego-nie-używamy-dowolnych-funkcji">Dlaczego nie używamy dowolnych funkcji</h3>
+<p>W modelowaniu struktury przestrzennej nie stosuje się dowolnych funkcji matematycznych, lecz ściśle określoną grupę tak zwanych <strong>funkcji (modeli) dozwolonych</strong>.</p>
+<p>Głównym powodem jest <strong>wymóg dodatniej określoności modelu</strong>. Model semiwariogramu jest wykorzystywany do wyznaczania wag w równaniach krigingu, a tylko wybrane funkcje gwarantują, że macierz układu równań krigingu będzie możliwa do rozwiązania i że wynikowa wariancja zawsze będzie dodatnia.</p>
+<p>W praktyce ograniczenie wyboru funkcji nie stanowi znaczącej bariery w dobrym odwzorowaniu semiwariogramu, ponieważ wolno używać dowolnej kombinacji liczby i typu funkcji dozwolonych.</p>
+</section>
+<section id="modele-podstawowe" class="level3">
+<h3 class="anchored" data-anchor-id="modele-podstawowe">Modele podstawowe</h3>
+<p>Najczęściej używane modele podstawowe to: nuggetowy, sferyczny, gaussowski, potęgowy i wykładniczy.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/modele_porownanie.png" class="img-fluid figure-img"></p>
+<figcaption>Porównanie pięciu modeli podstawowych.</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/modele_macierz.png" class="img-fluid figure-img"></p>
+<figcaption>Pięć modeli podstawowych, każdy na osobnym panelu.</figcaption>
+</figure>
+</div>
+<section id="model-nuggetowy" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="model-nuggetowy">Model nuggetowy</h4>
+<p><strong>Model nuggetowy</strong> (ang. <em>nugget effect model</em>) określa sytuację, w której wartość analizowanej cechy nie wykazuje autokorelacji — niepodobieństwo jej wartości nie wzrasta wraz z odległością.</p>
+<p><span class="math display">\[\gamma(h) = \begin{cases}
+0 &amp; \text{dla } h = 0 \\
+C_0 &gt; 0 &amp; \text{dla } h &gt; 0
+\end{cases}\]</span></p>
+<p>Model nuggetowy zazwyczaj nie jest używany samodzielnie — w większości zastosowań stanowi element modelu złożonego. Konieczność użycia go samodzielnie oznacza zazwyczaj, że <strong>odstęp próbkowania był większy niż zasięg autokorelacji</strong>: dane zostały zebrane zbyt rzadko, aby struktura przestrzenna cechy mogła się w nich ujawnić. Jako składowa modelu złożonego służy do oszacowania między innymi błędu pomiarowego i zmienności na krótkich odstępach.</p>
+</section>
+<section id="model-sferyczny" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="model-sferyczny">Model sferyczny</h4>
+<p><strong>Model sferyczny</strong> (ang. <em>spherical model</em>, <code>Sph</code>) jest jednym z najczęściej stosowanych modeli geostatystycznych.</p>
+<p><span class="math display">\[\gamma(h) = \begin{cases}
+0 &amp; \text{dla } h = 0 \\
+C \left[ \dfrac{3}{2} \left( \dfrac{h}{a} \right) -
+         \dfrac{1}{2} \left( \dfrac{h}{a} \right)^{3} \right] &amp; \text{dla } 0 &lt; h \leq a \\
+C &amp; \text{dla } h &gt; a
+\end{cases}\]</span></p>
+<p>gdzie <span class="math inline">\(\gamma(h)\)</span> to semiwariancja dla odległości <span class="math inline">\(h\)</span>, <span class="math inline">\(C\)</span> — semiwariancja progowa, <span class="math inline">\(a\)</span> — zasięg.</p>
+<p>W swoim początkowym odcinku, blisko początku układu współrzędnych, model ma charakter funkcji liniowej o nachyleniu <span class="math inline">\(3C/2a\)</span>. Reprezentuje cechę, której zmienność ma charakter <strong>naprzemiennych płatów niskich i wysokich wartości</strong>; średnio płaty te mają średnicę określoną przez zasięg modelu.</p>
+<p>Model sferyczny najlepiej oddaje naturę zjawisk fizycznych o wyraźnym i skończonym zasięgu oddziaływania: zawartości metali ciężkich lub azotu w glebie, gdzie procesy lokalne dominują nad trendami regionalnymi, zasięgów złóż mineralnych oraz lokalnych zanieczyszczeń gleby.</p>
+</section>
+<section id="model-wykładniczy" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="model-wykładniczy">Model wykładniczy</h4>
+<p><strong>Model wykładniczy</strong> (ang. <em>exponential model</em>, <code>Exp</code>), obok sferycznego, jest jednym z najczęściej stosowanych modeli geostatystycznych.</p>
+<p><span class="math display">\[\gamma(h) = \begin{cases}
+0 &amp; \text{dla } h = 0 \\
+C \left[ 1 - \exp\left( -\dfrac{3h}{a} \right) \right] &amp; \text{dla } h &gt; 0
+\end{cases}\]</span></p>
+<p>gdzie <span class="math inline">\(\gamma(h)\)</span> to semiwariancja dla odległości <span class="math inline">\(h\)</span>, <span class="math inline">\(C\)</span> — semiwariancja progowa, <span class="math inline">\(a\)</span> — zasięg. Zastosowanie we wzorze mnożnika 3 umożliwia interpretowanie parametru <span class="math inline">\(a\)</span> jako <strong>zasięgu praktycznego</strong>.</p>
+<p>Model ma charakter liniowy w fazie początkowej, ale o większym nachyleniu niż sferyczny — wynoszącym <span class="math inline">\(3C/a\)</span>, czyli dwukrotnie większym od <span class="math inline">\(3C/2a\)</span> modelu sferycznego. Wzrost semiwariancji przy bardzo małych odległościach jest zatem znacznie szybszy niż w modelu sferycznym, co oznacza, że wartości zmieniają się gwałtownie nawet między bliskimi punktami. Model wykładniczy opisuje zatem zjawiska o <strong>niskiej ciągłości przestrzennej</strong>.</p>
+<p>Od modelu sferycznego odróżnia go szczególnie to, że <strong>nie ma skończonego zasięgu</strong>. Podczas gdy model sferyczny w pewnym punkcie staje się płaską linią, model wykładniczy zbliża się do progu asymptotycznie. Teoretycznie oznacza to, że punkty wykazują podobieństwo nawet na bardzo dużych dystansach, choć wpływ ten szybko maleje. Z tego powodu dla modelu wykładniczego wyznacza się <strong>zasięg praktyczny</strong> (ang. <em>practical range</em>): odległość, przy której model osiąga 95% wartości semiwariancji progowej.</p>
+<p>Model stosuje się do modelowania opadów deszczu, które często zmieniają się gwałtownie na małym obszarze, parametrów chemicznych gleby o dużej zmienności lokalnej, takich jak zasolenie i pH, zmienności odczynu gleby wynikającej z różnic między typami gleb oraz stężeń pyłów zawieszonych w miastach, gdzie lokalne źródła tworzą silne, ale szybko wygasające różnice przestrzenne.</p>
+</section>
+<section id="model-gaussowski" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="model-gaussowski">Model gaussowski</h4>
+<p><strong>Model gaussowski</strong> (ang. <em>Gaussian model</em>, <code>Gau</code>) wyróżnia się <strong>parabolicznym kształtem</strong> na początkowym odcinku. Oznacza to, że wartości w punktach położonych blisko siebie są niemal identyczne.</p>
+<p><span class="math display">\[\gamma(h) = \begin{cases}
+0 &amp; \text{dla } h = 0 \\
+C \left[ 1 - \exp\left( -\dfrac{3h^{2}}{a^{2}} \right) \right] &amp; \text{dla } h &gt; 0
+\end{cases}\]</span></p>
+<p>gdzie <span class="math inline">\(\gamma(h)\)</span> to semiwariancja dla odległości <span class="math inline">\(h\)</span>, <span class="math inline">\(C\)</span> — semiwariancja progowa, <span class="math inline">\(a\)</span> — zasięg.</p>
+<p>Tak jak model wykładniczy, model gaussowski ma charakter asymptotyczny — semiwariancję progową osiąga w nieskończonym odstępie — więc i dla niego wyznacza się <strong>zasięg praktyczny</strong>.</p>
+<p>Model gaussowski tworzy ekstremalnie gładką powierzchnię, która może maskować lokalną zmienność. Z uwagi na tę cechę <strong>zazwyczaj nie powinien być stosowany samodzielnie</strong>, lecz jako element modelu złożonego.</p>
+<p>Stosuje się go do modelowania cech o regularnej i łagodnej zmienności przestrzennej: poziomu zwierciadła wód gruntowych w obszarze o mało zróżnicowanej rzeźbie i jednolitej budowie geologicznej, ciśnienia atmosferycznego lub temperatury w stabilnych masach powietrza, terenu o łagodnych, falistych kształtach oraz głębokości zalegania ciągłych warstw skalnych nieprzerwanych uskokami.</p>
+</section>
+<section id="model-potęgowy" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="model-potęgowy">Model potęgowy</h4>
+<p><strong>Model potęgowy</strong> (ang. <em>power model</em>, <code>Pow</code>) różni się fundamentalnie od pozostałych modeli podstawowych, ponieważ jest modelem <strong>nieograniczonym</strong>: jego wartość rośnie w nieskończoność, dlatego niemożliwe jest określenie ani jego zasięgu, ani semiwariancji progowej.</p>
+<p><span class="math display">\[\gamma(h) = \begin{cases}
+0 &amp; \text{dla } h = 0 \\
+\omega h^{k} &amp; \text{dla } h &gt; 0
+\end{cases}
+\qquad \text{przy czym } 0 &lt; k &lt; 2\]</span></p>
+<p>gdzie <span class="math inline">\(\omega\)</span> to parametr skali, czyli nachylenie krzywej, a <span class="math inline">\(k\)</span> — wykładnik potęgowy, który musi mieścić się w przedziale <span class="math inline">\((0, 2)\)</span>.</p>
+<p>Wykładnik <span class="math inline">\(k\)</span> w zakresie od 0 do 1 daje model wypukły „w górę”, <span class="math inline">\(k = 1\)</span> to linia prosta, a <span class="math inline">\(k\)</span> w zakresie od 1 do 2 — model wypukły „w dół”.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/model_potegowy_k.png" class="img-fluid figure-img"></p>
+<figcaption>Model potęgowy dla wykładnika <span class="math inline">\(k\)</span> mniejszego od 1, równego 1 i większego od 1.</figcaption>
+</figure>
+</div>
+<p>Model stosuje się, gdy obszar badań jest mniejszy niż zasięg autokorelacji, do opisu przepuszczalności skał lub rozprzestrzeniania się zanieczyszczeń w bardzo dużej skali, gdzie zmienność narasta wraz ze skalą obserwacji, oraz w analizie fraktalnej procesów wyglądających podobnie niezależnie od powiększenia.</p>
+</section>
+</section>
+<section id="model-złożony" class="level3">
+<h3 class="anchored" data-anchor-id="model-złożony">Model złożony</h3>
+<p>Najczęściej pojedynczy model nie jest w stanie dokładnie odwzorować zmienności przestrzennej analizowanej cechy. <strong>Model złożony</strong> to połączenie dwóch lub więcej modeli podstawowych. Najbardziej powszechny model złożony składa się z funkcji nuggetowej, działającej dla odległości <span class="math inline">\(h = 0\)</span>, oraz drugiej funkcji, działającej dla odległości <span class="math inline">\(h &gt; 0\)</span>.</p>
+<p>Model opisujący temperaturę powietrza w przykładzie tego rozdziału jest właśnie modelem złożonym: składa się z funkcji nuggetowej o wartości 0,68 oraz funkcji sferycznej wnoszącej 13,65. Semiwariancja progowa całego modelu to <strong>suma</strong> obu składowych, czyli 14,32.</p>
+</section>
+<section id="wybór-modelu-zmienia-wynik-estymacji" class="level3">
+<h3 class="anchored" data-anchor-id="wybór-modelu-zmienia-wynik-estymacji">Wybór modelu zmienia wynik estymacji</h3>
+<p>Model semiwariogramu nie jest ozdobnikiem poprzedzającym obliczenia — to on wyznacza wagi w równaniach krigingu, więc jego wybór zmienia obraz powierzchni estymowanej.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/modele_powierzchnie.png" class="img-fluid figure-img"></p>
+<figcaption>Estymacja temperatury powietrza przy czterech różnych modelach semiwariogramu dopasowanych do tego samego semiwariogramu empirycznego.</figcaption>
+</figure>
+</div>
+<p>Ogólny wzorzec przestrzenny jest we wszystkich czterech przypadkach ten sam — niższe temperatury w północnej części obszaru, wyższe w południowej — ale szczegół różni się wyraźnie. Model gaussowski, o parabolicznym początku, daje powierzchnię najgładszą; model wykładniczy, o najszybszym wzroście semiwariancji na krótkich dystansach, daje obraz najbardziej poszarpany, z wyraźnymi lokalnymi szczytami i zagłębieniami wokół punktów pomiarowych. Model potęgowy, nieograniczony, daje mapę zdominowaną przez zmienność wielkoskalową.</p>
+</section>
+</section>
+<section id="estymacja-kriging" class="level2">
+<h2 class="anchored" data-anchor-id="estymacja-kriging">Estymacja: kriging</h2>
+<p><strong>Kriging</strong> to nazwa własna grupy algorytmów geostatystycznych służących do estymacji wartości cechy ciągłej w dowolnej, nieopróbowanej lokalizacji na podstawie ograniczonego zbioru danych pomiarowych z danego obszaru. Nazwa została nadana dla uhonorowania pionierskich prac geologa Daniela Krige’a <span class="citation" data-cites="krige1951">(<a href="references.html#ref-krige1951" role="doc-biblioref">Krige 1951</a>)</span>; podstawy teoretyczne metody sformułował <span class="citation" data-cites="matheron1963">Matheron (<a href="references.html#ref-matheron1963" role="doc-biblioref">1963</a>)</span>.</p>
+<section id="skąd-biorą-się-wagi" class="level3">
+<h3 class="anchored" data-anchor-id="skąd-biorą-się-wagi">Skąd biorą się wagi</h3>
+<p>Kriging zakłada, że wartość cechy w danej lokalizacji <strong>zależy od sąsiednich obserwacji</strong>, którym przypisuje się odpowiednie wagi. Wagi wyznaczane są na podstawie <strong>charakteru i siły autokorelacji przestrzennej</strong>, określonej z danych pomiarowych — stąd bierze się istotna rola semiwariogramów.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/kriging_wagi.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<figcaption>Dziesięć punktów pomiarowych o znanych wartościach i lokalizacja, dla której szacujemy wartość (na czerwono).</figcaption>
+</figure>
+</div>
+<p>Wagi zależą od zmieniającego się wraz z odległością, a czasem i kierunkiem, podobieństwa wartości. Punkty mające podobne wartości i położone bliżej lokalizacji szacowanej otrzymują wyższą wagę niż punkty położone dalej lub niewykazujące korelacji przestrzennej.</p>
+<p>Przy ustalaniu wag uwzględniany jest także <strong>przestrzenny rozkład punktów</strong>: zgrupowane punkty o podobnych wartościach otrzymują mniejszą wagę niż pojedynczy punkt położony w tej samej odległości, ponieważ przekazują one łącznie mniej informacji niż pojedyncza lokalizacja. Jest to własność, której metody deterministyczne nie mają — w metodzie IDW grupa pięciu blisko siebie położonych punktów ma pięciokrotnie większy wpływ niż pojedynczy punkt w tej samej odległości, choć niesie niemal tę samą informację.</p>
+</section>
+<section id="pięć-kroków-estymacji" class="level3">
+<h3 class="anchored" data-anchor-id="pięć-kroków-estymacji">Pięć kroków estymacji</h3>
+<p><strong>Krok 1. Wykonanie semiwariogramu empirycznego</strong> na podstawie dostępnych danych.</p>
+<p><strong>Krok 2. Dopasowanie modelu do semiwariogramu empirycznego.</strong> Dzięki dopasowaniu funkcji ciągłej można odczytać wartość semiwariancji dla dowolnej kombinacji odległości i kierunku, również takiej, która nie wystąpiła w danych pomiarowych. Im lepiej dopasowany model, tym odczytane wartości semiwariancji bliższe tym, które uzyskalibyśmy z danych dla całej populacji.</p>
+<p><strong>Krok 3. Obliczenie wag</strong> dla punktów używanych w estymacji. W krigingu nieznana wartość cechy w lokalizacji <span class="math inline">\(u\)</span> obliczana jest jako średnia ważona:</p>
+<p><span class="math display">\[\hat{Z}(u) - m(u) = \sum_{\alpha=1}^{n(u)}
+\lambda_{\alpha}(u)\left[\,Z(u_{\alpha}) - m(u_{\alpha})\,\right]\]</span></p>
+<p>gdzie:</p>
+<ul>
+<li><span class="math inline">\(\hat{Z}(u)\)</span> — estymowana (szacowana) wartość cechy w lokalizacji <span class="math inline">\(u\)</span>,</li>
+<li><span class="math inline">\(m(u)\)</span> oraz <span class="math inline">\(m(u_{\alpha})\)</span> — średnie wartości w punkcie estymacji <span class="math inline">\(u\)</span> oraz w punktach pomiarowych <span class="math inline">\(u_{\alpha}\)</span>,</li>
+<li><span class="math inline">\(\lambda_{\alpha}(u)\)</span> — waga przypisana lokalizacji <span class="math inline">\(u_{\alpha}\)</span>,</li>
+<li><span class="math inline">\(Z(u_{\alpha})\)</span> — zmierzona wartość cechy <span class="math inline">\(Z\)</span> w lokalizacji <span class="math inline">\(u_{\alpha}\)</span>,</li>
+<li><span class="math inline">\(n(u)\)</span> — liczba danych pomiarowych użytych do estymacji, zazwyczaj ograniczona do punktów leżących w sąsiedztwie szukania wokół estymowanego punktu <span class="math inline">\(u\)</span>.</li>
+</ul>
+<p>Warunek nieobciążoności estymatora przyjmuje w poszczególnych wariantach krigingu różną postać. W <strong>krigingu zwykłym</strong> i <strong>krigingu z trendem</strong> średnia jest nieznana, więc nieobciążoność wymusza się, nakładając na wagi warunek <span class="math inline">\(\sum_{\alpha} \lambda_{\alpha}(u) = 1\)</span> — gdyby wagi sumowały się do innej wartości, oszacowanie byłoby systematycznie zawyżone albo zaniżone względem poziomu danych. W <strong>krigingu prostym</strong> średnia jest znana, więc warunku tego nie trzeba nakładać: wagi sumują się tam do wartości mniejszej od 1, a brakującą część, <span class="math inline">\(1 - \sum_{\alpha} \lambda_{\alpha}(u)\)</span>, przejmuje znana średnia <span class="math inline">\(m\)</span> <span class="citation" data-cites="goovaerts1997">(<a href="references.html#ref-goovaerts1997" role="doc-biblioref">Goovaerts 1997</a>)</span>. Im dalej od punktów pomiarowych, tym większa ta część — i dlatego estymacje krigingu prostego dążą na obrzeżach obszaru do średniej globalnej.</p>
+<p>Wagi obliczane są poprzez rozwiązanie układu równań macierzowych:</p>
+<p><span class="math display">\[K \cdot \lambda = k\]</span></p>
+<p>gdzie <span class="math inline">\(K\)</span> to macierz semiwariancji między wszystkimi znanymi lokalizacjami pomiarowymi, <span class="math inline">\(k\)</span> — wektor semiwariancji między znanymi lokalizacjami <span class="math inline">\(u_{\alpha}\)</span> a punktem estymowanym <span class="math inline">\(u\)</span>, a <span class="math inline">\(\lambda\)</span> — wektor wag dla poszczególnych punktów pomiarowych.</p>
+<p>Aby wyznaczyć wagi, trzeba znać trzy rzeczy:</p>
+<ol type="1">
+<li><strong>odległości</strong> między wszystkimi parami lokalizacji punktów pomiarowych,</li>
+<li><strong>odległości</strong> między lokalizacjami punktów pomiarowych a lokalizacją punktu estymowanego,</li>
+<li><strong>dopasowany model semiwariogramu</strong>, czyli funkcję opisującą przestrzenną autokorelację występującą w danych.</li>
+</ol>
+<p>Dwie pierwsze informacje pochodzą ze współrzędnych, trzecia — z Kroku 2. Model semiwariogramu zamienia odległości na semiwariancje, a semiwariancje — przez układ równań — na wagi.</p>
+<p><strong>Krok 4. Wykonanie estymacji wybraną metodą krigingu.</strong></p>
+<p><strong>Krok 5. Wizualizacja estymacji i wariancji krigingowej.</strong> Estymacje wykonuje się najczęściej nie dla jednego punktu, lecz dla zdefiniowanej siatki węzłów, więc wynik obliczeń przedstawiany jest w postaci mapy rastrowej.</p>
+</section>
+<section id="dwa-wyniki-krigingu" class="level3">
+<h3 class="anchored" data-anchor-id="dwa-wyniki-krigingu">Dwa wyniki krigingu</h3>
+<p>W wyniku krigingu otrzymujemy <strong>dwie</strong> informacje:</p>
+<ol type="1">
+<li><strong>Estymację</strong> — oszacowaną wartość cechy w lokalizacji o nieznanej wartości, <span class="math inline">\(\hat{Z}(u)\)</span>.</li>
+<li><strong>Wariancję krigingową</strong> — względną ocenę błędu (niepewności) estymacji w danym punkcie, wynikającą z niepewności związanej <strong>z rozmieszczeniem punktów pomiarowych oraz z przyjętym modelem, a nie z konkretnych wartości badanej cechy</strong>.</li>
+</ol>
+</section>
+<section id="wariancja-krigingowa" class="level3">
+<h3 class="anchored" data-anchor-id="wariancja-krigingowa">Wariancja krigingowa</h3>
+<p>Wariancja krigingowa, zwana też wariancją estymacji, <strong>nie zależy od zmierzonych wartości punktów pomiarowych</strong>, lecz od ich wzajemnego położenia, ich liczby oraz od modelu semiwariogramu.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/wariancja_krigingowa.png" class="img-fluid figure-img"></p>
+<figcaption>Wariancja krigingowa estymacji temperatury powietrza. Białe punkty to lokalizacje pomiarowe.</figcaption>
+</figure>
+</div>
+<p>Wariancja krigingowa przyjmuje najniższe wartości w pobliżu punktów pomiarowych, a najwyższe w obszarach rzadko opróbowanych:</p>
+<ul>
+<li>im więcej punktów pomiarowych w sąsiedztwie, tym mniejszy błąd,</li>
+<li>w lokalizacji punktu pomiarowego wariancja krigingowa wynosi <strong>zero</strong> — kriging zwraca tam dokładnie wartość zmierzoną,</li>
+<li>wariancja <strong>rośnie wraz z oddalaniem się od lokalizacji punktów pomiarowych</strong>: im dalej od punktów pomiarowych znajduje się punkt <span class="math inline">\(u\)</span>, tym mniejsza jest korelacja przestrzenna, co powoduje wzrost niepewności.</li>
+</ul>
+<p>Na mapie powyżej najniższa wartość wynosi 0,99, a nie zero — nie dlatego, że estymacja w lokalizacji pomiaru jest obarczona niepewnością, lecz dlatego, że <strong>żaden środek komórki siatki nie pokrywa się dokładnie z punktem pomiarowym</strong>. Przy rozdzielczości 90 m środek najbliższej komórki może leżeć nawet 64 m od pomiaru, a na takim dystansie wariancja już wyraźnie wzrosła.</p>
+<p>Z zależności tych wynika praktyczne zastosowanie wariancji krigingowej: jest ona dobrym narzędziem do <strong>oceny jakości sieci pomiarowej</strong>, bo pokazuje, gdzie brakuje danych. Może być natomiast niewystarczająca do oceny lokalnej niepewności wynikającej z samej zmienności zjawiska. Intuicyjnie czujemy, że przy jednakowej konfiguracji przestrzennej punktów danych niepewność oszacowania będzie większa wtedy, kiedy zmierzone wartości cechy różniły się między sobą znacznie, niż wtedy, kiedy były do siebie podobne — wariancja krigingowa będzie zaś w obu sytuacjach identyczna.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Wariancja krigingowa nie jest miarą błędu estymacji
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Wariancja krigingowa opisuje <strong>geometrię sieci pomiarowej i przyjęty model</strong>, a nie trafność oszacowań. Jej mapę można narysować przed wykonaniem jakiegokolwiek pomiaru wartości cechy — wystarczą współrzędne punktów i model semiwariogramu. Pytanie, o ile estymacja rozminęła się z rzeczywistością, wymaga porównania wartości estymowanych ze zmierzonymi, czyli <strong>walidacji</strong>.</p>
+</div>
+</div>
+</section>
+<section id="warianty-krigingu" class="level3">
+<h3 class="anchored" data-anchor-id="warianty-krigingu">Warianty krigingu</h3>
+<p>Istnieje szereg metod krigingu. Do trzech podstawowych zalicza się kriging prosty, kriging zwykły i kriging z trendem. <strong>Różnią się one założeniem o średniej wartości analizowanej cechy</strong> — nie sposobem obliczania wag ani definicją sąsiedztwa szukania, które są dla nich wspólne.</p>
+<p><strong>Kriging prosty</strong> (ang. <em>simple kriging</em>, SK) zakłada, że średnia wartość analizowanej cechy jest <strong>znana i stała</strong> na całym analizowanym obszarze.</p>
+<p><strong>Kriging zwykły</strong> (ang. <em>ordinary kriging</em>, OK) zakłada, że średnia wartość analizowanej cechy jest <strong>stała, ale nieznana</strong>. Metoda uwzględnia lokalne wahania średniej: przyjmuje się, że średnia jest stała tylko w lokalnym sąsiedztwie, czyli w tak zwanym <strong>ruchomym oknie</strong> wokół punktu, którego wartość szacujemy.</p>
+<p><strong>Kriging z trendem</strong> (ang. <em>kriging with a trend</em>, KT), określany również jako kriging z wewnętrznym trendem, do estymacji wykorzystuje — oprócz zmienności wartości wraz z odległością — <strong>położenie analizowanych punktów</strong>, czyli ich współrzędne. Średnia, czyli trend, jest modelowana matematycznie wewnątrz każdego sąsiedztwa szukania jako funkcja współrzędnych, na przykład liniowa lub kwadratowa zależność od położenia. Kriging z trendem stosuje się, gdy średnia nie jest stała, lecz zmienia się w sposób płynny i systematyczny na całym obszarze.</p>
+</section>
+<section id="porównanie-wariantów" class="level3">
+<h3 class="anchored" data-anchor-id="porównanie-wariantów">Porównanie wariantów</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/kriging_porownanie.png" class="img-fluid figure-img"></p>
+<figcaption>Estymacja temperatury powietrza trzema wariantami krigingu (panel górny) oraz mapy różnic między nimi (panel dolny).</figcaption>
+</figure>
+</div>
+<p>Panel górny pokazuje, że wszystkie trzy metody dają <strong>zbliżony ogólny wzorzec przestrzenny</strong>. Mapy różnic pokazują, że największe rozbieżności między estymacjami występują tam, gdzie przekroczony zostaje zasięg autokorelacji, oraz na krawędziach obszaru, gdzie następuje ekstrapolacja. Estymacje krigingu prostego dążą tam do średniej globalnej, estymacje krigingu zwykłego — do najbliższej średniej lokalnej, a estymacje krigingu z trendem — do trendu średniej wyznaczonego w najbliższym sąsiedztwie szukania.</p>
+<p>Największe rozbieżności obserwujemy w porównaniach z <strong>krigingiem prostym</strong>: wynika to z tego, że zakłada on stałą, znaną wartość średnią dla całego obszaru, podczas gdy dwa pozostałe warianty wykorzystują wartości średnie zmieniające się lokalnie — w ruchomym oknie albo na podstawie trendu wyznaczonego w sąsiedztwie szukania.</p>
+<p>Różnica między <strong>krigingiem zwykłym a krigingiem z trendem</strong> jest najmniejsza. Oznacza to, że lokalne przybliżenie średniej daje wyniki zbliżone do modelu uwzględniającego trend, co z kolei sugeruje, że trend w danych może być słaby albo dobrze aproksymowany przez lokalne sąsiedztwo w krigingu zwykłym.</p>
+</section>
+</section>
+<section id="ocena-jakości-estymacji" class="level2">
+<h2 class="anchored" data-anchor-id="ocena-jakości-estymacji">Ocena jakości estymacji</h2>
+<section id="błąd-estymacji" class="level3">
+<h3 class="anchored" data-anchor-id="błąd-estymacji">Błąd estymacji</h3>
+<p>Jakość estymacji w geostatystyce ocenia się przede wszystkim poprzez analizę <strong>błędu estymacji</strong>, czyli różnicy między wartością obserwowaną (zmierzoną) a oszacowaną przez model:</p>
+<p><span class="math display">\[\text{błąd estymacji} = \text{wartość obserwowana} - \text{wartość estymowana}\]</span></p>
+<p>Im mniejsza jest ta różnica, tym lepiej dobrany został model struktury przestrzennej, czyli semiwariogram, oraz parametry obliczeń. Błąd dodatni oznacza, że estymacja była <strong>zaniżona</strong> względem pomiaru; błąd ujemny — że była <strong>zawyżona</strong>.</p>
+<p>Błąd estymacji można analizować za pomocą map, wykresów lub statystyk jakości estymacji. Mapa pokazuje, czy błędy skupiają się w określonej części obszaru; histogram — czy ich rozkład jest symetryczny; wykres rozrzutu wartości obserwowanych względem estymowanych — czy zależność między nimi jest liniowa i czy estymacja nie jest systematycznie przesunięta.</p>
+</section>
+<section id="statystyki-jakości-estymacji" class="level3">
+<h3 class="anchored" data-anchor-id="statystyki-jakości-estymacji">Statystyki jakości estymacji</h3>
+<p>Statystyki jakości estymacji stosowane są do oceny jakości estymacji lub do <strong>porównania wyników między kolejnymi estymacjami</strong>: wykonanymi różnymi wariantami krigingu, przy użyciu alternatywnych modeli semiwariogramu lub z innymi parametrami sąsiedztwa szukania.</p>
+<p><strong>Średni błąd estymacji</strong> (MPE, ang. <em>mean prediction error</em>):</p>
+<p><span class="math display">\[MPE = \frac{\sum_{i=1}^{n}\left(v_i - \hat{v}_i\right)}{n}\]</span></p>
+<p>gdzie <span class="math inline">\(v_i\)</span> to wartość obserwowana, <span class="math inline">\(\hat{v}_i\)</span> — wartość estymowana, a <span class="math inline">\(n\)</span> — liczba punktów danych. <strong>Optymalnie wartość średniego błędu estymacji powinna wynosić 0</strong>, co oznacza, że błędy przeszacowania i niedoszacowania wzajemnie się bilansują.</p>
+<p><strong>Pierwiastek błędu średniokwadratowego</strong> (RMSE, ang. <em>root mean square error</em>):</p>
+<p><span class="math display">\[RMSE = \sqrt{\frac{\sum_{i=1}^{n}\left(v_i - \hat{v}_i\right)^{2}}{n}}\]</span></p>
+<p><strong>Optymalnie wartość pierwiastka błędu średniokwadratowego powinna być jak najmniejsza.</strong> Intencją stworzenia tego wskaźnika była ocena błędu absolutnego, pozbawionego znaku: potęgowanie „usuwa” znak błędu, a pierwiastkowanie umożliwia powrót do oryginalnej skali pomiarowej. Operacja potęgowania zwiększa znaczenie dużych błędów i z tego powodu RMSE jest większe od średniej z błędów bezwzględnych.</p>
+<p><strong>Współczynnik determinacji</strong> (<span class="math inline">\(r^2\)</span>, ang. <em>coefficient of determination</em>) to <strong>kwadrat współczynnika korelacji liniowej</strong> między wartościami obserwowanymi a estymowanymi:</p>
+<p><span class="math display">\[r^{2} = \left[\frac{\sum_{i=1}^{n}\left(v_i - \overline{v}\right)
+                        \left(\hat{v}_i - \overline{\hat{v}}\right)}
+{\sqrt{\sum_{i=1}^{n}\left(v_i - \overline{v}\right)^{2}}\;
+\sqrt{\sum_{i=1}^{n}\left(\hat{v}_i - \overline{\hat{v}}\right)^{2}}}\right]^{2}\]</span></p>
+<p>gdzie <span class="math inline">\(\overline{v}\)</span> i <span class="math inline">\(\overline{\hat{v}}\)</span> to średnie arytmetyczne wartości obserwowanych i estymowanych. <strong>Współczynnik determinacji przyjmuje wartości od 0 do 1</strong>; im wartość bliższa 1, tym silniejsza zależność między wartościami obserwowanymi a estymowanymi. W części praktycznej liczy go wyrażenie <code>cor(obs, est)^2</code> (<a href="16_pola_ocena.html" class="quarto-xref"><span>11&nbsp; Ocena jakości estymacji</span></a>).</p>
+<p>Mierzy on <strong>siłę zależności</strong>, a nie trafność: estymacja systematycznie zawyżona o stałą wartość da <span class="math inline">\(r^2\)</span> równe 1. Dlatego czyta się go razem ze średnim błędem estymacji.</p>
+<p>Idealna estymacja dawałaby brak błędu oraz współczynnik determinacji między pomiarami a ich oszacowaniem równy 1, ale <strong>w praktyce idealna estymacja nie jest osiągalna</strong>: dane wejściowe mogą być obarczone błędem lub niepewnością, znaczenie ma także wielkość i reprezentatywność próby. Wysokie, pojedyncze wartości błędu mogą świadczyć o wystąpieniu wartości odstających.</p>
+<p>Trzech statystyk nie czyta się osobno. Średni błąd estymacji bliski zeru oznacza wyłącznie, że błędy się bilansują — może więc wystąpić także wtedy, gdy pojedyncze błędy są bardzo duże, ale przeciwnych znaków. Dopiero RMSE mówi, jak duży jest typowy błąd pojedynczej estymacji.</p>
+</section>
+<section id="walidacja-wyników-estymacji" class="level3">
+<h3 class="anchored" data-anchor-id="walidacja-wyników-estymacji">Walidacja wyników estymacji</h3>
+<p>Walidację wyników estymacji stosujemy, gdy chcemy wybrać optymalny model semiwariogramu do wykonania estymacji albo porównać wyniki estymacji otrzymane różnymi metodami, na przykład krigingiem prostym wobec zwykłego, lub przy różnych parametrach sąsiedztwa szukania.</p>
+<p>Obie stosowane metody walidacji wykorzystują <strong>posiadany już zbiór danych pomiarowych</strong> do wyznaczenia błędów estymacji, zamiast wymagać kosztownego i czasochłonnego zbierania dodatkowych próbek kontrolnych. Różnią się sposobem podziału danych i wiarygodnością wyników.</p>
+<p><strong>Walidacja podzbiorem</strong> (ang. <em>jackknifing</em>) polega na podziale zbioru danych na dwa podzbiory:</p>
+<ul>
+<li><strong>treningowy</strong>, zawierający 70–80% punktów pomiarowych — wykorzystywany do stworzenia semiwariogramu empirycznego i zbudowania modelu,</li>
+<li><strong>testowy</strong>, zawierający 20–30% punktów pomiarowych — dla jego lokalizacji wykonuje się kriging, a następnie porównuje wynik estymowany z wartościami pomiarowymi.</li>
+</ul>
+<p>Podział należy wykonać, wybierając punkty <strong>losowo</strong>.</p>
+<p><strong>Kroswalidacja</strong> (ang. <em>cross-validation</em>) używa tych samych danych do budowy modelu, estymacji i oceny jej jakości. Procedura kroswalidacji metodą wyłączania jednej obserwacji (ang. <em>leave-one-out cross-validation</em>, LOO) składa się z czterech kroków:</p>
+<ol type="1">
+<li>Zbudowanie matematycznego modelu ze wszystkich dostępnych danych.</li>
+<li>Dla każdej znanej obserwacji: usunięcie jej ze zbioru danych, użycie modelu do wykonania estymacji w miejscu tej obserwacji oraz wyliczenie błędu estymacji.</li>
+<li>Podsumowanie otrzymanych wyników w formie statystyk opisowych.</li>
+<li>Wizualizacja błędów estymacji.</li>
+</ol>
+<p>Dla każdego punktu kroswalidacja zwraca: wartość estymowaną — obliczoną <strong>bez udziału pomiaru z tej lokalizacji</strong>, wariancję krigingową, wartość obserwowaną, błąd estymacji oraz <strong>znormalizowany błąd estymacji</strong> (ang. <em>zscore</em>), obliczany jako iloraz błędu estymacji i pierwiastka z wariancji krigingowej. Błąd znormalizowany pozwala porównywać błędy z obszarów o różnym zagęszczeniu sieci pomiarowej: ten sam błąd bezwzględny znaczy co innego tam, gdzie pomiarów jest dużo, i tam, gdzie jest ich mało.</p>
+<section id="zalety-i-wady-obu-metod" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="zalety-i-wady-obu-metod">Zalety i wady obu metod</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Walidacja podzbiorem</th>
+<th>Kroswalidacja</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Zaleta</strong></td>
+<td><strong>Niezależność danych</strong> — zbiór walidacyjny jest całkowicie niezależny od danych użytych do estymacji, dlatego metoda ta jest preferowana</td>
+<td><strong>Efektywność przy małych zbiorach</strong> — wykorzystuje wszystkie dostępne dane pomiarowe, co umożliwia walidację nawet bardzo nielicznych zbiorów</td>
+</tr>
+<tr class="even">
+<td><strong>Wady</strong></td>
+<td><strong>Utrata danych</strong> — proces wymaga usunięcia części oryginalnych pomiarów z obliczeń estymacyjnych, co może osłabić jakość samego modelu. <strong>Wymóg dużej liczebności</strong> — zbiór musi być na tyle duży, aby po podziale mniejszy podzbiór nadal pozwalał na obliczenie wiarygodnych statystyk jakości</td>
+<td><strong>Brak niezależności</strong> — ten sam zbiór danych służy zarówno modelowaniu struktury przestrzennej, jak i samej walidacji</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="zakres-wniosków" class="level3">
+<h3 class="anchored" data-anchor-id="zakres-wniosków">Zakres wniosków</h3>
+<p>Metody tej części odpowiadają na pytanie, <strong>jaka jest wartość cechy w lokalizacjach bez pomiaru</strong> i <strong>jak zmienia się podobieństwo wartości wraz z odległością</strong>. Pytanie, <strong>dlaczego</strong> rozkład przestrzenny cechy jest taki, a nie inny, wymaga odniesienia jej wartości do innych zmiennych i wykracza poza metody opisane w tym rozdziale. Pytanie o rozmieszczenie samych lokalizacji — czy punkty pomiarowe tworzą skupiska, czy są rozmieszczone regularnie — należy do metod analizy rozkładu danych punktowych (<a href="08_punkty_odleglosc.html" class="quarto-xref"><span>5&nbsp; Metody oparte na odległości</span></a>), a pytanie o podobieństwo wartości w sąsiadujących jednostkach przestrzennych — do miar autokorelacji danych obszarowych (<a href="11_obszarowe_autokorelacja.html" class="quarto-xref"><span>7&nbsp; Miary autokorelacji danych obszarowych</span></a>).</p>
+</section>
+</section>
+<section id="powiązanie-z-ćwiczeniami" class="level2">
+<h2 class="anchored" data-anchor-id="powiązanie-z-ćwiczeniami">Powiązanie z ćwiczeniami</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Grupa metod</th>
+<th>Funkcje</th>
+<th>Pakiet</th>
+<th>Gdzie wykonujesz</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>siatka interpolacyjna i przycięcie wyniku</td>
+<td><code>rast(ext =, res =, crs =)</code>, <code>mask()</code>, <code>crop(mask = TRUE)</code></td>
+<td><code>terra</code></td>
+<td><a href="13_pola_interpolacja.html" class="quarto-xref"><span>8&nbsp; Metody interpolacji</span></a></td>
+</tr>
+<tr class="even">
+<td>interpolacja deterministyczna</td>
+<td><code>voronoi()</code>, <code>gstat(set = list(idp = ))</code>, <code>gstat(degree = )</code>, <code>interpolate()</code></td>
+<td><code>terra</code>, <code>gstat</code></td>
+<td><a href="13_pola_interpolacja.html" class="quarto-xref"><span>8&nbsp; Metody interpolacji</span></a></td>
+</tr>
+<tr class="odd">
+<td>analiza struktury przestrzennej</td>
+<td><code>hscat()</code>, <code>variogram()</code>, <code>variogram(cloud = TRUE)</code></td>
+<td><code>gstat</code></td>
+<td><a href="14_pola_semiwariogram.html" class="quarto-xref"><span>9&nbsp; Analiza i modelowanie struktury przestrzennej</span></a></td>
+</tr>
+<tr class="even">
+<td>modelowanie struktury przestrzennej</td>
+<td><code>vgm()</code>, <code>fit.variogram()</code>, <code>show.vgms()</code></td>
+<td><code>gstat</code></td>
+<td><a href="14_pola_semiwariogram.html" class="quarto-xref"><span>9&nbsp; Analiza i modelowanie struktury przestrzennej</span></a></td>
+</tr>
+<tr class="odd">
+<td>estymacja geostatystyczna</td>
+<td><code>gstat(model =, beta =, nmax =, maxdist =)</code>, <code>interpolate()</code>, <code>predict()</code></td>
+<td><code>gstat</code>, <code>terra</code></td>
+<td><a href="15_pola_estymacja.html" class="quarto-xref"><span>10&nbsp; Geostatystyczne metody estymacji</span></a></td>
+</tr>
+<tr class="even">
+<td>ocena jakości estymacji</td>
+<td><code>initial_split()</code>, <code>training()</code>, <code>testing()</code>, <code>krige.cv()</code></td>
+<td><code>rsample</code>, <code>gstat</code></td>
+<td><a href="16_pola_ocena.html" class="quarto-xref"><span>11&nbsp; Ocena jakości estymacji</span></a></td>
+</tr>
+</tbody>
+</table>
+<p>Opis pakietów wraz z odnośnikami do dokumentacji zawiera <a href="A_pakiety.html" class="quarto-xref"><span>Załącznik A — Pakiety</span></a>, a pełne zestawienie funkcji — <a href="B_funkcje.html" class="quarto-xref"><span>Załącznik B — Funkcje</span></a>.</p>
+</section>
+<section id="literatura" class="level2">
+<h2 class="anchored" data-anchor-id="literatura">Literatura</h2>
+<ul>
+<li><span class="citation" data-cites="goovaerts1997">Goovaerts (<a href="references.html#ref-goovaerts1997" role="doc-biblioref">1997</a>)</span> — definicja geostatystyki, modele semiwariogramu, warianty krigingu.</li>
+<li><span class="citation" data-cites="nowosad_geostat">Nowosad (<a href="references.html#ref-nowosad_geostat" role="doc-biblioref">b.d.</a>)</span> — geostatystyka w R: miary relacji przestrzennych, modelowanie autokorelacji przestrzennej, estymacje jednozmienne, ocena jakości estymacji.</li>
+<li><span class="citation" data-cites="mgimond">Gimond (<a href="references.html#ref-mgimond" role="doc-biblioref">b.d.</a>)</span> — interpolacja przestrzenna, diagramy Woronoja, metoda IDW, kriging.</li>
+<li><span class="citation" data-cites="moraga2023">Moraga (<a href="references.html#ref-moraga2023" role="doc-biblioref">2023</a>)</span> — dane geostatystyczne, modele przestrzenne, kriging.</li>
+<li><span class="citation" data-cites="pebesma2004">Pebesma (<a href="references.html#ref-pebesma2004" role="doc-biblioref">2004</a>)</span> — opis pakietu <code>gstat</code>, na którym oparta jest część praktyczna.</li>
+<li><span class="citation" data-cites="lovelace2025">Lovelace, Nowosad, i Muenchow (<a href="references.html#ref-lovelace2025" role="doc-biblioref">2025</a>)</span> — praca z danymi przestrzennymi w R.</li>
+</ul>
+</section>
+<section id="pytania-kontrolne" class="level2">
+<h2 class="anchored" data-anchor-id="pytania-kontrolne">Pytania kontrolne</h2>
+<blockquote class="blockquote">
+<p><strong>1.</strong> Kiedy zastosowanie interpolacji przestrzennej ma sens?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Wtedy, gdy interpolowana cecha charakteryzuje się <strong>ciągłością zmienności przestrzennej</strong>, rozumianą jako tendencja wzrostu zróżnicowania wartości wraz ze wzrostem odległości między punktami. Innymi słowy: wartości w lokalizacjach bliskich muszą być do siebie bardziej podobne niż w lokalizacjach odległych, a cecha nie może zmieniać się skokowo.</p>
+<p>Chwilowa temperatura powietrza tę własność ma. Wysokość chwilowego opadu — nie: między punktem w strefie opadu a punktem tuż poza nią różnica jest skokowa, niezależnie od dzielącej je odległości, więc oszacowanie z sąsiednich punktów nie ma podstawy.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>2.</strong> Co odróżnia metody deterministyczne od metod (geo)statystycznych?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Dwie rzeczy, obie rozstrzygające:</p>
+<ul>
+<li><strong>skąd pochodzą parametry metody</strong> — w metodach deterministycznych ustalane są w oparciu o określaną często arbitralnie funkcję odległości lub powierzchni, a w metodach (geo)statystycznych wyprowadzane są w oparciu o teorię prawdopodobieństwa, z samych danych;</li>
+<li><strong>co metoda zwraca</strong> — metoda deterministyczna zwraca wyłącznie oszacowanie, metoda (geo)statystyczna zwraca także <strong>oszacowanie błędu</strong>.</li>
+</ul>
+<p>Metody deterministyczne są za to prostsze i szybsze obliczeniowo.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>3.</strong> Które metody deterministyczne odtwarzają wartości pomiarowe dokładnie, a które je uśredniają?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Dokładnie odtwarzają</strong>: diagramy Woronoja (przepisują wartość punktu do całego jego poligonu, więc zbiór wartości na mapie jest zbiorem pomiarów) oraz funkcje sklejane (powierzchnia przechodzi dokładnie przez punkty wejściowe).</p>
+<p><strong>Uśredniają</strong>: metoda IDW (każde oszacowanie jest średnią ważoną wartości sąsiednich punktów, więc nigdy nie wychodzi poza ich zakres) oraz funkcje wielomianowe (jedna powierzchnia dopasowana do wszystkich punktów naraz zwykle przez żaden z nich nie przechodzi).</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>4.</strong> Czym różni się powierzchnia uzyskana funkcjami sklejanymi od powierzchni uzyskanej funkcjami wielomianowymi?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Zasięgiem dopasowania i relacją do punktów pomiarowych.</strong> Funkcje wielomianowe dopasowują <strong>jedną</strong> gładką powierzchnię do wszystkich punktów naraz, więc każdy punkt wpływa na jej kształt w całym obszarze, a powierzchnia opisuje ogólny kierunek zmienności i zwykle przez punkty nie przechodzi. Stąd czułość tej metody na wartości odstające — pojedynczy nietypowy pomiar przechyla całą powierzchnię.</p>
+<p>Funkcje sklejane dają powierzchnię gładką, ale przechodzącą <strong>dokładnie przez punkty wejściowe</strong>; stosuje się je do powierzchni zmieniających się delikatnie, takich jak wysokość terenu czy wysokość zwierciadła wody.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>5.</strong> Wymień cztery funkcje geostatystyki. Do której z nich należy kriging?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><strong>Identyfikacja i modelowanie struktury</strong> przestrzennej lub czasowej — przy pomocy semiwariogramów empirycznych.</li>
+<li><strong>Estymacja</strong> — szacowanie wartości cechy w miejscu lub momencie nieopróbowanym.</li>
+<li><strong>Symulacja</strong> — generowanie wielu alternatywnych, równie prawdopodobnych realizacji zmienności, służących ocenie niepewności.</li>
+<li><strong>Optymalizacja próbkowania</strong> — projektowanie sieci pomiarowej minimalizującej koszty przy maksymalnej ilości informacji.</li>
+</ol>
+<p><strong>Kriging należy do estymacji</strong> i jest jej najważniejszą grupą algorytmów. Interpolacja nie jest więc jedynym celem geostatystyki — pozostałe trzy funkcje odpowiadają na inne pytania.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>6.</strong> Co oznacza założenie stacjonarności i co się dzieje z semiwariogramem, gdy w danych występuje trend?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Stacjonarność oznacza, że <strong>lokalne średnie i wariancje, określane na podzbiorach danych, są na całym badanym obszarze względnie stałe</strong> — nie ma ich kierunkowych zmian, czyli trendów.</p>
+<p>Jeżeli w danych jest trend, założenie jest złamane i semiwariogram opisuje łącznie trend oraz zmienność lokalną. Semiwariancja rośnie wtedy dalej zamiast ustabilizować się na poziomie zbliżonym do wariancji próby, a odczytana semiwariancja progowa i zasięg przestają opisywać samą strukturę lokalną. Obliczenia się wykonają — zmienia się sens ich wyniku, nie ich wykonalność.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>7.</strong> Dlaczego dwa pomiary o tych samych współrzędnych są problemem?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Ponieważ tworzą parę punktów o <strong>odstępie zerowym</strong>. Semiwariancja takiej pary nie daje się odróżnić od zmienności opisywanej efektem samorodka, a w obliczeniach estymacji prowadzi do układu równań bez jednoznacznego rozwiązania: dwie identyczne lokalizacje dają dwa identyczne wiersze macierzy semiwariancji.</p>
+<p>Jest to jedno z wymagań wobec danych wejściowych, obok dostatecznej liczebności (minimalnie powyżej 30 obserwacji, zazwyczaj więcej niż 100–150), reprezentatywności dla całego obszaru, jednolitej metodyki i wystarczającej dokładności.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>8.</strong> We wzorze na semiwariancję występują oznaczenia <span class="math inline">\(z(u_{\alpha})\)</span>, <span class="math inline">\(h\)</span> oraz <span class="math inline">\(z(u_{\alpha}+h)\)</span>. Co oznacza każde z nich?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li><span class="math inline">\(u_{\alpha}\)</span> — wektor współrzędnych, czyli lokalizacja punktu pomiarowego,</li>
+<li><span class="math inline">\(z(u_{\alpha})\)</span> — wartość badanej cechy w tej lokalizacji, nazywana <strong>ogonem</strong> (<em>tail</em>),</li>
+<li><span class="math inline">\(h\)</span> — <strong>odstęp</strong> (<em>lag</em>), czyli wektor przesunięcia między dwiema lokalizacjami,</li>
+<li><span class="math inline">\(z(u_{\alpha}+h)\)</span> — wartość cechy w lokalizacji odległej o odstęp <span class="math inline">\(h\)</span>, nazywana <strong>głową</strong> (<em>head</em>).</li>
+</ul>
+<p>Semiwariancja jest połową kwadratu różnicy między głową a ogonem. Nazwy wskazują zwrot wektora <span class="math inline">\(h\)</span> i mają znaczenie wtedy, gdy zmienność przestrzenna zależy nie tylko od odległości, ale też od kierunku.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>9.</strong> Dlaczego semiwariogram empiryczny zastępuje się modelem?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Z dwóch powodów.</p>
+<p><strong>Semiwariogram empiryczny jest nieciągły</strong> — jego wartości są średnimi przedziałowymi, więc istnieją tylko dla tych odstępów, które w danych wystąpiły. Estymacja wymaga natomiast semiwariancji dla <strong>każdej</strong> kombinacji odległości i kierunku, również takiej, której w danych pomiarowych nie było. Model, jako funkcja ciągła, taki odczyt umożliwia.</p>
+<p><strong>Semiwariogram empiryczny jest chaotyczny</strong> — próba jest przybliżeniem rzeczywistości, obciążonym błędem pomiaru wartości i błędem lokalizacji. Dopasowanie modelu wygładza te fluktuacje.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>10.</strong> Dlaczego do modelowania semiwariogramu wolno użyć tylko wybranych funkcji matematycznych?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Z powodu <strong>wymogu dodatniej określoności modelu</strong>. Model semiwariogramu nie służy wyłącznie do opisania danych — wyznacza wagi w równaniach krigingu. Tylko wybrane funkcje gwarantują, że macierz układu równań krigingu będzie możliwa do rozwiązania i że wynikowa wariancja zawsze będzie <strong>dodatnia</strong>.</p>
+<p>W praktyce nie jest to znaczące ograniczenie, ponieważ wolno używać dowolnej kombinacji liczby i typu funkcji dozwolonych — stąd modele złożone.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>11.</strong> Po kształcie krzywej w początkowym odcinku rozpoznaj model: (a) początek paraboliczny, (b) początek liniowy o dużym nachyleniu, bez skończonego zasięgu, (c) początek liniowy, semiwariancja progowa osiągana dokładnie na zasięgu, (d) krzywa rosnąca bez ograniczenia.</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>(a) gaussowski</strong> — paraboliczny początek oznacza, że wartości w punktach położonych blisko siebie są niemal identyczne; model daje powierzchnię ekstremalnie gładką i zwykle nie powinien być stosowany samodzielnie.</p>
+<p><strong>(b) wykładniczy</strong> — nachylenie początkowe <span class="math inline">\(C/a\)</span>, większe niż w modelu sferycznym; semiwariancja rośnie gwałtownie nawet między bliskimi punktami, co opisuje zjawiska o niskiej ciągłości przestrzennej. Do progu zbliża się asymptotycznie, więc podaje się dla niego zasięg praktyczny.</p>
+<p><strong>(c) sferyczny</strong> — nachylenie początkowe <span class="math inline">\(3C/2a\)</span>; jako jedyny z czterech osiąga semiwariancję progową dokładnie na odległości równej zasięgowi i dalej pozostaje stały.</p>
+<p><strong>(d) potęgowy</strong> — model nieograniczony: nie ma ani zasięgu, ani semiwariancji progowej.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>12.</strong> Model nuggetowy okazał się jedynym modelem pasującym do danych. Co to mówi o danych?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Że analizowana cecha <strong>nie wykazuje autokorelacji przestrzennej</strong> w badanym zbiorze — niepodobieństwo jej wartości nie wzrasta wraz z odległością, więc semiwariancja jest stała dla wszystkich odstępów większych od zera.</p>
+<p>Zazwyczaj oznacza to, że <strong>odstęp próbkowania był większy niż zasięg autokorelacji</strong>: struktura przestrzenna może istnieć, ale sieć pomiarowa jest zbyt rzadka, żeby się w danych ujawniła. Problem leży wtedy w próbkowaniu, nie w zjawisku, a wnioskiem jest konieczność zagęszczenia sieci pomiarowej, nie stwierdzenie braku struktury przestrzennej.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>13.</strong> W krigingu zwykłym suma wag musi wynosić 1, a w krigingu prostym nie. Dlaczego? Jakie trzy informacje są potrzebne do wyznaczenia wag?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Bo warianty różnią się założeniem o średniej. W krigingu zwykłym (i z trendem) średnia jest <strong>nieznana</strong>, więc nieobciążoność estymatora wymusza się warunkiem <span class="math inline">\(\sum_{\alpha} \lambda_{\alpha}(u) = 1\)</span>: gdyby wagi sumowały się do innej wartości, oszacowanie byłoby systematycznie zawyżone albo zaniżone względem poziomu danych. W krigingu prostym średnia jest <strong>znana</strong>, więc warunek jest zbędny — wagi sumują się do wartości mniejszej od 1, a brakującą część przejmuje znana średnia <span class="citation" data-cites="goovaerts1997">(<a href="references.html#ref-goovaerts1997" role="doc-biblioref">Goovaerts 1997</a>)</span>.</p>
+<p>Do wyznaczenia wag potrzebne są trzy informacje:</p>
+<ol type="1">
+<li>odległości między wszystkimi parami lokalizacji punktów pomiarowych,</li>
+<li>odległości między punktami pomiarowymi a lokalizacją punktu estymowanego,</li>
+<li>dopasowany model semiwariogramu.</li>
+</ol>
+<p>Dwie pierwsze pochodzą ze współrzędnych, trzecia — z etapu modelowania. Model zamienia odległości na semiwariancje, a układ równań <span class="math inline">\(K \cdot \lambda = k\)</span> zamienia semiwariancje na wagi.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>14.</strong> Dlaczego grupa blisko położonych punktów pomiarowych otrzymuje łącznie mniejszą wagę niż pojedynczy punkt w tej samej odległości?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-18" class="callout-18-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Ponieważ przy ustalaniu wag kriging uwzględnia <strong>przestrzenny rozkład punktów</strong>, a nie tylko ich odległość od lokalizacji szacowanej. Zgrupowane punkty o podobnych wartościach przekazują łącznie mniej informacji niż pojedyncza lokalizacja — ich wartości są do siebie podobne właśnie dlatego, że leżą blisko siebie, więc powtarzają tę samą informację.</p>
+<p>Jest to własność, której metody deterministyczne nie mają. W metodzie IDW grupa pięciu blisko siebie położonych punktów ma pięciokrotnie większy wpływ na oszacowanie niż pojedynczy punkt w tej samej odległości, mimo że niesie niemal tę samą informację.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>15.</strong> Kriging zwraca wariancję krigingową. Po co w takim razie wykonuje się walidację?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-19" class="callout-19-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Ponieważ <strong>wariancja krigingowa i błąd estymacji mierzą co innego</strong>.</p>
+<p>Wariancja krigingowa nie zależy od zmierzonych wartości cechy, lecz od wzajemnego położenia punktów pomiarowych, ich liczby i przyjętego modelu. Opisuje więc <strong>geometrię sieci pomiarowej</strong> — pokazuje, gdzie brakuje danych — a jej mapę można narysować, znając same współrzędne punktów. Nie może powiedzieć, o ile oszacowanie rozminęło się z rzeczywistością.</p>
+<p>Walidacja dostarcza dla wybranych lokalizacji <strong>dwóch</strong> wartości — obserwowanej i estymowanej — i pozwala je porównać. Dopiero to pozwala wybrać optymalny model semiwariogramu albo porównać wyniki uzyskane różnymi wariantami krigingu lub przy innych parametrach sąsiedztwa szukania.</p>
+</div>
+</div>
+</div>
+<div id="najwazniejsze-pola" class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Najważniejsze informacje — zanim przejdziesz do części praktycznej
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><strong>Interpolacja przestrzenna</strong> szacuje wartość cechy w lokalizacji bez pomiaru, na podstawie zbioru punktów pomiarowych i wyprowadzonych z nich reguł podobieństwa przestrzennego malejącego wraz z odległością; ma sens tylko dla cechy o ciągłej zmienności przestrzennej.</li>
+<li>Metody dzielą się na <strong>deterministyczne</strong> (diagramy Woronoja, metoda średniej ważonej odwrotnością odległości, funkcje wielomianowe, funkcje sklejane) i <strong>(geo)statystyczne</strong> (kriging). Rozstrzygająca różnica: metody deterministyczne <strong>nie dostarczają oszacowania błędu</strong>, a ich parametry ustala arbitralnie analityk.</li>
+<li><strong>Metoda IDW</strong> liczy średnią ważoną odwrotnością odległości, więc jej wynik nigdy nie wychodzi poza zakres wartości pomiarowych, a wartości ekstremalne występują wyłącznie w lokalizacjach pomiarów. Wyższy wykładnik potęgowy daje powierzchnię mniej wygładzoną, niższy — bardziej.</li>
+<li><strong>Geostatystyka</strong> ma cztery funkcje: identyfikację i modelowanie struktury przestrzennej, estymację, symulację i optymalizację próbkowania; kriging należy do estymacji. Opiera się na dwóch założeniach: <strong>przestrzennej ciągłości</strong> i <strong>stacjonarności</strong>.</li>
+<li><strong>Semiwariancja</strong> jest miarą <strong>niepodobieństwa</strong> — połową kwadratu różnicy wartości w dwóch lokalizacjach odległych o <span class="math inline">\(h\)</span>. <strong>Semiwariogram empiryczny</strong> przedstawia jej wartości uśrednione w kolejnych odstępach, a <strong>model semiwariogramu</strong> zastępuje je funkcją ciągłą, z której można odczytać semiwariancję dla dowolnej odległości.</li>
+<li>Model opisują trzy wielkości: <strong>efekt samorodka</strong> (zmienność dla <span class="math inline">\(h = 0\)</span>), <strong>semiwariancja progowa</strong> (maksymalny poziom zmienności przestrzennej, zbliżony do wariancji próby, jeśli cecha jest stacjonarna) i <strong>zasięg</strong> (odległość osiągnięcia semiwariancji progowej). Stosuje się wyłącznie funkcje dozwolone — nuggetową, sferyczną, wykładniczą, gaussowską i potęgową — bo tylko one gwarantują rozwiązywalność układu równań krigingu i dodatnią wariancję.</li>
+<li><strong>Kriging</strong> liczy średnią ważoną, w której wagi pochodzą <strong>z modelu semiwariogramu</strong>, a nie z arbitralnie przyjętego wzoru; w krigingu zwykłym i z trendem ich suma wynosi 1, a w krigingu prostym brakującą część przejmuje znana średnia. Zwraca <strong>dwie</strong> wielkości: estymację oraz <strong>wariancję krigingową</strong> — względną ocenę niepewności wynikającą z rozmieszczenia punktów pomiarowych i z przyjętego modelu, <strong>a nie z wartości badanej cechy</strong>. Trzy warianty różnią się założeniem o średniej: znana i stała (kriging prosty), stała i nieznana (kriging zwykły), zmieniająca się z położeniem (kriging z trendem).</li>
+<li>Trafność estymacji ocenia <strong>błąd estymacji</strong> (obserwowane − estymowane) i trzy statystyki: <strong>MPE</strong> optymalnie 0 (błędy się bilansują), <strong>RMSE</strong> jak najmniejszy (duże błędy ważą więcej), <strong><span class="math inline">\(r^2\)</span></strong> — kwadrat współczynnika korelacji obserwacji z estymacjami — jak najbliższy 1, przy czym mierzy on siłę zależności, nie brak obciążenia. Dostarcza ich <strong>walidacja</strong>: podzbiorem (dane oceniające niezależne, wymaga dużego zbioru) albo kroswalidacja (wykorzystuje wszystkie obserwacje, ale ten sam zbiór służy modelowaniu i ocenie).</li>
+</ul>
+</div>
+</div>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-mgimond" class="csl-entry" role="listitem">
+Gimond, Manuel. b.d. <em>Intro to GIS and Spatial Analysis</em>. <a href="https://mgimond.github.io/Spatial/">https://mgimond.github.io/Spatial/</a>.
+</div>
+<div id="ref-goovaerts1997" class="csl-entry" role="listitem">
+Goovaerts, Pierre. 1997. <em>Geostatistics for Natural Resources Evaluation</em>. New York: Oxford University Press.
+</div>
+<div id="ref-krige1951" class="csl-entry" role="listitem">
+Krige, Daniel G. 1951. <span>„A statistical approach to some basic mine valuation problems on the <span>W</span>itwatersrand”</span>. <em>Journal of the Chemical, Metallurgical and Mining Society of South Africa</em> 52 (6): 119–39.
+</div>
+<div id="ref-lovelace2025" class="csl-entry" role="listitem">
+Lovelace, Robin, Jakub Nowosad, i Jannes Muenchow. 2025. <em>Geocomputation with R</em>. 2. wyd. Boca Raton: Chapman; Hall/CRC. <a href="https://r.geocompx.org/">https://r.geocompx.org/</a>.
+</div>
+<div id="ref-matheron1963" class="csl-entry" role="listitem">
+Matheron, Georges. 1963. <span>„Principles of geostatistics”</span>. <em>Economic Geology</em> 58 (8): 1246–66.
+</div>
+<div id="ref-moraga2023" class="csl-entry" role="listitem">
+Moraga, Paula. 2023. <em>Spatial Statistics for Data Science: Theory and Practice with R</em>. Chapman; Hall/CRC. <a href="https://www.paulamoraga.com/book-spatial/">https://www.paulamoraga.com/book-spatial/</a>.
+</div>
+<div id="ref-nowosad_geostat" class="csl-entry" role="listitem">
+Nowosad, Jakub. b.d. <em>Geostatystyka w R</em>. <a href="https://jakubnowosad.com/geostat_book/">https://jakubnowosad.com/geostat_book/</a>.
+</div>
+<div id="ref-pebesma2004" class="csl-entry" role="listitem">
+Pebesma, Edzer J. 2004. <span>„Multivariable geostatistics in <span>S</span>: the gstat package”</span>. <em>Computers &amp; Geosciences</em> 30 (7): 683–91. <a href="https://doi.org/10.1016/j.cageo.2004.03.012">https://doi.org/10.1016/j.cageo.2004.03.012</a>.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Skopiowano!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Skopiowano!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./11_obszarowe_autokorelacja.html" class="pagination-link" aria-label="Miary autokorelacji danych obszarowych">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Miary autokorelacji danych obszarowych</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./13_pola_interpolacja.html" class="pagination-link" aria-label="Metody interpolacji">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Metody interpolacji</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

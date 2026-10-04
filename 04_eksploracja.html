@@ -1,0 +1,1897 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pl" xml:lang="pl"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>2&nbsp; Eksploracyjna analiza danych – Statystyka przestrzenna</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./05_punkty_teoria.html" rel="next">
+<link href="./03_eksploracja_teoria.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-c852b7e71cc1c09f55f367b2512aabbd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Brak wyników",
+    "search-matching-documents-text": "dopasowane dokumenty",
+    "search-copy-link-title": "Kopiuj link do wyszukiwania",
+    "search-hide-matches-text": "Ukryj dodatkowe dopasowania",
+    "search-more-match-text": "więcej dopasowań w tym dokumencie",
+    "search-more-matches-text": "więcej dopasowań w tym dokumencie",
+    "search-clear-button-title": "Wyczyść",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Anuluj",
+    "search-submit-button-title": "Zatwierdź",
+    "search-label": "Szukaj"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Przełącz pasek boczny" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./03_eksploracja_teoria.html">EKSPLORACYJNA ANALIZA DANYCH</a></li><li class="breadcrumb-item"><a href="./04_eksploracja.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Eksploracyjna analiza danych</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Przełącz pasek boczny" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Szukaj" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Statystyka przestrzenna</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Szukaj"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">O skrypcie</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./01_wstep.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">WSTĘP</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_dane_przestrzenne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Dane przestrzenne w R</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./03_eksploracja_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">EKSPLORACYJNA ANALIZA DANYCH</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_eksploracja.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Eksploracyjna analiza danych</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./05_punkty_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE PUNKTOWE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_punkty_centrograficzne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Statystyki centrograficzne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_punkty_intensywnosc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Metody oparte na analizie intensywności</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_punkty_odleglosc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Metody oparte na odległości</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./09_obszarowe_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE OBSZAROWE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_obszarowe_sasiedztwo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Określanie sąsiedztwa danych obszarowych</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_obszarowe_autokorelacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Miary autokorelacji danych obszarowych</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./12_pola_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE POWIERZCHNIOWE CIĄGŁE PRZESTRZENNIE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13_pola_interpolacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Metody interpolacji</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14_pola_semiwariogram.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Analiza i modelowanie struktury przestrzennej</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15_pola_estymacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Geostatystyczne metody estymacji</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_pola_ocena.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Ocena jakości estymacji</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">ZADANIA I PROJEKTY</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_zadania_samodzielne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Zadania samodzielne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18_projekt1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Projekt 1: przestępczość a zmienne społeczno-ekonomiczne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19_projekt2_geostatystyka.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Projekt 2: Geostatystyka</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Załączniki</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./A_pakiety.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Pakiety</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./B_funkcje.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Funkcje</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./C_operacje.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Operacje na danych przestrzennych</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./D_slownik.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Słownik pojęć</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bibliografia</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Spis treści</h2>
+   
+  <ul>
+  <li><a href="#wprowadzenie" id="toc-wprowadzenie" class="nav-link active" data-scroll-target="#wprowadzenie"><span class="header-section-number">2.1</span> Wprowadzenie</a></li>
+  <li><a href="#eksploracyjna-analiza-danych-w-r" id="toc-eksploracyjna-analiza-danych-w-r" class="nav-link" data-scroll-target="#eksploracyjna-analiza-danych-w-r"><span class="header-section-number">2.2</span> Eksploracyjna analiza danych w R</a></li>
+  <li><a href="#przykład-1-przestępczość-w-hrabstwie-cook" id="toc-przykład-1-przestępczość-w-hrabstwie-cook" class="nav-link" data-scroll-target="#przykład-1-przestępczość-w-hrabstwie-cook"><span class="header-section-number">2.3</span> Przykład 1: Przestępczość w hrabstwie Cook</a>
+  <ul class="collapse">
+  <li><a href="#dane-i-cel-analizy" id="toc-dane-i-cel-analizy" class="nav-link" data-scroll-target="#dane-i-cel-analizy">Dane i cel analizy</a></li>
+  <li><a href="#krok-1-podsumowanie-numeryczne" id="toc-krok-1-podsumowanie-numeryczne" class="nav-link" data-scroll-target="#krok-1-podsumowanie-numeryczne">Krok 1: podsumowanie numeryczne</a></li>
+  <li><a href="#krok-2-rozkład-zmiennej" id="toc-krok-2-rozkład-zmiennej" class="nav-link" data-scroll-target="#krok-2-rozkład-zmiennej">Krok 2: rozkład zmiennej</a></li>
+  <li><a href="#krok-3-zależność-od-zmiennych-społeczno-ekonomicznych" id="toc-krok-3-zależność-od-zmiennych-społeczno-ekonomicznych" class="nav-link" data-scroll-target="#krok-3-zależność-od-zmiennych-społeczno-ekonomicznych">Krok 3: zależność od zmiennych społeczno-ekonomicznych</a></li>
+  <li><a href="#krok-4-zmienność-przestępczości-w-klasach" id="toc-krok-4-zmienność-przestępczości-w-klasach" class="nav-link" data-scroll-target="#krok-4-zmienność-przestępczości-w-klasach">Krok 4: zmienność przestępczości w klasach</a></li>
+  <li><a href="#krok-5-eksploracyjna-analiza-przestrzenna" id="toc-krok-5-eksploracyjna-analiza-przestrzenna" class="nav-link" data-scroll-target="#krok-5-eksploracyjna-analiza-przestrzenna">Krok 5: eksploracyjna analiza przestrzenna</a></li>
+  <li><a href="#interpretacja-wyniku" id="toc-interpretacja-wyniku" class="nav-link" data-scroll-target="#interpretacja-wyniku">Interpretacja wyniku</a></li>
+  </ul></li>
+  <li><a href="#przykład-2-rozkład-temperatury-powietrza" id="toc-przykład-2-rozkład-temperatury-powietrza" class="nav-link" data-scroll-target="#przykład-2-rozkład-temperatury-powietrza"><span class="header-section-number">2.4</span> Przykład 2: Rozkład temperatury powietrza</a>
+  <ul class="collapse">
+  <li><a href="#dane-i-cel-analizy-1" id="toc-dane-i-cel-analizy-1" class="nav-link" data-scroll-target="#dane-i-cel-analizy-1">Dane i cel analizy</a></li>
+  <li><a href="#krok-1-podsumowanie-numeryczne-1" id="toc-krok-1-podsumowanie-numeryczne-1" class="nav-link" data-scroll-target="#krok-1-podsumowanie-numeryczne-1">Krok 1: podsumowanie numeryczne</a></li>
+  <li><a href="#krok-2-rozkład-zmiennej-1" id="toc-krok-2-rozkład-zmiennej-1" class="nav-link" data-scroll-target="#krok-2-rozkład-zmiennej-1">Krok 2: rozkład zmiennej</a></li>
+  <li><a href="#krok-3-zależność-od-zmiennych-ilościowych" id="toc-krok-3-zależność-od-zmiennych-ilościowych" class="nav-link" data-scroll-target="#krok-3-zależność-od-zmiennych-ilościowych">Krok 3: zależność od zmiennych ilościowych</a></li>
+  <li><a href="#krok-4-zmienność-w-klasach-pokrycia-terenu" id="toc-krok-4-zmienność-w-klasach-pokrycia-terenu" class="nav-link" data-scroll-target="#krok-4-zmienność-w-klasach-pokrycia-terenu">Krok 4: zmienność w klasach pokrycia terenu</a></li>
+  <li><a href="#krok-5-eksploracyjna-analiza-przestrzenna-1" id="toc-krok-5-eksploracyjna-analiza-przestrzenna-1" class="nav-link" data-scroll-target="#krok-5-eksploracyjna-analiza-przestrzenna-1">Krok 5: eksploracyjna analiza przestrzenna</a></li>
+  <li><a href="#interpretacja-wyniku-1" id="toc-interpretacja-wyniku-1" class="nav-link" data-scroll-target="#interpretacja-wyniku-1">Interpretacja wyniku</a></li>
+  </ul></li>
+  <li><a href="#pytania-kontrolne" id="toc-pytania-kontrolne" class="nav-link" data-scroll-target="#pytania-kontrolne"><span class="header-section-number">2.5</span> Pytania kontrolne</a></li>
+  <li><a href="#podsumowanie" id="toc-podsumowanie" class="nav-link" data-scroll-target="#podsumowanie"><span class="header-section-number">2.6</span> Podsumowanie</a></li>
+  <li><a href="#pełny-kod-analizy" id="toc-pełny-kod-analizy" class="nav-link" data-scroll-target="#pełny-kod-analizy"><span class="header-section-number">2.7</span> Pełny kod analizy</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./03_eksploracja_teoria.html">EKSPLORACYJNA ANALIZA DANYCH</a></li><li class="breadcrumb-item"><a href="./04_eksploracja.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Eksploracyjna analiza danych</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-eksploracja" class="quarto-section-identifier"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Eksploracyjna analiza danych</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Czego się nauczysz
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Po tym rozdziale potrafisz wykonać w R:</strong></p>
+<ul>
+<li>obliczyć i opisać podstawowe statystyki opisowe zmiennej oraz liczebność kategorii,</li>
+<li>przedstawić rozkład zmiennej na histogramie i wykresie gęstości, obliczyć skośność i kurtozę oraz wskazać wartości globalnie odstające,</li>
+<li>zbadać zależność między dwiema zmiennymi ilościowymi (wykres rozrzutu, test korelacji),</li>
+<li>zbadać zależność wielu zmiennych jednocześnie (macierz korelacji, macierz wykresów rozrzutu),</li>
+<li>zbadać zróżnicowanie zmiennej ilościowej w grupach (wykres pudełkowy, analiza wariancji, porównania wielokrotne),</li>
+<li>wykonać mapę lokalizacyjną oraz mapę rozkładu przestrzennego zmiennej.</li>
+</ul>
+<p><strong>Rozumiesz i umiesz zinterpretować:</strong></p>
+<ul>
+<li>różnicę między <strong>istotnością statystyczną</strong> a <strong>siłą zależności</strong>,</li>
+<li>skośność i kurtozę jako liczbowy opis rozkładu,</li>
+<li>wykres pudełkowy czytany razem z liczebnością grup,</li>
+<li>objawy wartości odstających lokalnie oraz typ próbkowania widoczny na mapie,</li>
+<li>granice wnioskowania z danych obszarowych: korelacja nie jest przyczynowością, a zależność między obszarami nie przenosi się na osoby.</li>
+</ul>
+<p><strong>Teoria:</strong> <a href="./03_eksploracja_teoria.html#najwazniejsze-eksploracja">Najważniejsze informacje</a>. <strong>Przygotowanie danych:</strong> <a href="02_dane_przestrzenne.html" class="quarto-xref"><span>Rozdział 1</span></a>. <strong>Funkcje:</strong> <a href="B_funkcje.html" class="quarto-xref"><span>Załącznik B</span></a>.</p>
+</div>
+</div>
+<section id="wprowadzenie" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="wprowadzenie"><span class="header-section-number">2.1</span> Wprowadzenie</h2>
+<p>Rozdział pokazuje, jak wykonać eksploracyjną analizę danych w R. Teorię — cele eksploracji, podział na analizę nieprzestrzenną i przestrzenną, opis poszczególnych metod — zawiera <a href="./03_eksploracja_teoria.html">rozdział teoretyczny części</a>; tutaj zajmujemy się wyłącznie jego zastosowaniem.</p>
+<p>Oba przykłady startują z danych już przygotowanych. Przygotowanie danych przestrzennych — złączenia, ujednolicenie układów współrzędnych, selekcja przestrzenna, zliczanie punktów w poligonach — jest przedmiotem <a href="02_dane_przestrzenne.html" class="quarto-xref"><span>Rozdział 1</span></a>.</p>
+<ul>
+<li><strong>Przykład 1</strong> dotyczy danych obszarowych i jest wzorcem dla projektu 1 (<a href="18_projekt1.html" class="quarto-xref"><span>Rozdział 13</span></a>).</li>
+<li><strong>Przykład 2</strong> dotyczy danych punktowych i jest punktem wyjścia dla części geostatystycznej (<a href="14_pola_semiwariogram.html" class="quarto-xref"><span>Rozdział 9</span></a>).</li>
+</ul>
+</section>
+<section id="eksploracyjna-analiza-danych-w-r" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="eksploracyjna-analiza-danych-w-r"><span class="header-section-number">2.2</span> Eksploracyjna analiza danych w R</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Czynność</th>
+<th>Funkcja</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>podstawowe statystyki opisowe</td>
+<td><code>summary()</code>, <code>sd()</code></td>
+</tr>
+<tr class="even">
+<td>liczebność kategorii</td>
+<td><code>table()</code></td>
+</tr>
+<tr class="odd">
+<td>skośność i kurtoza</td>
+<td><code>e1071::skewness()</code>, <code>e1071::kurtosis()</code></td>
+</tr>
+<tr class="even">
+<td>histogram, wykres gęstości</td>
+<td><code>ggplot2::geom_histogram()</code>, <code>geom_density()</code></td>
+</tr>
+<tr class="odd">
+<td>wykres pudełkowy</td>
+<td><code>ggplot2::geom_boxplot()</code></td>
+</tr>
+<tr class="even">
+<td>wykres rozrzutu</td>
+<td><code>ggplot2::geom_point()</code></td>
+</tr>
+<tr class="odd">
+<td>współczynnik korelacji i test korelacji</td>
+<td><code>cor()</code>, <code>cor.test(method = "spearman")</code></td>
+</tr>
+<tr class="even">
+<td>macierz wykresów rozrzutu</td>
+<td><code>PerformanceAnalytics::chart.Correlation()</code></td>
+</tr>
+<tr class="odd">
+<td>analiza wariancji i porównania wielokrotne</td>
+<td><code>aov()</code>, <code>TukeyHSD()</code></td>
+</tr>
+<tr class="even">
+<td>mapa lokalizacyjna z siatką współrzędnych</td>
+<td><code>tmap::tm_grid()</code>, <code>tm_graticules()</code></td>
+</tr>
+<tr class="odd">
+<td>mapa rozkładu przestrzennego zmiennej</td>
+<td><code>tmap::tm_symbols()</code>, <code>tm_polygons()</code></td>
+</tr>
+</tbody>
+</table>
+<p>Pełne zestawienie funkcji — <a href="B_funkcje.html" class="quarto-xref"><span>Załącznik B</span></a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(e1071)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="przykład-1-przestępczość-w-hrabstwie-cook" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="przykład-1-przestępczość-w-hrabstwie-cook"><span class="header-section-number">2.3</span> Przykład 1: Przestępczość w hrabstwie Cook</h2>
+<section id="dane-i-cel-analizy" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="dane-i-cel-analizy">Dane i cel analizy</h3>
+<p><strong>Cel.</strong> Znalezienie czynników społeczno-ekonomicznych powiązanych z poziomem przestępczości. <em>Czy istnieje zależność między współczynnikiem kradzieży samochodów a zmiennymi społeczno-ekonomicznymi?</em></p>
+<p><strong>Dane.</strong> Plik <code>data/cook_przygotowane.gpkg</code> — obszary spisowe hrabstwa Cook z przypisanymi danymi społeczno-ekonomicznymi (American Community Survey 2016–2020), liczbą kradzieży samochodów w 2020 roku (<code>NB_CRIMES</code>) oraz współczynnikiem na 1000 mieszkańców (<code>CRIME_RATE</code>). Sposób przygotowania tego pliku z trzech źródeł pokazuje <a href="02_dane_przestrzenne.html" class="quarto-xref"><span>Rozdział 1</span></a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>cook <span class="ot">=</span> <span class="fu">read_sf</span>(<span class="st">"data/cook_przygotowane.gpkg"</span>, <span class="at">layer =</span> <span class="st">"cook"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(cook)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 788</code></pre>
+</div>
+</div>
+<p>Część analiz statystycznych wykonuje się na tabeli bez kolumny geometrii.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>cook_attr <span class="ot">=</span> <span class="fu">st_drop_geometry</span>(cook)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="krok-1-podsumowanie-numeryczne" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-1-podsumowanie-numeryczne">Krok 1: podsumowanie numeryczne</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(cook_attr<span class="sc">$</span>CRIME_RATE)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 0.1563  1.5652  2.8933  4.3606  6.0958 31.1284 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(cook_attr<span class="sc">$</span>CRIME_RATE)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4.06271</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(cook_attr<span class="sc">$</span>INCOME_CAT, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  high    low medium   &lt;NA&gt; 
+   152    282    349      5 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(cook_attr<span class="sc">$</span>HOME_VALUES_CAT, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  high    low medium   &lt;NA&gt; 
+   208    199    365     16 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(cook_attr<span class="sc">$</span>BUILT_YEAR_CAT, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+medium    new    old 
+   314     16    458 </code></pre>
+</div>
+</div>
+</section>
+<section id="krok-2-rozkład-zmiennej" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-2-rozkład-zmiennej">Krok 2: rozkład zmiennej</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(cook_attr, <span class="fu">aes</span>(<span class="at">x =</span> CRIME_RATE)) <span class="sc">+</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Kradzieże na 1000 mieszkańców"</span>, <span class="at">y =</span> <span class="st">"Liczba obszarów spisowych"</span>) <span class="sc">+</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_eksploracja_files/figure-html/p1-krok2a-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">skewness</span>(cook_attr<span class="sc">$</span>CRIME_RATE)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.93658</code></pre>
+</div>
+</div>
+</section>
+<section id="krok-3-zależność-od-zmiennych-społeczno-ekonomicznych" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-3-zależność-od-zmiennych-społeczno-ekonomicznych">Krok 3: zależność od zmiennych społeczno-ekonomicznych</h3>
+<p>Obliczamy współczynniki korelacji między przestępczością a wszystkimi zmiennymi ilościowymi. Zmienne wskazujemy nazwami, a nie numerami kolumn — numery przestają być poprawne po każdej zmianie w zbiorze danych.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>zmienne <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"WHITE"</span>, <span class="st">"BLACK"</span>, <span class="st">"ASIAN"</span>, <span class="st">"HISPANIC"</span>, <span class="st">"OTHER"</span>, <span class="st">"FOREIGN_BORN"</span>,</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>            <span class="st">"UNEMPL"</span>, <span class="st">"PUBLIC_ASSIST"</span>, <span class="st">"VACANT"</span>, <span class="st">"OCCUPIED"</span>, <span class="st">"OWNER"</span>, <span class="st">"RENTER"</span>,</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">"MEDIAN_INCOME"</span>, <span class="st">"MEDIAN_BUILT_YEAR"</span>, <span class="st">"MEDIAN_HOME_VALUE"</span>,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">"SEX_RATIO"</span>, <span class="st">"EDU_HIGH"</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>korelacje <span class="ot">=</span> <span class="fu">sapply</span>(cook_attr[zmienne], <span class="cf">function</span>(x) {</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor</span>(cook_attr<span class="sc">$</span>CRIME_RATE, x, <span class="at">method =</span> <span class="st">"spearman"</span>, <span class="at">use =</span> <span class="st">"complete.obs"</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">sort</span>(korelacje), <span class="dv">2</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            WHITE          OCCUPIED      FOREIGN_BORN     MEDIAN_INCOME 
+            -0.58             -0.54             -0.54             -0.50 
+            ASIAN          HISPANIC MEDIAN_HOME_VALUE          EDU_HIGH 
+            -0.49             -0.42             -0.41             -0.37 
+            OWNER         SEX_RATIO MEDIAN_BUILT_YEAR             OTHER 
+            -0.37             -0.27              0.00              0.15 
+           RENTER            UNEMPL            VACANT     PUBLIC_ASSIST 
+             0.37              0.49              0.54              0.56 
+            BLACK 
+             0.64 </code></pre>
+</div>
+</div>
+<p>Do dalszej analizy wybieramy zmienne o współczynniku korelacji przekraczającym 0,5 w wartości bezwzględnej.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>wybrane <span class="ot">=</span> <span class="fu">names</span>(korelacje)[<span class="fu">abs</span>(korelacje) <span class="sc">&gt;</span> <span class="fl">0.5</span>]</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(korelacje[wybrane], <span class="dv">2</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        WHITE         BLACK  FOREIGN_BORN PUBLIC_ASSIST        VACANT 
+        -0.58          0.64         -0.54          0.56          0.54 
+     OCCUPIED MEDIAN_INCOME 
+        -0.54         -0.50 </code></pre>
+</div>
+</div>
+<p>Macierz wykresów rozrzutu przedstawia jednocześnie rozkłady wybranych zmiennych, wykresy rozrzutu dla wszystkich par oraz wartości współczynników korelacji.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>PerformanceAnalytics<span class="sc">::</span><span class="fu">chart.Correlation</span>(cook_attr[, <span class="fu">c</span>(<span class="st">"CRIME_RATE"</span>, wybrane)],</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">histogram =</span> <span class="cn">TRUE</span>, <span class="at">pch =</span> <span class="dv">19</span>,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">method =</span> <span class="st">"spearman"</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_eksploracja_files/figure-html/p1-krok3c-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Dlaczego <code>PerformanceAnalytics::</code>, a nie <code>library(PerformanceAnalytics)</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Pakiet <code>PerformanceAnalytics</code> zawiera własne funkcje <code>skewness()</code> i <code>kurtosis()</code>, o takich samych nazwach jak funkcje z pakietu <code>e1071</code>. Po wywołaniu <code>library(PerformanceAnalytics)</code> <strong>zasłaniają</strong> one funkcje z <code>e1071</code> — a liczą według innego estymatora, więc dają inne wyniki (dla danych z Przykładu 2: skośność 0,416 zamiast 0,413, kurtoza −0,562 zamiast −0,581).</p>
+<p>R informuje o tym komunikatem <code>The following objects are masked from 'package:e1071'</code>, który łatwo przeoczyć. Dlatego funkcję potrzebną tylko raz wywołujemy z przedrostkiem nazwy pakietu (<code>pakiet::funkcja()</code>), bez <code>library()</code> — nic wtedy nie zostaje zasłonięte.</p>
+</div>
+</div>
+</section>
+<section id="krok-4-zmienność-przestępczości-w-klasach" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-4-zmienność-przestępczości-w-klasach">Krok 4: zmienność przestępczości w klasach</h3>
+<p>Klasy dochodu i wartości domów wyznaczono kwartylami odpowiedniej zmiennej: <code>low</code> — wartości poniżej pierwszego kwartyla, <code>medium</code> — między pierwszym a trzecim kwartylem, <code>high</code> — powyżej trzeciego kwartyla. Klasy wieku zabudowy: <code>old</code> — zabudowa powstała przed 1950 rokiem, <code>medium</code> — między 1950 a 2000, <code>new</code> — po 2000 roku.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>cook_attr <span class="sc">|&gt;</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(INCOME_CAT)) <span class="sc">|&gt;</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">INCOME_CAT =</span> <span class="fu">factor</span>(INCOME_CAT, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"low"</span>, <span class="st">"medium"</span>, <span class="st">"high"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> INCOME_CAT, <span class="at">y =</span> CRIME_RATE)) <span class="sc">+</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Poziom dochodów gospodarstw domowych"</span>,</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Kradzieże na 1000 mieszkańców"</span>) <span class="sc">+</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_eksploracja_files/figure-html/p1-krok4a-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>cook_attr <span class="sc">|&gt;</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(HOME_VALUES_CAT)) <span class="sc">|&gt;</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">HOME_VALUES_CAT =</span> <span class="fu">factor</span>(HOME_VALUES_CAT, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"low"</span>, <span class="st">"medium"</span>, <span class="st">"high"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> HOME_VALUES_CAT, <span class="at">y =</span> CRIME_RATE)) <span class="sc">+</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Wartość domów"</span>, <span class="at">y =</span> <span class="st">"Kradzieże na 1000 mieszkańców"</span>) <span class="sc">+</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_eksploracja_files/figure-html/p1-krok4b-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>cook_attr <span class="sc">|&gt;</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">BUILT_YEAR_CAT =</span> <span class="fu">factor</span>(BUILT_YEAR_CAT, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"old"</span>, <span class="st">"medium"</span>, <span class="st">"new"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> BUILT_YEAR_CAT, <span class="at">y =</span> CRIME_RATE)) <span class="sc">+</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Wiek zabudowy"</span>, <span class="at">y =</span> <span class="st">"Kradzieże na 1000 mieszkańców"</span>) <span class="sc">+</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_eksploracja_files/figure-html/p1-krok4c-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Mediany w klasach, do odczytania razem z liczebnościami z kroku 1:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>cook_attr <span class="sc">|&gt;</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(INCOME_CAT)) <span class="sc">|&gt;</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(INCOME_CAT) <span class="sc">|&gt;</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">mediana =</span> <span class="fu">round</span>(<span class="fu">median</span>(CRIME_RATE), <span class="dv">2</span>))</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+  INCOME_CAT     n mediana
+  &lt;chr&gt;      &lt;int&gt;   &lt;dbl&gt;
+1 high         152    2.01
+2 low          282    5.89
+3 medium       349    2.23</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>cook_attr <span class="sc">|&gt;</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(BUILT_YEAR_CAT) <span class="sc">|&gt;</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">mediana =</span> <span class="fu">round</span>(<span class="fu">median</span>(CRIME_RATE), <span class="dv">2</span>))</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+  BUILT_YEAR_CAT     n mediana
+  &lt;chr&gt;          &lt;int&gt;   &lt;dbl&gt;
+1 medium           314    2.74
+2 new               16    5.3 
+3 old              458    2.96</code></pre>
+</div>
+</div>
+</section>
+<section id="krok-5-eksploracyjna-analiza-przestrzenna" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-5-eksploracyjna-analiza-przestrzenna">Krok 5: eksploracyjna analiza przestrzenna</h3>
+<p>Eksploracja przestrzenna polega tu na wizualizacji przestępczości oraz zmiennych społeczno-ekonomicznych, aby ocenić, czy obszary o wysokich i niskich wartościach pokrywają się przestrzennie.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(cook) <span class="sc">+</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"CRIME_RATE"</span>,</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.scale =</span> <span class="fu">tm_scale_intervals</span>(<span class="at">style =</span> <span class="st">"jenks"</span>, <span class="at">n =</span> <span class="dv">4</span>,</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>                                              <span class="at">values =</span> <span class="st">"brewer.yl_or_rd"</span>),</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"Kradzieże / 1000 mieszk."</span>))</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_eksploracja_files/figure-html/p1-krok5a-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>paleta <span class="ot">=</span> <span class="fu">tm_scale_intervals</span>(<span class="at">values =</span> <span class="st">"brewer.yl_or_rd"</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_arrange</span>(</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(cook) <span class="sc">+</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"BLACK"</span>, <span class="at">fill.scale =</span> paleta,</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"BLACK"</span>)),</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(cook) <span class="sc">+</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"WHITE"</span>, <span class="at">fill.scale =</span> paleta,</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"WHITE"</span>)),</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(cook) <span class="sc">+</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"VACANT"</span>, <span class="at">fill.scale =</span> paleta,</span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>                <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"VACANT"</span>)),</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(cook) <span class="sc">+</span></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"PUBLIC_ASSIST"</span>, <span class="at">fill.scale =</span> paleta,</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>                <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"PUBLIC_ASSIST"</span>)),</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">ncol =</span> <span class="dv">2</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_eksploracja_files/figure-html/p1-krok5b-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Zmienne jakościowe wymagają skali kategorycznej i palety przypisanej do klas.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>paleta_klas <span class="ot">=</span> <span class="fu">c</span>(<span class="at">low =</span> <span class="st">"#FFF68F"</span>, <span class="at">medium =</span> <span class="st">"#EEB422"</span>, <span class="at">high =</span> <span class="st">"#FF4040"</span>)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_arrange</span>(</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(cook) <span class="sc">+</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"INCOME_CAT"</span>,</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">fill.scale =</span> <span class="fu">tm_scale_categorical</span>(<span class="at">values =</span> paleta_klas),</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"Dochód"</span>)),</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(cook) <span class="sc">+</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"HOME_VALUES_CAT"</span>,</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>                <span class="at">fill.scale =</span> <span class="fu">tm_scale_categorical</span>(<span class="at">values =</span> paleta_klas),</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>                <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"Wartość domów"</span>)),</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">ncol =</span> <span class="dv">2</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_eksploracja_files/figure-html/p1-krok5c-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="interpretacja-wyniku" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="interpretacja-wyniku">Interpretacja wyniku</h3>
+<p><strong>Rozkład zmiennej.</strong> Współczynnik kradzieży samochodów w 788 obszarach spisowych waha się od 0.16 do 31.13 na 1000 mieszkańców, przy medianie 2.89 i średniej 4.36. Średnia jest ponad półtora raza wyższa od mediany, a skośność wynosi 1.94 — rozkład jest silnie prawoskośny. Histogram to potwierdza: w większości obszarów współczynnik jest niski, a pojedyncze obszary osiągają wartości kilkukrotnie wyższe od typowych. Dla takiego rozkładu <strong>medianą opisujemy przeciętny poziom zjawiska, nie średnią</strong>, a do pomiaru korelacji stosujemy współczynnik Spearmana, nie Pearsona.</p>
+<p><strong>Zależność od zmiennych społeczno-ekonomicznych.</strong> Siedem zmiennych ma współczynnik korelacji przekraczający 0,5 w wartości bezwzględnej. Dodatnio skorelowane są: udział ludności czarnej (<code>BLACK</code>, rho = 0,64), udział gospodarstw korzystających z pomocy społecznej (<code>PUBLIC_ASSIST</code>, 0,56) oraz udział budynków niezamieszkałych (<code>VACANT</code>, 0,54). Ujemnie: udział ludności białej (<code>WHITE</code>, −0,58), udział budynków zamieszkałych (<code>OCCUPIED</code>, −0,54), udział osób urodzonych za granicą (<code>FOREIGN_BORN</code>, −0,54) oraz mediana dochodów (<code>MEDIAN_INCOME</code>, −0,50).</p>
+<p>Wartości z przedziału od 0,50 do 0,64 to zależności <strong>umiarkowane</strong> — wyraźne, ale daleko im do silnych. Opis jednym zdaniem: wyższy współczynnik kradzieży samochodów współwystępuje z niższymi dochodami, większym udziałem zabudowy niezamieszkałej i większym udziałem gospodarstw korzystających z pomocy społecznej.</p>
+<p>Dwie pary zmiennych na tej liście nie są niezależnymi obserwacjami: <code>WHITE</code> i <code>BLACK</code> oraz <code>VACANT</code> i <code>OCCUPIED</code> dopełniają się nawzajem, dlatego ich współczynniki mają przeciwne znaki i podobną wartość bezwzględną. To jedna informacja podana dwa razy, nie dwie.</p>
+<p><strong>Zmienność w klasach.</strong> Mediana współczynnika wynosi 5,89 w klasie niskich dochodów wobec 2,23 w klasie średnich i 2,01 w klasie wysokich. Dla wartości domów układ jest podobny: 6,20 — 2,38 — 2,06. W obu przypadkach różnica dotyczy przede wszystkim klasy najniższej, a nie przebiega równomiernie przez wszystkie trzy klasy.</p>
+<p>Dla wieku zabudowy wynik wygląda na pierwszy rzut oka podobnie wyraźnie — mediana 5,30 dla zabudowy nowej wobec 2,96 dla starej i 2,74 dla średniej — ale <strong>klasa <code>new</code> liczy tylko 16 obszarów z 788</strong>. Wniosek jest więc słaby: pojedyncze obszary decydują o położeniu całego pudełka. To typowa pułapka wykresu pudełkowego, który przedstawia każdą grupę w tej samej skali graficznej niezależnie od liczebności. Dlatego czyta się go razem z wynikiem <code>table()</code>.</p>
+<p><strong>Eksploracja przestrzenna.</strong> Obszary o wysokim współczynniku kradzieży koncentrują się w południowej i środkowej części analizowanego obszaru. Tam też przeważają klasy niskich dochodów i niskiej wartości domów, wyższy jest udział zabudowy niezamieszkałej i udział gospodarstw korzystających z pomocy społecznej. Mapy zmiennych rasowo-etnicznych pokazują wyraźny podział przestrzenny, pokrywający się z podziałem pozostałych zmiennych.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Zakres wniosków z eksploracji
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Eksploracja wskazała, <strong>gdzie</strong> współczynnik kradzieży jest wysoki i <strong>z czym współwystępuje</strong>. Wniosek o <strong>przyczynie</strong> przestępczości wymagałby odrębnego postępowania, z trzech powodów:</p>
+<ol type="1">
+<li><strong>Korelacja nie jest przyczynowością.</strong> Obie zmienne mogą być skutkiem trzeciego czynnika, a kierunek zależności może być odwrotny od zakładanego.</li>
+<li><strong>Błąd ekologiczny</strong> (ang. <em>ecological fallacy</em>). Zależność zaobserwowana na poziomie obszarów spisowych nie przenosi się na poziom osób ani gospodarstw domowych. Z tego, że obszary o niższej medianie dochodów mają wyższy współczynnik kradzieży, nie wynika nic o osobach o niższych dochodach.</li>
+<li><strong>Problem zmiennych jednostek odniesienia</strong> (ang. <em>modifiable areal unit problem</em>, MAUP). Wyniki zależą od podziału obszaru na jednostki — przy innym podziale wartości współczynników korelacji mogą być inne. Pojęcie to omawia <a href="11_obszarowe_autokorelacja.html" class="quarto-xref"><span>Rozdział 7</span></a>.</li>
+</ol>
+<p>Eksploracja wskazuje, gdzie szukać. Pytanie „dlaczego” należy do modelowania, które uwzględnia te trzy zastrzeżenia.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="przykład-2-rozkład-temperatury-powietrza" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="przykład-2-rozkład-temperatury-powietrza"><span class="header-section-number">2.4</span> Przykład 2: Rozkład temperatury powietrza</h2>
+<section id="dane-i-cel-analizy-1" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="dane-i-cel-analizy-1">Dane i cel analizy</h3>
+<p><strong>Cel.</strong> Uzyskanie informacji o przestrzennym rozkładzie wartości temperatury powietrza. Te same dane posłużą następnie do oszacowania wartości dla całego obszaru jedną z geostatystycznych metod estymacji (<a href="15_pola_estymacja.html" class="quarto-xref"><span>Rozdział 10</span></a>) — eksploracja ma odpowiedzieć na pytanie, czy dane się do tego nadają.</p>
+<p><strong>Dane.</strong></p>
+<ul>
+<li><code>data/punkty.csv</code> — lokalizacje pomiarów temperatury powietrza wraz ze zmiennymi dodatkowymi: wskaźnikiem wegetacji (<code>ndvi</code>), wysokością n.p.m. (<code>srtm</code>) oraz klasą pokrycia terenu (<code>clc</code>),</li>
+<li><code>data/granica.gpkg</code> — granica obszaru analizy.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>granica <span class="ot">=</span> <span class="fu">read_sf</span>(<span class="st">"data/granica.gpkg"</span>)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>punkty <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"data/punkty.csv"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(temp)) <span class="sc">|&gt;</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="st">"EPSG:2180"</span>)</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(punkty)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 247</code></pre>
+</div>
+</div>
+<p>Z 248 wierszy pliku pozostało 247 — jedna obserwacja nie ma zmierzonej temperatury i została usunięta.</p>
+</section>
+<section id="krok-1-podsumowanie-numeryczne-1" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-1-podsumowanie-numeryczne-1">Krok 1: podsumowanie numeryczne</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(punkty<span class="sc">$</span>temp)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  7.883  12.003  14.941  15.273  17.630  24.945 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(punkty<span class="sc">$</span>temp)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.973076</code></pre>
+</div>
+</div>
+</section>
+<section id="krok-2-rozkład-zmiennej-1" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-2-rozkład-zmiennej-1">Krok 2: rozkład zmiennej</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(punkty, <span class="fu">aes</span>(temp)) <span class="sc">+</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Temperatura [°C]"</span>, <span class="at">y =</span> <span class="st">"Liczba obserwacji"</span>) <span class="sc">+</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_eksploracja_files/figure-html/p2-krok2a-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(punkty, <span class="fu">aes</span>(temp)) <span class="sc">+</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>() <span class="sc">+</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Temperatura [°C]"</span>, <span class="at">y =</span> <span class="st">"Gęstość"</span>) <span class="sc">+</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_eksploracja_files/figure-html/p2-krok2b-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">skewness</span>(punkty<span class="sc">$</span>temp)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.4132931</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kurtosis</span>(punkty<span class="sc">$</span>temp)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -0.5813262</code></pre>
+</div>
+</div>
+</section>
+<section id="krok-3-zależność-od-zmiennych-ilościowych" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-3-zależność-od-zmiennych-ilościowych">Krok 3: zależność od zmiennych ilościowych</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(punkty, <span class="fu">aes</span>(temp, ndvi)) <span class="sc">+</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Temperatura [°C]"</span>, <span class="at">y =</span> <span class="st">"Wskaźnik ndvi"</span>) <span class="sc">+</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_eksploracja_files/figure-html/p2-krok3a-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(punkty, <span class="fu">aes</span>(temp, srtm)) <span class="sc">+</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Temperatura [°C]"</span>, <span class="at">y =</span> <span class="st">"Wysokość n.p.m. [m]"</span>) <span class="sc">+</span></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 2 rows containing missing values or values outside the scale range
+(`geom_point()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_eksploracja_files/figure-html/p2-krok3b-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Funkcja <code>cor.test()</code> podaje jednocześnie wartość współczynnika korelacji oraz poziom istotności. Argument <code>method</code> określa rodzaj współczynnika: <code>"spearman"</code> — korelacja rang Spearmana, <code>"pearson"</code> — korelacja liniowa Pearsona.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(punkty<span class="sc">$</span>temp, punkty<span class="sc">$</span>ndvi, <span class="at">method =</span> <span class="st">"spearman"</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Spearman's rank correlation rho
+
+data:  punkty$temp and punkty$ndvi
+S = 2378524, p-value = 0.4074
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+       rho 
+0.05294538 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(punkty<span class="sc">$</span>temp, punkty<span class="sc">$</span>srtm, <span class="at">method =</span> <span class="st">"spearman"</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Spearman's rank correlation rho
+
+data:  punkty$temp and punkty$srtm
+S = 2866567, p-value = 0.00782
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+       rho 
+-0.1695597 </code></pre>
+</div>
+</div>
+</section>
+<section id="krok-4-zmienność-w-klasach-pokrycia-terenu" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-4-zmienność-w-klasach-pokrycia-terenu">Krok 4: zmienność w klasach pokrycia terenu</h3>
+<p>Zmienną <code>clc</code> trzeba najpierw zamienić na typ czynnikowy — jej wartości to kody klas, nie liczby.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>punkty <span class="ot">=</span> punkty <span class="sc">|&gt;</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">clc =</span> <span class="fu">as.factor</span>(clc))</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(punkty<span class="sc">$</span>clc, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+   1    2    4 &lt;NA&gt; 
+ 165   57   20    5 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(punkty, <span class="fu">aes</span>(<span class="at">x =</span> clc, <span class="at">y =</span> temp)) <span class="sc">+</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Klasa pokrycia terenu"</span>, <span class="at">y =</span> <span class="st">"Temperatura [°C]"</span>) <span class="sc">+</span></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_eksploracja_files/figure-html/p2-krok4b-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>aov_test <span class="ot">=</span> <span class="fu">aov</span>(temp <span class="sc">~</span> clc, <span class="at">data =</span> punkty)</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(aov_test)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             Df Sum Sq Mean Sq F value Pr(&gt;F)    
+clc           2   1272   636.0   60.86 &lt;2e-16 ***
+Residuals   239   2498    10.4                   
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+5 observations deleted due to missingness</code></pre>
+</div>
+</div>
+<p>Analiza wariancji nie wskazuje, <strong>między którymi</strong> grupami występują różnice. Do tego służą porównania wielokrotne (<em>post-hoc</em>), na przykład test Tukeya.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>tukey <span class="ot">=</span> <span class="fu">TukeyHSD</span>(aov_test, <span class="st">"clc"</span>)</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(tukey, <span class="at">las =</span> <span class="dv">1</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_eksploracja_files/figure-html/p2-krok4d-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="krok-5-eksploracyjna-analiza-przestrzenna-1" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="krok-5-eksploracyjna-analiza-przestrzenna-1">Krok 5: eksploracyjna analiza przestrzenna</h3>
+<p>Mapa lokalizacyjna pozwala sprawdzić poprawność współrzędnych oraz ocenić typ próbkowania.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(granica) <span class="sc">+</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(punkty) <span class="sc">+</span></span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_symbols</span>(<span class="at">size =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_grid</span>()</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_eksploracja_files/figure-html/p2-krok5a-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Mapa rozkładu przestrzennego samej zmiennej pozwala dodatkowo wykryć wartości odstające lokalnie.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(punkty) <span class="sc">+</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">labels.show =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_symbols</span>(<span class="at">fill =</span> <span class="st">"temp"</span>,</span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">fill.scale =</span> <span class="fu">tm_scale_continuous</span>(<span class="at">values =</span> <span class="st">"-brewer.spectral"</span>),</span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"Temperatura [°C]"</span>),</span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="fl">0.5</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="04_eksploracja_files/figure-html/p2-krok5b-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Rozkład wartości temperatury powietrza w analizowanym obszarze.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="interpretacja-wyniku-1" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="interpretacja-wyniku-1">Interpretacja wyniku</h3>
+<p><strong>Rozkład zmiennej.</strong> Temperatura powietrza w 247 punktach pomiarowych waha się od 7.9 °C do 24.9 °C, przy średniej 15.3 °C i medianie 14.9 °C. Odchylenie standardowe wynosi 4.0 °C. Średnia jest nieco wyższa od mediany, co odpowiada dodatniej skośności (0.41): rozkład ma łagodnie wydłużone prawe ramię. Kurtoza (-0.58) jest ujemna, więc rozkład jest bardziej spłaszczony od normalnego — wartości rozkładają się dość równomiernie, bez wyraźnej koncentracji wokół średniej. Histogram nie pokazuje pojedynczych wartości oderwanych od reszty zbioru, więc nie ma podstaw do wskazania wartości globalnie odstających.</p>
+<p>Warto porównać ten rozkład z rozkładem z Przykładu 1. Tam skośność wynosiła 1.94 i średnia była znacznie wyższa od mediany; tutaj skośność jest niewielka, a średnia i mediana leżą blisko siebie. Oznacza to, że dla temperatury średnia jest sensowną miarą przeciętnego poziomu zjawiska, a dla współczynnika przestępczości nie była.</p>
+<p><strong>Zależność od zmiennych ilościowych.</strong> To miejsce, w którym łatwo wyciągnąć błędny wniosek. Dla pary <code>temp</code>–<code>ndvi</code> współczynnik korelacji wynosi 0.05 przy poziomie istotności 0.41 — <strong>nie ma podstaw do odrzucenia hipotezy o braku zależności</strong>. Wykres rozrzutu to potwierdza: punkty tworzą chmurę bez wyraźnego kierunku.</p>
+<p>Dla pary <code>temp</code>–<code>srtm</code> współczynnik wynosi -0.17, a poziom istotności 0.0078 — zależność jest <strong>istotna statystycznie</strong>, ujemna (wyżej jest chłodniej, co jest zgodne z oczekiwaniem), ale <strong>bardzo słaba</strong>. Wysokość n.p.m. wyjaśnia znikomą część zmienności temperatury w tym zbiorze.</p>
+<p>Argument <code>use = "complete.obs"</code> jest tu konieczny: kolumna <code>srtm</code> ma dwa braki danych, a funkcja <code>cor()</code> bez tego argumentu zwraca <code>NA</code> zamiast wartości współczynnika. Współczynnik policzony jest więc na 245 parach, nie na wszystkich 247.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Istotność statystyczna to nie siła zależności
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Przy 247 obserwacjach istotna statystycznie okazuje się już korelacja rzędu 0,17 — wartość, której kwadrat wynosi niespełna 0,03. Dla współczynnika Spearmana, liczonego na <strong>rangach</strong>, kwadrat nie opisuje udziału wyjaśnionej zmienności wartości (tak czyta się dopiero kwadrat współczynnika Pearsona), ale pozostaje użyteczną wskazówką, jak słaba jest to zależność. Dlatego raportujemy <strong>obie</strong> liczby: wartość współczynnika i poziom istotności, a siłę zależności opisujemy na podstawie pierwszej z nich. Zasadę omawia <a href="./03_eksploracja_teoria.html#najwazniejsze-eksploracja">rozdział teoretyczny części</a>.</p>
+</div>
+</div>
+<p><strong>Zmienność w klasach pokrycia terenu.</strong> Tutaj zależność jest wyraźna. Analiza wariancji daje wartość <em>F</em> = 60,86 przy <em>p</em> &lt; 0,001, więc średnie temperatury różnią się istotnie między klasami pokrycia terenu. Wykres pudełkowy pokazuje kierunek różnic, a test Tukeya wskazuje, które pary klas różnią się istotnie — przedział ufności niepokrywający zera oznacza różnicę istotną. Liczebności klas (165, 57 i 20 obserwacji) są na tyle duże, że wniosek jest mocny — inaczej niż dla klasy <code>new</code> w Przykładzie 1.</p>
+<p>Zwróć uwagę na komunikat <code>5 observations deleted due to missingness</code> pod wynikiem analizy wariancji. Zmienna <code>clc</code> ma pięć braków, których nie usunęliśmy przy wczytywaniu — filtrowaliśmy wyłącznie po <code>temp</code>. Analiza wariancji usunęła je samodzielnie, więc wykonała się na 242 obserwacjach, nie na 247. Taki komunikat zawsze trzeba przeczytać: informuje, że część danych nie weszła do obliczeń.</p>
+<p><strong>Eksploracja przestrzenna.</strong> Mapa lokalizacyjna potwierdza, że wszystkie punkty leżą w granicach obszaru analizy, a współrzędne są poprawnie przypisane — przy pomyłce X–Y punkty znalazłyby się daleko poza granicą. Próbkowanie jest nieregularne, z wyraźnie większym zagęszczeniem punktów w niektórych częściach obszaru. Ma to znaczenie dla planowanej analizy geostatystycznej: od rozmieszczenia punktów zależy, dla jakich odstępów można wyznaczyć semiwariogram (<a href="14_pola_semiwariogram.html" class="quarto-xref"><span>Rozdział 9</span></a>). Mapa wartości temperatury pokazuje, że wartości niskie i wysokie nie są rozrzucone przypadkowo, lecz skupiają się w obszarach — jest to przesłanka, że zmienna ma strukturę przestrzenną, a więc estymacja geostatystyczna ma sens.</p>
+</section>
+</section>
+<section id="pytania-kontrolne" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="pytania-kontrolne"><span class="header-section-number">2.5</span> Pytania kontrolne</h2>
+<blockquote class="blockquote">
+<p><strong>1.</strong> Czym różni się eksploracyjna analiza nieprzestrzenna od przestrzennej i dlaczego potrzebne są obie?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Analiza nieprzestrzenna bada wartości atrybutów bez uwzględnienia lokalizacji: statystyki opisowe, rozkład, korelacje, zmienność w grupach. Analiza przestrzenna opiera się na lokalizacji: typ próbkowania, zmienność przestrzenna zjawiska, poprawność współrzędnych.</p>
+<p>Obie są potrzebne, bo każda wykrywa to, czego druga nie widzi. Analiza nieprzestrzenna nie wykryje wartości odstającej lokalnie, jeśli mieści się ona w typowym zakresie zmiennej. Analiza przestrzenna nie wykryje wartości odstającej globalnie, jeśli leży ona wśród podobnych do siebie.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>2.</strong> W Przykładzie 1 średnia współczynnika przestępczości jest znacznie wyższa od mediany, a w Przykładzie 2 średnia i mediana temperatury leżą blisko siebie. Co z tego wynika dla opisu obu zmiennych?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Wyraźna różnica między średnią a medianą oznacza rozkład asymetryczny. W Przykładzie 1 skośność wynosi 1,94 — rozkład jest silnie prawoskośny, bo pojedyncze obszary mają bardzo wysoki współczynnik. W takim przypadku <strong>średnia nie opisuje typowego obszaru</strong>: jest zawyżana przez wartości skrajne. Przeciętny poziom zjawiska opisuje mediana.</p>
+<p>W Przykładzie 2 skośność wynosi 0,41, rozkład jest niemal symetryczny, więc średnia jest sensowną miarą przeciętnej temperatury.</p>
+<p>Asymetria rozkładu decyduje też o wyborze miary korelacji: przy rozkładach silnie asymetrycznych stosuje się współczynnik Spearmana, obliczany na rangach, a nie współczynnik Pearsona.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>3.</strong> Dlaczego wynik istotny statystycznie nie oznacza, że zależność jest silna?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Poziom istotności zależy nie tylko od siły zależności, ale też od <strong>liczby obserwacji</strong>. Przy dużej próbie istotna statystycznie okazuje się nawet bardzo słaba zależność — w Przykładzie 2 istotna była korelacja rang o wartości −0,17, czyli zależność bardzo słaba.</p>
+<p>Dlatego zawsze raportuje się obie liczby: <strong>wartość współczynnika</strong> (siła i kierunek zależności) oraz <strong>poziom istotności</strong> (czy wynik można odróżnić od przypadku). Siłę zależności opisuje się na podstawie pierwszej z nich.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>4.</strong> Czym różni się analiza wariancji od testu Tukeya i dlaczego potrzebne są oba?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Analiza wariancji odpowiada na pytanie, czy średnie <strong>różnią się w ogóle</strong> między grupami — daje jedną odpowiedź dla całego podziału. Nie wskazuje, które grupy się różnią.</p>
+<p>Test Tukeya to porównanie wielokrotne (<em>post-hoc</em>): sprawdza każdą parę grup osobno, korygując poziom istotności z uwagi na liczbę porównań. Wykonuje się go po analizie wariancji, jeśli ta wykazała istotne różnice. Na wykresie przedział ufności niepokrywający zera oznacza parę różniącą się istotnie.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>5.</strong> Dlaczego wykres pudełkowy czyta się razem z wynikiem funkcji <code>table()</code>?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Ponieważ wykres pudełkowy przedstawia każdą grupę w tej samej skali graficznej, niezależnie od jej liczebności. Pudełko oparte na 16 obserwacjach wygląda tak samo przekonująco jak pudełko oparte na 458.</p>
+<p>W Przykładzie 1 klasa <code>new</code> liczy 16 obszarów z 788 i ma najwyższą medianę współczynnika przestępczości. Wniosek o wyższej przestępczości w nowej zabudowie jest więc słaby: o położeniu całego pudełka decyduje kilka obszarów. Liczebność grup sprawdza się funkcją <code>table()</code> albo podaje bezpośrednio na wykresie.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>6.</strong> Czym jest wartość odstająca lokalnie i dlaczego nie wykryje jej histogram?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Wartość odstająca lokalnie to taka, która mieści się w typowym zakresie zmiennej — więc na histogramie nie wyróżnia się niczym — ale wyraźnie odbiega od wartości w swoim najbliższym otoczeniu. Temperatura 10 °C w zbiorze o zakresie od 8 do 25 °C jest zupełnie zwyczajna, ale jeśli wszystkie okoliczne punkty wskazują 20 °C, jest to sygnał błędu pomiaru albo zjawiska lokalnego.</p>
+<p>Histogram pomija lokalizację, dlatego takiej wartości nie pokaże. Wykrywa ją mapa rozkładu przestrzennego zmiennej.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>7.</strong> Co to błąd ekologiczny?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Błąd ekologiczny (ang. <em>ecological fallacy</em>) to przenoszenie zależności zaobserwowanej na poziomie <strong>grup lub obszarów</strong> na poziom <strong>jednostek</strong> — osób, gospodarstw domowych. Z tego, że obszary o niższej medianie dochodów mają wyższy współczynnik przestępczości, nie wynika nic o osobach o niższych dochodach.</p>
+<p>Jest to ograniczenie wpisane w analizę danych obszarowych, a nie błąd obliczeń. Pokrewnym problemem jest zależność wyników od przyjętego podziału obszaru na jednostki — problem zmiennych jednostek odniesienia (MAUP), omawiany w <a href="11_obszarowe_autokorelacja.html" class="quarto-xref"><span>Rozdział 7</span></a>.</p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>8.</strong> Dlaczego warto przeczytać komunikat <code>observations deleted due to missingness</code> pod wynikiem analizy wariancji?</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Ponieważ informuje, że obliczenia wykonano na mniejszym zbiorze, niż wczytany. Funkcje statystyczne usuwają obserwacje z brakami danych samodzielnie i nie wymagają na to zgody. W Przykładzie 2 analiza wariancji objęła 242 obserwacje, nie 247, bo zmienna <code>clc</code> miała pięć braków — mimo że przy wczytywaniu danych filtrowaliśmy tylko po zmiennej <code>temp</code>.</p>
+<p>Bez przeczytania tego komunikatu łatwo opisać wynik jako dotyczący całego zbioru.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="podsumowanie" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="podsumowanie"><span class="header-section-number">2.6</span> Podsumowanie</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pytanie</th>
+<th>Metoda</th>
+<th>Funkcja</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Jakie wartości przyjmuje zmienna?</td>
+<td>statystyki opisowe</td>
+<td><code>summary()</code>, <code>sd()</code></td>
+</tr>
+<tr class="even">
+<td>Ile obserwacji liczy każda kategoria?</td>
+<td>tabela liczebności</td>
+<td><code>table()</code></td>
+</tr>
+<tr class="odd">
+<td>Jaki jest rozkład zmiennej?</td>
+<td>histogram, wykres gęstości, skośność, kurtoza</td>
+<td><code>geom_histogram()</code>, <code>geom_density()</code>, <code>skewness()</code>, <code>kurtosis()</code></td>
+</tr>
+<tr class="even">
+<td>Czy są wartości globalnie odstające?</td>
+<td>histogram, wykres pudełkowy</td>
+<td><code>geom_histogram()</code>, <code>geom_boxplot()</code></td>
+</tr>
+<tr class="odd">
+<td>Czy zmienna jest powiązana z inną zmienną ilościową?</td>
+<td>wykres rozrzutu, test korelacji</td>
+<td><code>geom_point()</code>, <code>cor.test()</code></td>
+</tr>
+<tr class="even">
+<td>Które z wielu zmiennych są powiązane?</td>
+<td>macierz korelacji, macierz wykresów rozrzutu</td>
+<td><code>cor()</code>, <code>chart.Correlation()</code></td>
+</tr>
+<tr class="odd">
+<td>Czy zmienna różnicuje się w grupach?</td>
+<td>wykres pudełkowy, analiza wariancji, test Tukeya</td>
+<td><code>geom_boxplot()</code>, <code>aov()</code>, <code>TukeyHSD()</code></td>
+</tr>
+<tr class="even">
+<td>Czy współrzędne są poprawne? Jaki jest typ próbkowania?</td>
+<td>mapa lokalizacyjna</td>
+<td><code>tm_symbols()</code> + <code>tm_grid()</code></td>
+</tr>
+<tr class="odd">
+<td>Jak zmienna rozkłada się w przestrzeni? Czy są wartości odstające lokalnie?</td>
+<td>mapa zmiennej</td>
+<td><code>tm_symbols()</code>, <code>tm_polygons()</code></td>
+</tr>
+</tbody>
+</table>
+<p>Cztery zasady, do których wracamy w kolejnych rozdziałach:</p>
+<ol type="1">
+<li><strong>Istotność statystyczna to nie siła zależności.</strong> Raportujemy obie liczby.</li>
+<li><strong>Asymetria rozkładu decyduje o doborze miar.</strong> Przy rozkładzie silnie asymetrycznym przeciętny poziom opisuje mediana, a korelację mierzy współczynnik Spearmana.</li>
+<li><strong>Wykres pudełkowy czytamy razem z liczebnością grup.</strong> Wyraźna różnica oparta na kilkunastu obserwacjach jest słabą przesłanką.</li>
+<li><strong>Eksploracja wskazuje, gdzie szukać, a nie dlaczego tak jest.</strong> Korelacja nie jest przyczynowością, a zależność między obszarami nie przenosi się na osoby.</li>
+</ol>
+</section>
+<section id="pełny-kod-analizy" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="pełny-kod-analizy"><span class="header-section-number">2.7</span> Pełny kod analizy</h2>
+<p>Poniżej zebrany jest cały kod obu przykładów, w kolejności wykonania — do skopiowania do własnego skryptu zamiast przeklejania pojedynczych fragmentów. Nie ma w nim kodu objaśniającego: to dokładnie ta ścieżka, która prowadzi od danych wejściowych do wyniku.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>
+<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(e1071)</span>
+<span id="cb60-6"><a href="#cb60-6" aria-hidden="true" tabindex="-1"></a>cook <span class="ot">=</span> <span class="fu">read_sf</span>(<span class="st">"data/cook_przygotowane.gpkg"</span>, <span class="at">layer =</span> <span class="st">"cook"</span>)</span>
+<span id="cb60-7"><a href="#cb60-7" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(cook)</span>
+<span id="cb60-8"><a href="#cb60-8" aria-hidden="true" tabindex="-1"></a>cook_attr <span class="ot">=</span> <span class="fu">st_drop_geometry</span>(cook)</span>
+<span id="cb60-9"><a href="#cb60-9" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(cook_attr<span class="sc">$</span>CRIME_RATE)</span>
+<span id="cb60-10"><a href="#cb60-10" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(cook_attr<span class="sc">$</span>CRIME_RATE)</span>
+<span id="cb60-11"><a href="#cb60-11" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(cook_attr<span class="sc">$</span>INCOME_CAT, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span>
+<span id="cb60-12"><a href="#cb60-12" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(cook_attr<span class="sc">$</span>HOME_VALUES_CAT, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span>
+<span id="cb60-13"><a href="#cb60-13" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(cook_attr<span class="sc">$</span>BUILT_YEAR_CAT, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span>
+<span id="cb60-14"><a href="#cb60-14" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(cook_attr, <span class="fu">aes</span>(<span class="at">x =</span> CRIME_RATE)) <span class="sc">+</span></span>
+<span id="cb60-15"><a href="#cb60-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span></span>
+<span id="cb60-16"><a href="#cb60-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Kradzieże na 1000 mieszkańców"</span>, <span class="at">y =</span> <span class="st">"Liczba obszarów spisowych"</span>) <span class="sc">+</span></span>
+<span id="cb60-17"><a href="#cb60-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb60-18"><a href="#cb60-18" aria-hidden="true" tabindex="-1"></a><span class="fu">skewness</span>(cook_attr<span class="sc">$</span>CRIME_RATE)</span>
+<span id="cb60-19"><a href="#cb60-19" aria-hidden="true" tabindex="-1"></a>zmienne <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"WHITE"</span>, <span class="st">"BLACK"</span>, <span class="st">"ASIAN"</span>, <span class="st">"HISPANIC"</span>, <span class="st">"OTHER"</span>, <span class="st">"FOREIGN_BORN"</span>,</span>
+<span id="cb60-20"><a href="#cb60-20" aria-hidden="true" tabindex="-1"></a>            <span class="st">"UNEMPL"</span>, <span class="st">"PUBLIC_ASSIST"</span>, <span class="st">"VACANT"</span>, <span class="st">"OCCUPIED"</span>, <span class="st">"OWNER"</span>, <span class="st">"RENTER"</span>,</span>
+<span id="cb60-21"><a href="#cb60-21" aria-hidden="true" tabindex="-1"></a>            <span class="st">"MEDIAN_INCOME"</span>, <span class="st">"MEDIAN_BUILT_YEAR"</span>, <span class="st">"MEDIAN_HOME_VALUE"</span>,</span>
+<span id="cb60-22"><a href="#cb60-22" aria-hidden="true" tabindex="-1"></a>            <span class="st">"SEX_RATIO"</span>, <span class="st">"EDU_HIGH"</span>)</span>
+<span id="cb60-23"><a href="#cb60-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-24"><a href="#cb60-24" aria-hidden="true" tabindex="-1"></a>korelacje <span class="ot">=</span> <span class="fu">sapply</span>(cook_attr[zmienne], <span class="cf">function</span>(x) {</span>
+<span id="cb60-25"><a href="#cb60-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor</span>(cook_attr<span class="sc">$</span>CRIME_RATE, x, <span class="at">method =</span> <span class="st">"spearman"</span>, <span class="at">use =</span> <span class="st">"complete.obs"</span>)</span>
+<span id="cb60-26"><a href="#cb60-26" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb60-27"><a href="#cb60-27" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">sort</span>(korelacje), <span class="dv">2</span>)</span>
+<span id="cb60-28"><a href="#cb60-28" aria-hidden="true" tabindex="-1"></a>wybrane <span class="ot">=</span> <span class="fu">names</span>(korelacje)[<span class="fu">abs</span>(korelacje) <span class="sc">&gt;</span> <span class="fl">0.5</span>]</span>
+<span id="cb60-29"><a href="#cb60-29" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(korelacje[wybrane], <span class="dv">2</span>)</span>
+<span id="cb60-30"><a href="#cb60-30" aria-hidden="true" tabindex="-1"></a>PerformanceAnalytics<span class="sc">::</span><span class="fu">chart.Correlation</span>(cook_attr[, <span class="fu">c</span>(<span class="st">"CRIME_RATE"</span>, wybrane)],</span>
+<span id="cb60-31"><a href="#cb60-31" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">histogram =</span> <span class="cn">TRUE</span>, <span class="at">pch =</span> <span class="dv">19</span>,</span>
+<span id="cb60-32"><a href="#cb60-32" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">method =</span> <span class="st">"spearman"</span>)</span>
+<span id="cb60-33"><a href="#cb60-33" aria-hidden="true" tabindex="-1"></a>cook_attr <span class="sc">|&gt;</span></span>
+<span id="cb60-34"><a href="#cb60-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(INCOME_CAT)) <span class="sc">|&gt;</span></span>
+<span id="cb60-35"><a href="#cb60-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">INCOME_CAT =</span> <span class="fu">factor</span>(INCOME_CAT, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"low"</span>, <span class="st">"medium"</span>, <span class="st">"high"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb60-36"><a href="#cb60-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> INCOME_CAT, <span class="at">y =</span> CRIME_RATE)) <span class="sc">+</span></span>
+<span id="cb60-37"><a href="#cb60-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb60-38"><a href="#cb60-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Poziom dochodów gospodarstw domowych"</span>,</span>
+<span id="cb60-39"><a href="#cb60-39" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Kradzieże na 1000 mieszkańców"</span>) <span class="sc">+</span></span>
+<span id="cb60-40"><a href="#cb60-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb60-41"><a href="#cb60-41" aria-hidden="true" tabindex="-1"></a>cook_attr <span class="sc">|&gt;</span></span>
+<span id="cb60-42"><a href="#cb60-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(HOME_VALUES_CAT)) <span class="sc">|&gt;</span></span>
+<span id="cb60-43"><a href="#cb60-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">HOME_VALUES_CAT =</span> <span class="fu">factor</span>(HOME_VALUES_CAT, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"low"</span>, <span class="st">"medium"</span>, <span class="st">"high"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb60-44"><a href="#cb60-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> HOME_VALUES_CAT, <span class="at">y =</span> CRIME_RATE)) <span class="sc">+</span></span>
+<span id="cb60-45"><a href="#cb60-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb60-46"><a href="#cb60-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Wartość domów"</span>, <span class="at">y =</span> <span class="st">"Kradzieże na 1000 mieszkańców"</span>) <span class="sc">+</span></span>
+<span id="cb60-47"><a href="#cb60-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb60-48"><a href="#cb60-48" aria-hidden="true" tabindex="-1"></a>cook_attr <span class="sc">|&gt;</span></span>
+<span id="cb60-49"><a href="#cb60-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">BUILT_YEAR_CAT =</span> <span class="fu">factor</span>(BUILT_YEAR_CAT, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"old"</span>, <span class="st">"medium"</span>, <span class="st">"new"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb60-50"><a href="#cb60-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> BUILT_YEAR_CAT, <span class="at">y =</span> CRIME_RATE)) <span class="sc">+</span></span>
+<span id="cb60-51"><a href="#cb60-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb60-52"><a href="#cb60-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Wiek zabudowy"</span>, <span class="at">y =</span> <span class="st">"Kradzieże na 1000 mieszkańców"</span>) <span class="sc">+</span></span>
+<span id="cb60-53"><a href="#cb60-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb60-54"><a href="#cb60-54" aria-hidden="true" tabindex="-1"></a>cook_attr <span class="sc">|&gt;</span></span>
+<span id="cb60-55"><a href="#cb60-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(INCOME_CAT)) <span class="sc">|&gt;</span></span>
+<span id="cb60-56"><a href="#cb60-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(INCOME_CAT) <span class="sc">|&gt;</span></span>
+<span id="cb60-57"><a href="#cb60-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">mediana =</span> <span class="fu">round</span>(<span class="fu">median</span>(CRIME_RATE), <span class="dv">2</span>))</span>
+<span id="cb60-58"><a href="#cb60-58" aria-hidden="true" tabindex="-1"></a>cook_attr <span class="sc">|&gt;</span></span>
+<span id="cb60-59"><a href="#cb60-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(BUILT_YEAR_CAT) <span class="sc">|&gt;</span></span>
+<span id="cb60-60"><a href="#cb60-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">mediana =</span> <span class="fu">round</span>(<span class="fu">median</span>(CRIME_RATE), <span class="dv">2</span>))</span>
+<span id="cb60-61"><a href="#cb60-61" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(cook) <span class="sc">+</span></span>
+<span id="cb60-62"><a href="#cb60-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"CRIME_RATE"</span>,</span>
+<span id="cb60-63"><a href="#cb60-63" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.scale =</span> <span class="fu">tm_scale_intervals</span>(<span class="at">style =</span> <span class="st">"jenks"</span>, <span class="at">n =</span> <span class="dv">4</span>,</span>
+<span id="cb60-64"><a href="#cb60-64" aria-hidden="true" tabindex="-1"></a>                                              <span class="at">values =</span> <span class="st">"brewer.yl_or_rd"</span>),</span>
+<span id="cb60-65"><a href="#cb60-65" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"Kradzieże / 1000 mieszk."</span>))</span>
+<span id="cb60-66"><a href="#cb60-66" aria-hidden="true" tabindex="-1"></a>paleta <span class="ot">=</span> <span class="fu">tm_scale_intervals</span>(<span class="at">values =</span> <span class="st">"brewer.yl_or_rd"</span>)</span>
+<span id="cb60-67"><a href="#cb60-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-68"><a href="#cb60-68" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_arrange</span>(</span>
+<span id="cb60-69"><a href="#cb60-69" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(cook) <span class="sc">+</span></span>
+<span id="cb60-70"><a href="#cb60-70" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"BLACK"</span>, <span class="at">fill.scale =</span> paleta,</span>
+<span id="cb60-71"><a href="#cb60-71" aria-hidden="true" tabindex="-1"></a>                <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"BLACK"</span>)),</span>
+<span id="cb60-72"><a href="#cb60-72" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(cook) <span class="sc">+</span></span>
+<span id="cb60-73"><a href="#cb60-73" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"WHITE"</span>, <span class="at">fill.scale =</span> paleta,</span>
+<span id="cb60-74"><a href="#cb60-74" aria-hidden="true" tabindex="-1"></a>                <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"WHITE"</span>)),</span>
+<span id="cb60-75"><a href="#cb60-75" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(cook) <span class="sc">+</span></span>
+<span id="cb60-76"><a href="#cb60-76" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"VACANT"</span>, <span class="at">fill.scale =</span> paleta,</span>
+<span id="cb60-77"><a href="#cb60-77" aria-hidden="true" tabindex="-1"></a>                <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"VACANT"</span>)),</span>
+<span id="cb60-78"><a href="#cb60-78" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(cook) <span class="sc">+</span></span>
+<span id="cb60-79"><a href="#cb60-79" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"PUBLIC_ASSIST"</span>, <span class="at">fill.scale =</span> paleta,</span>
+<span id="cb60-80"><a href="#cb60-80" aria-hidden="true" tabindex="-1"></a>                <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"PUBLIC_ASSIST"</span>)),</span>
+<span id="cb60-81"><a href="#cb60-81" aria-hidden="true" tabindex="-1"></a>  <span class="at">ncol =</span> <span class="dv">2</span>)</span>
+<span id="cb60-82"><a href="#cb60-82" aria-hidden="true" tabindex="-1"></a>paleta_klas <span class="ot">=</span> <span class="fu">c</span>(<span class="at">low =</span> <span class="st">"#FFF68F"</span>, <span class="at">medium =</span> <span class="st">"#EEB422"</span>, <span class="at">high =</span> <span class="st">"#FF4040"</span>)</span>
+<span id="cb60-83"><a href="#cb60-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-84"><a href="#cb60-84" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_arrange</span>(</span>
+<span id="cb60-85"><a href="#cb60-85" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(cook) <span class="sc">+</span></span>
+<span id="cb60-86"><a href="#cb60-86" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"INCOME_CAT"</span>,</span>
+<span id="cb60-87"><a href="#cb60-87" aria-hidden="true" tabindex="-1"></a>                <span class="at">fill.scale =</span> <span class="fu">tm_scale_categorical</span>(<span class="at">values =</span> paleta_klas),</span>
+<span id="cb60-88"><a href="#cb60-88" aria-hidden="true" tabindex="-1"></a>                <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"Dochód"</span>)),</span>
+<span id="cb60-89"><a href="#cb60-89" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(cook) <span class="sc">+</span></span>
+<span id="cb60-90"><a href="#cb60-90" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"HOME_VALUES_CAT"</span>,</span>
+<span id="cb60-91"><a href="#cb60-91" aria-hidden="true" tabindex="-1"></a>                <span class="at">fill.scale =</span> <span class="fu">tm_scale_categorical</span>(<span class="at">values =</span> paleta_klas),</span>
+<span id="cb60-92"><a href="#cb60-92" aria-hidden="true" tabindex="-1"></a>                <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"Wartość domów"</span>)),</span>
+<span id="cb60-93"><a href="#cb60-93" aria-hidden="true" tabindex="-1"></a>  <span class="at">ncol =</span> <span class="dv">2</span>)</span>
+<span id="cb60-94"><a href="#cb60-94" aria-hidden="true" tabindex="-1"></a>granica <span class="ot">=</span> <span class="fu">read_sf</span>(<span class="st">"data/granica.gpkg"</span>)</span>
+<span id="cb60-95"><a href="#cb60-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-96"><a href="#cb60-96" aria-hidden="true" tabindex="-1"></a>punkty <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"data/punkty.csv"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb60-97"><a href="#cb60-97" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(temp)) <span class="sc">|&gt;</span></span>
+<span id="cb60-98"><a href="#cb60-98" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="st">"EPSG:2180"</span>)</span>
+<span id="cb60-99"><a href="#cb60-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-100"><a href="#cb60-100" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(punkty)</span>
+<span id="cb60-101"><a href="#cb60-101" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(punkty<span class="sc">$</span>temp)</span>
+<span id="cb60-102"><a href="#cb60-102" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(punkty<span class="sc">$</span>temp)</span>
+<span id="cb60-103"><a href="#cb60-103" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(punkty, <span class="fu">aes</span>(temp)) <span class="sc">+</span></span>
+<span id="cb60-104"><a href="#cb60-104" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span></span>
+<span id="cb60-105"><a href="#cb60-105" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Temperatura [°C]"</span>, <span class="at">y =</span> <span class="st">"Liczba obserwacji"</span>) <span class="sc">+</span></span>
+<span id="cb60-106"><a href="#cb60-106" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb60-107"><a href="#cb60-107" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(punkty, <span class="fu">aes</span>(temp)) <span class="sc">+</span></span>
+<span id="cb60-108"><a href="#cb60-108" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>() <span class="sc">+</span></span>
+<span id="cb60-109"><a href="#cb60-109" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Temperatura [°C]"</span>, <span class="at">y =</span> <span class="st">"Gęstość"</span>) <span class="sc">+</span></span>
+<span id="cb60-110"><a href="#cb60-110" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb60-111"><a href="#cb60-111" aria-hidden="true" tabindex="-1"></a><span class="fu">skewness</span>(punkty<span class="sc">$</span>temp)</span>
+<span id="cb60-112"><a href="#cb60-112" aria-hidden="true" tabindex="-1"></a><span class="fu">kurtosis</span>(punkty<span class="sc">$</span>temp)</span>
+<span id="cb60-113"><a href="#cb60-113" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(punkty, <span class="fu">aes</span>(temp, ndvi)) <span class="sc">+</span></span>
+<span id="cb60-114"><a href="#cb60-114" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb60-115"><a href="#cb60-115" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Temperatura [°C]"</span>, <span class="at">y =</span> <span class="st">"Wskaźnik ndvi"</span>) <span class="sc">+</span></span>
+<span id="cb60-116"><a href="#cb60-116" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb60-117"><a href="#cb60-117" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(punkty, <span class="fu">aes</span>(temp, srtm)) <span class="sc">+</span></span>
+<span id="cb60-118"><a href="#cb60-118" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb60-119"><a href="#cb60-119" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Temperatura [°C]"</span>, <span class="at">y =</span> <span class="st">"Wysokość n.p.m. [m]"</span>) <span class="sc">+</span></span>
+<span id="cb60-120"><a href="#cb60-120" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb60-121"><a href="#cb60-121" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(punkty<span class="sc">$</span>temp, punkty<span class="sc">$</span>ndvi, <span class="at">method =</span> <span class="st">"spearman"</span>)</span>
+<span id="cb60-122"><a href="#cb60-122" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(punkty<span class="sc">$</span>temp, punkty<span class="sc">$</span>srtm, <span class="at">method =</span> <span class="st">"spearman"</span>)</span>
+<span id="cb60-123"><a href="#cb60-123" aria-hidden="true" tabindex="-1"></a>punkty <span class="ot">=</span> punkty <span class="sc">|&gt;</span></span>
+<span id="cb60-124"><a href="#cb60-124" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">clc =</span> <span class="fu">as.factor</span>(clc))</span>
+<span id="cb60-125"><a href="#cb60-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-126"><a href="#cb60-126" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(punkty<span class="sc">$</span>clc, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span>
+<span id="cb60-127"><a href="#cb60-127" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(punkty, <span class="fu">aes</span>(<span class="at">x =</span> clc, <span class="at">y =</span> temp)) <span class="sc">+</span></span>
+<span id="cb60-128"><a href="#cb60-128" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb60-129"><a href="#cb60-129" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Klasa pokrycia terenu"</span>, <span class="at">y =</span> <span class="st">"Temperatura [°C]"</span>) <span class="sc">+</span></span>
+<span id="cb60-130"><a href="#cb60-130" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb60-131"><a href="#cb60-131" aria-hidden="true" tabindex="-1"></a>aov_test <span class="ot">=</span> <span class="fu">aov</span>(temp <span class="sc">~</span> clc, <span class="at">data =</span> punkty)</span>
+<span id="cb60-132"><a href="#cb60-132" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(aov_test)</span>
+<span id="cb60-133"><a href="#cb60-133" aria-hidden="true" tabindex="-1"></a>tukey <span class="ot">=</span> <span class="fu">TukeyHSD</span>(aov_test, <span class="st">"clc"</span>)</span>
+<span id="cb60-134"><a href="#cb60-134" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(tukey, <span class="at">las =</span> <span class="dv">1</span>)</span>
+<span id="cb60-135"><a href="#cb60-135" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(granica) <span class="sc">+</span></span>
+<span id="cb60-136"><a href="#cb60-136" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
+<span id="cb60-137"><a href="#cb60-137" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(punkty) <span class="sc">+</span></span>
+<span id="cb60-138"><a href="#cb60-138" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_symbols</span>(<span class="at">size =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb60-139"><a href="#cb60-139" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_grid</span>()</span>
+<span id="cb60-140"><a href="#cb60-140" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(punkty) <span class="sc">+</span></span>
+<span id="cb60-141"><a href="#cb60-141" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">labels.show =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb60-142"><a href="#cb60-142" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_symbols</span>(<span class="at">fill =</span> <span class="st">"temp"</span>,</span>
+<span id="cb60-143"><a href="#cb60-143" aria-hidden="true" tabindex="-1"></a>             <span class="at">fill.scale =</span> <span class="fu">tm_scale_continuous</span>(<span class="at">values =</span> <span class="st">"-brewer.spectral"</span>),</span>
+<span id="cb60-144"><a href="#cb60-144" aria-hidden="true" tabindex="-1"></a>             <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="at">title =</span> <span class="st">"Temperatura [°C]"</span>),</span>
+<span id="cb60-145"><a href="#cb60-145" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="fl">0.5</span>)</span></code><button title="Kopiuj do schowka" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Skopiowano!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Skopiowano!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./03_eksploracja_teoria.html" class="pagination-link" aria-label="EKSPLORACYJNA ANALIZA DANYCH">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">EKSPLORACYJNA ANALIZA DANYCH</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./05_punkty_teoria.html" class="pagination-link" aria-label="DANE PUNKTOWE">
+        <span class="nav-page-text">DANE PUNKTOWE</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

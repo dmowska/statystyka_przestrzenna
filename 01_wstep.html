@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pl" xml:lang="pl"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.6.42">
@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -30,7 +50,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./02_wprowadzenie.html" rel="next">
+<link href="./02_dane_przestrzenne.html" rel="next">
 <link href="./index.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -55,20 +75,49 @@ ul.task-list li input[type="checkbox"] {
   ],
   "show-item-context": false,
   "language": {
-    "search-no-results-text": "No results",
-    "search-matching-documents-text": "matching documents",
-    "search-copy-link-title": "Copy link to search",
-    "search-hide-matches-text": "Hide additional matches",
-    "search-more-match-text": "more match in this document",
-    "search-more-matches-text": "more matches in this document",
-    "search-clear-button-title": "Clear",
+    "search-no-results-text": "Brak wyników",
+    "search-matching-documents-text": "dopasowane dokumenty",
+    "search-copy-link-title": "Kopiuj link do wyszukiwania",
+    "search-hide-matches-text": "Ukryj dodatkowe dopasowania",
+    "search-more-match-text": "więcej dopasowań w tym dokumencie",
+    "search-more-matches-text": "więcej dopasowań w tym dokumencie",
+    "search-clear-button-title": "Wyczyść",
     "search-text-placeholder": "",
-    "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit",
-    "search-label": "Search"
+    "search-detached-cancel-button-title": "Anuluj",
+    "search-submit-button-title": "Zatwierdź",
+    "search-label": "Szukaj"
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -78,13 +127,13 @@ ul.task-list li input[type="checkbox"] {
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Przełącz pasek boczny" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_wstep.html">WSTĘP</a></li></ol></nav>
-        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Przełącz pasek boczny" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
-      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+      <button type="button" class="btn quarto-search-button" aria-label="Szukaj" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
@@ -101,7 +150,7 @@ ul.task-list li input[type="checkbox"] {
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
-        <div id="quarto-search" class="" title="Search"></div>
+        <div id="quarto-search" class="" title="Szukaj"></div>
         </div>
         </div>
     <div class="sidebar-menu-container"> 
@@ -116,149 +165,189 @@ ul.task-list li input[type="checkbox"] {
       <div class="sidebar-item-container"> 
             <a href="./01_wstep.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">WSTĘP</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./02_wprowadzenie.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Wprowadzenie</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./03_zastosowanie.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Zastosowania statystyki przestrzennej</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./04_daneprzestrzenne.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Dane przestrzenne w R</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./05_eksploracja.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Eksploracyjna analiza danych przestrzennych</span></span></a>
+  <a href="./02_dane_przestrzenne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Dane przestrzenne w R</span></span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./06_punkty.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">DANE PUNKTOWE</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <a href="./03_eksploracja_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">EKSPLORACYJNA ANALIZA DANYCH</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./07_punkty_centrograficzne.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Statystyki centrograficzne</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./08_punkty_odleglosc.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Metody oparte na odległości</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./09_punkty_intensywnosc.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Metody oparte na analizie intensywności</span></span></a>
+  <a href="./04_eksploracja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Eksploracyjna analiza danych</span></span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./10_poligony.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">DANE OBSZAROWE</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <a href="./05_punkty_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE PUNKTOWE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./11_poligony_sasiedztwo.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Określanie sąsiedztwa danych obszarowych</span></span></a>
+  <a href="./06_punkty_centrograficzne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Statystyki centrograficzne</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./12_poligony_autokorelacja.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Miary autokorelacji danych obszarowych</span></span></a>
+  <a href="./07_punkty_intensywnosc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Metody oparte na analizie intensywności</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_punkty_odleglosc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Metody oparte na odległości</span></span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./13_pola.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">DANE POWIERZCHNIOWE CIĄGŁE PRZESTRZENNIE</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <a href="./09_obszarowe_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE OBSZAROWE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./14_pola_interpolacja.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Metody interpolacji</span></span></a>
+  <a href="./10_obszarowe_sasiedztwo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Określanie sąsiedztwa danych obszarowych</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./15_pola_modelowanie.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Geostatystyka: Analiza i modelowanie autokorelacji przestrzennej</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./16_pola_estymacja.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Geostatystyczne metody estymacji</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./17_pola_ocena.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Ocena jakości estymacji</span></span></a>
+  <a href="./11_obszarowe_autokorelacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Miary autokorelacji danych obszarowych</span></span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
- <span class="menu-text">ZADANIA</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <a href="./12_pola_teoria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DANE POWIERZCHNIOWE CIĄGŁE PRZESTRZENNIE</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./18_zadania_samodzielne.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Zadania samodzielne</span></span></a>
+  <a href="./13_pola_interpolacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Metody interpolacji</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./19_projekt.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Projekt</span></span></a>
+  <a href="./14_pola_semiwariogram.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Analiza i modelowanie struktury przestrzennej</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./20_projekt_geostatystyka.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Projekt 2: Geostatytyka</span></span></a>
+  <a href="./15_pola_estymacja.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Geostatystyczne metody estymacji</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_pola_ocena.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Ocena jakości estymacji</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">ZADANIA I PROJEKTY</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_zadania_samodzielne.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Zadania samodzielne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18_projekt1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Projekt 1: przestępczość a zmienne społeczno-ekonomiczne</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19_projekt2_geostatystyka.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Projekt 2: Geostatystyka</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Załączniki</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Przełącz sekcję">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./A_pakiety.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Pakiety</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./B_funkcje.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Funkcje</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./C_operacje.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Operacje na danych przestrzennych</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./D_slownik.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Słownik pojęć</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bibliografia</span></a>
   </div>
 </li>
       </ul>
@@ -268,15 +357,44 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Spis treści</h2>
+   
+  <ul>
+  <li><a href="#podstawowe-pojęcia" id="toc-podstawowe-pojęcia" class="nav-link active" data-scroll-target="#podstawowe-pojęcia">Podstawowe pojęcia</a>
+  <ul class="collapse">
+  <li><a href="#statystyka-przestrzenna" id="toc-statystyka-przestrzenna" class="nav-link" data-scroll-target="#statystyka-przestrzenna">Statystyka przestrzenna</a></li>
+  <li><a href="#zależność-przestrzenna" id="toc-zależność-przestrzenna" class="nav-link" data-scroll-target="#zależność-przestrzenna">Zależność przestrzenna</a></li>
+  <li><a href="#autokorelacja-przestrzenna" id="toc-autokorelacja-przestrzenna" class="nav-link" data-scroll-target="#autokorelacja-przestrzenna">Autokorelacja przestrzenna</a></li>
+  </ul></li>
+  <li><a href="#rozwój-metod-statystyki-przestrzennej" id="toc-rozwój-metod-statystyki-przestrzennej" class="nav-link" data-scroll-target="#rozwój-metod-statystyki-przestrzennej">Rozwój metod statystyki przestrzennej</a></li>
+  <li><a href="#statystyka-przestrzenna-a-inne-dyscypliny" id="toc-statystyka-przestrzenna-a-inne-dyscypliny" class="nav-link" data-scroll-target="#statystyka-przestrzenna-a-inne-dyscypliny">Statystyka przestrzenna a inne dyscypliny</a>
+  <ul class="collapse">
+  <li><a href="#statystyka-przestrzenna-a-analizy-przestrzenne-i-gis" id="toc-statystyka-przestrzenna-a-analizy-przestrzenne-i-gis" class="nav-link" data-scroll-target="#statystyka-przestrzenna-a-analizy-przestrzenne-i-gis">Statystyka przestrzenna a analizy przestrzenne i GIS</a></li>
+  <li><a href="#statystyka-przestrzenna-a-statystyka" id="toc-statystyka-przestrzenna-a-statystyka" class="nav-link" data-scroll-target="#statystyka-przestrzenna-a-statystyka">Statystyka przestrzenna a statystyka</a></li>
+  <li><a href="#statystyka-przestrzenna-a-ekonometria-przestrzenna" id="toc-statystyka-przestrzenna-a-ekonometria-przestrzenna" class="nav-link" data-scroll-target="#statystyka-przestrzenna-a-ekonometria-przestrzenna">Statystyka przestrzenna a ekonometria przestrzenna</a></li>
+  </ul></li>
+  <li><a href="#zastosowania-statystyki-przestrzennej" id="toc-zastosowania-statystyki-przestrzennej" class="nav-link" data-scroll-target="#zastosowania-statystyki-przestrzennej">Zastosowania statystyki przestrzennej</a>
+  <ul class="collapse">
+  <li><a href="#główne-nurty-metodologiczne-w-statystyce-przestrzennej" id="toc-główne-nurty-metodologiczne-w-statystyce-przestrzennej" class="nav-link" data-scroll-target="#główne-nurty-metodologiczne-w-statystyce-przestrzennej">Główne nurty metodologiczne w statystyce przestrzennej</a></li>
+  <li><a href="#analiza-danych-punktowych-bezatybutowych" id="toc-analiza-danych-punktowych-bezatybutowych" class="nav-link" data-scroll-target="#analiza-danych-punktowych-bezatybutowych">Analiza danych punktowych (bezatybutowych)</a></li>
+  <li><a href="#geostatystyka" id="toc-geostatystyka" class="nav-link" data-scroll-target="#geostatystyka">Geostatystyka</a></li>
+  <li><a href="#autokorelacja-przestrzenna-danych-obszarowych" id="toc-autokorelacja-przestrzenna-danych-obszarowych" class="nav-link" data-scroll-target="#autokorelacja-przestrzenna-danych-obszarowych">Autokorelacja przestrzenna danych obszarowych</a></li>
+  </ul></li>
+  <li><a href="#od-pytania-badawczego-do-metody" id="toc-od-pytania-badawczego-do-metody" class="nav-link" data-scroll-target="#od-pytania-badawczego-do-metody">Od pytania badawczego do metody</a></li>
+  <li><a href="#powiązanie-z-ćwiczeniami" id="toc-powiązanie-z-ćwiczeniami" class="nav-link" data-scroll-target="#powiązanie-z-ćwiczeniami">Powiązanie z ćwiczeniami</a></li>
+  <li><a href="#literatura" id="toc-literatura" class="nav-link" data-scroll-target="#literatura">Literatura</a></li>
+  <li><a href="#pytania-kontrolne" id="toc-pytania-kontrolne" class="nav-link" data-scroll-target="#pytania-kontrolne">Pytania kontrolne</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">WSTĘP</h1>
+<h1 class="title"><span id="sec-wstep" class="quarto-section-identifier">WSTĘP</span></h1>
 </div>
 
 
@@ -293,28 +411,816 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Termin <strong><em>statystyka przestrzenna</em></strong> odnosi się do stosowania pojęć i metod statystycznych do danych, które mają wyraźną strukturę przestrzenną, <em>która jest ważna dla zrozumienia tych danych</em> (<a href="https://www.spatialanalysisonline.com/" class="uri">https://www.spatialanalysisonline.com/</a>). Statystyka przestrzenna dostarcza narzędzi badawczych oraz podstaw teoretycznych związanych ze zbieraniem danych, analizą danych, oraz wnioskowaniem statystycznym <strong>dla danych przestrzennych</strong> (Suchecka 2014).</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Czego się nauczysz
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Po tym rozdziale potrafisz:</strong></p>
+<ul>
+<li>wyjaśnić, czym zajmuje się statystyka przestrzenna i co odróżnia ją od statystyki stosowanej do danych pozbawionych lokalizacji,</li>
+<li>rozróżnić trzy rodzaje danych przestrzennych i wskazać nurt metodologiczny właściwy dla każdego z nich,</li>
+<li>dobrać grupę metod do pytania badawczego i rodzaju danych,</li>
+<li>umiejscowić statystykę przestrzenną względem analiz przestrzennych i GIS oraz względem ekonometrii przestrzennej,</li>
+<li>wskazać prace, które wyznaczyły kolejne etapy rozwoju metod statystyki przestrzennej.</li>
+</ul>
+<p><strong>Rozumiesz i umiesz zinterpretować:</strong></p>
+<ul>
+<li>zależność przestrzenną oraz pierwsze prawo geografii,</li>
+<li>autokorelację przestrzenną jako konsekwencję zależności przestrzennej,</li>
+<li>co jest przedmiotem analizy dla danych punktowych, obszarowych i powierzchniowych ciągłych przestrzennie,</li>
+<li>skutek niespełnienia założenia o niezależności obserwacji,</li>
+<li>odpowiedniki metod statystyki klasycznej w statystyce przestrzennej,</li>
+<li>co przedstawia mapa klastrów przestrzennych i do której grupy metod należy.</li>
+</ul>
+<p><strong>Część praktyczna:</strong> <a href="02_dane_przestrzenne.html" class="quarto-xref"><span>1&nbsp; Dane przestrzenne w R</span></a>. <strong>Słownik pojęć:</strong> <a href="D_slownik.html" class="quarto-xref"><span>Załącznik D — Słownik pojęć</span></a>. <strong>Pakiety:</strong> <a href="A_pakiety.html" class="quarto-xref"><span>Załącznik A — Pakiety</span></a>. <strong>Funkcje:</strong> <a href="B_funkcje.html" class="quarto-xref"><span>Załącznik B — Funkcje</span></a>.</p>
+</div>
+</div>
+<p>Termin <strong><em>statystyka przestrzenna</em></strong> odnosi się do stosowania pojęć i metod statystycznych do danych, które mają wyraźną strukturę przestrzenną, <em>która jest ważna dla zrozumienia tych danych</em> <span class="citation" data-cites="spatialanalysisonline">(<a href="references.html#ref-spatialanalysisonline" role="doc-biblioref">de Smith, Goodchild, i Longley, b.d.</a>)</span>. Statystyka przestrzenna dostarcza narzędzi badawczych oraz podstaw teoretycznych związanych ze zbieraniem danych, analizą danych oraz wnioskowaniem statystycznym <strong>dla danych przestrzennych</strong> <span class="citation" data-cites="suchecka2014">(<a href="references.html#ref-suchecka2014" role="doc-biblioref">Suchecka 2014</a>)</span>.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="figs/nurty_statystyka.png" class="img-fluid figure-img"></p>
+<p><img src="figs/wstep_dane_nurty.png" class="img-fluid figure-img"></p>
 <figcaption>Główne nurty statystyki przestrzennej ze względu na rodzaj analizowanych danych</figcaption>
 </figure>
 </div>
-<p>Ze względu na możliwości zastosowania metod statystycznych można wyróżnić <strong>trzy rodzaje danych przestrzennych</strong> (Cressie, 1993):</p>
+<p>Ze względu na możliwości zastosowania metod statystycznych można wyróżnić <strong>trzy rodzaje danych przestrzennych</strong> <span class="citation" data-cites="cressie1993">(<a href="references.html#ref-cressie1993" role="doc-biblioref">Cressie 1993</a>)</span>:</p>
 <ul>
-<li><strong>dane punktowe</strong> (<em>point data</em>) - reprezentują wartości zmiennych mające charakter punktów w przestrzeni geograficznej;</li>
+<li><strong>dane punktowe</strong> (<em>point pattern data</em>) - bezatrybutowe; przedmiotem analizy jest samo rozmieszczenie zdarzeń, a zbiór ich lokalizacji jest realizacją pola losowego;</li>
 <li><strong>dane obszarowe</strong> (<em>area data</em>) - powstają poprzez podzielenie obszaru badań na jednostki przestrzenne, w których agregowane są wyniki, np. podział na jednostki administracyjne;</li>
 <li><strong>dane powierzchniowe ciągłe przestrzennie</strong> (<em>surface data, spatially continous data</em>) - określane poprzez ciągłą zmienność na podstawie funkcji odległości (np. temperatura powietrza, opady atmosferyczne, występowanie złóż surowców naturalnych).</li>
 </ul>
-<p>Ze względu na rodzaj analizowanych danych w statystyce przestrzennej można wyróżnić <strong>trzy główne nurty</strong> (Suchecka 2014):</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/wstep_rodzaje_danych.png" class="img-fluid figure-img"></p>
+<figcaption>Co jest przedmiotem analizy w każdym z trzech rodzajów danych.</figcaption>
+</figure>
+</div>
+<p>Dane punktowe i pomiary zjawiska ciągłego wyglądają na mapie tak samo — jako zbiór punktów — a należą do różnych nurtów. Rozstrzyga przedmiot analizy: dla danych punktowych jest nim <strong>rozmieszczenie</strong> zdarzeń, dla danych obszarowych <strong>wartość przypisana jednostce</strong>, a dla danych powierzchniowych ciągłych — <strong>wartość w każdym miejscu</strong> obszaru, szacowana na podstawie pomiarów wykonanych w wybranych punktach.</p>
+<p>Ze względu na rodzaj analizowanych danych w statystyce przestrzennej można wyróżnić <strong>trzy główne nurty</strong> <span class="citation" data-cites="suchecka2014">(<a href="references.html#ref-suchecka2014" role="doc-biblioref">Suchecka 2014</a>)</span>:</p>
 <ul>
 <li><p><strong>analizę danych punktowych</strong> (ang. <em>point pattern analysis</em>) - stosuje się do określenia, w jaki sposób dane obiekty (zdarzenia) są rozmieszczone w przestrzeni (losowo, regularnie, skupione w klastry).</p></li>
-<li><p><strong>metody analizy danych obszarowych</strong> - stosuje się do oceny autokorelacji przestrzennej i sprawdzenia, czy obszary bliskie mają podobne, czy różne wartości.</p></li>
-<li><p><strong>geostatystykę</strong> - stosuje się do zrozumienie zmienności przestrzennej lub czasowej zjawisk ciągłych przestrzennie (np. rozkład opadów atmosferycznych, zanieczyszczeń powietrza).</p></li>
+<li><p><strong>metody analizy danych obszarowych i punktowych atrybutowych</strong> - stosuje się do oceny autokorelacji przestrzennej i sprawdzenia, czy obszary bliskie mają podobne, czy różne wartości.</p></li>
+<li><p><strong>geostatystykę</strong> - stosuje się do zrozumienia zmienności przestrzennej lub czasowej zjawisk ciągłych przestrzennie (np. rozkład opadów atmosferycznych, zanieczyszczeń powietrza).</p></li>
 </ul>
-<p>W kolejnych rozdziałach omówione zostaną metody wchodzące w skład w/w nurtów statystyki przestrzennej.</p>
+<p>W kolejnych rozdziałach omówione zostaną metody wchodzące w skład wymienionych wyżej nurtów statystyki przestrzennej.</p>
+<section id="podstawowe-pojęcia" class="level2">
+<h2 class="anchored" data-anchor-id="podstawowe-pojęcia">Podstawowe pojęcia</h2>
+<section id="statystyka-przestrzenna" class="level3">
+<h3 class="anchored" data-anchor-id="statystyka-przestrzenna">Statystyka przestrzenna</h3>
+<ul>
+<li><p>Termin <strong><em>statystyka przestrzenna</em></strong> odnosi się do stosowania pojęć i metod statystycznych do danych, które mają wyraźną strukturę przestrzenną, <em>która jest ważna dla zrozumienia tych danych</em> <span class="citation" data-cites="spatialanalysisonline">(<a href="references.html#ref-spatialanalysisonline" role="doc-biblioref">de Smith, Goodchild, i Longley, b.d.</a>)</span></p></li>
+<li><p>Statystyka przestrzenna dostarcza narzędzi badawczych oraz podstaw teoretycznych związanych ze zbieraniem danych, analizą danych oraz wnioskowaniem statystycznym <strong>dla danych przestrzennych</strong> <span class="citation" data-cites="suchecka2014">(<a href="references.html#ref-suchecka2014" role="doc-biblioref">Suchecka 2014</a>)</span>.</p></li>
+</ul>
+</section>
+<section id="zależność-przestrzenna" class="level3">
+<h3 class="anchored" data-anchor-id="zależność-przestrzenna">Zależność przestrzenna</h3>
+<ul>
+<li><p>podstawowa koncepcja analiz przestrzennych</p></li>
+<li><p>pojęcie zależności przestrzennej (ang. <em>spatial dependence</em>) zostało ujęte przez Toblera <span class="citation" data-cites="tobler1970">(<a href="references.html#ref-tobler1970" role="doc-biblioref">Tobler 1970</a>)</span>: <strong>“Wszystkie rzeczy są ze sobą powiązane, ale rzeczy bliskie są bardziej powiązane niż rzeczy odległe”.</strong></p></li>
+<li><p>sformułowanie Toblera jest znane jako “Pierwsze prawo geografii” (ang. <em>First Law of Geography</em>)</p></li>
+<li><p>“wielkość” zależności przestrzenej może być mierzona za pomocą statystyk autokorelacji przestrzennej.</p></li>
+<li><p>zależność przestrzenna stanowi także podstawę metod stosowanych w ramach geostatystyki, która opisuje zmienność przestrzenną za pomocą funkcji pokazującej, jak autokorelacja przestrzenna maleje wraz ze wzrostem odległości.</p></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/wstep_tobler.png" class="img-fluid figure-img"></p>
+<figcaption>Pierwsze prawo geografii na danych pomiarowych. Temperatura powietrza zmierzona w 247 punktach: układ rzeczywisty, ten sam zbiór wartości przestawiony losowo między punktami oraz średnia bezwzględna różnica wartości w przedziałach odległości.</figcaption>
+</figure>
+</div>
+<p>Lokalizacje i zbiór wartości są w obu układach te same; różni je wyłącznie przyporządkowanie wartości do lokalizacji. W układzie rzeczywistym średnia bezwzględna różnica temperatury rośnie z 2,1 °C dla par punktów oddalonych średnio o 0,7 km do 9,0 °C dla par oddalonych o 12,5 km. Po losowym przestawieniu wartości ta sama miara utrzymuje się na poziomie około 4,5 °C na niemal całym zakresie odległości. Zależność przestrzenna jest więc własnością układu wartości, a nie samego zbioru lokalizacji.</p>
+<!-- https://www.spatialanalysisonline.com/HTML/index.html?spatial_dependence.htm-->
+<!-- https://www.spatialanalysisonline.com/HTML/index.html?spatial_relationships.htm-->
+</section>
+<section id="autokorelacja-przestrzenna" class="level3">
+<h3 class="anchored" data-anchor-id="autokorelacja-przestrzenna">Autokorelacja przestrzenna</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/spatial_auto_mgimond.png" class="img-fluid figure-img"></p>
+<figcaption>Trzy układy wartości tej samej zmiennej w regularnej siatce.</figcaption>
+</figure>
+</div>
+<p>Zwróć uwagę na zmianę układu wartości: od skupienia wartości podobnych, przez brak widocznej struktury, po układ naprzemienny.</p>
+<p><em>Źródło:</em> <a href="https://mgimond.github.io/Spatial/spatial-autocorrelation.html" class="uri">https://mgimond.github.io/Spatial/spatial-autocorrelation.html</a></p>
+<ul>
+<li><p>określana jako sytuacja, w której <strong>występowanie jednego zjawiska w jednej jednostce przestrzennej powoduje zmniejszenie lub zwiększenie się tego zjawiska w jednostkach sąsiednich</strong> <span class="citation" data-cites="bivand1980">(<a href="references.html#ref-bivand1980" role="doc-biblioref">Bivand 1980</a>)</span></p></li>
+<li><p>może być obserwowana jako klastry podobnych wartości lub systematyczny wzorzec przestrzenny (spatial pattern)</p></li>
+<li><p>jest to konsekwencja występowania zależności przestrzennych - oznacza, że bliskie geograficznie obserwacje są bardziej do siebie podobne niż te odległe</p></li>
+<li><p>sam termin <em>autokorelacja przestrzenna</em> wprowadzili w 1968 roku Cliff i Ord; do tego czasu używano pojęć: zależność przestrzenna (<em>spatial dependency</em>), interakcje przestrzenne (<em>spatial interactions</em>), związek przestrzenny (<em>spatial association</em>) <span class="citation" data-cites="suchecka2014">(<a href="references.html#ref-suchecka2014" role="doc-biblioref">Suchecka 2014</a>)</span></p></li>
+<li><p>pierwsze miary autokorelacji przestrzennej wprowadzone zostały w latach 50. XX w. w pracach <span class="citation" data-cites="moran1950">Moran (<a href="references.html#ref-moran1950" role="doc-biblioref">1950</a>)</span> oraz <span class="citation" data-cites="geary1954">Geary (<a href="references.html#ref-geary1954" role="doc-biblioref">1954</a>)</span>, a następnie rozszerzone o miary lokalne w latach 90.</p></li>
+</ul>
+</section>
+</section>
+<section id="rozwój-metod-statystyki-przestrzennej" class="level2">
+<h2 class="anchored" data-anchor-id="rozwój-metod-statystyki-przestrzennej">Rozwój metod statystyki przestrzennej</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/wstep_historia_maly.png" class="img-fluid figure-img"></p>
+<figcaption>Rozwój metod statystyki przestrzennej: trzy nurty i prace, które wyznaczyły ich kolejne etapy. Wersja do powiększenia: <a href="figs/wstep_historia.png"><code>wstep_historia.png</code></a> (3200 × 1016 pikseli).</figcaption>
+</figure>
+</div>
+<p>Rycina porządkuje rozwój dyscypliny w trzech pasmach — po jednym na każdy nurt — oraz w paśmie wspólnym dla całej dyscypliny. Nurty rozwijały się przez kilkadziesiąt lat równolegle i w dużej mierze niezależnie od siebie: geostatystyka w kręgu francuskojęzycznym, statystyka autokorelacji przestrzennej w anglojęzycznym; kontakt obu środowisk zaczął się w latach 70. <span class="citation" data-cites="chun2013">(<a href="references.html#ref-chun2013" role="doc-biblioref">Chun i Griffith 2013</a>)</span>. W paśmie geostatystycznym rycina wskazuje także prace D. Krige’a z początku lat 50. nad szacowaniem zasobów złota, które poprzedziły formalizację Matherona <span class="citation" data-cites="krige1951">(<a href="references.html#ref-krige1951" role="doc-biblioref">Krige 1951</a>)</span>. Ostatnia kolumna wymienia pakiety R, w których metody każdego z nurtów są dziś dostępne — to one są narzędziem pracy w dalszej części skryptu.</p>
+<ul>
+<li><p><strong>lata 30. XX w.</strong></p>
+<ul>
+<li><p>zastosowanie teorii procesów punktowych w ramach analiz przestrzennych do analizy przestrzennego rozmieszczenia zjawisk (pierwsze zastosowanie: ekologia - badanie rozkładu gatunków drzew w przestrzeni)</p></li>
+<li><p>praca <span class="citation" data-cites="stephan1934">Stephan (<a href="references.html#ref-stephan1934" role="doc-biblioref">1934</a>)</span>: <em>dane geograficzne są ze sobą powiązane jak kiście winogron, a nie oddzielne jak kule w urnie</em></p></li>
+<li><p>eksperyment Fishera <span class="citation" data-cites="fisher1935">(<a href="references.html#ref-fisher1935" role="doc-biblioref">Fisher 1935</a>)</span>: wyniki eksperymentu pokazały zbliżone poziomy wydajności z upraw pól leżących obok siebie.</p></li>
+</ul></li>
+</ul>
+<!-- -->
+<ul>
+<li><p><strong>lata 50. XX w.</strong> <span class="citation" data-cites="moran1950 geary1954">(<a href="references.html#ref-moran1950" role="doc-biblioref">Moran 1950</a>; <a href="references.html#ref-geary1954" role="doc-biblioref">Geary 1954</a>)</span></p>
+<ul>
+<li><p>opracowanie obecnie stosowanych testów statystycznych do weryfikacji istotności autokorelacji przestrzennej wartości atrybutów dla regularnych obiektów obszarowych (regular lattice system). Testy te służą do weryfikacji hipotezy zerowej o braku autokorelacji przestrzennej (braku struktury przestrzennej), wobec nieokreślonej hipotezy alternatywnej</p></li>
+<li><p>wyprowadzone statystyki autokorelacji przestrzennej były określane miernikami sąsiedztwa</p></li>
+</ul></li>
+</ul>
+<!-- -->
+<ul>
+<li><p><strong>lata 70. XX w.</strong></p>
+<ul>
+<li>dynamiczny rozwój metod statystyki przestrzennej</li>
+<li>dwa kierunki badań:
+<ul>
+<li>rozwój podstaw teorii statystyki dla danych przestrzennych</li>
+<li>rozwój nowych metod i technik badawczych związanych głównie z pojawieniem się nowych technik komputerowych</li>
+</ul></li>
+<li>monografia <em>Spatial Autocorrelation</em> <span class="citation" data-cites="cliff1973">(<a href="references.html#ref-cliff1973" role="doc-biblioref">Cliff i Ord 1973</a>)</span>, w której Cliff i Ord dostarczyli teorii rozkładów dla statystyk autokorelacji — termin wprowadzili pięć lat wcześniej (patrz wyżej)</li>
+</ul></li>
+</ul>
+<!-- -->
+<ul>
+<li><p><strong>lata 90. XX w</strong></p>
+<ul>
+<li>poszerzenie globalnych miar autokorelacji przestrzennej o miary lokalne które wyznacza się oddzielnie dla każdego obszaru — statystykę G Getisa i Orda <span class="citation" data-cites="getis1992">(<a href="references.html#ref-getis1992" role="doc-biblioref">Getis i Ord 1992</a>)</span>, statystykę LISA (<em>local indicators of spatial association</em>) <span class="citation" data-cites="anselin1995">(<a href="references.html#ref-anselin1995" role="doc-biblioref">Anselin 1995</a>)</span> oraz lokalną statystykę <span class="math inline">\(C_i\)</span> Geary’ego</li>
+</ul></li>
+</ul>
+</section>
+<section id="statystyka-przestrzenna-a-inne-dyscypliny" class="level2">
+<h2 class="anchored" data-anchor-id="statystyka-przestrzenna-a-inne-dyscypliny">Statystyka przestrzenna a inne dyscypliny</h2>
+<p>Statystyka przestrzenna jest odrębną dyscypliną wywodzącą się z analiz przestrzennych oraz ściśle związaną z tradycyjnymi metodami statystycznymi i nowocześniejszą statystyką obliczeniową (ang. <em>computational statistics</em>).</p>
+<p>Statystyka przestrzenna dostarcza formalnych narzędzi statystycznych w ramach szerszego procesu badania danych przestrzennych.</p>
+<p>Metody statystyki przestrzennej są także implementowane w ramach oprogramowania GIS:</p>
+<ul>
+<li><p>QGIS: <a href="https://docs.qgis.org/3.34/en/docs/training_manual/vector_analysis/spatial_statistics.html" class="uri">https://docs.qgis.org/3.34/en/docs/training_manual/vector_analysis/spatial_statistics.html</a></p></li>
+<li><p>ArcGIS: <a href="https://pro.arcgis.com/en/pro-app/latest/tool-reference/spatial-statistics/an-overview-of-the-spatial-statistics-toolbox.htm" class="uri">https://pro.arcgis.com/en/pro-app/latest/tool-reference/spatial-statistics/an-overview-of-the-spatial-statistics-toolbox.htm</a></p></li>
+</ul>
+<section id="statystyka-przestrzenna-a-analizy-przestrzenne-i-gis" class="level3">
+<h3 class="anchored" data-anchor-id="statystyka-przestrzenna-a-analizy-przestrzenne-i-gis">Statystyka przestrzenna a analizy przestrzenne i GIS</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/wstep_gis_schemat.png" class="img-fluid figure-img"></p>
+<figcaption>GIS, analizy przestrzenne i statystyka przestrzenna — zakresy pojęć.</figcaption>
+</figure>
+</div>
+<p>Zakresy są zagnieżdżone: statystyka przestrzenna jest wyspecjalizowanym podzbiorem analiz przestrzennych, a te prowadzone są na danych i w środowisku dostarczanym przez GIS.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 12%">
+<col style="width: 87%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Opis</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Systemy Informacji Geograficznej (GIS)</td>
+<td><ul>
+<li><p>System/platforma do tworzenia, gromadzenia, zarządzania, analizowania i wizualizacji różnych typów danych</p></li>
+<li><p>Dostarcza podstawowych narzędzi i technologii do pracy z danymi przestrzennymi, w tym do ich tworzenia, edycji i przechowywania.</p></li>
+</ul></td>
+</tr>
+<tr class="even">
+<td>Analizy przestrzenne</td>
+<td><ul>
+<li><p>Dziedzina obejmująca szeroki zestaw technik wykorzystywanych do wizualizacji, przetwarzania i analizy danych przestrzennych.</p></li>
+<li><p>Proces wykorzystywania narzędzi i technologii GIS do rozwiązywania problemów przestrzennych i zrozumienia danych przestrzennych.</p></li>
+<li><p>Obejmuje wiele metod i narzędzi, takich jak nakładanie, selekcja obiektów na podstawie atrybutów, buforowanie, agregacja danych, obliczanie odległości, algebra map.</p></li>
+</ul>
+<p>Zastosowanie:</p>
+<ul>
+<li><p>określania relacji przestrzennych (bliskość, przecięcie, nakładanie się, dostępność)</p></li>
+<li><p>analizy sieciowe: znajdowania najkrótszej/najszybszej drogi</p></li>
+<li><p>znajdowania najlepszych lokalizacji (na podstawie dowolnego zestawu kryteriów opartych o atrybuty danych przestrzennych lub wykorzystując unikalne właściwości danych przestrzennych, takie jak odległość lub relacje z innymi miejscami.)</p></li>
+</ul></td>
+</tr>
+<tr class="odd">
+<td>Statystyka przestrzenna</td>
+<td><ul>
+<li><p>Wyspecjalizowany podzbiór metod analizy przestrzennej, który koncentruje się na stosowaniu pojęć i metod statystycznych do danych przestrzennych.</p></li>
+<li><p>Uwzględnia ona zależności przestrzenne, heterogeniczność przestrzenną oraz położenie geograficzne obserwacji w celu modelowania wzorców i relacji za pomocą narzędzi takich jak autokorelacja przestrzenna, interpolacja przestrzenna, geostatystyka i regresja przestrzenna.</p></li>
+<li><p>Metody statystyki przestrzennej mogą być zaimplementowane jako rozszerzenia oprogramownia GIS.</p></li>
+</ul>
+<p>Zastosowanie:</p>
+<ul>
+<li><p>wykrywanie i kwantyfikacja wzorców w rozkładzie przestrzennym danych,</p></li>
+<li><p>wykrywanie obszarów koncentracji zjawisk poprzez wyszukanie statystycznie istotnych skupisk wysokich lub niskich wartości) |</p></li>
+<li><p>prognozowania - szacowanie wartości dla całego obszaru (dane ciągłe) na podstawie danych punktowych</p></li>
+</ul></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="statystyka-przestrzenna-a-statystyka" class="level3">
+<h3 class="anchored" data-anchor-id="statystyka-przestrzenna-a-statystyka">Statystyka przestrzenna a statystyka</h3>
+<ul>
+<li><p>Statystyka przestrzenna w odróżnieniu od klasycznej statystyki umożliwia analizę danych geograficznych oraz informacji zlokalizowanych w przestrzeni.</p></li>
+<li><p>Statystyka przestrzenna i klasyczna statystyka różnią się jednym zasadniczym założeniem:</p>
+<ul>
+<li><p><strong>Klasyczna statystyka:</strong> zakłada niezależność obserwacji, tzn. elementy próby są dobierane niezależnie od siebie (tj. losowo)</p></li>
+<li><p><strong>Statystyka przestrzenna:</strong> założenie o niezależności obserwacji nie jest spełnione. Zgodnie z regułą Toblera (nazywaną też pierwszym prawem geografii) obiekty sąsiadujące w przestrzeni/czasie są do siebie bardziej podobne niż obiekty dalej od siebie położone. Nie znaczy to, że dobór próby jest nielosowy: zależność jest własnością zjawiska, a nie schematu losowania. Znaczy to, że obserwacje niosą informację <strong>nadmiarową</strong>, a <strong>efektywna liczebność próby</strong> — równoważna liczba obserwacji niezależnych — jest mniejsza niż liczba obserwacji <span class="citation" data-cites="chun2013">(<a href="references.html#ref-chun2013" role="doc-biblioref">Chun i Griffith 2013</a>)</span>.</p></li>
+</ul></li>
+</ul>
+<section id="analogie-między-statystyką-a-statystyką-przestrzenną" class="level4">
+<h4 class="anchored" data-anchor-id="analogie-między-statystyką-a-statystyką-przestrzenną">Analogie między statystyką a statystyką przestrzenną</h4>
+<p>Metodologia badań statystyki przestrzennej w większości powstała na podstawie metod statystyki klasycznej. W ramach statystyki przestrzennej także wyróżnia się statystykę opisową oraz wnioskowanie statystyczne.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/wstep_analogie.png" class="img-fluid figure-img"></p>
+<figcaption>Odpowiedniki metod statystyki klasycznej w statystyce przestrzennej. Źródło: <span class="citation" data-cites="suchecka2014">Suchecka (<a href="references.html#ref-suchecka2014" role="doc-biblioref">2014</a>)</span>.</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="statystyka-przestrzenna-a-ekonometria-przestrzenna" class="level3">
+<h3 class="anchored" data-anchor-id="statystyka-przestrzenna-a-ekonometria-przestrzenna">Statystyka przestrzenna a ekonometria przestrzenna</h3>
+<table class="caption-top table">
+<caption>Źródło: <span class="citation" data-cites="suchecka2014">Suchecka (<a href="references.html#ref-suchecka2014" role="doc-biblioref">2014</a>)</span></caption>
+<colgroup>
+<col style="width: 51%">
+<col style="width: 48%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Statystyka przestrzenna</th>
+<th>Ekonometria przestrzenna</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>opiera się na analizie danych odnoszących się do różnych dyscyplin</td>
+<td>opiera się na modelowaniu, zajmuje się specyfikacją, estymacją i weryfikacją modeli uwzględniajacych aspekt przestrzenny</td>
+</tr>
+<tr class="even">
+<td>większość opracowań z zakresu statystyki przestrzennej dotyczy zjawisk w dziedzinie biologii, ekologii, epidemiologii, geologii</td>
+<td><p>analiza przestrzennych danych ekonomicznych oraz związanych z nimi problemów</p>
+<p>opisuje przede wszystkim procesy ekonomiczne na poziomie regionalnym</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="zastosowania-statystyki-przestrzennej" class="level2">
+<h2 class="anchored" data-anchor-id="zastosowania-statystyki-przestrzennej">Zastosowania statystyki przestrzennej</h2>
+<section id="główne-nurty-metodologiczne-w-statystyce-przestrzennej" class="level3">
+<h3 class="anchored" data-anchor-id="główne-nurty-metodologiczne-w-statystyce-przestrzennej">Główne nurty metodologiczne w statystyce przestrzennej</h3>
+<p>Ze względu na <strong>rodzaj analizowanych danych</strong> w statystyce przestrzennej można wyróżnić trzy główne nurty:</p>
+<ol type="1">
+<li>analizę danych punktowych (ang. <em>point pattern analysis</em>)</li>
+<li>geostatystykę</li>
+<li>metody analizy danych obszarowych i punktowych atrybutowych.</li>
+</ol>
+<p><span class="citation" data-cites="griffith1999">Griffith (<a href="references.html#ref-griffith1999" role="doc-biblioref">1999</a>)</span> wśród metod statystyki przestrzennej wyróżnia:</p>
+<ul>
+<li>analizę danych punktowych</li>
+<li>geostatystykę</li>
+<li>autoregresję przestrzenną</li>
+<li>metody wizualizacji danych</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/wstep_griffith.png" class="img-fluid figure-img"></p>
+<figcaption>Podział metod analizy danych ilościowych według kryterium niezależności obserwacji. Źródło: <span class="citation" data-cites="suchecka2014">Suchecka (<a href="references.html#ref-suchecka2014" role="doc-biblioref">2014</a>)</span>, za: <span class="citation" data-cites="griffith1999">Griffith (<a href="references.html#ref-griffith1999" role="doc-biblioref">1999</a>)</span>.</figcaption>
+</figure>
+</div>
+<p>Granica przebiega według tego, czy obserwacje można uznać za niezależne. Metody tradycyjne zakładają niezależność; statystyka przestrzenna obejmuje cztery wymienione wyżej grupy metod.</p>
+</section>
+<section id="analiza-danych-punktowych-bezatybutowych" class="level3">
+<h3 class="anchored" data-anchor-id="analiza-danych-punktowych-bezatybutowych">Analiza danych punktowych (bezatybutowych)</h3>
+<section id="cel" class="level4">
+<h4 class="anchored" data-anchor-id="cel">Cel</h4>
+<ul>
+<li><p>określenie w jaki sposób dane obiekty/zdarzenia są rozmieszczone w przestrzeni.</p>
+<ul>
+<li>Czy punkty są rozmieszczone <strong>losowo</strong>? (tzn. na ich rozmieszczenie nie działa żaden czynnik lub zależą od wielu czynników które się wzajemnie znoszą)</li>
+<li>Czy punkty są rozmieszczone <strong>regularnie</strong>? (tj. efekt świadomego działania, nie jest to proces naturalny)</li>
+<li>Czy występują <strong>skupiska (klastry)</strong> punktów? (tzn. na rozmieszczenie punktów wpływa jakiś czynnik)</li>
+</ul></li>
+<li><p>rozpoznanie wzorca rozmieszczenia punktów w przestrzeni jest podstawą do wykrycia zależności przestrzennych.</p></li>
+</ul>
+</section>
+<section id="dane-punktowe" class="level4">
+<h4 class="anchored" data-anchor-id="dane-punktowe">Dane punktowe</h4>
+<p>Przykładami danych punktowych bezatrybutowych są:</p>
+<ul>
+<li>dane epidemiologiczne dotyczące występowania przypadków zachorowań</li>
+<li>rozkłady występowania określonych gatunków roślin czy zwierząt.</li>
+</ul>
+</section>
+<section id="przykłady-danych-punktowych-zbiory-danych-z-pakietu-spatstat" class="level4">
+<h4 class="anchored" data-anchor-id="przykłady-danych-punktowych-zbiory-danych-z-pakietu-spatstat">Przykłady danych punktowych: zbiory danych z pakietu spatstat</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/point_examples.png" class="img-fluid figure-img"></p>
+<figcaption>Przykłady danych punktowych: rozmieszczenie sosen (<code>longleaf</code>), pożary lasu (<code>clmfires</code>), rozmieszczenie ludności w parku (<code>gordon</code>) oraz przestępstwa (<code>chicago</code>).</figcaption>
+</figure>
+</div>
+<p>Nie wszystkie te zbiory są bezatrybutowe: w <code>clmfires</code> i <code>chicago</code> punktom przypisano znacznik (przyczynę pożaru, typ przestępstwa), a w <code>longleaf</code> wielkość punktu odpowiada średnicy pnia na wysokości piersi, czyli wartości znacznika liczbowego.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/point_examples2.png" class="img-fluid figure-img"></p>
+<figcaption>Przykłady danych punktowych: zachorowalność na nowotwór (<code>chorley</code>) oraz lokalizacja narzędzi paleolitycznych (<code>stonetools</code>).</figcaption>
+</figure>
+</div>
+<p>Oba zbiory rozbito na panele według wartości znacznika: typu nowotworu (krtani, płuc) oraz rodzaju znaleziska (kość, wyrób kamienny). Zestawienie paneli jest pytaniem o to, czy obie grupy zdarzeń rozkładają się w przestrzeni tak samo.</p>
+</section>
+<section id="zastosowanie" class="level4">
+<h4 class="anchored" data-anchor-id="zastosowanie">Zastosowanie</h4>
+<p>Analiza przestrzennych danych punktowych jest stosowana w wielu dziedzinach:</p>
+<ul>
+<li><p><strong>biologia, ekologia, botanika</strong> -</p>
+<ul>
+<li>rozmieszczenie gatunków roślin,</li>
+<li>rozmieszczenie gatunków ptaków i ich lęgowisk</li>
+<li>badanie rozkładu gatunków drzew w przestrzeni (badanie rozmieszczenia roślin stało się pierwowzorem technik analizy przestrzennych danych punktowych)</li>
+</ul></li>
+<li><p><strong>epidemiologia</strong> - rozprzestrzenianie się chorób (wirusów, bakterii)</p></li>
+<li><p><strong>ochrona zdrowia</strong> - obszary występowania chorób zakaźnych, nowotworów</p></li>
+<li><p><strong>nauki ekonomiczne</strong> - przestrzenne zróżnicowanie zjawisk ekonomicznych, np. dochodów, bezrobocia</p></li>
+<li><p><strong>archeologia</strong></p>
+<ul>
+<li>zróżnicowanie lokalizacji stanowisk archeologicznych w kontekście rozwoju społeczno-środowiskowego</li>
+<li>analiza wzorców stanowisk stanowi mocną metodę zrozumienia preferencji lokalizacji stanowisk w archeologii.</li>
+</ul></li>
+<li><p><strong>geografia</strong></p>
+<ul>
+<li>rozprzestrzenianie się pożarów</li>
+</ul></li>
+</ul>
+<!--https://www.sciencedirect.com/science/article/pii/S2352409X22004102-->
+<!--https://benmarwick.github.io/How-To-Do-Archaeological-Science-Using-R/basic-spatial-analysis-in-r-point-pattern-analysis.html -->
+</section>
+</section>
+<section id="geostatystyka" class="level3">
+<h3 class="anchored" data-anchor-id="geostatystyka">Geostatystyka</h3>
+<ul>
+<li>Geostatystyka to gałąź statystyki skupiająca się na przestrzennych lub czasoprzestrzennych zbiorach danych.</li>
+<li>Uwzględnia w analizie przestrzenną i czasową lokalizację.</li>
+<li>Podstawą opisu struktury przestrzennej jest semiwariogram - funkcja określająca zależność pomiędzy średnim zróżnicowaniem wartości analizowanej cechy i odległością między punktami pomiaru (zakłada się, że podobieństwo wartości maleje wraz z odleglością).</li>
+<li>Początki geostatystyki: lata 60.XX w. — francuski matematyk Georges Matheron sformułował w 1963 roku zasady geostatystyki <span class="citation" data-cites="matheron1963">(<a href="references.html#ref-matheron1963" role="doc-biblioref">Matheron 1963</a>)</span>, mające na celu optymalizację szacowania parametrów geologicznych.</li>
+</ul>
+<section id="cel-1" class="level4">
+<h4 class="anchored" data-anchor-id="cel-1">Cel</h4>
+<ul>
+<li>zrozumienia zmienności przestrzennej lub czasowej zjawiska</li>
+<li>szacowanie wartości dla całego obszaru (dane ciągłe) na podstawie danych punktowych (estymacja)</li>
+<li>określenie prawdopodobieństwa przekroczenia w danym punkcie lub obszarze wartości progowej</li>
+<li>Optymalizacja próbkowania oraz sieci monitoringowych</li>
+</ul>
+</section>
+<section id="przykłady-zastosowania" class="level4">
+<h4 class="anchored" data-anchor-id="przykłady-zastosowania">Przykłady zastosowania</h4>
+<p>Modelowanie zmienności przestrzennej opadów na podstawie zbioru danych <code>sic97</code> (<em>Spatial Interpolation Comparison 1997 data set: Swiss Rainfall</em>) z pakietu <code>gstat</code> przedstawiającego 100 pomiarów wysokości opadów w obszarze Szwajcarii.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/geostat_ex_swiss_rainfall.png" class="img-fluid figure-img"></p>
+<figcaption>Wysokość opadów w Szwajcarii — wynik estymacji na podstawie zbioru <code>sic97</code>.</figcaption>
+</figure>
+</div>
+<p>Modelowanie zmienności przestrzennej zanieczyszczenia gleb (zmienna <em>Co</em>) na podstawie zbioru danych <code>jura</code> z pakietu <code>gstat</code>. Zbiór danych przedstawia pomiary zanieczyszczenia gleby metalami ciężkimi w 259 lokalizacjach. Zbiór danych <code>jura</code> pochodzi z książki <span class="citation" data-cites="goovaerts1997">Goovaerts (<a href="references.html#ref-goovaerts1997" role="doc-biblioref">1997</a>)</span>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/geostat_ex_jura_co.png" class="img-fluid figure-img"></p>
+<figcaption>Zanieczyszczenie gleb kobaltem — wynik estymacji na podstawie zbioru <code>jura</code>.</figcaption>
+</figure>
+</div>
+<p>Modelowanie zmienności przestrzennej zanieczyszczenia powietrza w Kalifornii (średnia zawartość Ozonu w latach 1980-2009) na podstawie zbioru danych <code>airqual</code> z pakietu <code>rspat</code>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/geostat_ex_ca_airquality_kriging.png" class="img-fluid figure-img"></p>
+<figcaption>Zanieczyszczenie powietrza w Kalifornii — wynik estymacji na podstawie zbioru <code>airqual</code>.</figcaption>
+</figure>
+</div>
+</section>
+<section id="zastosowanie-geostatystyki" class="level4">
+<h4 class="anchored" data-anchor-id="zastosowanie-geostatystyki">Zastosowanie geostatystyki</h4>
+<p>Geostatystyka jest stosowana obecnie w wielu dyscyplinach, takich jak: geologia naftowa, oceanografia, geochemia,logistyka, leśnictwo, gleboznawstwo, hydrologia, meteorologia, epidemiologia.</p>
+<ul>
+<li><p>Górnictwo, geologia, eksploracja zasobów naturalnych:</p>
+<ul>
+<li>szacowanie rezerw mineralnych,</li>
+<li>charakterystyki złoża,</li>
+<li>optymalizacji miejsc wierceń.</li>
+<li><a href="https://geojournals.pgi.gov.pl/bp/article/view/28824/pdf" class="uri">https://geojournals.pgi.gov.pl/bp/article/view/28824/pdf</a></li>
+</ul></li>
+<li><p>Zarządzanie kryzysowe</p>
+<ul>
+<li>ocena ryzyka związanego z klęskami żywiołowymi, takimi jak trzęsienia ziemi, osuwiska i powodzie, w celu opracowania strategii zarządzania katastrofami i łagodzenia ryzyka.</li>
+</ul></li>
+<li><p>Rolnictwo</p>
+<ul>
+<li>analizę jakości gleby,</li>
+<li>prognozowanie plonów</li>
+<li>precyzyjne rolnictwo poprzez pomiar zmienności przestrzennej właściwości gleby.</li>
+</ul></li>
+<li><p>Geografia</p>
+<ul>
+<li>ocena zanieczyszczeń, np. mapy zanieczyszczeń powietrza.</li>
+</ul></li>
+<li><p>Hydrologia</p>
+<ul>
+<li>modelowanie głębokości wód gruntowych,</li>
+<li>prognozowanie występowania opadów</li>
+<li>ocena ryzyka powodzi poprzez analizę wzorców przestrzennych zmiennych hydrologicznych.</li>
+</ul></li>
+<li><p>Epidemiologia i geografia zdrowia</p>
+<ul>
+<li>badanie przestrzennego rozmieszczenia chorób,</li>
+<li>analiza dostępu do opieki zdrowotnej i</li>
+<li>przewidywania wybuchów chorób w różnych lokalizacjach.</li>
+</ul></li>
+<li><p>Ubezpieczenia i finanse:</p>
+<ul>
+<li>wykorzystywane w branży ubezpieczeniowej do oceny i zarządzania ryzykiem związanym z klęskami żywiołowymi lub rozprzestrzenianiem się chorób w celu decydowania o odpowiednich składkach i skutecznego zarządzania portfelami.</li>
+</ul></li>
+</ul>
+<p><a href="https://desktop.arcgis.com/en/arcmap/latest/extensions/geostatistical-analyst/geostatistical-analyst-example-applications.htm" class="uri">https://desktop.arcgis.com/en/arcmap/latest/extensions/geostatistical-analyst/geostatistical-analyst-example-applications.htm</a></p>
+</section>
+</section>
+<section id="autokorelacja-przestrzenna-danych-obszarowych" class="level3">
+<h3 class="anchored" data-anchor-id="autokorelacja-przestrzenna-danych-obszarowych">Autokorelacja przestrzenna danych obszarowych</h3>
+<section id="cel-2" class="level4">
+<h4 class="anchored" data-anchor-id="cel-2">Cel</h4>
+<ul>
+<li>analiza podobieństwa i różnic między obszarami/regionami</li>
+<li>wyszukanie obszarów podobnych do siebie</li>
+<li>znalezienie obszarów znacząco różnych od sąsiednich</li>
+<li>kluczowe zadanie: określenie, które obszary ze sobą sąsiadują.</li>
+</ul>
+</section>
+<section id="przykład-zastosowania" class="level4">
+<h4 class="anchored" data-anchor-id="przykład-zastosowania">Przykład zastosowania</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/bezrobocie.png" class="img-fluid figure-img"></p>
+<figcaption>Stopa bezrobocia rejestrowanego w powiatach (po lewej) oraz mapa istotnych klastrów przestrzennych tej zmiennej (po prawej).</figcaption>
+</figure>
+</div>
+<p>Mapa po lewej przedstawia rozkład wartości zmiennej: każdy powiat ma przypisaną jedną liczbę, a barwa odpowiada przedziałowi wartości. Mapa po prawej jest wynikiem <strong>lokalnej</strong> miary autokorelacji przestrzennej i wskazuje powiaty, dla których układ wartości w ich otoczeniu różni się istotnie od układu przypadkowego: <code>high-high</code> to powiat o wysokiej wartości otoczony powiatami o wysokich wartościach, <code>low-low</code> — powiat o niskiej wartości wśród niskich, a <code>high-low</code> i <code>low-high</code> to powiaty odstające od swojego sąsiedztwa. Powiaty wyszarzone nie różnią się istotnie od układu przypadkowego. Sposób wyznaczania takich klastrów oraz warunki poprawnego odczytu takiej mapy opisuje <a href="11_obszarowe_autokorelacja.html" class="quarto-xref"><span>7&nbsp; Miary autokorelacji danych obszarowych</span></a>.</p>
+</section>
+</section>
+</section>
+<section id="od-pytania-badawczego-do-metody" class="level2">
+<h2 class="anchored" data-anchor-id="od-pytania-badawczego-do-metody">Od pytania badawczego do metody</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/wstep_pytanie_metoda.png" class="img-fluid figure-img"></p>
+<figcaption>Od pytania badawczego do rodzaju danych i grupy metod.</figcaption>
+</figure>
+</div>
+<p>Rycinę czyta się od lewej: punktem wyjścia jest pytanie zadawane danym, a nie format, w którym dane są zapisane. To samo zjawisko zapisane jako zbiór punktów prowadzi do innej grupy metod w zależności od tego, czy przedmiotem zainteresowania jest rozmieszczenie zdarzeń, czy wartość zmierzona w punkcie.</p>
+</section>
+<section id="powiązanie-z-ćwiczeniami" class="level2">
+<h2 class="anchored" data-anchor-id="powiązanie-z-ćwiczeniami">Powiązanie z ćwiczeniami</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pytanie badawcze</th>
+<th>Rodzaj danych</th>
+<th>Grupa metod</th>
+<th>Gdzie wykonujesz</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Jak wczytać, złączyć i zwizualizować dane przestrzenne w R?</td>
+<td>wszystkie</td>
+<td>—</td>
+<td><a href="02_dane_przestrzenne.html" class="quarto-xref"><span>1&nbsp; Dane przestrzenne w R</span></a></td>
+</tr>
+<tr class="even">
+<td>Jaki jest rozkład wartości zmiennej i czy widać w nim układ przestrzenny?</td>
+<td>wszystkie</td>
+<td>eksploracyjna analiza danych</td>
+<td><a href="04_eksploracja.html" class="quarto-xref"><span>2&nbsp; Eksploracyjna analiza danych</span></a></td>
+</tr>
+<tr class="odd">
+<td>Czy zdarzenia są rozmieszczone losowo, regularnie, czy w skupiskach?</td>
+<td>punktowe (bezatrybutowe)</td>
+<td>analiza rozkładu przestrzennego danych punktowych</td>
+<td><a href="06_punkty_centrograficzne.html" class="quarto-xref"><span>3&nbsp; Statystyki centrograficzne</span></a>, <a href="07_punkty_intensywnosc.html" class="quarto-xref"><span>4&nbsp; Metody oparte na analizie intensywności</span></a>, <a href="08_punkty_odleglosc.html" class="quarto-xref"><span>5&nbsp; Metody oparte na odległości</span></a></td>
+</tr>
+<tr class="even">
+<td>Czy sąsiadujące jednostki mają podobne wartości?</td>
+<td>obszarowe</td>
+<td>autokorelacja przestrzenna</td>
+<td><a href="10_obszarowe_sasiedztwo.html" class="quarto-xref"><span>6&nbsp; Określanie sąsiedztwa danych obszarowych</span></a>, <a href="11_obszarowe_autokorelacja.html" class="quarto-xref"><span>7&nbsp; Miary autokorelacji danych obszarowych</span></a></td>
+</tr>
+<tr class="odd">
+<td>Jaka jest wartość zjawiska tam, gdzie nie było pomiaru?</td>
+<td>powierzchniowe ciągłe przestrzennie</td>
+<td>interpolacja i geostatystyka</td>
+<td><a href="13_pola_interpolacja.html" class="quarto-xref"><span>8&nbsp; Metody interpolacji</span></a>, <a href="14_pola_semiwariogram.html" class="quarto-xref"><span>9&nbsp; Analiza i modelowanie struktury przestrzennej</span></a>, <a href="15_pola_estymacja.html" class="quarto-xref"><span>10&nbsp; Geostatystyczne metody estymacji</span></a>, <a href="16_pola_ocena.html" class="quarto-xref"><span>11&nbsp; Ocena jakości estymacji</span></a></td>
+</tr>
+</tbody>
+</table>
+<p>Opis pakietów wraz z odnośnikami do dokumentacji zawiera <a href="A_pakiety.html" class="quarto-xref"><span>Załącznik A — Pakiety</span></a>, a pełne zestawienie funkcji — <a href="B_funkcje.html" class="quarto-xref"><span>Załącznik B — Funkcje</span></a>.</p>
+</section>
+<section id="literatura" class="level2">
+<h2 class="anchored" data-anchor-id="literatura">Literatura</h2>
+<ul>
+<li><span class="citation" data-cites="suchecka2014">Suchecka (<a href="references.html#ref-suchecka2014" role="doc-biblioref">2014</a>)</span> — podział danych przestrzennych i nurtów metodologicznych, rozwój metod, porównanie statystyki przestrzennej ze statystyką klasyczną oraz z ekonometrią przestrzenną.</li>
+<li><span class="citation" data-cites="cressie1993">Cressie (<a href="references.html#ref-cressie1993" role="doc-biblioref">1993</a>)</span> — podział danych przestrzennych i wspólne ramy teoretyczne dyscypliny.</li>
+<li><span class="citation" data-cites="chun2013">Chun i Griffith (<a href="references.html#ref-chun2013" role="doc-biblioref">2013</a>)</span> — założenie o niezależności obserwacji i jego konsekwencje; równoległy rozwój trzech nurtów.</li>
+<li><span class="citation" data-cites="mgimond">Gimond (<a href="references.html#ref-mgimond" role="doc-biblioref">b.d.</a>)</span> — wprowadzenie do analiz przestrzennych i statystyki przestrzennej.</li>
+<li><span class="citation" data-cites="spatialanalysisonline">de Smith, Goodchild, i Longley (<a href="references.html#ref-spatialanalysisonline" role="doc-biblioref">b.d.</a>)</span> — definicje pojęć, zależność przestrzenna i relacje przestrzenne.</li>
+<li><span class="citation" data-cites="griffith1999">Griffith (<a href="references.html#ref-griffith1999" role="doc-biblioref">1999</a>)</span> — podział metod statystyki przestrzennej.</li>
+<li><span class="citation" data-cites="tobler1970">Tobler (<a href="references.html#ref-tobler1970" role="doc-biblioref">1970</a>)</span> — źródło sformułowania znanego jako pierwsze prawo geografii.</li>
+<li><span class="citation" data-cites="moraga2023">Moraga (<a href="references.html#ref-moraga2023" role="doc-biblioref">2023</a>)</span>, <span class="citation" data-cites="kopczewska2023">Kopczewska (<a href="references.html#ref-kopczewska2023" role="doc-biblioref">2023</a>)</span> — podręczniki obejmujące wszystkie trzy nurty.</li>
+<li><span class="citation" data-cites="lovelace2025">Lovelace, Nowosad, i Muenchow (<a href="references.html#ref-lovelace2025" role="doc-biblioref">2025</a>)</span> — praca z danymi przestrzennymi w R.</li>
+</ul>
+</section>
+<section id="pytania-kontrolne" class="level2">
+<h2 class="anchored" data-anchor-id="pytania-kontrolne">Pytania kontrolne</h2>
+<ol type="1">
+<li>Czym zajmuje się statystyka przestrzenna i co odróżnia ją od statystyki stosowanej do danych pozbawionych lokalizacji?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Statystyka przestrzenna stosuje pojęcia i metody statystyczne do danych o wyraźnej strukturze przestrzennej — takiej, która jest istotna dla zrozumienia tych danych. Dostarcza narzędzi badawczych oraz podstaw teoretycznych dla zbierania danych, ich analizy i wnioskowania statystycznego <strong>dla danych przestrzennych</strong>. Odróżnia ją to, że uwzględnia położenie geograficzne obserwacji oraz zależności przestrzenne między nimi, zamiast traktować obserwacje jako wzajemnie niezależne.</p>
+</div>
+</div>
+</div>
+<ol start="2" type="1">
+<li>Wymień trzy rodzaje danych przestrzennych i wskaż nurt metodologiczny właściwy dla każdego z nich.</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li><strong>Dane punktowe</strong> (bezatrybutowe) → analiza rozkładu przestrzennego danych punktowych.</li>
+<li><strong>Dane obszarowe</strong> → metody analizy danych obszarowych i punktowych atrybutowych (autokorelacja przestrzenna).</li>
+<li><strong>Dane powierzchniowe ciągłe przestrzennie</strong> → geostatystyka.</li>
+</ul>
+<p>Dane punktowe i pomiary zjawiska ciągłego wyglądają na mapie tak samo. Rozstrzyga przedmiot analizy: w pierwszym przypadku analizowane jest rozmieszczenie zdarzeń, w drugim — wartość zmierzona w punkcie i wartość w miejscach, w których pomiaru nie było.</p>
+</div>
+</div>
+</div>
+<ol start="3" type="1">
+<li>Czym jest zależność przestrzenna i jak brzmi sformułowanie znane jako pierwsze prawo geografii?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Zależność przestrzenna to podstawowa koncepcja analiz przestrzennych, ujęta przez Toblera: „Wszystkie rzeczy są ze sobą powiązane, ale rzeczy bliskie są bardziej powiązane niż rzeczy odległe”. Jej „wielkość” mierzy się statystykami autokorelacji przestrzennej; stanowi ona także podstawę metod geostatystycznych, które opisują zmienność przestrzenną funkcją pokazującą, jak autokorelacja maleje wraz ze wzrostem odległości.</p>
+</div>
+</div>
+</div>
+<ol start="4" type="1">
+<li>Czym jest autokorelacja przestrzenna i jak przejawia się na mapie?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Autokorelacja przestrzenna to sytuacja, w której występowanie zjawiska w jednej jednostce przestrzennej powoduje zmniejszenie lub zwiększenie się tego zjawiska w jednostkach sąsiednich. Jest konsekwencją zależności przestrzennej. Na mapie przejawia się jako klastry podobnych wartości albo jako systematyczny wzorzec przestrzenny — na przykład układ naprzemienny wartości wysokich i niskich.</p>
+</div>
+</div>
+</div>
+<ol start="5" type="1">
+<li>Które z dwóch podejść — statystyka klasyczna czy przestrzenna — zakłada niezależność obserwacji? Co wynika z niespełnienia tego założenia?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Założenie o niezależności obserwacji przyjmuje <strong>statystyka klasyczna</strong>. W danych przestrzennych nie jest ono spełnione: obiekty sąsiadujące są do siebie bardziej podobne niż obiekty odległe. Nie znaczy to, że dobór próby jest nielosowy — zależność jest własnością zjawiska, nie schematu losowania. Znaczy to, że obserwacje niosą informację nadmiarową, a efektywna liczebność próby, czyli równoważna liczba obserwacji niezależnych, jest mniejsza niż liczba obserwacji.</p>
+</div>
+</div>
+</div>
+<ol start="6" type="1">
+<li>Jak mają się do siebie GIS, analizy przestrzenne i statystyka przestrzenna?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Zakresy są zagnieżdżone. GIS to system do tworzenia, gromadzenia, zarządzania, analizowania i wizualizacji danych; dostarcza danych i środowiska pracy. Analizy przestrzenne to dziedzina obejmująca techniki przetwarzania i analizy danych przestrzennych przy użyciu narzędzi GIS — nakładanie warstw, buforowanie, obliczanie odległości, algebra map. Statystyka przestrzenna jest wyspecjalizowanym podzbiorem analiz przestrzennych, który stosuje do danych przestrzennych pojęcia i metody statystyczne i uwzględnia zależności przestrzenne oraz heterogeniczność przestrzenną.</p>
+</div>
+</div>
+</div>
+<ol start="7" type="1">
+<li>Czym statystyka przestrzenna różni się od ekonometrii przestrzennej?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Statystyka przestrzenna opiera się na analizie danych odnoszących się do różnych dyscyplin — większość opracowań dotyczy biologii, ekologii, epidemiologii i geologii. Ekonometria przestrzenna opiera się na <strong>modelowaniu</strong>: zajmuje się specyfikacją, estymacją i weryfikacją modeli uwzględniających aspekt przestrzenny, przede wszystkim dla procesów ekonomicznych na poziomie regionalnym.</p>
+</div>
+</div>
+</div>
+<ol start="8" type="1">
+<li>Na jakie pytanie odpowiada analiza rozkładu przestrzennego danych punktowych, a na jakie geostatystyka?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Analiza rozkładu przestrzennego danych punktowych odpowiada na pytanie, <strong>w jaki sposób</strong> zdarzenia są rozmieszczone w przestrzeni: losowo, regularnie czy w skupiskach. Geostatystyka odpowiada na pytanie o <strong>wartość zjawiska ciągłego w miejscu, w którym nie wykonano pomiaru</strong>, a także służy opisowi zmienności przestrzennej zjawiska, określaniu prawdopodobieństwa przekroczenia wartości progowej oraz optymalizacji próbkowania i sieci monitoringowych.</p>
+</div>
+</div>
+</div>
+<ol start="9" type="1">
+<li>Co przedstawia mapa klastrów przestrzennych i do której grupy metod należy jej wyznaczenie?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sprawdź odpowiedź
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Mapa klastrów wskazuje jednostki, w których układ wartości wraz z ich sąsiedztwem różni się istotnie od układu przypadkowego, i podaje typ tego układu: wysoka wartość wśród wysokich, niska wśród niskich albo wartość odstająca od otoczenia. Jej wyznaczenie należy do metod analizy danych obszarowych — konkretnie do <strong>lokalnych</strong> miar autokorelacji przestrzennej. Warunkiem wstępnym jest określenie, które jednostki ze sobą sąsiadują.</p>
+</div>
+</div>
+</div>
+<div id="najwazniejsze-wstep" class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Najważniejsze informacje — zanim przejdziesz do części praktycznej
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Statystyka przestrzenna stosuje pojęcia i metody statystyczne do danych, których struktura przestrzenna jest istotna dla ich zrozumienia.</li>
+<li>Wyróżnia się trzy rodzaje danych przestrzennych — punktowe, obszarowe oraz powierzchniowe ciągłe przestrzennie — i odpowiadające im trzy nurty metodologiczne: analizę rozkładu danych punktowych, autokorelację przestrzenną oraz geostatystykę.</li>
+<li>O przynależności do nurtu rozstrzyga <strong>przedmiot analizy</strong>, nie wygląd danych na mapie: rozmieszczenie zdarzeń, wartość przypisana jednostce albo wartość w każdym miejscu obszaru.</li>
+<li>Zależność przestrzenna, ujęta przez Toblera jako pierwsze prawo geografii, mówi, że rzeczy bliskie są bardziej powiązane niż odległe; jej „wielkość” mierzą statystyki autokorelacji przestrzennej.</li>
+<li>Autokorelacja przestrzenna to sytuacja, w której występowanie zjawiska w jednej jednostce przestrzennej wpływa na jego wielkość w jednostkach sąsiednich; przejawia się klastrami podobnych wartości lub systematycznym wzorcem przestrzennym.</li>
+<li>Statystyka klasyczna zakłada niezależność obserwacji; w danych przestrzennych założenie to nie jest spełnione i to jest powód istnienia odrębnych metod.</li>
+<li>Statystyka przestrzenna jest wyspecjalizowanym podzbiorem analiz przestrzennych, a te prowadzone są na danych i w środowisku dostarczanym przez GIS.</li>
+</ul>
+</div>
+</div>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-anselin1995" class="csl-entry" role="listitem">
+Anselin, Luc. 1995. <span>„Local indicators of spatial association — <span>LISA</span>”</span>. <em>Geographical Analysis</em> 27 (2): 93–115.
+</div>
+<div id="ref-bivand1980" class="csl-entry" role="listitem">
+Bivand, Roger. 1980. <span>„Autokorelacja przestrzenna a metody analizy statystycznej w geografii”</span>. W <em>Analiza regresji w geografii</em>, zredagowane przez Zbyszko Chojnicki, 23–28. Poznań: PWN.
+</div>
+<div id="ref-chun2013" class="csl-entry" role="listitem">
+Chun, Yongwan, i Daniel A. Griffith. 2013. <em>Spatial Statistics and Geostatistics: Theory and Applications for Geographic Information Science and Technology</em>. London: SAGE.
+</div>
+<div id="ref-cliff1973" class="csl-entry" role="listitem">
+Cliff, Andrew D., i J. Keith Ord. 1973. <em>Spatial Autocorrelation</em>. London: Pion.
+</div>
+<div id="ref-cressie1993" class="csl-entry" role="listitem">
+Cressie, Noel A. C. 1993. <em>Statistics for Spatial Data</em>. Revised. New York: Wiley.
+</div>
+<div id="ref-spatialanalysisonline" class="csl-entry" role="listitem">
+de Smith, Michael J., Michael F. Goodchild, i Paul A. Longley. b.d. <span>„Geospatial Analysis: A Comprehensive Guide to Principles, Techniques and Software Tools”</span>. <a href="https://www.spatialanalysisonline.com/">https://www.spatialanalysisonline.com/</a>.
+</div>
+<div id="ref-fisher1935" class="csl-entry" role="listitem">
+Fisher, Ronald A. 1935. <em>The Design of Experiments</em>. Edinburgh: Oliver; Boyd.
+</div>
+<div id="ref-geary1954" class="csl-entry" role="listitem">
+Geary, Robert C. 1954. <span>„The contiguity ratio and statistical mapping”</span>. <em>The Incorporated Statistician</em> 5 (3): 115–46.
+</div>
+<div id="ref-getis1992" class="csl-entry" role="listitem">
+Getis, Arthur, i J. Keith Ord. 1992. <span>„The analysis of spatial association by use of distance statistics”</span>. <em>Geographical Analysis</em> 24 (3): 189–206.
+</div>
+<div id="ref-mgimond" class="csl-entry" role="listitem">
+Gimond, Manuel. b.d. <em>Intro to GIS and Spatial Analysis</em>. <a href="https://mgimond.github.io/Spatial/">https://mgimond.github.io/Spatial/</a>.
+</div>
+<div id="ref-goovaerts1997" class="csl-entry" role="listitem">
+Goovaerts, Pierre. 1997. <em>Geostatistics for Natural Resources Evaluation</em>. New York: Oxford University Press.
+</div>
+<div id="ref-griffith1999" class="csl-entry" role="listitem">
+Griffith, Daniel A. 1999. <em>A Casebook for Spatial Statistical Data Analysis</em>. New York: Oxford University Press.
+</div>
+<div id="ref-kopczewska2023" class="csl-entry" role="listitem">
+Kopczewska, Katarzyna. 2023. <em>Przestrzenne metody ilościowe w R</em>. Warszawa: CeDeWu.
+</div>
+<div id="ref-krige1951" class="csl-entry" role="listitem">
+Krige, Daniel G. 1951. <span>„A statistical approach to some basic mine valuation problems on the <span>W</span>itwatersrand”</span>. <em>Journal of the Chemical, Metallurgical and Mining Society of South Africa</em> 52 (6): 119–39.
+</div>
+<div id="ref-lovelace2025" class="csl-entry" role="listitem">
+Lovelace, Robin, Jakub Nowosad, i Jannes Muenchow. 2025. <em>Geocomputation with R</em>. 2. wyd. Boca Raton: Chapman; Hall/CRC. <a href="https://r.geocompx.org/">https://r.geocompx.org/</a>.
+</div>
+<div id="ref-matheron1963" class="csl-entry" role="listitem">
+Matheron, Georges. 1963. <span>„Principles of geostatistics”</span>. <em>Economic Geology</em> 58 (8): 1246–66.
+</div>
+<div id="ref-moraga2023" class="csl-entry" role="listitem">
+Moraga, Paula. 2023. <em>Spatial Statistics for Data Science: Theory and Practice with R</em>. Chapman; Hall/CRC. <a href="https://www.paulamoraga.com/book-spatial/">https://www.paulamoraga.com/book-spatial/</a>.
+</div>
+<div id="ref-moran1950" class="csl-entry" role="listitem">
+Moran, Patrick A. P. 1950. <span>„Notes on continuous stochastic phenomena”</span>. <em>Biometrika</em> 37 (1/2): 17–23.
+</div>
+<div id="ref-stephan1934" class="csl-entry" role="listitem">
+Stephan, Frederick F. 1934. <span>„Sampling errors and interpretations of social data ordered in time and space”</span>. <em>Journal of the American Statistical Association</em> 29 (185A): 165–66.
+</div>
+<div id="ref-suchecka2014" class="csl-entry" role="listitem">
+Suchecka, Jadwiga, red. 2014. <em>Statystyka przestrzenna. Metody analiz struktur przestrzennych</em>. Warszawa: C.H. Beck.
+</div>
+<div id="ref-tobler1970" class="csl-entry" role="listitem">
+Tobler, Waldo R. 1970. <span>„A computer movie simulating urban growth in the <span>D</span>etroit region”</span>. <em>Economic Geography</em> 46: 234–40.
+</div>
+</div>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -360,12 +1266,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // flash "checked"
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
+    button.setAttribute("title", "Skopiowano!");
     let tooltip;
     if (window.bootstrap) {
       button.setAttribute("data-bs-toggle", "tooltip");
       button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
+      button.setAttribute("data-bs-title", "Skopiowano!");
       tooltip = new bootstrap.Tooltip(button, 
         { trigger: "manual", 
           customClass: "code-copy-button-tooltip",
@@ -741,8 +1647,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./02_wprowadzenie.html" class="pagination-link" aria-label="Wprowadzenie">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Wprowadzenie</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./02_dane_przestrzenne.html" class="pagination-link" aria-label="Dane przestrzenne w R">
+        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Dane przestrzenne w R</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
