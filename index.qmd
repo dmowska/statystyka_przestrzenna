@@ -4,13 +4,17 @@
 
 Skrypt zawiera materiały do ćwiczeń z przedmiotu “Statystyka przestrzenna” prowadzonego na III roku studiów inżynierskich Geoinformacja na Wydziale Nauk Geograficznych i Geologicznych UAM.
 
-Skrypt składa się z kilku części dotyczących:
+Skrypt składa się z części dotyczących:
 
--   pracy z danymi przestrzennymi w R
+-   wstępu do statystyki przestrzennej oraz pracy z danymi przestrzennymi w R
 -   eksploracyjnej analizy danych
 -   analizy przestrzennego rozkładu danych punktowych
 -   analizy danych obszarowych
--   analizy danych ciągłych (geostatystyka)
+-   analizy danych powierzchniowych ciągłych przestrzennie (geostatystyka)
+-   zadań samodzielnych i projektów
+
+Każda część otwiera się rozdziałem teoretycznym, który jest jej stroną tytułową. Zestawienia
+pakietów, funkcji, operacji technicznych oraz słownik pojęć zebrane są w załącznikach.
 
 ## Dane wykorzystywane w skrypcie {.unnumbered}
 
@@ -18,12 +22,12 @@ Dane wykorzystywane w skrypcie można pobrać [TUTAJ](https://dmowska-dydaktyka.
 
 ## Zadania samodzielne {.unnumbered}
 
-Rozdział 14 w części ZADANIA zawiera zestawienie zadań do samodzielnego rozwiązania. Zadania te będą rozwiązywane na kolejnych ćwiczeniach.
+Część ZADANIA I PROJEKTY zawiera zestawienie zadań do samodzielnego rozwiązania (@sec-zadania) — zadania te będą rozwiązywane na kolejnych ćwiczeniach.
 
-Rozdział 15 zawiera opis projektu zaliczeniowego obejmującego materiał dotyczący eksploracyjnej analizy danych, analizy przestrzennego rozkładu danych punktowych oraz analizy danych obszarowych.
+Pierwszy projekt zaliczeniowy (@sec-projekt1) obejmuje eksploracyjną analizę danych, analizę przestrzennego rozkładu danych punktowych oraz analizę danych obszarowych. Drugi projekt (@sec-projekt2) poświęcony jest geostatystyce.
 
 ## Wykorzystanie skryptu na ćwiczeniach {.unnumbered}
 
 -   Przed zajęciami należy zapoznać się z materiałem zamieszczonym w rozdziale zadanym na kolejne ćwiczenia.
 
--   Na ćwiczeniach samodzielnie rozwiązywane będą zadania z rozdziału 14 odnoszące się do zadanej części materiału.
+-   Na ćwiczeniach samodzielnie rozwiązywane będą zadania odnoszące się do zadanej części materiału (@sec-zadania).

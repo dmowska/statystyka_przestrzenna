@@ -1,0 +1,662 @@
+# Projekt 1: przestępczość a zmienne społeczno-ekonomiczne {#sec-projekt1}
+
+## Opis projektu
+
+Projekt wykorzystuje dane o przestępczości oraz dane społeczno-ekonomiczne dla wybranego
+hrabstwa w Stanach Zjednoczonych dla wskazanego roku. Projekt składa się z 4 etapów.
+
+- **Etap 1. Eksploracyjna analiza danych.** Czy istnieje zależność między poziomem
+  przestępczości a zmiennymi społeczno-ekonomicznymi?
+- **Etap 2. Analiza rozkładu przestrzennego danych o przestępczości.** Jaki rozkład
+  charakteryzuje lokalizacje przestępstw: czy jest losowy, czy istnieją skupienia punktów?
+- **Etap 3. Analiza podobieństwa i różnic wartości wybranych zmiennych
+  społeczno-ekonomicznych.** Czy w danych występuje autokorelacja przestrzenna? Gdzie
+  znajdują się obszary o wysokich i niskich wartościach zmiennych? Czy tworzą skupienia?
+- **Etap 4. Porównanie wyników między hrabstwami.**
+
+| Efekt | Zakres | Sposób wykonania |
+|---|---|---|
+| Raport z etapu 1 i prezentacja | eksploracyjna analiza danych | indywidualny |
+| Raport z etapu 2 i prezentacja | rozkład przestrzenny lokalizacji przestępstw | indywidualny |
+| Raport z etapu 3 i prezentacja | autokorelacja przestrzenna zmiennych społeczno-ekonomicznych | indywidualny |
+| Raport z etapu 4 i prezentacja | porównanie wyników między hrabstwami | grupowy |
+
+Każdy etap rozliczasz w dwóch formach: **raportem cząstkowym** przygotowanym według sekcji
+@sec-projekt1-raport oraz **prezentacją na zajęciach** według sekcji @sec-projekt1-prezentacja.
+
+Każdy etap jest oceniany według zasad opisanych w sekcji @sec-projekt1-ocena.
+
+Przed oddaniem każdego etapu sprawdź listę w ramce „Co trzeba oddać" na końcu rozdziału.
+
+### Forma oddania {.unnumbered}
+
+Projekt oddajesz w zespole MS Teams, w folderze `projekt_1`. Utwórz w nim folder o nazwie
+`Imie_Nazwisko`, a w nim folder `dane`, do którego wgrasz wszystkie dane potrzebne
+w etapach 1–3. Struktura folderu powinna wyglądać tak:
+
+```
+projekt_1/
+└── Imie_Nazwisko/
+    ├── dane/
+    │   ├── cook_2023_burglary.gpkg
+    │   ├── cook_2023_socio_cz1.gpkg
+    │   ├── cook_2023_socio_cz3.gpkg
+    │   └── ….gpkg
+    ├── nazwisko_cz1.qmd
+    ├── nazwisko_cz1.html
+    ├── nazwisko_cz2.qmd
+    ├── nazwisko_cz2.html
+    ├── nazwisko_cz3.qmd
+    └── nazwisko_cz3.html
+```
+
+W każdym pliku `.qmd` wczytuj dane ścieżką względną, np. `st_read("dane/….gpkg")`. Nie
+używaj ścieżek z własnego komputera (np. `C:/Users/…`), bo plik nie uruchomi się na innym
+komputerze.
+
+Plik HTML musi zawierać wszystkie ryciny w sobie, bez dodatkowego folderu
+`nazwisko_czN_files`. W tym celu na początku każdego pliku `.qmd` umieść nagłówek:
+
+```yaml
+---
+title: "Etap 1: eksploracyjna analiza danych"
+author: "Imię Nazwisko"
+format:
+  html:
+    embed-resources: true
+---
+```
+
+Kluczowa jest linia `embed-resources: true`. Po wygenerowaniu sprawdź, czy obok pliku HTML
+nie powstał folder `_files`.
+
+Raport grupowy (etap 4) oddajecie w osobnym folderze `projekt_1_grupowy`. Utwórzcie w nim
+folder nazwany nazwiskami członków grupy, a w nim folder `dane` z danymi oraz plik
+`nazwisko1_nazwisko2_nazwisko3_cz4.qmd` i wygenerowany plik `.html`:
+
+```
+projekt_1_grupowy/
+└── Nazwisko1_Nazwisko2_Nazwisko3/
+    ├── dane/
+    │   └── ….gpkg
+    ├── nazwisko1_nazwisko2_nazwisko3_cz4.qmd
+    └── nazwisko1_nazwisko2_nazwisko3_cz4.html
+```
+
+Obowiązują te same zasady co w raportach cząstkowych: dane wczytywane ścieżką
+`dane/….gpkg` i nagłówek YAML z `embed-resources: true`.
+
+## Dane
+
+### Hrabstwo {.unnumbered}
+
+Każdy student analizuje inne hrabstwo. Hrabstwo wybierasz z listy poniżej; pulę ważną dla
+Twojej grupy oraz typ przestępstwa i rok podaje prowadząca.
+
+| Hrabstwo | Miasto | Stan | Plik granicy |
+|---|---|---|---|
+| Travis | Austin | Teksas | `Travis.gpkg` |
+| Suffolk | Boston | Massachusetts | `Suffolk.gpkg` |
+| Mecklenburg | Charlotte | Karolina Północna | `Mecklenburg.gpkg` |
+| Wayne | Detroit | Michigan | `Wayne.gpkg` |
+| Harris | Houston | Teksas | `Harris.gpkg` |
+| Jackson | Kansas City | Missouri | `Jackson.gpkg` |
+| Los Angeles | Los Angeles | Kalifornia | `Los_Angeles.gpkg` |
+| Jefferson | Louisville | Kentucky | `Jefferson.gpkg` |
+| Shelby | Memphis | Tennessee | `Shelby.gpkg` |
+| Hennepin | Minneapolis | Minnesota | `Hennepin.gpkg` |
+| Davidson | Nashville | Tennessee | `Davidson.gpkg` |
+| New York | Nowy Jork | Nowy Jork | `New_York.gpkg` |
+| Bronx | Nowy Jork | Nowy Jork | `Bronx.gpkg` |
+| Queens | Nowy Jork | Nowy Jork | `Queens.gpkg` |
+| Kings | Nowy Jork | Nowy Jork | `Kings.gpkg` |
+| San Francisco | San Francisco | Kalifornia | `San_Francisco.gpkg` |
+| King | Seattle | Waszyngton | `King.gpkg` |
+| St. Louis | St Louis | Missouri | `St_Louis.gpkg` |
+| Pima | Tucson | Arizona | `Pima.gpkg` |
+| Virginia Beach | Virginia Beach | Wirginia | `Virginia_Beach.gpkg` |
+
+### Dane o przestępczości {.unnumbered}
+
+Pakiet `crimedata` udostępnia zarejestrowane przez policję otwarte dane o przestępczości
+w dużych miastach Stanów Zjednoczonych, zebrane w *Crime Open Database*
+(<https://osf.io/zyaqn/>).
+
+Poniższy blok pobiera dane, wybiera jeden typ przestępstwa, przekształca tabelę na obiekt
+klasy `sf` i przycina ją do granicy hrabstwa. Wartości czterech zmiennych na początku bloku
+podaje prowadząca.
+
+```{r}
+#| eval: false
+library(crimedata)
+library(sf)
+library(dplyr)
+
+# parametry podane przez prowadzącą
+rok = ____                                 # rok analizy
+miasto = "____"                            # nazwa miasta z tabeli powyżej
+typ_przestepstwa = "____"                  # kategoria offense_type
+plik_hrabstwa = "dane/____.gpkg"           # plik granicy hrabstwa
+
+# pobranie i selekcja jednego typu przestępstwa;
+# droplevels() usuwa poziomy zmiennych czynnikowych, które po selekcji nie występują
+przestepstwa = get_crime_data(years = rok, cities = miasto, type = "core",
+                              quiet = TRUE, output = "tbl") |>
+  filter(offense_type == typ_przestepstwa) |>
+  droplevels()
+
+# tabela ze współrzędnymi geograficznymi staje się warstwą punktową
+przestepstwa_sf = st_as_sf(przestepstwa, coords = c("longitude", "latitude"),
+                           crs = "EPSG:4326")
+
+# dane w projekcie są w układzie EPSG:5070; przekształcamy do niego warstwę przestępstw
+przestepstwa_sf = st_transform(przestepstwa_sf, "EPSG:5070")
+
+hrabstwo = read_sf(plik_hrabstwa)
+# przycięcie do hrabstwa: zostają wyłącznie punkty leżące w jego granicach
+przestepstwa_hr = przestepstwa_sf[hrabstwo, ]
+
+write_sf(przestepstwa_hr, "dane/hrabstwo_rok_przestepstwo.gpkg")
+```
+
+Nazwa miasta jest zmienną, a nie wartością domyślną, celowo: zakres roczników różni się
+między miastami, a deklarowana dostępność nie zawsze oznacza obecność danych. Jeśli
+pobranie zwróci zbiór pusty albo komunikat o braku danych, zgłoś to prowadzącej — nie
+zmieniaj roku ani miasta samodzielnie.
+
+### Nazwy plików wynikowych {.unnumbered}
+
+Pliki nazywaj według wzorców poniżej, bez spacji. Spacje i kropki w nazwie hrabstwa zamień
+na podkreślenie.
+
+| Zawartość | Wzorzec nazwy | Przykład |
+|---|---|---|
+| warstwa punktowa przestępstw | `hrabstwo_rok_przestepstwo.gpkg` | `cook_2023_burglary.gpkg` |
+| warstwa poligonowa do etapu 1 | `hrabstwo_rok_socio_cz1.gpkg` | `cook_2023_socio_cz1.gpkg` |
+| warstwa poligonowa do etapu 3 | `hrabstwo_rok_socio_cz3.gpkg` | `cook_2023_socio_cz3.gpkg` |
+
+### Dane społeczno-ekonomiczne {.unnumbered}
+
+Dane pochodzą z *American Community Survey* (zestawienie 5-letnie) i są dostarczone jako
+gotowa warstwa poligonowa obszarów spisowych Twojego hrabstwa, w układzie **EPSG:5070**.
+Nie pobierasz ich sam.
+
+Warstwa zawiera następujące kolumny:
+
+- `GEOID` — jedenastocyfrowy identyfikator obszaru spisowego,
+- `POP` — liczba ludności,
+- `WHITE` — udział ludności białej,
+- `BLACK` — udział ludności czarnoskórej,
+- `ASIAN` — udział ludności azjatyckiej,
+- `HISPANIC` — udział ludności pochodzenia latynoskiego,
+- `OTHER` — udział ludności pozostałych grup rasowo-etnicznych,
+- `FOREIGN_BORN` — udział osób urodzonych za granicą,
+- `UNEMPL` — udział osób bezrobotnych,
+- `PUBLIC_ASSIST` — udział gospodarstw domowych korzystających z pomocy społecznej,
+- `VACANT` — udział budynków niezamieszkałych,
+- `OCCUPIED` — udział budynków zamieszkałych,
+- `OWNER` — udział mieszkań zamieszkałych przez właściciela,
+- `RENTER` — udział mieszkań zamieszkałych przez najemcę,
+- `MEDIAN_INCOME` — mediana dochodów gospodarstwa domowego,
+- `MEDIAN_BUILT_YEAR` — mediana roku budowy zabudowy,
+- `MEDIAN_HOME_VALUE` — mediana wartości domów,
+- `SEX_RATIO` — współczynnik feminizacji,
+- `EDU_HIGH` — udział osób z wyższym wykształceniem.
+
+Udziały wyrażone są jako wartości z przedziału **0–1, nie w procentach**. Ma to znaczenie
+przy opisie osi i legend map.
+
+## Zanim zaczniesz liczyć
+
+::: {.callout-warning}
+## Układ współrzędnych
+
+Wszystkie dane w projekcie są w układzie **EPSG:5070**. Granice hrabstw i warstwa
+poligonowa ze zmiennymi społeczno-ekonomicznymi są w nim udostępnione. Przekształcasz
+wyłącznie warstwę przestępstw, która po pobraniu jest w WGS 84:
+
+`st_transform(przestepstwa_sf, "EPSG:5070")`
+
+Etap 2 liczy odległości i powierzchnie. Wykonany na współrzędnych geograficznych daje
+liczby w stopniach, czyli wielkości bez sensu fizycznego — i nie zgłasza przy tym błędu.
+:::
+
+::: {.callout-warning}
+## Obszary o zerowej liczbie mieszkańców
+
+W części hrabstw są obszary spisowe, w których odnotowano przestępstwa, a `POP` wynosi
+zero. Współczynnik przestępczości przyjmuje tam wartość `Inf`, która psuje średnią,
+odchylenie standardowe i współczynniki korelacji — bez żadnego komunikatu.
+
+**Takich obszarów nie usuwasz** — mapa miałaby wtedy dziury. Wpisujesz w nich
+`CRIME_RATE = NA`.
+:::
+
+::: {.callout-warning}
+## Identyfikator wczytywany jako liczba
+
+`GEOID` ma jedenaście cyfr. Wczytany jako liczba traci zero wiodące, a złączenie po tym
+kluczu gubi część wierszy bez ostrzeżenia. Jeśli wczytujesz atrybuty z pliku tekstowego,
+wymuś typ tekstowy.
+:::
+
+::: {.callout-warning}
+## Kolejność ładowania pakietów
+
+Pakiet `terra` zawiera funkcje `density()`, `rescale()` i `area()` o takich samych nazwach
+jak funkcje pakietu `spatstat`. Załadowany po `spatstat` zasłania je i kod przerywa
+działanie. Funkcje `terra` wywołuj z przedrostkiem: `terra::rast()`.
+:::
+
+::: {.callout-warning}
+## Procedury losowe
+
+Obwiednia w etapie 2 oraz lokalna statystyka G w etapie 3 wyznaczają wynik przez losowanie.
+Bez ustawionego ziarna każde uruchomienie daje inny wynik. Przed każdą taką procedurą
+wpisz:
+
+`set.seed(1111)`
+
+Wartość ziarna podajesz w raporcie.
+:::
+
+## Etap 1: eksploracyjna analiza danych
+
+Materiał: @sec-dane-przestrzenne i @sec-eksploracja. **Przygotowanie danych pokazane jest
+krok po kroku na przykładzie hrabstwa Cook w @sec-dane-przestrzenne** — ta sama ścieżka
+prowadzi do danych Twojego hrabstwa.
+
+### Cel {.unnumbered}
+
+Odpowiadasz na pytanie: **czy w Twoim hrabstwie poziom przestępczości wiąże się
+z wartościami zmiennych społeczno-ekonomicznych?**
+
+### Zadanie {.unnumbered}
+
+**Przygotowanie danych**
+
+1.  Pobierz dane o przestępczości, przekształć je do układu **EPSG:5070** i przytnij do
+    granicy hrabstwa. Zapisz warstwę punktową jako `hrabstwo_rok_przestepstwo.gpkg`.
+2.  Wczytaj warstwę obszarów spisowych.
+3.  Wybierz obszary spisowe, w których odnotowano przestępstwa.
+4.  Zlicz przestępstwa w każdym obszarze → `NB_CRIMES`.
+5.  Oblicz **współczynnik przestępczości na 1000 mieszkańców** → `CRIME_RATE`. W obszarach
+    o zerowej liczbie mieszkańców wpisz `NA`.
+6.  Dodaj trzy zmienne jakościowe:
+    -   `INCOME_CAT` — trzy klasy `MEDIAN_INCOME`: poniżej kwartyla pierwszego, między
+        kwartylem pierwszym a trzecim, powyżej kwartyla trzeciego;
+    -   `HOME_VALUES_CAT` — trzy klasy `MEDIAN_HOME_VALUE` według tych samych progów;
+    -   `BUILT_YEAR_CAT` — trzy klasy `MEDIAN_BUILT_YEAR`: przed 1950, 1950–2000, po 2000.
+7.  Zapisz warstwę wynikową jako `hrabstwo_rok_socio_cz1.gpkg`.
+
+**Analiza nieprzestrzenna**
+
+8.  Oblicz statystyki opisowe zmiennych ilościowych.
+9.  Scharakteryzuj rozkład `CRIME_RATE`: histogram, skośność, relacja średniej i mediany.
+10. Oblicz **współczynniki korelacji rang Spearmana** między `CRIME_RATE` a zmiennymi
+    ilościowymi. Zmienne o wartości bezwzględnej współczynnika powyżej **0,5** przedstaw na
+    macierzy wykresów rozrzutu; jeśli progu nie przekracza żadna — umieść na niej dwie
+    zmienne o najwyższej wartości bezwzględnej.
+11. Sprawdź, czy `CRIME_RATE` różni się w klasach `INCOME_CAT`, `HOME_VALUES_CAT`
+    i `BUILT_YEAR_CAT`. Wynik przedstaw jako **jedną rycinę z trzema panelami** oraz podaj
+    mediany w klasach.
+
+**Analiza przestrzenna — cztery mapy**
+
+12. Mapa `CRIME_RATE`.
+13. Mapy **dwóch zmiennych o najwyższej wartości bezwzględnej współczynnika korelacji** ze
+    `CRIME_RATE` — wybór wynika z kroku 10.
+14. Mapa jednej zmiennej skategoryzowanej.
+
+### Kluczowe liczby {.unnumbered}
+
+| Wielkość | Wartość |
+|---|---|
+| liczba obszarów spisowych w hrabstwie | |
+| liczba obszarów wziętych do analizy | |
+| liczba obszarów z `CRIME_RATE = NA` | |
+| liczba przestępstw w hrabstwie | |
+| `CRIME_RATE` — minimum | |
+| `CRIME_RATE` — mediana | |
+| `CRIME_RATE` — średnia | |
+| `CRIME_RATE` — maksimum | |
+| skośność `CRIME_RATE` | |
+| zmienne o module współczynnika korelacji powyżej 0,5 wraz z wartościami | |
+| mediana `CRIME_RATE` w klasach `INCOME_CAT` | |
+| mediana `CRIME_RATE` w klasach `HOME_VALUES_CAT` | |
+| mediana `CRIME_RATE` w klasach `BUILT_YEAR_CAT` | |
+
+### Do prezentacji {.unnumbered}
+
+Mapa `CRIME_RATE`, histogram `CRIME_RATE`, rycina z wykresami skrzynkowymi dla trzech
+zmiennych skategoryzowanych.
+
+### Co oddać {.unnumbered}
+
+W folderze `projekt_1/Imie_Nazwisko/`:
+
+-   `nazwisko_cz1.qmd` i wygenerowany `nazwisko_cz1.html`,
+-   w folderze `dane/`: `hrabstwo_rok_przestepstwo.gpkg`, `hrabstwo_rok_socio_cz1.gpkg`
+    oraz plik granicy hrabstwa.
+
+## Etap 2: analiza rozkładu przestrzennego przestępstw
+
+Materiał: @sec-punkty-centrograficzne, @sec-punkty-intensywnosc, @sec-punkty-odleglosc.
+
+### Cel {.unnumbered}
+
+Odpowiadasz na pytanie: **czy lokalizacje przestępstw w Twoim hrabstwie są rozmieszczone
+losowo, czy tworzą skupienia?** Analizę prowadzisz na warstwie punktowej z etapu 1.
+
+### Zadanie {.unnumbered}
+
+1.  Oblicz statystyki centrograficzne: średnią centralną, odległość standardową i elipsę
+    odchylenia standardowego. Przedstaw je na jednej mapie razem z punktami i granicą
+    hrabstwa.
+2.  Oblicz odległości do najbliższego sąsiada, podsumuj je statystykami opisowymi
+    i przedstaw ich rozkład na dystrybuancie. Zinterpretuj wynik.
+3.  Oblicz wskaźnik Clarka-Evansa z **korektą brzegową `correction = "cdf"`** — tą samą,
+    której używamy w materiałach do zajęć. Zinterpretuj otrzymaną wartość.
+4.  Wyznacz funkcję G wraz z obwiednią. Przed wyznaczeniem obwiedni wpisz `set.seed(1111)`.
+    Przedstaw wynik na wykresie i zinterpretuj.
+5.  Oblicz średnią intensywność przestępstw dla okna analizy będącego **granicą hrabstwa**.
+6.  Oblicz średnią intensywność dla okna będącego **zasięgiem warstwy punktowej**. Porównaj
+    obie wartości i wyjaśnij różnicę.
+7.  Wykonaj test zliczania w kwadratach. Podaj liczbę kwadratów i zinterpretuj wynik.
+8.  Przedstaw na mapie zmienność intensywności przy tej samej liczbie kwadratów co
+    w teście.
+
+### Kluczowe liczby {.unnumbered}
+
+| Wielkość | Wartość |
+|---|---|
+| liczba punktów w analizie | |
+| średnia centralna — współrzędna X | |
+| średnia centralna — współrzędna Y | |
+| odległość standardowa [m] | |
+| odległość do najbliższego sąsiada — minimum [m] | |
+| odległość do najbliższego sąsiada — mediana [m] | |
+| odległość do najbliższego sąsiada — średnia [m] | |
+| odległość do najbliższego sąsiada — maksimum [m] | |
+| wskaźnik Clarka-Evansa | |
+| funkcja G — liczba symulacji | |
+| funkcja G — wartość ziarna (`set.seed(1111)`) | |
+| intensywność, okno = granica hrabstwa [pkt/km²] | |
+| intensywność, okno = zasięg warstwy punktowej [pkt/km²] | |
+| test zliczania — liczba kwadratów | |
+| test zliczania — wartość statystyki | |
+| test zliczania — p-value | |
+
+### Do prezentacji {.unnumbered}
+
+Mapa statystyk centrograficznych, dystrybuanta odległości do najbliższego sąsiada, wykres
+funkcji G z obwiednią, mapa intensywności w kwadratach.
+
+### Co oddać {.unnumbered}
+
+W folderze `projekt_1/Imie_Nazwisko/`:
+
+-   `nazwisko_cz2.qmd` i wygenerowany `nazwisko_cz2.html`,
+-   w folderze `dane/`: `hrabstwo_rok_przestepstwo.gpkg` oraz plik granicy hrabstwa.
+
+## Etap 3: autokorelacja przestrzenna zmiennych społeczno-ekonomicznych
+
+Materiał: @sec-obszarowe-autokorelacja.
+
+### Cel {.unnumbered}
+
+Odpowiadasz na dwa pytania: **czy wartości zmiennych społeczno-ekonomicznych
+w sąsiadujących obszarach są do siebie podobne** oraz **gdzie leżą obszary wartości
+wysokich i niskich?**
+
+Analizę prowadzisz na **wszystkich obszarach spisowych hrabstwa**, a nie na podzbiorze
+z etapu 1. Etap 3 dotyczy zmiennych społeczno-ekonomicznych, nie przestępczości, a
+sąsiedztwo zbudowane na podzbiorze miałoby dziury i obszary bez sąsiadów.
+
+### Zadanie {.unnumbered}
+
+Analizujesz **dwie zmienne**: `MEDIAN_INCOME` oraz drugą, wybraną na podstawie wyników
+etapu 1. Wybór uzasadnij.
+
+1.  Wczytaj pełną warstwę obszarów spisowych hrabstwa i utwórz obiekt przestrzenny z obiema
+    zmiennymi.
+2.  Zbuduj listę sąsiadów regułą **queen**. Sprawdź, czy każdy obszar ma sąsiada, i podaj
+    liczbę obszarów bez sąsiadów.
+3.  Zbuduj macierze wag przestrzennych. **Styl wag dobierz do miary**: miary oparte na
+    porównaniu wartości sąsiadów wymagają wag standaryzowanych rzędami, a globalna
+    statystyka G wag binarnych. Podaj w raporcie, której macierzy użyłaś/eś do której
+    miary.
+4.  Zbadaj autokorelację globalną obu zmiennych statystykami I Morana i C Geary'ego. Podaj
+    wartości i poziomy istotności, zinterpretuj.
+5.  Wyznacz lokalną statystykę G Getisa-Orda i zlokalizuj obszary wartości wysokich
+    i niskich. Przed wyznaczeniem wpisz `set.seed(1111)` i podaj liczbę symulacji.
+    Zwizualizuj i zinterpretuj.
+6.  Wyznacz lokalną statystykę I Morana i na jej podstawie wydziel klastry
+    „wysokie–wysokie", „niskie–niskie", „wysokie–niskie" i „niskie–wysokie". Zwizualizuj
+    i zinterpretuj.
+7.  Porównaj wynik lokalnej statystyki G z wynikiem lokalnej statystyki I Morana. Obie
+    wskazują obszary, ale odpowiadają na różne pytania — wyjaśnij, na jakie.
+8.  Zapisz warstwę wynikową jako `hrabstwo_rok_socio_cz3.gpkg`.
+
+### Kluczowe liczby {.unnumbered}
+
+| Wielkość | Zmienna 1 | Zmienna 2 |
+|---|---|---|
+| nazwa zmiennej | | |
+| liczba obszarów | | |
+| liczba obszarów bez sąsiadów | | |
+| styl wag — I Morana i C Geary'ego | | |
+| styl wag — globalna statystyka G | | |
+| I Morana — wartość | | |
+| I Morana — p-value | | |
+| C Geary'ego — wartość | | |
+| C Geary'ego — p-value | | |
+| lokalna G — liczba obszarów wartości wysokich | | |
+| lokalna G — liczba obszarów wartości niskich | | |
+| lokalna G — poziom istotności | | |
+| lokalna G — liczba symulacji | | |
+
+Liczba obszarów w każdym typie klastra lokalnej statystyki I Morana:
+
+| Typ obszaru (lokalne I Morana) | Zmienna 1 | Zmienna 2 |
+|---|---|---|
+| wysokie–wysokie | | |
+| niskie–niskie | | |
+| wysokie–niskie | | |
+| niskie–wysokie | | |
+| nieistotne | | |
+
+### Do prezentacji {.unnumbered}
+
+Mapa obszarów wartości wysokich i niskich oraz mapa klastrów lokalnej I Morana dla
+`MEDIAN_INCOME`, tabela wyników testów globalnych dla obu zmiennych.
+
+### Co oddać {.unnumbered}
+
+W folderze `projekt_1/Imie_Nazwisko/`:
+
+-   `nazwisko_cz3.qmd` i wygenerowany `nazwisko_cz3.html`,
+-   w folderze `dane/`: `hrabstwo_rok_socio_cz3.gpkg` oraz warstwa obszarów spisowych
+    hrabstwa.
+
+## Etap 4: porównanie wyników między hrabstwami
+
+### Cel {.unnumbered}
+
+Grupa porównuje wyniki uzyskane przez swoich członków dla różnych hrabstw i formułuje
+wspólny wniosek. Raport powstaje **wyłącznie z raportów cząstkowych członków grupy** —
+nowych obliczeń nie wykonujecie.
+
+### Zadanie {.unnumbered}
+
+1.  Zestawcie charakterystykę porównywanych hrabstw: powierzchnia, liczba ludności, liczba
+    przestępstw, typ przestępstwa i rok.
+2.  Rozstrzygnijcie, **które miary wolno zestawić wprost, a które nie**. Część miar jest
+    bezwymiarowa albo znormalizowana, a część zależy od wielkości hrabstwa, liczby obszarów
+    spisowych albo od przyjętego okna analizy. Dla każdej miary wchodzącej do zestawienia
+    podajcie, czy jest porównywalna wprost, a jeśli nie — od czego zależy jej wartość i jak
+    należałoby ją znormalizować. Uzasadnienie opierajcie na tym, **co dana miara liczy**.
+3.  Zestawcie wyniki trzech etapów w tabelach zbiorczych i wybranych rycinach. Podpis każdej
+    ryciny przeniesionej z raportu cząstkowego wskazuje hrabstwo, którego dotyczy.
+4.  Wskażcie, gdzie wzorce hrabstw są podobne, gdzie różne i czym różnicę można tłumaczyć.
+5.  Sformułujcie wspólny wniosek odnoszący się do wszystkich porównywanych hrabstw łącznie.
+
+Raport grupowy liczy **1000–1200 słów** tekstu, do którego dołącza się ryciny i wyniki.
+Kończy się sekcją Podsumowanie zawierającą: porównane hrabstwa, rok, typ przestępstwa, cel
+analizy, wypunktowane metody oraz 3–5 wniosków. **Sekcja Podsumowanie w raporcie grupowym
+nie zawiera rycin i nie jest podstawą prezentacji.**
+
+### Kluczowe liczby {.unnumbered}
+
+| Wielkość | Hrabstwo 1 | Hrabstwo 2 | Hrabstwo 3 |
+|---|---|---|---|
+| nazwa hrabstwa | | | |
+| powierzchnia [km²] | | | |
+| liczba ludności | | | |
+| liczba przestępstw | | | |
+| liczba obszarów spisowych | | | |
+| `CRIME_RATE` — mediana | | | |
+| wskaźnik Clarka-Evansa | | | |
+| intensywność, okno = granica hrabstwa [pkt/km²] | | | |
+| I Morana dla `MEDIAN_INCOME` | | | |
+| udział obszarów wysokie–wysokie dla `MEDIAN_INCOME` [%] | | | |
+
+### Co oddać {.unnumbered}
+
+W folderze `projekt_1_grupowy/Nazwisko1_Nazwisko2_Nazwisko3/`:
+
+-   `nazwisko1_nazwisko2_nazwisko3_cz4.qmd` i wygenerowany `.html`,
+-   w folderze `dane/`: dane użyte w raporcie.
+
+## Struktura raportu cząstkowego {#sec-projekt1-raport}
+
+Raport cząstkowy liczy 1000–1200 słów tekstu, do którego dołącza się ryciny i wyniki.
+Zakres raportu wyznacza lista zadań podana w sekcji opisującej dany etap: raport musi
+zawierać wszystkie wymienione tam elementy.
+
+Dodatkowo, poza limitem słów, raport kończy się sekcją Podsumowanie, która stanowi podstawę
+prezentacji na zajęciach. Ma ona formę listy punktów i zawiera: nazwę hrabstwa, rok, typ
+przestępstwa, cel analizy, wypunktowane metody użyte do jego realizacji, ryciny wymienione
+w części „Do prezentacji" w opisie danego etapu oraz 3–5 najważniejszych wniosków. Pod
+sekcją Podsumowanie należy zamieścić tabelę z najważniejszymi liczbami uzyskanymi w danym
+etapie.
+
+Raport ma następującą strukturę:
+
+```
+# <Nazwa etapu> — hrabstwo <nazwa>
+    autor, hrabstwo, typ przestępstwa, rok
+
+## Dane i metodyka
+## Wyniki i interpretacja
+## Podsumowanie
+   tabela z najważniejszymi liczbami
+```
+
+-   **Dane i metodyka** — kilka zdań o tym, skąd pochodzą dane, jakie przekształcenia
+    wykonano oraz jakich metod i funkcji użyto.
+-   **Wyniki i interpretacja** — ryciny i tabele wraz z interpretacją podaną **przy każdym
+    wyniku**, nie zebraną osobno na końcu.
+-   **Podsumowanie** — lista punktów opisana wyżej, a pod nią tabela kluczowych liczb
+    danego etapu.
+
+Przy każdej procedurze losowej podaj w raporcie wartość ziarna wraz z informacją, jak je
+ustawić — `set.seed(1111)`.
+
+Ryciny i tabele podpisujesz: tabele nad tabelą, ryciny pod ryciną. Do każdej ryciny
+i tabeli odwołujesz się w tekście.
+
+Raport grupowy z etapu 4 ma ten sam limit 1000–1200 słów plus ryciny i wyniki. Sekcja
+Podsumowanie w nim występuje, ale bez rycin i nie jest podstawą prezentacji.
+
+## Prezentacja {#sec-projekt1-prezentacja}
+
+Prezentacja opiera się na sekcji Podsumowanie raportu cząstkowego. Podczas prezentacji
+należy kolejno:
+
+1.  wskazać analizowane hrabstwo, rok i typ przestępstwa,
+2.  przedstawić cel analizy w danym etapie,
+3.  pokazać ryciny zamieszczone w sekcji Podsumowanie i skomentować każdą jednym zdaniem,
+4.  przedstawić 3–5 zwięzłych wniosków, z których każdy odwołuje się do konkretnej wartości
+    z tabeli najważniejszych liczb.
+
+Przykłady wniosków z odwołaniem do liczb:
+
+-   Współczynnik korelacji Spearmana między `CRIME_RATE` a [zmienna] wynosi …, co wskazuje
+    na [słabą/umiarkowaną/silną], [dodatnią/ujemną] zależność.
+-   Średnia intensywność przestępstw wynosi … na km².
+-   Rozkład przestępstw jest [losowy/skupiony/regularny], na co wskazuje wartość wskaźnika
+    Clarka-Evansa równa … (p = …).
+-   Wartość statystyki I Morana dla [zmienna] wynosi … (p = …), co wskazuje, że dane
+    [wykazują/nie wykazują] autokorelacji przestrzennej.
+-   Najwięcej obszarów typu wysokie–wysokie (…) występuje w [część hrabstwa].
+
+### Prezentacja raportu grupowego {.unnumbered}
+
+Sekcja Podsumowanie w raporcie grupowym nie jest podstawą prezentacji. Prezentację możecie
+poprowadzić bezpośrednio z dokumentu raportu albo przygotować osobno. W obu przypadkach
+musi ona zawierać kolejno:
+
+1.  hrabstwa, które porównano,
+2.  cel analizy,
+3.  najważniejsze wyniki pokazane na mapach,
+4.  najważniejsze wnioski z odwołaniem do konkretnych liczb.
+
+## Kryteria oceny {#sec-projekt1-ocena}
+
+Każdy etap, również etap 4 realizowany w grupie, jest oceniany dwiema osobnymi ocenami: za
+prezentację na zajęciach oraz za raport. Nieobecność na prezentacji oznacza ocenę
+niedostateczną za prezentację. Oceniana jest poprawiona wersja raportu; terminy oddania obu
+wersji podają warunki zaliczenia. Reguła progowa dotyczy wyłącznie oceny za prezentację.
+
+| Kryterium | Co obejmuje |
+|---|---|
+| Kompletność analiz | wykonane wszystkie polecenia danego etapu, wypełniona tabela kluczowych liczb |
+| Poprawność wykonania | właściwe funkcje, układ EPSG:5070, jawnie ustawione parametry, ustawione `set.seed(1111)` |
+| Dane i metodyka | opis wystarczający, by stwierdzić, co zostało zrobione i z jakimi parametrami |
+| Wyniki, interpretacja i podsumowanie | interpretacja przy każdym wyniku, wnioski zgodne z otrzymanymi liczbami, poprawna terminologia |
+| Odpowiedzi na pytania | uzasadnienie własnych wyborów, znajomość własnych liczb, konsekwencje zmiany parametru |
+| Forma | podpisy i odwołania, czytelność rycin, limit 1000–1200 słów, struktura folderów i plików |
+
+### Reguła progowa {.unnumbered}
+
+Jeżeli na zadane pytania nie potrafisz:
+
+-   podać ani jednej własnej liczby, o którą pytano, ani wskazać jej w swoim raporcie,
+-   powiedzieć, co robi wskazany fragment Twojego kodu,
+-   uzasadnić żadnego z podjętych wyborów,
+
+to **ocena za prezentację nie jest pozytywna**, niezależnie od jakości oddanego raportu.
+
+Reguła nie dotyczy odpowiedzi błędnej albo niepełnej, jeśli operujesz własnymi danymi
+i własnymi decyzjami — to zwykła niska ocena za prezentację.
+
+::: {.callout-important}
+## Co trzeba oddać
+
+Lista kontrolna przed oddaniem etapu.
+
+**Etapy 1–3:**
+
+-   w folderze `projekt_1/Imie_Nazwisko/`: plik `nazwisko_czN.qmd` i wygenerowany
+    `nazwisko_czN.html`,
+-   wszystkie dane potrzebne do uruchomienia `.qmd` w folderze `dane/`, wczytywane ścieżką
+    `dane/….gpkg`,
+-   w nagłówku YAML `embed-resources: true`; obok pliku HTML nie ma folderu `_files`,
+-   nazwy plików danych zgodne z wzorcem `hrabstwo_rok_przestepstwo.gpkg`,
+    `hrabstwo_rok_socio_cz1.gpkg`, `hrabstwo_rok_socio_cz3.gpkg`, bez spacji,
+-   dane w układzie EPSG:5070,
+-   `set.seed(1111)` ustawione przy procedurach losowych,
+-   raport 1000–1200 słów z rycinami i wynikami,
+-   sekcja Podsumowanie z rycinami wymienionymi w części „Do prezentacji",
+-   tabela z najważniejszymi liczbami.
+
+**Etap 4:**
+
+-   folder grupy w `projekt_1_grupowy/` z folderem `dane/`, plikiem
+    `nazwiska_grupy_cz4.qmd` i wygenerowanym `.html`,
+-   `embed-resources: true`; obok pliku HTML nie ma folderu `_files`,
+-   raport 1000–1200 słów z rycinami i wynikami,
+-   sekcja Podsumowanie bez rycin,
+-   materiał do prezentacji: porównane hrabstwa, cel, wyniki na mapach, wnioski z liczbami.
+:::

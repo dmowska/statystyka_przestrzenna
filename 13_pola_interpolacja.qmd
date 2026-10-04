@@ -1,0 +1,554 @@
+# Metody interpolacji {#sec-pola-interpolacja}
+
+::: {.callout-note}
+## Czego się nauczysz
+
+**Po tym rozdziale potrafisz wykonać w R:**
+
+-   utworzyć siatkę interpolacyjną o zadanej rozdzielczości (`rast()`),
+-   wykonać interpolację metodą diagramów Woronoja (`voronoi()`),
+-   wykonać interpolację metodą średniej ważonej odwrotnością odległości
+    (`gstat()` + `interpolate()`),
+-   obliczyć wartość IDW ręcznie, ze wzoru, dla kilku punktów pomiarowych,
+-   wykonać interpolację funkcjami wielomianowymi (`gstat(degree = )`),
+-   przyciąć wynik do granicy obszaru i porównać mapy uzyskane różnymi metodami.
+
+**Rozumiesz i umiesz zinterpretować:**
+
+-   jak wykładnik potęgowy steruje wygładzeniem powierzchni interpolowanej,
+-   dlaczego wartości IDW mieszczą się w zakresie wartości pomiarowych,
+-   dlaczego diagramy Woronoja dają powierzchnię skokową, a pozostałe metody ciągłą,
+-   co odróżnia powierzchnię dopasowaną wielomianem od powierzchni IDW,
+-   po co do interpolacji używa się także punktów leżących poza granicą obszaru.
+
+**Teoria:** [Najważniejsze informacje](12_pola_teoria.qmd#najwazniejsze-pola). **Funkcje:** @sec-funkcje.
+**Słownik:** @sec-slownik.
+:::
+
+## Wprowadzenie
+
+Dane pomiarowe opisujące zjawisko ciągłe — temperaturę powietrza, sumę opadów, wysokość
+terenu — zbierane są w **punktach**, a potrzebne są zwykle dla **całego obszaru**.
+Interpolacja przestrzenna szacuje wartość cechy w lokalizacjach, w których pomiaru nie
+wykonano, na podstawie wartości zmierzonych w lokalizacjach sąsiednich.
+
+W tym rozdziale wykonujemy interpolację **metodami deterministycznymi**: ich parametry
+ustala analityk, a wynikiem jest wyłącznie oszacowana wartość. Oszacowanie **błędu**
+estymacji dają metody geostatystyczne, którymi zajmują się trzy kolejne rozdziały —
+poprzedza je opis struktury przestrzennej zmiennej (@sec-pola-semiwariogram), a następnie
+estymacja (@sec-pola-estymacja) i ocena jej jakości (@sec-pola-ocena).
+
+Definicje, klasyfikacja metod i wzory znajdują się w rozdziale teoretycznym części. Tutaj
+interesuje nas, **jak wykonać interpolację w R i czym różnią się jej wyniki**.
+
+## Struktura obiektów: siatka interpolacyjna
+
+Większość metod interpolacji wymaga wskazania lokalizacji, dla których ma zostać policzone
+oszacowanie. Lokalizacje te tworzą **siatkę interpolacyjną** — pusty raster o zadanym zasięgu
+i rozdzielczości, w którym każda komórka jest jednym punktem estymacji. Wynikiem interpolacji
+jest ten sam raster z wypełnionymi wartościami.
+
+Siatkę budujemy obiektem klasy `SpatRaster` z pakietu `terra`. Rozdzielczość jest decyzją
+analityka: im mniejsza komórka, tym więcej punktów estymacji i dłuższe obliczenia, przy
+niezmienionej liczbie punktów pomiarowych. W całej części geostatystycznej używamy
+rozdzielczości **90 m**.
+
+Wyjątkiem są **diagramy Woronoja**, które siatki nie potrzebują: dzielą obszar na poligony
+przypisane poszczególnym punktom pomiarowym, więc ich wynik jest warstwą **wektorową**.
+
+## Metody interpolacji deterministycznej w R
+
+| Metoda | Funkcja | Pakiet | Wynik |
+|---|---|---|---|
+| diagramy Woronoja | `voronoi()` | `terra` | warstwa wektorowa (`SpatVector`) |
+| średniej ważonej odwrotnością odległości (IDW) | `gstat(set = list(idp = ))` + `interpolate()` | `gstat`, `terra` | raster (`SpatRaster`) |
+| funkcje wielomianowe | `gstat(degree = )` + `interpolate()` | `gstat`, `terra` | raster (`SpatRaster`) |
+
+Pełne zestawienie funkcji — @sec-funkcje.
+
+```{r}
+#| label: pakiety
+#| message: false
+#| warning: false
+library(sf)
+library(terra)
+library(gstat)
+library(tmap)
+library(dplyr)
+```
+
+Funkcja `interpolate()` z pakietu `terra` wypełnia siatkę wartościami policzonymi przez model.
+Dla modeli pakietu `gstat` potrzebuje pośrednika, który zamieni współrzędne komórek rastra na
+obiekt przestrzenny, wywoła `predict()` i odda samą tabelę wyników. Poniższa funkcja robi
+dokładnie to i jest używana we wszystkich krokach opartych na `gstat()`.
+
+```{r}
+#| label: funkcja-pomocnicza
+interpolate_gstat = function(model, x, ...) {
+  # x to tabela współrzędnych komórek siatki przekazana przez interpolate();
+  # remove = FALSE zachowuje kolumny x i y, potrzebne modelom używającym współrzędnych
+  v = st_as_sf(x, coords = c("x", "y"), crs = st_crs(model$data[[1]]$data), remove = FALSE)
+  p = predict(model, v, ...)
+  st_drop_geometry(p)
+}
+```
+
+## Przykład: temperatura powietrza
+
+::: {.callout-note}
+## Kroki analizy
+
+1.  Wczytanie i przygotowanie danych — `read.csv()`, `filter()`, `st_as_sf()`, `vect()`.
+2.  Siatka interpolacyjna — `rast()`.
+3.  Diagramy Woronoja — `voronoi()`, `crop()`.
+4.  Metoda IDW — `gstat()`, `interpolate()`, `mask()`.
+5.  Funkcje wielomianowe — `gstat(degree = )`, `interpolate()`, `mask()`.
+6.  Porównanie metod i zapis wyników — `tmap_arrange()`, `writeRaster()`.
+
+Kod spoza tych sześciu kroków jest objaśnieniem: nie trzeba go uruchamiać, żeby wykonać
+analizę.
+:::
+
+### Krok 1: dane {.unnumbered}
+
+-   `data/punkty.csv` — pomiary temperatury powietrza wraz ze współrzędnymi w kolumnach
+    `x` i `y`,
+-   `data/granica.gpkg` — granica obszaru badań.
+
+Kolumna `temp` zawiera jedną brakującą wartość. Wiersz z brakiem usuwamy funkcją `filter()`,
+**przed** zamianą tabeli na obiekt przestrzenny: `st_as_sf()` przerywa działanie, jeśli trafi
+na brak wartości we współrzędnych, a indeksowanie podstawowe R pozostawiłoby w zbiorze wiersz
+widmo.
+
+```{r}
+#| label: dane
+#| message: false
+punkty = read.csv("data/punkty.csv") |>
+  filter(!is.na(temp)) |>
+  st_as_sf(coords = c("x", "y"), crs = "EPSG:2180")
+
+granica = vect("data/granica.gpkg")
+punkty
+```
+
+Wypisany obiekt jest klasy `sf`. Nagłówek podaje liczbę obiektów i pól atrybutowych, typ
+geometrii (`POINT`), zasięg przestrzenny oraz układ współrzędnych — PUWG 1992, wypisywany
+przez R jako `ETRF2000-PL / CS92`. Jest to układ odwzorowany, więc odległości i rozdzielczość
+siatki wyrażamy w metrach.
+
+Granicę wczytujemy funkcją `vect()` jako obiekt `SpatVector` pakietu `terra`, bo to jej
+zasięgiem posłużymy się przy budowie siatki i nią przytniemy wyniki.
+
+```{r}
+#| label: mapa-danych
+#| message: false
+#| warning: false
+tm_shape(granica) +
+  tm_borders(col = "black") +
+  tm_shape(punkty) +
+  tm_symbols(fill = "temp",
+             fill.scale = tm_scale_continuous(values = "-brewer.spectral"),
+             fill.legend = tm_legend(title = "Temperatura [°C]"),
+             size = 0.4)
+```
+
+Zwróć uwagę, że część punktów pomiarowych leży **poza** granicą obszaru: wewnątrz granicy
+znajduje się `{r} lengths(st_intersects(st_as_sf(granica), punkty))` z
+`{r} nrow(punkty)` punktów. Do interpolacji używamy wszystkich — punkty zewnętrzne poprawiają
+oszacowania przy brzegu obszaru, gdzie inaczej sąsiedzi byliby wyłącznie z jednej strony.
+Do granicy przycinamy dopiero **wynik**.
+
+### Krok 2: siatka interpolacyjna {.unnumbered}
+
+Funkcja `rast()` tworzy pusty raster. Argument `ext` przejmuje zasięg z warstwy granicy,
+`res` ustala rozdzielczość, a `crs` — układ współrzędnych.
+
+```{r}
+#| label: siatka
+siatka = rast(ext = granica, res = 90, crs = crs(granica))
+siatka
+```
+
+Wypis obiektu `SpatRaster` podaje kolejno: liczbę wierszy, kolumn i warstw (`size`),
+rozdzielczość w jednostkach układu (`resolution` — 90 × 90 m), zasięg przestrzenny (`extent`)
+oraz układ współrzędnych. Raster ma
+`{r} format(ncell(siatka), big.mark = " ")` komórek i na razie nie zawiera żadnych wartości —
+wypełnią go kolejne kroki.
+
+### Krok 3: diagramy Woronoja {.unnumbered}
+
+Metoda dzieli obszar na poligony: każdy punkt pomiarowy dostaje poligon obejmujący wszystkie
+lokalizacje położone bliżej niego niż któregokolwiek innego punktu. Wartość punktu zostaje
+wpisana w cały jego poligon.
+
+Funkcja `voronoi()` z pakietu `terra` przyjmuje warstwę punktową `SpatVector`, więc obiekt
+`sf` zamieniamy funkcją `vect()`. Wynik przycinamy do granicy funkcją `crop()`.
+
+```{r}
+#| label: woronoj
+woronoj = voronoi(vect(punkty))
+woronoj_granica = crop(woronoj, granica)
+woronoj_granica
+```
+
+Po przycięciu zostaje `{r} nrow(woronoj_granica)` poligonów z
+`{r} nrow(woronoj)` utworzonych — poligony punktów leżących w całości poza granicą zostały
+usunięte.
+
+```{r}
+#| label: mapa-woronoj
+#| message: false
+#| warning: false
+tm_shape(woronoj_granica) +
+  tm_polygons(fill = "temp",
+              fill.scale = tm_scale_continuous(values = "-brewer.spectral"),
+              fill.legend = tm_legend(title = "Temperatura [°C]"),
+              col = NULL)
+```
+
+### Krok 4: metoda średniej ważonej odwrotnością odległości {.unnumbered}
+
+Metoda IDW (ang. *inverse distance weighted*) oblicza wartość w nieznanej lokalizacji jako
+**średnią ważoną** wartości punktów pomiarowych, w której waga maleje wraz z odległością:
+
+$$z = \frac{\sum_{i=1}^{n} w_i z_i}{\sum_{i=1}^{n} w_i}, \qquad w_i = \frac{1}{d_i^{\,p}}$$
+
+gdzie $z_i$ to wartość w punkcie $i$, $d_i$ — odległość tego punktu od lokalizacji
+szacowanej, a $p$ — **wykładnik potęgowy**.
+
+Zanim użyjemy gotowej funkcji, policzmy wartość wprost ze wzoru. Poniższa funkcja przyjmuje
+wektor wartości punktów pomiarowych, wektor ich odległości od lokalizacji szacowanej oraz
+wykładnik potęgowy.
+
+```{r}
+#| label: idw-recznie
+idw = function(wartosc, d, power = 2) {
+  wagi = 1 / (d ^ power)
+  sum(wagi * wartosc) / sum(wagi)
+}
+
+wartosc = c(10, 15, 20)
+d = c(100, 150, 600)
+
+idw(wartosc, d, power = 0)
+idw(wartosc, d, power = 1)
+idw(wartosc, d, power = 2)
+```
+
+Przy `power = 0` wszystkie wagi są równe, więc wynik jest zwykłą średnią arytmetyczną.
+Wraz ze wzrostem wykładnika oszacowanie przesuwa się w stronę wartości punktu najbliższego —
+tutaj punktu o wartości 10 oddalonego o 100 m.
+
+W siatce interpolację wykonują dwa wywołania. Funkcja `gstat()` zapisuje parametry:
+`formula = temp ~ 1` oznacza, że szacujemy zmienną `temp` bez zmiennych objaśniających,
+`locations` wskazuje punkty pomiarowe, a `set = list(idp = 2)` ustala wykładnik potęgowy.
+Funkcja `interpolate()` wypełnia siatkę, a `mask()` przycina wynik do granicy.
+
+```{r}
+#| label: idw-siatka
+#| message: false
+idw_param = gstat(id = "temp", formula = temp ~ 1, locations = punkty,
+                  set = list(idp = 2))
+
+idw_interp = interpolate(siatka, idw_param, fun = interpolate_gstat, debug.level = 0)
+idw_granica = mask(idw_interp, granica)
+names(idw_granica)
+```
+
+Wynik ma dwie warstwy: `temp.pred` z oszacowaniami i `temp.var` z wariancją, która dla metody
+deterministycznej pozostaje pusta. Mapujemy warstwę `temp.pred`.
+
+```{r}
+#| label: mapa-idw
+#| message: false
+#| warning: false
+tm_shape(idw_granica) +
+  tm_raster(col = "temp.pred",
+            col.scale = tm_scale_continuous(values = "-brewer.spectral"),
+            col.legend = tm_legend(title = "Temperatura [°C]"))
+```
+
+::: {.callout-note}
+## Objaśnienie — poza ścieżką zadania
+
+Wykładnik potęgowy steruje tym, jak szybko maleje wpływ punktów odległych, a więc stopniem
+wygładzenia powierzchni. Poniżej ta sama interpolacja przy trzech wartościach wykładnika.
+
+```{r}
+#| label: idw-wykladniki
+#| message: false
+#| warning: false
+#| fig-width: 10
+#| fig-height: 4
+# ta sama interpolacja przy trzech wartościach wykładnika potęgowego
+idw_p = function(p) {
+  interpolate(siatka,
+              gstat(id = "temp", formula = temp ~ 1, locations = punkty,
+                    set = list(idp = p)),
+              fun = interpolate_gstat, debug.level = 0) |>
+    mask(granica)
+}
+
+idw_1 = idw_p(1)
+idw_5 = idw_p(5)
+
+mapa_p = function(r, tytul) {
+  tm_shape(r) +
+    tm_raster(col = "temp.pred",
+              col.scale = tm_scale_continuous(values = "-brewer.spectral",
+                                              limits = c(7.5, 25)),
+              col.legend = tm_legend(show = FALSE)) +
+    tm_title(tytul)
+}
+
+tmap_arrange(mapa_p(idw_1, "idp = 1"),
+             mapa_p(idw_granica, "idp = 2"),
+             mapa_p(idw_5, "idp = 5"), ncol = 3)
+```
+
+Przy `idp = 1` zakres oszacowań jest wyraźnie węższy od zakresu pomiarów, a powierzchnia
+gładka: każde oszacowanie powstaje z wkładu wielu punktów, więc wartości skrajne są
+uśrednione. Przy `idp = 5` powierzchnia zbliża się kształtem do diagramów Woronoja, bo
+o wyniku decyduje niemal wyłącznie punkt najbliższy. Liczby dla tych trzech wariantów
+zestawione są w interpretacji wyniku.
+:::
+
+### Krok 5: funkcje wielomianowe {.unnumbered}
+
+Interpolacja wielomianowa dopasowuje do wszystkich punktów pomiarowych **jedną gładką
+powierzchnię** opisaną funkcją matematyczną. Stopień wielomianu określa, jak bardzo
+powierzchnia może się wyginać: stopień 1 to płaszczyzna, wyższe stopnie dopuszczają
+wygięcia.
+
+Wywołanie jest takie samo jak dla IDW — zmienia się jeden argument: `degree` zamiast
+`set = list(idp = )`.
+
+```{r}
+#| label: wielomian
+#| message: false
+wielomian_param = gstat(formula = temp ~ 1, locations = punkty, degree = 1)
+
+wielomian_interp = interpolate(siatka, wielomian_param, fun = interpolate_gstat,
+                               debug.level = 0)
+wielomian_granica = mask(wielomian_interp, granica)
+```
+
+```{r}
+#| label: mapa-wielomian
+#| message: false
+#| warning: false
+tm_shape(wielomian_granica) +
+  tm_raster(col = "var1.pred",
+            col.scale = tm_scale_continuous(values = "-brewer.spectral"),
+            col.legend = tm_legend(title = "Temperatura [°C]"))
+```
+
+Wynik jest płaszczyzną nachyloną w kierunku, w którym temperatura rośnie — pojedynczy punkt
+pomiarowy nie może jej lokalnie odkształcić.
+
+### Krok 6: porównanie metod i zapis wyników {.unnumbered}
+
+Trzy mapy zestawiamy na jednej rycinie, w **tej samej skali barw** — bez tego porównanie
+pokazywałoby różnice legend, a nie różnice metod.
+
+```{r}
+#| label: porownanie
+#| message: false
+#| warning: false
+#| fig-width: 10
+#| fig-height: 4
+skala = tm_scale_continuous(values = "-brewer.spectral", limits = c(7.5, 25))
+
+m_woronoj = tm_shape(woronoj_granica) +
+  tm_polygons(fill = "temp", fill.scale = skala,
+              fill.legend = tm_legend(show = FALSE), col = NULL) +
+  tm_title("Diagramy Woronoja")
+
+m_idw = tm_shape(idw_granica) +
+  tm_raster(col = "temp.pred", col.scale = skala,
+            col.legend = tm_legend(show = FALSE)) +
+  tm_title("IDW, idp = 2")
+
+m_wielomian = tm_shape(wielomian_granica) +
+  tm_raster(col = "var1.pred", col.scale = skala,
+            col.legend = tm_legend(show = FALSE)) +
+  tm_title("Wielomian 1. stopnia")
+
+tmap_arrange(m_woronoj, m_idw, m_wielomian, ncol = 3)
+```
+
+```{r}
+#| label: zapis
+#| message: false
+dir.create("out", showWarnings = FALSE)
+writeRaster(idw_granica, "out/idw_temperatura.tif", overwrite = TRUE)
+writeVector(woronoj_granica, "out/woronoj_temperatura.gpkg", overwrite = TRUE)
+```
+
+### Interpretacja wyniku {.unnumbered}
+
+**Trzy metody dały trzy różne powierzchnie z tych samych danych.** Różnice nie wynikają
+z jakości danych, lecz z założeń metod.
+
+**Diagramy Woronoja** dają powierzchnię **skokową**: wartość jest stała w obrębie poligonu
+i zmienia się nagle na jego krawędzi. Zakres wartości na mapie jest dokładnie zakresem
+pomiarów, bo metoda nie liczy żadnych wartości pośrednich — przepisuje zmierzone. Jest to
+najprostsze możliwe oszacowanie i dobry punkt odniesienia dla pozostałych.
+
+**IDW** daje powierzchnię **ciągłą**, z lokalnymi wzniesieniami wokół punktów o wartościach
+skrajnych. Oszacowania mieszczą się w przedziale
+`{r} round(min(values(idw_granica)[, "temp.pred"], na.rm = TRUE), 2)`–`{r} round(max(values(idw_granica)[, "temp.pred"], na.rm = TRUE), 2)` °C
+przy zakresie pomiarów
+`{r} round(min(punkty$temp), 2)`–`{r} round(max(punkty$temp), 2)` °C. **Wynik IDW nigdy nie
+wychodzi poza zakres wartości pomiarowych** — jest średnią ważoną, więc nie może być większy
+od wartości największej ani mniejszy od najmniejszej. Metoda nie odtworzy zatem lokalnego
+maksimum ani minimum położonego między punktami pomiarowymi.
+
+Wpływ wykładnika potęgowego widać na liczbach:
+
+| Wykładnik | Zakres oszacowań |
+|---|---|
+| `idp = 1` | `{r} round(min(values(idw_1)[, "temp.pred"], na.rm = TRUE), 2)`–`{r} round(max(values(idw_1)[, "temp.pred"], na.rm = TRUE), 2)` °C |
+| `idp = 2` | `{r} round(min(values(idw_granica)[, "temp.pred"], na.rm = TRUE), 2)`–`{r} round(max(values(idw_granica)[, "temp.pred"], na.rm = TRUE), 2)` °C |
+| `idp = 5` | `{r} round(min(values(idw_5)[, "temp.pred"], na.rm = TRUE), 2)`–`{r} round(max(values(idw_5)[, "temp.pred"], na.rm = TRUE), 2)` °C |
+| pomiary | `{r} round(min(punkty$temp), 2)`–`{r} round(max(punkty$temp), 2)` °C |
+
+Im wyższy wykładnik, tym bardziej zakres oszacowań zbliża się do zakresu pomiarów i tym mniej
+wygładzona powierzchnia. Wartość wykładnika jest **decyzją analityka**, a nie właściwością
+danych, i trzeba ją podawać razem z wynikiem.
+
+**Wielomian 1. stopnia** daje płaszczyznę: zakres
+`{r} round(min(values(wielomian_granica)[, "var1.pred"], na.rm = TRUE), 2)`–`{r} round(max(values(wielomian_granica)[, "var1.pred"], na.rm = TRUE), 2)` °C,
+najwęższy z trzech metod. Jedna funkcja dopasowana do wszystkich
+`{r} nrow(punkty)` punktów opisuje **ogólny kierunek zmienności** w obszarze, pomijając
+odstępstwa lokalne. Wielomian jest przez to czuły na wartości odstające: pojedynczy punkt
+o nietypowej wartości przechyla całą powierzchnię, podczas gdy w IDW wpływa tylko na swoje
+najbliższe otoczenie.
+
+Wybór metody zależy więc od tego, co chcemy pokazać: wartości przypisane obszarom wpływu
+poszczególnych punktów (Woronoj), lokalną zmienność (IDW) czy ogólny trend w obszarze
+(wielomian). Pytanie, **jak dokładne** jest każde z tych oszacowań, pozostaje tu bez
+odpowiedzi — rozstrzygają je metody geostatystyczne, które zaczynamy od opisu struktury
+przestrzennej zmiennej w @sec-pola-semiwariogram.
+
+## Pytania kontrolne
+
+> **1.** Która z metod tego rozdziału nie wymaga utworzenia siatki interpolacyjnej?
+
+::: {.callout-tip collapse="true"}
+## Sprawdź odpowiedź
+**Diagramy Woronoja.** Metoda dzieli obszar na poligony przypisane punktom pomiarowym, więc
+jej wynikiem jest warstwa **wektorowa** (`SpatVector`), a nie raster. Siatki wymagają metody,
+które szacują wartość w z góry ustalonych lokalizacjach — IDW i funkcje wielomianowe.
+:::
+
+> **2.** Co oznacza wykładnik potęgowy `idp = 0` w metodzie IDW?
+
+::: {.callout-tip collapse="true"}
+## Sprawdź odpowiedź
+Że **wszystkie punkty pomiarowe mają tę samą wagę**, niezależnie od odległości: przy $p = 0$
+każda waga $w_i = 1/d_i^{\,0}$ wynosi 1. Oszacowanie staje się wtedy zwykłą średnią
+arytmetyczną wartości punktów branych do obliczeń — w przykładzie z Kroku 4 wynosi
+`{r} idw(wartosc, d, power = 0)`, czyli dokładnie średnią z 10, 15 i 20.
+:::
+
+> **3.** Chcesz uzyskać mniej wygładzoną, bardziej szczegółową powierzchnię IDW. Jak zmienisz
+> wykładnik potęgowy?
+
+::: {.callout-tip collapse="true"}
+## Sprawdź odpowiedź
+**Zwiększysz go.** Wyższy wykładnik sprawia, że wagi maleją z odległością szybciej, więc
+o oszacowaniu decydują przede wszystkim punkty najbliższe. Powierzchnia zyskuje lokalne
+wzniesienia wokół punktów pomiarowych i przestaje być gładka; przy bardzo wysokim wykładniku
+upodabnia się do diagramów Woronoja.
+
+Niższy wykładnik daje efekt przeciwny: większy wpływ punktów odległych i powierzchnię
+wygładzoną.
+:::
+
+> **4.** Dlaczego mapa IDW nie pokazuje temperatury wyższej niż najwyższa zmierzona?
+
+::: {.callout-tip collapse="true"}
+## Sprawdź odpowiedź
+Ponieważ każde oszacowanie IDW jest **średnią ważoną** wartości punktów pomiarowych. Średnia
+ważona ze zbioru liczb zawsze mieści się między najmniejszą a największą z nich, niezależnie
+od przyjętych wag.
+
+Konsekwencja praktyczna: metoda nie odtworzy wzniesienia ani zagłębienia położonego między
+punktami pomiarowymi. Jeśli rzeczywiste maksimum zjawiska leży tam, gdzie nie było pomiaru,
+na mapie IDW go nie będzie.
+:::
+
+> **5.** Czym różni się powierzchnia dopasowana wielomianem od powierzchni IDW?
+
+::: {.callout-tip collapse="true"}
+## Sprawdź odpowiedź
+**Zasięgiem wpływu punktu pomiarowego.** Wielomian dopasowuje **jedną funkcję do całego
+obszaru**, więc każdy punkt wpływa na kształt powierzchni wszędzie, a wynik opisuje ogólny
+kierunek zmienności. IDW liczy każdą komórkę osobno, z wkładem malejącym wraz z odległością,
+więc punkt wpływa głównie na swoje otoczenie i na mapie widać zmienność lokalną.
+
+Stąd czułość wielomianu na wartości odstające: jeden nietypowy pomiar przechyla całą
+płaszczyznę, podczas gdy w IDW zaznacza się tylko wokół własnej lokalizacji.
+:::
+
+> **6.** Do interpolacji użyto wszystkich `{r} nrow(punkty)` punktów, choć wewnątrz granicy
+> leży ich tylko `{r} lengths(st_intersects(st_as_sf(granica), punkty))`. Po co?
+
+::: {.callout-tip collapse="true"}
+## Sprawdź odpowiedź
+Żeby poprawić oszacowania **przy brzegu obszaru**. Komórka leżąca tuż przy granicy ma przy
+użyciu samych punktów wewnętrznych sąsiadów wyłącznie z jednej strony, więc jej oszacowanie
+jest przesunięte w stronę wnętrza obszaru. Punkty zewnętrzne domykają otoczenie z drugiej
+strony.
+
+Dlatego kolejność jest taka: interpolacja na **pełnym** zbiorze punktów, przycięcie dopiero
+**wyniku** (`mask()` dla rastra, `crop()` dla warstwy wektorowej).
+:::
+
+> **7.** Dwie osoby wykonały interpolację IDW tych samych danych i otrzymały różne mapy.
+> Co mogło się różnić?
+
+::: {.callout-tip collapse="true"}
+## Sprawdź odpowiedź
+Przede wszystkim **wykładnik potęgowy** (`idp`) — to wartość ustalana arbitralnie i podawana
+w wywołaniu, a nie wyznaczana z danych.
+
+Drugą możliwą przyczyną jest **rozdzielczość siatki**: ta sama metoda policzona w siatce 90 m
+i w siatce 500 m da mapy o różnym poziomie szczegółowości. Obie wartości należą do opisu
+wyniku i trzeba je podawać razem z mapą.
+:::
+
+## Podsumowanie
+
+| Metoda | Funkcja | Co daje | Warunek poprawnego odczytu |
+|---|---|---|---|
+| diagramy Woronoja | `voronoi()` + `crop()` | powierzchnię skokową: wartość punktu w całym jego obszarze wpływu | wynik wektorowy; zakres wartości równy zakresowi pomiarów |
+| IDW | `gstat(set = list(idp = ))` + `interpolate()` + `mask()` | powierzchnię ciągłą ze zmiennością lokalną | oszacowania mieszczą się w zakresie pomiarów; `idp` podajemy razem z wynikiem |
+| ręczne obliczenie IDW | własna funkcja ze wzoru | wartość w jednej lokalizacji, z jawnymi wagami | pokazuje, skąd bierze się wynik `gstat()` |
+| funkcje wielomianowe | `gstat(degree = )` + `interpolate()` + `mask()` | ogólny kierunek zmienności w obszarze | czułe na wartości odstające; stopień wielomianu podajemy razem z wynikiem |
+| siatka interpolacyjna | `rast(ext = , res = , crs = )` | lokalizacje, dla których liczone jest oszacowanie | rozdzielczość jest decyzją analityka, nie właściwością danych |
+
+Trzy zasady, do których wracamy w kolejnych rozdziałach:
+
+1.  **Parametr metody deterministycznej jest decyzją analityka.** Wykładnik potęgowy, stopień
+    wielomianu i rozdzielczość siatki podajemy razem z wynikiem — bez nich mapa nie jest
+    odtwarzalna.
+2.  **Interpolujemy na pełnym zbiorze punktów, przycinamy wynik.** Punkty spoza granicy
+    poprawiają oszacowania przy brzegu obszaru.
+3.  **Metody deterministyczne dają oszacowanie bez oceny jego błędu.** Ocena wymaga metod
+    geostatystycznych — @sec-pola-semiwariogram, @sec-pola-estymacja i @sec-pola-ocena.
+
+## Pełny kod analizy
+
+Poniżej zebrany jest cały kod Kroków 1–6 w kolejności wykonania — do skopiowania do własnego
+skryptu zamiast przeklejania pojedynczych fragmentów. Nie ma w nim kodu objaśniającego: to
+dokładnie ta ścieżka, która prowadzi od danych wejściowych do plików w katalogu `out/`.
+
+```{r}
+#| ref.label: ["pakiety", "funkcja-pomocnicza", "dane", "mapa-danych", "siatka",
+#|   "woronoj", "mapa-woronoj", "idw-recznie", "idw-siatka", "mapa-idw",
+#|   "wielomian", "mapa-wielomian", "porownanie", "zapis"]
+#| eval: false
+#| echo: true
+```

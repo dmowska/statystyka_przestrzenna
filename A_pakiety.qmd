@@ -1,0 +1,244 @@
+# Pakiety {#sec-pakiety}
+
+Zestawienie pakietów R używanych w skrypcie wraz z instrukcją instalacji oraz opisem
+najczęstszych błędów. Do tego załącznika warto wracać w trakcie semestru i przy pracy nad
+projektami.
+
+## Pakiety używane w skrypcie
+
+| Pakiet | Do czego służy | Rozdziały |
+|---|---|---|
+| `sf` | dane wektorowe: wczytywanie, zapis, układy współrzędnych, operacje geometryczne | wszystkie |
+| `terra` | dane rastrowe oraz wektorowe: wczytywanie, przycinanie, agregacja, interpolacja | @sec-dane-przestrzenne, @sec-pola-interpolacja, @sec-pola-estymacja |
+| `tmap` | wizualizacja danych przestrzennych (mapy) | wszystkie |
+| `dplyr` | przetwarzanie tabel atrybutów: selekcja, filtrowanie, złączenia | wszystkie |
+| `ggplot2` | wykresy nieprzestrzenne: histogramy, wykresy pudełkowe, wykresy rozrzutu | @sec-eksploracja i dalsze |
+| `sfdep` | statystyki centrograficzne | @sec-punkty-centrograficzne |
+| `spatstat` | analiza rozkładu przestrzennego punktów: intensywność, odległości, funkcje G i K | @sec-punkty-intensywnosc, @sec-punkty-odleglosc |
+| `spdep` | sąsiedztwo i miary autokorelacji przestrzennej danych obszarowych | @sec-obszarowe-sasiedztwo, @sec-obszarowe-autokorelacja |
+| `gstat` | geostatystyka: semiwariogram, modelowanie, kriging | @sec-pola-semiwariogram, @sec-pola-estymacja, @sec-pola-ocena |
+| `rsample` | podział zbioru na treningowy i testowy | @sec-pola-ocena |
+| `e1071` | skośność i kurtoza | @sec-eksploracja |
+| `PerformanceAnalytics` | macierz wykresów rozrzutu | @sec-eksploracja |
+| `spDataLarge` | zbiory danych do zadań samodzielnych; nie ma go na CRAN | @sec-zadania |
+| `crimedata` | pobranie danych o przestępstwach w miastach USA | @sec-projekt1 |
+
+## Opis pakietów
+
+### sf
+
+Pakiet do obsługi danych **wektorowych**. Definiuje klasę `sf`, będącą sposobem reprezentacji
+przestrzennych danych wektorowych w R.
+
+-   oparty jest na standardzie *Simple Features* organizacji OGC, dzięki czemu poszczególne typy
+    geometrii (np. `POLYGON` i `MULTIPOLYGON`) stanowią odrębne klasy;
+-   obsługuje przestrzenne bazy danych, takie jak PostGIS;
+-   większość funkcji ma prefiks `st_` (od *spatial type*);
+-   jest wykorzystywany przez kilkadziesiąt innych pakietów R.
+
+Dokumentacja: <https://r-spatial.github.io/sf/> ·
+opis standardu *Simple Features*: <https://r-spatial.github.io/sf/articles/sf1.html> ·
+CRAN: <https://cran.r-project.org/package=sf>
+
+### terra
+
+Pakiet do obsługi danych **rastrowych** oraz wektorowych. Definiuje klasy `SpatRaster`
+(dane rastrowe) i `SpatVector` (dane wektorowe).
+
+-   metody analizy danych rastrowych obejmują funkcje lokalne, sąsiedztwa, globalne, strefowe
+    oraz operacje geometryczne;
+-   metody dla danych wektorowych obejmują operacje geometryczne, m.in. *intersect* i *buffer*;
+-   zastąpił wcześniejszy pakiet `raster`.
+
+Dokumentacja: <https://rspatial.github.io/terra/> ·
+materiały wprowadzające: <https://rspatial.org/> ·
+CRAN: <https://cran.r-project.org/package=terra>
+
+### tmap
+
+Pakiet do **wizualizacji** danych przestrzennych. Mapę buduje się z elementów łączonych znakiem
+`+`, podobnie jak wykres w pakiecie `ggplot2` — składnia została jednak dostosowana do tworzenia
+map, a nie wykresów.
+
+W skrypcie stosowana jest składnia wersji 4 pakietu (argumenty `fill`, `fill.scale`,
+`fill.legend`, `col.scale`, funkcje `tm_scale_*()` oraz `tm_legend()`). Materiały oparte na
+wersji 3 używają składni, która w wersji 4 jest wycofywana.
+
+Dokumentacja: <https://r-tmap.github.io/tmap/> ·
+wprowadzenie: <https://r-tmap.github.io/tmap/articles/tmap-getstarted.html> ·
+CRAN: <https://cran.r-project.org/package=tmap>
+
+### dplyr i ggplot2
+
+Pakiety z kolekcji **tidyverse**, znane z wcześniejszych zajęć ze statystyki i wizualizacji
+danych. `dplyr` służy do przetwarzania tabel atrybutów (`filter()`, `select()`, `mutate()`,
+`left_join()`), a `ggplot2` — do tworzenia wykresów nieprzestrzennych. Funkcje `dplyr` działają
+na obiektach klasy `sf`, zachowując kolumnę geometrii.
+
+Dokumentacja: <https://dplyr.tidyverse.org/> · <https://ggplot2.tidyverse.org/>
+
+### sfdep
+
+Pakiet udostępniający metody statystyki przestrzennej w sposób zgodny ze składnią tidyverse.
+W skrypcie wykorzystywany do obliczania statystyk centrograficznych (`center_mean()`,
+`std_distance()`, `std_dev_ellipse()`).
+
+Dokumentacja: <https://sfdep.josiahparry.com/> ·
+CRAN: <https://cran.r-project.org/package=sfdep>
+
+### spatstat
+
+Pakiet do analizy rozkładu przestrzennego danych punktowych. Definiuje klasy `ppp` (zbiór
+punktów) oraz `owin` (obszar analizy). Udostępnia metody oparte na intensywności
+(`quadratcount()`, `quadrat.test()`, `density()`) oraz na odległości (`nndist()`, `Gest()`,
+`Kest()`, `clarkevans()`, `envelope()`).
+
+Dokumentacja: <https://spatstat.org/> ·
+CRAN: <https://cran.r-project.org/package=spatstat>
+
+### spdep
+
+Pakiet do analizy danych obszarowych. Umożliwia określanie sąsiedztwa (`poly2nb()`,
+`dnearneigh()`, `knearneigh()`), tworzenie macierzy wag przestrzennych (`nb2listw()`) oraz
+obliczanie globalnych i lokalnych miar autokorelacji przestrzennej (`moran.test()`,
+`moran.mc()`, `geary.test()`, `globalG.test()`, `localmoran()`, `localC_perm()`,
+`localG_perm()`) oraz klasyfikację klastrów na ich podstawie (`hotspot()`).
+
+Dokumentacja: <https://r-spatial.github.io/spdep/> ·
+CRAN: <https://cran.r-project.org/package=spdep>
+
+### gstat
+
+Pakiet geostatystyczny. Umożliwia analizę i modelowanie struktury przestrzennej
+(`variogram()`, `vgm()`, `fit.variogram()`), estymację metodą krigingu (`gstat()`, `krige()`)
+oraz kroswalidację (`krige.cv()`).
+
+Dokumentacja: <https://r-spatial.github.io/gstat/> ·
+CRAN: <https://cran.r-project.org/package=gstat>
+
+### Pakiety pomocnicze
+
+| Pakiet | Zastosowanie w skrypcie | Dokumentacja |
+|---|---|---|
+| `rsample` | podział zbioru na treningowy i testowy (`initial_split()`) | <https://rsample.tidymodels.org/> |
+| `e1071` | skośność i kurtoza (`skewness()`, `kurtosis()`) | <https://cran.r-project.org/package=e1071> |
+| `PerformanceAnalytics` | macierz wykresów rozrzutu (`chart.Correlation()`) | <https://cran.r-project.org/package=PerformanceAnalytics> |
+| `viridis` | palety barw przyjazne osobom z zaburzeniami widzenia barw | <https://sjmgarnier.github.io/viridis/> |
+| `spDataLarge` | zbiory danych do zadań samodzielnych | <https://github.com/Nowosad/spDataLarge> |
+
+## Biblioteki zewnętrzne
+
+Pakiety przestrzenne w R nie implementują wszystkich operacji samodzielnie — korzystają z trzech
+bibliotek używanych również przez programy QGIS i ArcGIS. Komunikaty o ich wersjach pojawiają
+się przy pierwszym wywołaniu `library(sf)`.
+
+**GDAL/OGR** — odczyt i zapis danych rastrowych (GDAL) oraz wektorowych (OGR). Dzięki tej
+bibliotece funkcje `read_sf()` i `rast()` obsługują kilkadziesiąt formatów plików.
+
+**GEOS** — operacje przestrzenne: tworzenie buforów, wyznaczanie centroidów, określanie relacji
+topologicznych (przecina, zawiera itd.).
+
+**PROJ** — definiowanie i przeliczanie układów współrzędnych. Układy identyfikuje się kodami
+EPSG (ang. *European Petroleum Survey Group*), na przykład `EPSG:2180` oznacza układ PUWG 1992,
+a `EPSG:4326` — WGS 84. Dane mogą przechowywać opis układu również w rozbudowanej formie WKT2,
+wypisywanej przez funkcję `st_crs()`. Bazę kodów zawiera strona <https://epsg.org/>.
+
+## Instalacja
+
+Większość pakietów pochodzi z repozytorium CRAN i instaluje się standardowo. Poniższy blok
+wystarczy uruchomić **raz, przed rozpoczęciem zajęć**.
+
+```r
+install.packages(c(
+  "sf", "terra", "tmap", "dplyr", "ggplot2",
+  "sfdep", "spatstat", "spdep", "gstat", "rsample",
+  "e1071", "PerformanceAnalytics", "crimedata"
+))
+```
+
+### Pakiet spDataLarge
+
+Pakiet `spDataLarge` zawiera zbiory danych używane w zadaniach samodzielnych i **nie jest
+dostępny na CRAN**. Instaluje się go z repozytorium r-universe:
+
+```r
+install.packages("spDataLarge", repos = "https://geocompr.r-universe.dev")
+```
+
+### Sprawdzenie instalacji
+
+```r
+# jeśli którykolwiek pakiet nie jest zainstalowany, funkcja zwróci jego nazwę
+potrzebne = c("sf", "terra", "tmap", "dplyr", "ggplot2", "sfdep", "spatstat",
+              "spdep", "gstat", "rsample", "e1071", "PerformanceAnalytics",
+              "crimedata", "spDataLarge")
+setdiff(potrzebne, rownames(installed.packages()))
+```
+
+## Typowe błędy i komunikaty {#sec-typowe-bledy}
+
+### Zera wiodące w kodach TERYT
+
+Identyfikatory jednostek administracyjnych (TERYT) zapisane w plikach tekstowych zaczynają się
+czasem od zera (np. `"0201"` dla powiatu bolesławieckiego). Funkcja `read.csv()` rozpoznaje taką
+kolumnę jako **liczbę** i zero wiodące znika — `"0201"` staje się `201`. Przy próbie złączenia
+z warstwą przestrzenną, gdzie TERYT jest zapisany jako tekst, klucze przestają się zgadzać.
+
+Rozwiązanie: wymusić wczytanie kolumny jako tekstu.
+
+```r
+read.csv("data/powiaty_klasyfikacje.csv", colClasses = c(TERYT = "character"))
+```
+
+::: {.callout-warning}
+## Dlaczego to groźne
+Funkcja `merge()` z base R dopasuje liczbę do tekstu, po cichu **pomijając wiersze, których
+nie dopasowała** — bez błędu i bez ostrzeżenia. Dla powiatów w Polsce oznacza to utratę
+91 z 380 powiatów (wszystkich z województw o kodzie 02, 04, 06 i 08) i mapę z dziurą
+w południowo-zachodniej Polsce.
+
+Funkcja `left_join()` z pakietu `dplyr` w tej samej sytuacji **odmawia złączenia** i wypisuje
+komunikat `Can't join x$TERYT with y$TERYT due to incompatible types`. Dlatego w skrypcie
+używamy `left_join()`, nie `merge()`.
+:::
+
+Po każdym złączeniu warto sprawdzić, czy się udało:
+
+```r
+sum(is.na(powiaty$SB2023))  # powinno wynosić 0
+```
+
+### Brakujące wartości (NA) a tworzenie obiektu przestrzennego
+
+Indeksowanie z base R zwraca dla brakujących wartości **wiersze widma** wypełnione `NA`:
+
+```r
+punkty = read.csv("data/punkty.csv")   # 248 wierszy, w tym jeden NA w kolumnie temp
+nrow(punkty[punkty$temp > 20, ])       # 38 - o jeden za dużo
+```
+
+Taki wiersz ma `NA` również we współrzędnych, więc `st_as_sf()` przerywa działanie
+komunikatem `missing values in coordinates not allowed`. Funkcja `filter()` z pakietu `dplyr`
+pomija brakujące wartości:
+
+```r
+nrow(dplyr::filter(punkty, temp > 20))  # 37 - poprawnie
+```
+
+### Niezgodność układów współrzędnych
+
+Operacje łączące dwie warstwy (złączenia przestrzenne, przycinanie, wizualizacja) wymagają
+tego samego układu współrzędnych. Przed każdą taką operacją warto sprawdzić:
+
+```r
+st_crs(warstwa_1) == st_crs(warstwa_2)
+```
+
+Jeśli układy się różnią, należy przekształcić jedną z warstw funkcją `st_transform()`:
+
+```r
+warstwa_2 = st_transform(warstwa_2, st_crs(warstwa_1))
+```
+
+Dane w skrypcie zapisane są najczęściej w układzie PUWG 1992 (`EPSG:2180`), a dane pobierane
+z serwisów internetowych — w WGS 84 (`EPSG:4326`).

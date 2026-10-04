@@ -1,0 +1,849 @@
+# Dane przestrzenne w R {#sec-dane-przestrzenne}
+
+::: {.callout-note}
+## Czego się nauczysz
+
+**Po tym rozdziale potrafisz wykonać w R:**
+
+-   wczytać dane przestrzenne (wektorowe, rastrowe) oraz tabelę z pliku tekstowego,
+-   dołączyć dane atrybutowe do warstwy przestrzennej po wspólnym identyfikatorze i sprawdzić,
+    czy złączenie się udało,
+-   sprawdzić i ujednolicić układy współrzędnych dwóch warstw,
+-   wykonać selekcję obiektów na podstawie lokalizacji,
+-   zliczyć punkty w poligonach i przeliczyć je na liczbę mieszkańców,
+-   zamienić tabelę ze współrzędnymi na obiekt przestrzenny,
+-   przyciąć raster do zasięgu innej warstwy,
+-   stworzyć mapę w pakiecie `tmap` i zapisać wyniki do pliku.
+
+**Rozumiesz i umiesz zinterpretować:**
+
+-   strukturę obiektu klasy `sf` oraz klasy `SpatRaster`,
+-   znaczenie poszczególnych pól nagłówka tych obiektów,
+-   różnicę między układem współrzędnych geograficznych a odwzorowanym i jej praktyczne skutki,
+-   objawy nieudanego złączenia danych atrybutowych z warstwą przestrzenną,
+-   dlaczego współczynnik na mieszkańca wymaga sprawdzenia mianownika.
+
+**Do doczytania w razie potrzeby:** @sec-operacje — tworzenie obiektów wektorowych od zera,
+strefy buforowe, centroidy, tworzenie siatek, zmiana rozdzielczości rastra, dalsze elementy
+kompozycji mapy.
+
+**Teoria:** [Najważniejsze informacje](01_wstep.qmd#najwazniejsze-wstep).
+**Pakiety:** @sec-pakiety. **Funkcje:** @sec-funkcje.
+:::
+
+## Wprowadzenie
+
+R jest językiem programowania oraz środowiskiem obliczeniowym pozwalającym na analizę
+statystyczną i wizualizację danych. Dostarcza także wielu funkcji do pracy z danymi
+przestrzennymi — i to one są przedmiotem tego rozdziału.
+
+Statystykę opisową, przetwarzanie tabel i tworzenie wykresów w R już znasz. Nowe jest to, że
+dane mają teraz **lokalizację**: każdy wiersz tabeli odnosi się do konkretnego miejsca na
+powierzchni Ziemi, opisanego współrzędnymi w określonym układzie współrzędnych. Wynikają z tego
+trzy właściwości, których dane nieprzestrzenne nie miały:
+
+1.  obiekt przestrzenny to tabela **z dodatkową kolumną geometrii**, a kolumna ta podlega innym
+    regułom niż pozostałe,
+2.  każda warstwa ma **układ współrzędnych**, a operacje łączące dwie warstwy wymagają, aby był
+    on taki sam,
+3.  dane mogą być zapisane w dwóch modelach — **wektorowym** (punkty, linie, poligony) oraz
+    **rastrowym** (siatka komórek) — obsługiwanych przez różne pakiety.
+
+Rozdział pokazuje pełną ścieżkę od surowych plików do danych gotowych do analizy. Przykład 1
+prowadzi przez tę ścieżkę krok po kroku i kończy się zapisaniem pliku, który będzie punktem
+wyjścia w @sec-eksploracja. Przykład 2 dotyczy danych rastrowych.
+
+Szersze omówienie pracy z danymi przestrzennymi w R zawiera podręcznik @lovelace2025, dostępny
+także w otwartej wersji internetowej pod adresem <https://r.geocompx.org/>.
+
+## Pakiety i klasy obiektów przestrzennych
+
+Funkcje do pracy z danymi przestrzennymi zawarte są w pakietach:
+
+-   obsługa danych przestrzennych: **sf** (dane wektorowe), **terra** (dane rastrowe i wektorowe)
+-   wizualizacja danych przestrzennych: **tmap**
+-   statystyka przestrzenna:
+    -   statystyka punktów: **spatstat**, **sfdep**
+    -   dane obszarowe: **spdep**, **sfdep**
+    -   geostatystyka: **gstat**
+
+W tym rozdziale wykorzystujemy trzy pakiety: `sf` (dane wektorowe), `terra` (dane rastrowe)
+oraz `tmap` (wizualizacja), a do przetwarzania tabel atrybutów — znany już `dplyr`. Opis każdego
+z pakietów, odnośniki do dokumentacji oraz instrukcję instalacji zawiera @sec-pakiety.
+
+Każdy model danych ma w R własną klasę obiektów:
+
+| Model danych | Pakiet | Klasa obiektu |
+|---|---|---|
+| wektorowy | `sf` | `sf` |
+| wektorowy | `terra` | `SpatVector` |
+| rastrowy | `terra` | `SpatRaster` |
+
+Większość funkcji pakietu `sf` zaczyna się od prefiksu `st_` (od *spatial type*). Pozwala to
+odnaleźć właściwą funkcję bez przeszukiwania dokumentacji: po wpisaniu `st_` w konsoli RStudio
+i naciśnięciu klawisza Tab wyświetlana jest lista wszystkich dostępnych funkcji.
+
+```{r}
+#| label: pakiety
+#| message: false
+#| warning: false
+library(sf)
+library(terra)
+library(tmap)
+library(dplyr)
+```
+
+## Struktura obiektów przestrzennych
+
+Przed przystąpieniem do analizy należy ustalić, co dokładnie zostało wczytane do R. Służy do
+tego wypisanie obiektu w konsoli — nagłówek zawiera wszystkie informacje potrzebne do
+zaplanowania dalszego przetwarzania.
+
+### Obiekt klasy sf
+
+Obiekt klasy `sf` składa się z dwóch części: **ramki danych** z atrybutami oraz **kolumny
+geometrii** przechowującej współrzędne (najczęściej nosi ona nazwę `geometry` lub `geom`).
+Dzięki temu na obiekcie `sf` działają funkcje przeznaczone do pracy z tabelami, a geometria
+pozostaje powiązana z wierszami.
+
+```{r}
+#| label: struktura-sf
+granice = read_sf("data/cook_granice.gpkg", layer = "obszary_spisowe")
+granice
+```
+
+Nagłówek wypisanego obiektu podaje:
+
+| Pole nagłówka | Znaczenie |
+|---|---|
+| `Simple feature collection with 1332 features and 1 field` | liczba obiektów (wierszy) oraz liczba kolumn atrybutów; kolumna geometrii nie jest liczona jako atrybut |
+| `(with 1 geometry empty)` | ostrzeżenie: jeden obiekt nie ma przypisanej geometrii |
+| `Geometry type: MULTIPOLYGON` | typ geometrii obiektów w warstwie |
+| `Dimension: XY` | liczba wymiarów współrzędnych (XY, XYZ dla danych z wysokością, XYM z wartością dodatkową) |
+| `Bounding box` | obwiednia, czyli prostokąt obejmujący wszystkie obiekty warstwy |
+| `Geodetic CRS: NAD83` | układ współrzędnych |
+
+Typ geometrii określa, z jakich obiektów zbudowana jest warstwa. Podstawowe typy to `POINT`,
+`LINESTRING` oraz `POLYGON`; ich odpowiedniki z przedrostkiem `MULTI` (`MULTIPOINT`,
+`MULTILINESTRING`, `MULTIPOLYGON`) oznaczają, że jeden obiekt może składać się z kilku
+rozłącznych części.
+
+Dwa pola tego nagłówka wymagają komentarza.
+
+**`Geodetic CRS` kontra `Projected CRS`.** Pierwsze oznacza układ **współrzędnych
+geograficznych** — współrzędne wyrażone są w stopniach szerokości i długości geograficznej.
+Widać to w obwiedni: wartości mieszczą się między −88 i −87 oraz między 41 i 42. Drugie oznacza
+układ **odwzorowany**, w którym współrzędne wyrażone są w jednostkach długości, najczęściej
+w metrach (patrz Przykład 2). Różnica ma praktyczne skutki: w układzie odwzorowanym odległości
+i pola powierzchni otrzymujemy bezpośrednio w metrach, a w układzie geograficznym wymagają
+obliczeń na elipsoidzie albo wcześniejszego przekształcenia układu.
+
+**`(with 1 geometry empty)`.** Jeden z 1332 obszarów spisowych nie ma przypisanej geometrii.
+
+```{r}
+granice |>
+  filter(st_is_empty(granice)) |>
+  st_drop_geometry()
+```
+
+Jest to obszar spisowy o identyfikatorze `17031990000`, obejmujący powierzchnię wody, bez
+ludności i bez danych. Obiekty z pustą geometrią nie przecinają się z niczym, więc wypadną
+samodzielnie przy selekcji przestrzennej w kroku 5. Warto jednak zauważyć taki komunikat od
+razu — gdyby pustych geometrii było więcej, oznaczałoby to problem z plikiem źródłowym.
+
+### Obiekt klasy SpatRaster
+
+Dane rastrowe obsługuje pakiet `terra`, a klasa `SpatRaster` reprezentuje je jako siatkę
+komórek o jednakowej wielkości. Każda komórka przechowuje jedną wartość na warstwę.
+
+```{r}
+srtm = rast("data/srtm.tif")
+srtm
+```
+
+Nagłówek obiektu `SpatRaster` podaje:
+
+| Pole nagłówka | Znaczenie |
+|---|---|
+| `dimensions` | liczba wierszy, kolumn oraz warstw (`nrow, ncol, nlyr`) |
+| `resolution` | rozdzielczość, czyli wielkość komórki w jednostkach układu współrzędnych |
+| `extent` | zasięg warstwy (`xmin`, `xmax`, `ymin`, `ymax`) |
+| `coord. ref.` | układ współrzędnych |
+| `source` | nazwa pliku, z którego dane zostały wczytane |
+| `name` | nazwa warstwy (przy rastrach wielowarstwowych — nazwy wszystkich warstw) |
+| `min value`, `max value` | zakres wartości w warstwie |
+
+Trzy z tych pól są ze sobą powiązane: **zasięg** podzielony przez **rozdzielczość** daje
+**wymiary**. Dla warstwy `srtm` zasięg w kierunku poziomym wynosi
+`{r} format(round(diff(c(xmin(srtm), xmax(srtm)))), big.mark = " ", scientific = FALSE)` m,
+a rozdzielczość 90 m, co daje `{r} ncol(srtm)` kolumn. Zapamiętanie tej zależności pozwala
+przewidzieć, co się stanie przy przycinaniu rastra i przy zmianie jego rozdzielczości.
+
+Raster może zawierać wiele warstw. Plik `siatka-all.tif` jest przykładem takiego zbioru:
+
+```{r}
+siatka_all = rast("data/siatka-all.tif")
+nlyr(siatka_all)
+names(siatka_all)
+```
+
+## Praca z danymi przestrzennymi w R
+
+Czynności wykorzystywane w tym rozdziale:
+
+| Czynność | Funkcja |
+|---|---|
+| wczytanie tabeli z pliku tekstowego | `read.csv()` |
+| wczytanie danych wektorowych | `sf::read_sf()` |
+| sprawdzenie warstw w geopaczce | `sf::st_layers()` |
+| wczytanie danych rastrowych | `terra::rast()` |
+| dołączenie atrybutów do geometrii | `dplyr::left_join()` |
+| sprawdzenie i zmiana układu współrzędnych | `sf::st_crs()`, `sf::st_transform()` |
+| selekcja na podstawie lokalizacji | indeksowanie `x[y, ]` |
+| zliczenie punktów w poligonach | `lengths(sf::st_intersects())` |
+| zamiana tabeli ze współrzędnymi na obiekt przestrzenny | `sf::st_as_sf()` |
+| wyznaczenie obwiedni (zasięgu przestrzennego) | `sf::st_bbox()` |
+| przycięcie rastra | `terra::crop()` |
+| tworzenie map | `tmap::tm_shape()` + `tm_polygons()` / `tm_symbols()` / `tm_raster()` |
+| zapis danych wektorowych i rastrowych | `sf::write_sf()`, `terra::writeRaster()` |
+
+Pełne zestawienie funkcji używanych w skrypcie zawiera @sec-funkcje.
+
+## Przykład 1: Przestępczość i dane społeczno-ekonomiczne w hrabstwie Cook
+
+### Dane i cel {.unnumbered}
+
+**Cel.** Przygotowanie zbioru danych, w którym każdemu obszarowi spisowemu przypisano liczbę
+przestępstw oraz zmienne społeczno-ekonomiczne. Taki zbiór jest punktem wyjścia do analizy
+w @sec-eksploracja oraz w projekcie 1 (@sec-projekt1).
+
+Dane pochodzą z trzech plików, w trzech różnych postaciach — i to jest typowa sytuacja:
+
+-   `data/cook_granice.gpkg` — granice obszarów spisowych hrabstwa Cook (centralna część
+    Chicago), warstwa `obszary_spisowe`; zawiera wyłącznie identyfikator `GEOID` i geometrię,
+-   `data/cook_dane_spoleczne.csv` — dane społeczno-ekonomiczne dla tych obszarów, ze zbioru
+    American Community Survey 2016–2020; tabela bez geometrii, połączona z granicami przez
+    `GEOID`,
+-   `data/crimes_vehicle_theft.gpkg` — lokalizacje kradzieży samochodów w 2020 roku, dane
+    punktowe.
+
+Zmienne w pliku `cook_dane_spoleczne.csv`:
+
+| Zmienna | Opis |
+|---|---|
+| `GEOID` | identyfikator obszaru spisowego — klucz złączenia |
+| `POP` | liczba ludności |
+| `WHITE`, `BLACK`, `ASIAN`, `HISPANIC`, `OTHER` | udział ludności w grupach rasowo-etnicznych |
+| `FOREIGN_BORN` | udział osób urodzonych za granicą |
+| `UNEMPL` | udział osób bezrobotnych |
+| `PUBLIC_ASSIST` | udział gospodarstw korzystających z pomocy społecznej |
+| `VACANT`, `OCCUPIED` | udział budynków niezamieszkałych i zamieszkałych |
+| `OWNER`, `RENTER` | udział mieszkań zamieszkałych przez właściciela i przez najemcę |
+| `MEDIAN_INCOME` | mediana dochodów |
+| `MEDIAN_BUILT_YEAR` | mediana roku budowy zabudowy |
+| `MEDIAN_HOME_VALUE` | mediana wartości domów |
+| `SEX_RATIO` | współczynnik feminizacji |
+| `EDU_HIGH` | udział osób z wyższym wykształceniem |
+| `HOME_VALUES_CAT`, `INCOME_CAT`, `BUILT_YEAR_CAT` | klasy: wartość domów, dochód, wiek zabudowy |
+
+Udziały wyrażone są jako wartości z przedziału od 0 do 1, a nie w procentach.
+
+### Krok 1: wczytanie granic obszarów spisowych {.unnumbered}
+
+Geopaczka może zawierać wiele warstw, dlatego przed wczytaniem sprawdzamy jej zawartość.
+
+```{r}
+#| label: p1-krok1
+st_layers("data/cook_granice.gpkg")
+```
+
+Warstwa `obszary_spisowe` została wczytana do obiektu `granice` w sekcji o strukturze obiektów:
+1332 obszary, jedna kolumna atrybutów (`GEOID`), układ współrzędnych geograficznych NAD83.
+
+### Krok 2: wczytanie danych społeczno-ekonomicznych {.unnumbered}
+
+Kolumnę `GEOID` wczytujemy jako **tekst**. Identyfikator obszaru spisowego ma 11 cyfr
+(np. `17031822400`), co przekracza zakres typu całkowitego — wczytany domyślnie, stałby się
+liczbą zmiennoprzecinkową i przestałby się zgadzać z identyfikatorem w warstwie przestrzennej,
+gdzie zapisany jest jako tekst.
+
+Argument `na.strings` określa, które zapisy w pliku oznaczają brak danych. W kolumnach
+tekstowych `read.csv()` domyślnie uznaje za brak danych wyłącznie napis `NA`, więc puste pole
+zostałoby wczytane jako pusty tekst — czyli jako dodatkowa, nienazwana kategoria zmiennej
+jakościowej.
+
+```{r}
+#| label: p1-krok2
+dane = read.csv("data/cook_dane_spoleczne.csv",
+                colClasses = c(GEOID = "character"),
+                na.strings = c("NA", ""))
+str(dane[, 1:6])
+```
+
+::: {.callout-warning}
+## Identyfikator jako tekst, nie liczba
+Identyfikatory jednostek przestrzennych wczytuj **zawsze** jako tekst (argument `colClasses`).
+Są identyfikatorem, a nie wartością liczbową — nie podlegają obliczeniom. Przyczyny bywają
+różne: zbyt duża liczba cyfr (jak tutaj) albo zero wiodące (jak w kodach TERYT), skutek zawsze
+ten sam — nieudane złączenie. Szerzej: @sec-typowe-bledy.
+:::
+
+### Krok 3: dołączenie danych atrybutowych do geometrii {.unnumbered}
+
+Obie tabele mają kolumnę `GEOID`, więc złączenie wykonujemy funkcją `left_join()`. Kolejność
+argumentów ma znaczenie: **obiekt przestrzenny musi być pierwszy**, aby wynik również był
+obiektem przestrzennym.
+
+```{r}
+#| label: p1-krok3a
+obszary = granice |>
+  left_join(dane, by = "GEOID")
+obszary
+```
+
+Sprawdzenie poprawności złączenia jest obowiązkowe. Nieudane złączenie nie zawsze powoduje
+błąd — częściej skutkuje brakami danych w części wierszy.
+
+```{r}
+#| label: p1-krok3b
+nrow(obszary)
+sum(is.na(obszary$POP))
+```
+
+1332 obiekty i zero braków w kolumnie `POP`, czyli każdy obszar otrzymał przypisane dane.
+
+::: {.callout-important}
+## Dlaczego `left_join()`, a nie `merge()`
+Jeśli typy kluczy nie są zgodne (tekst wobec liczby), funkcja `left_join()` **przerywa
+działanie** i wypisuje komunikat `Can't join x$GEOID with y$GEOID due to incompatible types`.
+Funkcja `merge()` z base R w tej samej sytuacji dopasuje wartości, które da się dopasować,
+i **usunie pozostałe wiersze bez żadnego ostrzeżenia**. Z tego powodu w skrypcie stosujemy
+`left_join()`.
+:::
+
+### Krok 4: wczytanie przestępstw i ujednolicenie układów współrzędnych {.unnumbered}
+
+```{r}
+#| label: p1-krok4a
+crimes = read_sf("data/crimes_vehicle_theft.gpkg")
+nrow(crimes)
+```
+
+Każda operacja łącząca dwie warstwy — selekcja przestrzenna, zliczanie, wizualizacja — wymaga,
+aby obie były w tym samym układzie współrzędnych. Sprawdzamy to przed, nie po.
+
+```{r}
+#| label: p1-krok4b
+st_crs(obszary)$input
+st_crs(crimes)$input
+st_crs(obszary) == st_crs(crimes)
+```
+
+Układy się różnią, więc przekształcamy warstwę punktową do układu warstwy poligonowej. Funkcja
+`st_transform()` przyjmuje kod układu albo — co jest wygodniejsze i mniej podatne na pomyłkę —
+układ odczytany z drugiej warstwy.
+
+```{r}
+#| label: p1-krok4c
+crimes = st_transform(crimes, st_crs(obszary))
+st_crs(obszary) == st_crs(crimes)
+```
+
+### Krok 5: selekcja obszarów na podstawie lokalizacji {.unnumbered}
+
+Dane o przestępstwach obejmują tylko centralną część hrabstwa, a granice — całe hrabstwo.
+Do analizy wybieramy obszary spisowe, w których odnotowano przynajmniej jedno przestępstwo.
+Selekcję na podstawie lokalizacji wykonuje się przez indeksowanie obiektu przestrzennego drugim
+obiektem przestrzennym.
+
+```{r}
+#| label: p1-krok5
+obszary_sel = obszary[crimes, ]
+nrow(obszary_sel)
+```
+
+Z 1332 obszarów pozostało `{r} nrow(obszary_sel)`. Wypadł przy tym również obszar z pustą
+geometrią, o którym była mowa w sekcji o strukturze obiektów.
+
+### Krok 6: zliczenie przestępstw w obszarach {.unnumbered}
+
+Funkcja `st_intersects()` zwraca dla każdego obszaru listę numerów przecinających go punktów.
+Funkcja `lengths()` zamienia tę listę na liczbę punktów w każdym obszarze.
+
+```{r}
+#| label: p1-krok6a
+obszary_sel = obszary_sel |>
+  mutate(NB_CRIMES = lengths(st_intersects(obszary_sel, crimes)))
+
+summary(obszary_sel$NB_CRIMES)
+```
+
+Suma zliczeń powinna być równa liczbie przestępstw — jeśli jest mniejsza, część punktów leży
+poza wybranymi obszarami.
+
+```{r}
+#| label: p1-krok6b
+sum(obszary_sel$NB_CRIMES)
+nrow(crimes)
+```
+
+### Krok 7: przeliczenie na liczbę mieszkańców {.unnumbered}
+
+Sama liczba przestępstw nie pozwala porównywać obszarów, bo zależy od liczby ludności.
+Przeliczamy ją na 1000 mieszkańców.
+
+```{r}
+#| label: p1-krok7a
+obszary_sel = obszary_sel |>
+  mutate(CRIME_RATE = NB_CRIMES / POP * 1000)
+
+summary(obszary_sel$CRIME_RATE)
+```
+
+Średnia wynosi `Inf`, co oznacza, że w zbiorze są wartości nieskończone. Przeliczenie na
+mieszkańca wymaga sprawdzenia, czy mianownik nie jest nigdzie zerem.
+
+```{r}
+#| label: p1-krok7b
+sum(obszary_sel$POP == 0)
+```
+
+::: {.callout-warning}
+## Dzielenie przez zero we współczynniku na mieszkańca
+Trzy obszary spisowe mają zero mieszkańców, a jednocześnie odnotowane przestępstwa — są to
+tereny niemieszkalne: lotniska, parki, obszary przemysłowe. Współczynnik na 1000 mieszkańców
+jest w nich **nieokreślony**: nie ma ludności, do której można by odnieść liczbę zdarzeń.
+W wyniku pojawia się `Inf`, co psuje średnią i odchylenie standardowe całej zmiennej.
+
+Takie obszary usuwamy z analizy opartej na współczynniku.
+:::
+
+```{r}
+#| label: p1-krok7c
+cook = obszary_sel |>
+  filter(POP > 0)
+
+nrow(cook)
+summary(cook$CRIME_RATE)
+```
+
+### Krok 8: zapis przygotowanych danych {.unnumbered}
+
+```{r}
+#| label: p1-krok8
+#| eval: false
+write_sf(cook, "data/cook_przygotowane.gpkg", layer = "cook", delete_dsn = TRUE)
+```
+
+Plik `data/cook_przygotowane.gpkg` jest dostarczony razem z danymi do skryptu, więc analizę
+w @sec-eksploracja można rozpocząć bez powtarzania powyższych kroków.
+
+### Krok 9: mapa {.unnumbered}
+
+Pakiet `tmap` buduje mapę z kolejnych elementów łączonych znakiem `+`, podobnie jak `ggplot2`
+buduje wykres. Minimalna mapa składa się z dwóch elementów: funkcja `tm_shape()` wskazuje
+warstwę, a funkcja zależna od typu danych (`tm_polygons()`, `tm_dots()`, `tm_raster()`)
+określa sposób jej przedstawienia.
+
+```{r}
+#| label: p1-krok9a
+#| message: false
+tm_shape(cook) +
+  tm_borders(col = "grey") +
+  tm_shape(crimes) +
+  tm_dots(fill = "red", size = 0.1)
+```
+
+Aby przedstawić na mapie wybraną zmienną, podajemy jej nazwę argumentem `fill`. Sposób
+przedstawienia wartości określa funkcja `tm_scale_*()`, a opis legendy — funkcja `tm_legend()`.
+
+```{r}
+#| label: p1-krok9b
+#| message: false
+tm_shape(cook) +
+  tm_polygons(fill = "CRIME_RATE",
+              fill.scale = tm_scale_intervals(style = "jenks", n = 4,
+                                              values = "brewer.yl_or_rd"),
+              fill.legend = tm_legend(title = "Kradzieże / 1000 mieszk.")) +
+  tm_scalebar()
+```
+
+### Interpretacja wyniku {.unnumbered}
+
+**Co powstało.** Zbiór `cook` zawiera `{r} nrow(cook)` obszarów spisowych — z 1332 obszarów
+w pliku granic pozostało `{r} nrow(obszary_sel)` po selekcji przestrzennej i
+`{r} nrow(cook)` po usunięciu obszarów o zerowej liczbie mieszkańców. Każdy obszar ma
+przypisane dane społeczno-ekonomiczne, liczbę kradzieży oraz współczynnik na 1000 mieszkańców.
+Suma zliczeń wynosi `{r} sum(obszary_sel$NB_CRIMES)`, czyli dokładnie tyle, ile przestępstw
+było w pliku źródłowym — żaden punkt nie wypadł z analizy przy selekcji obszarów.
+
+**Dane.** Współczynnik kradzieży samochodów waha się od
+`{r} round(min(cook$CRIME_RATE), 2)` do `{r} round(max(cook$CRIME_RATE), 2)` na 1000
+mieszkańców, przy medianie `{r} round(median(cook$CRIME_RATE), 2)`. Średnia
+(`{r} round(mean(cook$CRIME_RATE), 2)`) jest wyraźnie wyższa od mediany, co wskazuje na
+rozkład z wydłużonym prawym ramieniem: w większości obszarów współczynnik jest niski,
+a w pojedynczych bardzo wysoki. Mapa pokazuje, że obszary o wysokich wartościach nie są
+rozrzucone przypadkowo, lecz skupiają się w części południowej i środkowej. Szczegółową
+analizą tych zależności zajmiemy się w @sec-eksploracja — tutaj kończymy na stwierdzeniu, że
+dane są przygotowane poprawnie i że widać w nich strukturę przestrzenną wartą zbadania.
+
+**Poprawność.** Trzy kontrole wykonane po drodze są nie mniej ważne niż sam wynik:
+
+1.  **Zero braków po złączeniu** (`sum(is.na(obszary$POP))`) — klucz `GEOID` był przygotowany
+    prawidłowo. Gdybyśmy pominęli `colClasses`, `left_join()` przerwałby działanie.
+2.  **Zgodność układów współrzędnych** sprawdzona **przed** selekcją przestrzenną. Bez
+    przekształcenia warstwy punktowej selekcja nie wybrałaby żadnego obszaru albo zwróciłaby
+    wynik pozbawiony sensu.
+3.  **Suma zliczeń równa liczbie przestępstw** — potwierdza, że selekcja obszarów i zliczanie
+    punktów objęły cały zbiór.
+
+Żadnej z tych trzech kontroli nie widać na mapie. Mapa narysuje się także na danych
+przygotowanych błędnie — po prostu będzie przedstawiać coś innego, niż sądzimy.
+
+## Przykład 2: Pomiary temperatury powietrza i pokrycie terenu
+
+Drugi typowy układ danych: wyniki pomiarów zapisane są w pliku tekstowym jako lista
+współrzędnych i wartości, a kontekst przestrzenny — w pliku rastrowym. Analiza wymaga zamiany
+tabeli na warstwę punktową i dopasowania do niej rastra.
+
+W tym przykładzie kod i wyniki są podane, natomiast **interpretacji nie ma w tekście**.
+Przeczytaj wyniki samodzielnie, odpowiedz na pytania zamieszczone na końcu przykładu,
+a następnie rozwiń bloki z odpowiedziami i sprawdź poprawność swojej interpretacji.
+
+### Dane {.unnumbered}
+
+-   `data/punkty.csv` — lokalizacje pomiarów temperatury powietrza (kolumny `x` i `y`, układ
+    PUWG 1992, `EPSG:2180`) wraz ze zmiennymi dodatkowymi: wysokością n.p.m. (`srtm`), klasą pokrycia terenu
+    (`clc`) oraz wskaźnikami wegetacji (`ndvi`, `savi`),
+-   `data/clc.tif` — raster z klasami pokrycia terenu.
+
+### Krok 1: wczytanie tabeli {.unnumbered}
+
+```{r}
+#| label: p2-krok1
+punkty = read.csv("data/punkty.csv")
+head(punkty)
+nrow(punkty)
+summary(punkty$temp)
+```
+
+### Krok 2: wybór punktów i zamiana na obiekt przestrzenny {.unnumbered}
+
+Wybieramy lokalizacje, w których zmierzono temperaturę powyżej 20 °C. Do filtrowania służy
+funkcja `filter()` z pakietu `dplyr`.
+
+```{r}
+#| label: p2-krok2a
+punkty20 = punkty |>
+  filter(temp > 20)
+nrow(punkty20)
+```
+
+::: {.callout-warning}
+## Brakujące wartości przy filtrowaniu
+Kolumna `temp` zawiera jedną wartość `NA`. Indeksowanie z base R —
+`punkty[punkty$temp > 20, ]` — zwróciłoby **38** wierszy, w tym jeden wypełniony wartościami
+`NA`, ponieważ wyrażenie `NA > 20` daje w wyniku `NA`, a nie `FALSE`. Wiersz taki ma `NA`
+również we współrzędnych, wobec czego funkcja `st_as_sf()` przerwałaby działanie komunikatem
+`missing values in coordinates not allowed`. Funkcja `filter()` pomija brakujące wartości
+i zwraca poprawne 37 wierszy. Szerzej: @sec-typowe-bledy.
+:::
+
+Tabelę zamieniamy na obiekt przestrzenny funkcją `st_as_sf()`. Wymaga ona wskazania, **które
+kolumny zawierają współrzędne** (argument `coords`), a także **w jakim układzie współrzędnych
+wartości te są wyrażone** (argument `crs`). Sama para liczb nie określa jeszcze położenia punktu
+na powierzchni Ziemi.
+
+```{r}
+#| label: p2-krok2b
+punkty20_sf = st_as_sf(punkty20, coords = c("x", "y"), crs = "EPSG:2180")
+punkty20_sf
+```
+
+### Krok 3: wyznaczenie obwiedni warstwy punktowej {.unnumbered}
+
+```{r}
+#| label: p2-krok3
+punkty20_bb = st_bbox(punkty20_sf)
+punkty20_bb
+```
+
+### Krok 4: wczytanie i przycięcie rastra {.unnumbered}
+
+```{r}
+#| label: p2-krok4a
+clc = rast("data/clc.tif")
+clc
+```
+
+Wczytany obiekt jest rastrem o wymiarach 96 wierszy na 127 kolumn i jednej warstwie
+(`dimensions: 96, 127, 1`), o rozdzielczości 90 × 90 m (`resolution`), zapisanym w układzie
+PUWG 1992 (`coord. ref.`; R wypisuje jego nazwę jako `ETRF2000-PL / CS92`). Warstwa nosi nazwę `clc`, a jej wartości mieszczą się w zakresie
+od `{r} min(values(clc), na.rm = TRUE)` do `{r} max(values(clc), na.rm = TRUE)`. Nie są to
+jednak wartości liczbowe w zwykłym sensie, lecz **kody klas pokrycia terenu** — zmienna
+jakościowa zapisana za pomocą liczb. Ma to znaczenie przy wykonywaniu mapy (krok 5).
+
+Funkcja `crop()` przycina raster do zasięgu podanej warstwy; przyjmuje obwiednię, obiekt
+wektorowy lub inny raster.
+
+```{r}
+#| label: p2-krok4b
+clc20 = crop(clc, punkty20_bb)
+clc20
+```
+
+```{r}
+#| label: p2-krok4c
+ncell(clc)
+ncell(clc20)
+```
+
+### Krok 5: mapa łącząca raster i punkty {.unnumbered}
+
+Mapa złożona z kilku warstw powstaje przez połączenie kolejnych par `tm_shape()` oraz funkcji
+rysującej. Warstwy są przedstawiane w kolejności podania, dlatego raster stanowiący tło
+umieszczamy jako pierwszy.
+
+Klasy pokrycia terenu są zmienną jakościową, dlatego raster zamieniamy na typ czynnikowy
+i stosujemy skalę `tm_scale_categorical()`.
+
+```{r}
+#| label: p2-krok5
+#| message: false
+clc20 = as.factor(clc20)
+tm_shape(clc20) +
+  tm_raster(col.scale = tm_scale_categorical(values = "brewer.set2"),
+            col.legend = tm_legend(title = "Klasa pokrycia terenu")) +
+  tm_shape(punkty20_sf) +
+  tm_symbols(fill = "temp",
+             fill.scale = tm_scale_continuous(values = "viridis"),
+             fill.legend = tm_legend(title = "Temperatura [°C]"),
+             col = "white",
+             size = 0.7) +
+  tm_scalebar()
+```
+
+### Krok 6: zapis wyników {.unnumbered}
+
+```{r}
+#| label: p2-krok6
+#| eval: false
+dir.create("out", showWarnings = FALSE)
+write_sf(punkty20_sf, "out/punkty20.gpkg")
+writeRaster(clc20, "out/clc20.tif", overwrite = TRUE)
+```
+
+### Sprawdź swoją interpretację {.unnumbered}
+
+> **Pytanie 1.** Porównaj wynik `head(punkty)` z wypisanym obiektem `punkty20_sf`. Co stało się
+> z kolumnami `x` oraz `y`?
+
+::: {.callout-tip collapse="true"}
+## Sprawdź odpowiedź
+Kolumny `x` i `y` nie występują już w tabeli atrybutów, a na ich miejscu pojawiła się kolumna
+`geometry`. Funkcja `st_as_sf()` nie kopiuje współrzędnych, lecz **przenosi** je do kolumny
+geometrii, ponieważ tam obiekt przestrzenny przechowuje informację o położeniu.
+
+Ma to praktyczną konsekwencję: od tego momentu nie można odwołać się do współrzędnych przez
+`punkty20_sf$x`. Jeżeli są one potrzebne jako wartości liczbowe, wydobywa się je funkcją
+`st_coordinates()`.
+:::
+
+> **Pytanie 2.** Obwiednia `punkty20_bb` przyjmuje wartości rzędu 746 000 i 712 000, a obwiednia
+> warstwy `granice` z Przykładu 1 — wartości między −88 i 42. Skąd ta różnica i jakie ma
+> znaczenie przy obliczaniu odległości?
+
+::: {.callout-tip collapse="true"}
+## Sprawdź odpowiedź
+Punkty zapisane są w układzie PUWG 1992 (`EPSG:2180`), który jest układem **odwzorowanym**:
+wyraża współrzędne w metrach od początku układu. Warstwa `granice` jest w układzie NAD83,
+będącym układem **współrzędnych geograficznych**: wyraża współrzędne w stopniach długości
+(−88) i szerokości (42) geograficznej. Nagłówki obu obiektów podają to wprost —
+`Projected CRS` wobec `Geodetic CRS`.
+
+Wynika z tego, że odległości i pola powierzchni wyznaczane na danych w PUWG 1992 (`EPSG:2180`) otrzymujemy
+bezpośrednio w metrach i metrach kwadratowych. Dla danych w układzie geograficznym ta sama
+operacja wymaga przekształcenia układu funkcją `st_transform()` albo obliczeń na elipsoidzie.
+Z tego powodu do analiz odległościowych stosuje się układy odwzorowane.
+:::
+
+> **Pytanie 3.** Porównaj nagłówki obiektów `clc` i `clc20` oraz wyniki funkcji `ncell()` dla
+> obu z nich. Co dokładnie zmieniło przycięcie, a co pozostało bez zmian?
+
+::: {.callout-tip collapse="true"}
+## Sprawdź odpowiedź
+Zmieniły się **wymiary** rastra (z 96 × 127 na 49 × 108 komórek), jego **zasięg** oraz liczba
+komórek — z 12 192 na 5 292, czyli do około 43% liczby pierwotnej.
+
+Bez zmian pozostały **rozdzielczość** (nadal 90 × 90 m) oraz **układ współrzędnych**. W tym
+zawiera się istota przycinania: funkcja `crop()` wycina fragment istniejącej siatki, nie
+przeliczając jej. Komórki pozostają te same, zmniejsza się jedynie ich liczba. Operacją
+zmieniającą rozdzielczość jest `aggregate()` (@sec-operacje).
+:::
+
+> **Pytanie 4.** Dlaczego przed wykonaniem mapy obiekt `clc20` został zamieniony na typ
+> czynnikowy funkcją `as.factor()`? Jaki byłby skutek pominięcia tego kroku?
+
+::: {.callout-tip collapse="true"}
+## Sprawdź odpowiedź
+Raster `clc.tif` przechowuje klasy pokrycia terenu zapisane jako liczby (1, 2, 4). Bez zamiany
+na typ czynnikowy pakiet `tmap` potraktowałby je jako zmienną **ciągłą** i zastosował ciągłą
+skalę barw z wartościami pośrednimi, sugerując istnienie klasy 3,5 oraz to, że klasa 4 jest
+dwukrotnie większa od klasy 2. Żadne z tych stwierdzeń nie ma sensu w odniesieniu do pokrycia
+terenu.
+
+Jest to przykład ogólniejszej zasady: sposób przedstawienia zmiennej musi odpowiadać jej
+**skali pomiarowej**, a nie typowi danych, którym została zapisana w pliku.
+:::
+
+## Pytania kontrolne
+
+> **1.** Czym obiekt klasy `sf` różni się od zwykłej ramki danych?
+
+::: {.callout-tip collapse="true"}
+## Sprawdź odpowiedź
+Obiekt klasy `sf` to ramka danych z dodatkową **kolumną geometrii**, przechowującą współrzędne
+obiektów, oraz z zestawem atrybutów przestrzennych — przede wszystkim informacją o układzie
+współrzędnych. Kolumna geometrii zachowuje powiązanie z wierszami przy ich selekcji
+i przetwarzaniu, dlatego na obiekcie `sf` można stosować funkcje przeznaczone do pracy
+z tabelami.
+:::
+
+> **2.** Jakie informacje znajdują się w nagłówku obiektu klasy `sf` wypisanego w konsoli?
+
+::: {.callout-tip collapse="true"}
+## Sprawdź odpowiedź
+Liczba obiektów i liczba kolumn atrybutów, ewentualne ostrzeżenie o pustych geometriach, typ
+geometrii, liczba wymiarów współrzędnych, obwiednia (zasięg przestrzenny) oraz układ
+współrzędnych wraz z informacją, czy jest to układ odwzorowany (`Projected CRS`), czy układ
+współrzędnych geograficznych (`Geodetic CRS`).
+:::
+
+> **3.** Jakie informacje znajdują się w nagłówku obiektu klasy `SpatRaster`?
+
+::: {.callout-tip collapse="true"}
+## Sprawdź odpowiedź
+Wymiary (liczba wierszy, kolumn i warstw), rozdzielczość, zasięg, układ współrzędnych, nazwa
+pliku źródłowego, nazwy warstw oraz zakres wartości (`min value`, `max value`).
+
+Zasięg podzielony przez rozdzielczość daje wymiary — te trzy pola są ze sobą powiązane.
+:::
+
+> **4.** Dlaczego identyfikatory jednostek przestrzennych wczytujemy z pliku `.csv` jako tekst?
+
+::: {.callout-tip collapse="true"}
+## Sprawdź odpowiedź
+Ponieważ wczytane jako liczba przestają zgadzać się z identyfikatorem w warstwie przestrzennej,
+gdzie zapisane są jako tekst. Przyczyną bywa zbyt duża liczba cyfr (`GEOID` ma 11 cyfr
+i przekracza zakres typu całkowitego) albo zero wiodące (kody TERYT, np. `"0201"`).
+
+Skutek jest zawsze ten sam: nieudane złączenie. Przy funkcji `merge()` z base R — ciche, bez
+żadnego komunikatu.
+:::
+
+> **5.** W jaki sposób sprawdzić, czy złączenie danych atrybutowych z warstwą przestrzenną się
+> udało?
+
+::: {.callout-tip collapse="true"}
+## Sprawdź odpowiedź
+Przez sprawdzenie liczby obiektów w wyniku (`nrow()`) oraz liczby brakujących wartości
+w dołączonej kolumnie (`sum(is.na(...))`). Liczba obiektów powinna pozostać niezmieniona,
+a liczba braków wynosić zero.
+:::
+
+> **6.** Dlaczego przed selekcją przestrzenną dwóch warstw trzeba sprawdzić ich układy
+> współrzędnych?
+
+::: {.callout-tip collapse="true"}
+## Sprawdź odpowiedź
+Ponieważ operacje łączące dwie warstwy porównują współrzędne, a te mają znaczenie wyłącznie
+w obrębie jednego układu. Przy różnych układach selekcja przestrzenna nie wybierze żadnego
+obiektu albo zwróci wynik pozbawiony sensu — w zależności od tego, jak daleko od siebie wypadają
+obie warstwy po nałożeniu.
+
+Sprawdzenie to jedna linia: `st_crs(warstwa_1) == st_crs(warstwa_2)`. Ujednolicenie:
+`st_transform(warstwa_2, st_crs(warstwa_1))`.
+:::
+
+> **7.** Dlaczego przy przeliczaniu liczby zdarzeń na liczbę mieszkańców trzeba sprawdzić
+> mianownik?
+
+::: {.callout-tip collapse="true"}
+## Sprawdź odpowiedź
+Bo może być zerem. Obszary niemieszkalne — lotniska, parki, tereny przemysłowe — mają zero
+mieszkańców, a mogą mieć odnotowane zdarzenia. Współczynnik przyjmuje wtedy wartość `Inf`,
+która psuje średnią i odchylenie standardowe całej zmiennej, a sam jest merytorycznie
+nieokreślony: nie ma ludności, do której można odnieść liczbę zdarzeń.
+
+Sprawdzenie to jedna linia: `sum(zbior$POP == 0)`.
+:::
+
+> **8.** Z jakich dwóch elementów składa się najprostsza mapa w pakiecie `tmap`?
+
+::: {.callout-tip collapse="true"}
+## Sprawdź odpowiedź
+Z funkcji `tm_shape()`, która wskazuje warstwę do przedstawienia, oraz z funkcji zależnej od
+typu danych: `tm_polygons()` lub `tm_borders()` dla danych poligonowych, `tm_dots()` lub
+`tm_symbols()` dla punktowych, `tm_raster()` dla rastrowych. Elementy łączy się znakiem `+`.
+:::
+
+> **9.** Czym różni się funkcja `crop()` od funkcji `aggregate()`?
+
+::: {.callout-tip collapse="true"}
+## Sprawdź odpowiedź
+Funkcja `crop()` wycina fragment rastra: zmienia jego zasięg i wymiary, pozostawiając
+rozdzielczość bez zmian. Funkcja `aggregate()` łączy komórki: zmienia rozdzielczość i wymiary,
+pozostawiając bez zmian zasięg.
+:::
+
+## Podsumowanie
+
+| Czynność | Funkcja | Wynik |
+|---|---|---|
+| wczytanie danych wektorowych | `read_sf()` | obiekt klasy `sf` |
+| sprawdzenie warstw w geopaczce | `st_layers()` | nazwy warstw, typ geometrii, liczba obiektów |
+| wczytanie danych rastrowych | `rast()` | obiekt klasy `SpatRaster` |
+| wczytanie tabeli z identyfikatorem | `read.csv(colClasses = c(ID = "character"))` | ramka danych z identyfikatorem jako tekstem |
+| dołączenie atrybutów do geometrii | `left_join()` | obiekt `sf` z dodatkowymi kolumnami |
+| sprawdzenie poprawności złączenia | `nrow()`, `sum(is.na(...))` | liczba obiektów oraz liczba wierszy bez dopasowania (powinna wynosić 0) |
+| sprawdzenie zgodności układów współrzędnych | `st_crs(x) == st_crs(y)` | `TRUE` albo `FALSE` |
+| ujednolicenie układów współrzędnych | `st_transform(x, st_crs(y))` | warstwa w układzie drugiej warstwy |
+| selekcja na podstawie lokalizacji | indeksowanie `x[y, ]` | obiekty przecinające się z drugą warstwą |
+| zliczenie punktów w poligonach | `lengths(st_intersects(poligony, punkty))` | wektor liczb punktów |
+| tabela ze współrzędnymi → obiekt przestrzenny | `st_as_sf(coords =, crs =)` | obiekt `sf`; kolumny współrzędnych zastąpione kolumną geometrii |
+| wyznaczenie obwiedni warstwy | `st_bbox()` | zasięg w jednostkach układu współrzędnych |
+| przycięcie rastra | `crop()` | mniejszy raster o **niezmienionej** rozdzielczości |
+| zmiana rozdzielczości rastra | `aggregate()` | raster o **niezmienionym** zasięgu |
+| wykonanie mapy | `tm_shape()` + `tm_polygons()` / `tm_symbols()` / `tm_raster()` | mapa |
+| zapis danych i mapy | `write_sf()`, `writeRaster()`, `tmap_save()` | plik |
+
+Trzy kontrole, które wykonujemy zawsze:
+
+1.  **Po złączeniu** — czy liczba obiektów się nie zmieniła i czy nie ma braków w dołączonej
+    kolumnie.
+2.  **Przed operacją na dwóch warstwach** — czy układy współrzędnych są zgodne.
+3.  **Po przeliczeniu na mieszkańca lub jednostkę powierzchni** — czy mianownik nie jest
+    nigdzie zerem.
+
+Pozostałe operacje na danych przestrzennych w R — import i eksport do innych formatów, tworzenie
+obiektów od zera, zmiana układu współrzędnych pojedynczego punktu, strefy buforowe, centroidy,
+siatki wektorowe i rastrowe, zmiana rozdzielczości rastra oraz dalsze elementy kompozycji mapy —
+zebrane są w @sec-operacje. Zestawienie wszystkich funkcji używanych w skrypcie znajduje się
+w @sec-funkcje, a opis pakietów wraz z odnośnikami do dokumentacji — w @sec-pakiety.
+
+## Pełny kod analizy
+
+Poniżej zebrany jest cały kod obu przykładów, w kolejności wykonania — do skopiowania do
+własnego skryptu zamiast przeklejania pojedynczych fragmentów. Nie ma w nim kodu
+objaśniającego: to dokładnie ta ścieżka, która prowadzi od danych wejściowych do wyniku.
+
+```{r}
+#| ref.label: ["pakiety", "struktura-sf", "p1-krok1", "p1-krok2", "p1-krok3a",
+#|   "p1-krok3b", "p1-krok4a", "p1-krok4b", "p1-krok4c", "p1-krok5",
+#|   "p1-krok6a", "p1-krok6b", "p1-krok7a", "p1-krok7b", "p1-krok7c",
+#|   "p1-krok8", "p1-krok9a", "p1-krok9b", "p2-krok1", "p2-krok2a",
+#|   "p2-krok2b", "p2-krok3", "p2-krok4a", "p2-krok4b", "p2-krok4c",
+#|   "p2-krok5", "p2-krok6"]
+#| eval: false
+#| echo: true
+```

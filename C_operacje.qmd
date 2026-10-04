@@ -1,0 +1,286 @@
+# Operacje na danych przestrzennych {#sec-operacje}
+
+Katalog operacji na danych przestrzennych w R — do wykorzystania w kolejnych rozdziałach oraz
+przy pracy nad projektami. Czynności podstawowe, potrzebne na zajęciach, omawia
+@sec-dane-przestrzenne; ten załącznik zbiera pozostałe.
+
+::: {.callout-note}
+## Zakres załącznika
+Znajdują się tu **operacje techniczne na danych przestrzennych**: import i eksport, tworzenie
+i przekształcanie obiektów, selekcja, tworzenie siatek, operacje na rastrach, elementy
+kompozycji mapy. Nie ma tu metod statystyki przestrzennej — te omawiane są w rozdziałach
+odpowiadających poszczególnym blokom zajęć.
+
+Odpowiedź na pytanie „której funkcji użyć" znajduje się w @sec-funkcje; tutaj jest pokazane,
+jak jej użyć.
+:::
+
+## Dane i pakiety
+
+Przykłady w tym załączniku korzystają z danych wczytanych poniżej. Blok ten należy uruchomić
+przed wykonaniem pozostałych fragmentów kodu. Operacje geometryczne pokazane są na granicach
+powiatów województwa wielkopolskiego, a przykłady wymagające zmiennej liczbowej — na
+przygotowanym zbiorze z hrabstwa Cook (@sec-dane-przestrzenne).
+
+```{r}
+#| message: false
+#| warning: false
+library(sf)
+library(terra)
+library(tmap)
+library(dplyr)
+
+# granice powiatów województwa wielkopolskiego - operacje geometryczne
+powiaty = read_sf("data/wlkp_powiaty.gpkg", layer = "powiaty")
+
+# przygotowany zbiór z hrabstwa Cook - przykłady wymagające zmiennej liczbowej
+cook = read_sf("data/cook_przygotowane.gpkg", layer = "cook")
+
+# punkty pomiarowe temperatury powietrza
+punkty = read.csv("data/punkty.csv")
+
+# dane rastrowe: cyfrowy model wysokościowy oraz raster wielowarstwowy
+srtm = rast("data/srtm.tif")
+siatka_all = rast("data/siatka-all.tif")
+```
+
+
+Pozostałe operacje na danych przestrzennych — do wykorzystania w kolejnych rozdziałach oraz
+w projektach. Ta część nie jest omawiana na zajęciach.
+
+## Import i eksport danych
+
+R odczytuje dane przestrzenne z wielu formatów. Do najpopularniejszych należą: dane tekstowe
+(`.csv`), dane wektorowe (`.shp`), dane rastrowe (*GeoTIFF*, `.tif`) oraz geopaczki (`.gpkg`),
+które mogą przechowywać jednocześnie warstwy wektorowe, rastrowe oraz tabele.
+
+Zapis danych wektorowych — funkcja `write_sf()` **nadpisuje** plik:
+
+```{r}
+#| message: false
+#| warning: false
+dir.create("out", showWarnings = FALSE)
+write_sf(powiaty, dsn = "out/out_powiaty_wlkp.shp")
+```
+
+Zapis kilku warstw do jednej geopaczki — funkcja `st_write()` nie nadpisuje pliku
+automatycznie, dlatego nazwę warstwy podaje się argumentem `layer`, a argument
+`delete_dsn = TRUE` usuwa plik istniejący wcześniej:
+
+```{r}
+#| message: false
+#| warning: false
+st_write(powiaty, dsn = "out/out_powiaty_wlkp.gpkg", layer = "powiaty2", delete_dsn = TRUE)
+st_write(powiaty, dsn = "out/out_powiaty_wlkp.gpkg", layer = "powiaty3")
+st_layers("out/out_powiaty_wlkp.gpkg")
+```
+
+Zapis rastra, w tym pojedynczej warstwy z obiektu wielowarstwowego:
+
+```{r}
+#| eval: false
+writeRaster(siatka_all, "out/out_siatka_all.tif", overwrite = TRUE)
+writeRaster(siatka_all["siatka-all_2"], "out/out_clc.tif", overwrite = TRUE)
+```
+
+## Dalsze informacje o strukturze obiektów
+
+Pełną strukturę obiektu `sf` wypisuje funkcja `str()`:
+
+```{r}
+punkty_sf = st_as_sf(punkty |> filter(!is.na(temp)),
+                     coords = c("x", "y"), crs = "EPSG:2180")
+str(punkty_sf)
+```
+
+Usunięcie geometrii — obiekt przestrzenny staje się zwykłą ramką danych:
+
+```{r}
+punkty_df = st_drop_geometry(punkty_sf)
+head(punkty_df)
+```
+
+Wydobycie współrzędnych jako macierzy i dołączenie ich z powrotem do tabeli:
+
+```{r}
+xy = st_coordinates(punkty_sf)
+head(xy)
+punkty_df2 = cbind(punkty_df, xy)
+head(punkty_df2)
+```
+
+Pełna definicja układu współrzędnych w formacie WKT2:
+
+```{r}
+st_crs(punkty_sf)
+```
+
+Zamiana rastra na ramkę danych:
+
+```{r}
+srtm_df = as.data.frame(srtm)
+head(srtm_df)
+```
+
+## Tworzenie obiektów wektorowych od zera
+
+Funkcja `st_point()` tworzy pojedynczy punkt na podstawie wektora współrzędnych, a funkcja
+`st_sfc()` tworzy z niego kolumnę geometrii i dodaje informację o układzie współrzędnych:
+
+```{r}
+st_point(c(16.941820, 52.464279))
+p1 = st_sfc(st_point(c(16.941820, 52.464279)), crs = 4326)
+p1
+```
+
+## Zmiana układu współrzędnych
+
+Obiekt `p1` powstał ze współrzędnych geograficznych w układzie WGS 84 (`EPSG:4326`). Funkcja
+`st_transform()` przekształca go do układu PUWG 1992 (`EPSG:2180`):
+
+```{r}
+p1a = st_transform(p1, 2180)
+p1a
+```
+
+## Strefa buforowa
+
+Funkcja `st_buffer()` wyznacza otoczkę o zadanej odległości, wyrażonej w jednostkach układu
+współrzędnych — w tym przypadku w metrach:
+
+```{r}
+bfr = st_buffer(p1a, dist = 50000)
+plot(bfr)
+```
+
+## Centroidy poligonów
+
+```{r}
+#| warning: false
+powiaty_centroidy = st_centroid(powiaty)
+head(powiaty_centroidy)
+```
+
+## Selekcja na podstawie lokalizacji
+
+Indeksowanie obiektu przestrzennego drugim obiektem przestrzennym wybiera obiekty, które się
+z nim przecinają:
+
+```{r}
+centroidy_bfr = powiaty_centroidy[bfr, ]
+nrow(centroidy_bfr)
+```
+
+Argument `op` pozwala wskazać inną relację przestrzenną niż przecinanie:
+
+```{r}
+#| eval: false
+powiaty_centroidy[bfr, , op = st_within]
+```
+
+## Selekcja na podstawie atrybutów
+
+Tabelę atrybutów obiektu `sf` przeszukuje się tak jak każdą inną ramkę danych; geometria
+pozostaje powiązana z wybranymi wierszami:
+
+```{r}
+poznan = powiaty |>
+  filter(Nazwa == "Poznań")
+plot(st_geometry(poznan))
+```
+
+## Siatka wektorowa
+
+Tworzenie siatki składa się z trzech kroków: utworzenia poligonu o zasięgu warstwy, utworzenia
+siatki funkcją `st_make_grid()` (argument `n` określa liczbę kolumn i wierszy) oraz zamiany
+wyniku na obiekt klasy `sf`:
+
+```{r}
+wlkp_bb = st_sf(geom = st_as_sfc(st_bbox(powiaty)))
+wlkp_grid = st_make_grid(wlkp_bb, n = 10)
+wlkp_grid_sf = st_sf(geometry = wlkp_grid)
+plot(wlkp_grid)
+```
+
+## Siatka rastrowa
+
+Funkcja `rast()` tworzy także pusty raster o zadanym zasięgu, rozdzielczości i układzie
+współrzędnych. Do utworzonej siatki należy przypisać wartości:
+
+```{r}
+moja_siatka = rast(ext = poznan, res = 90, crs = crs(poznan))
+moja_siatka = setValues(moja_siatka, 1:ncell(moja_siatka))
+moja_siatka
+```
+
+Zasięg można również podać wprost, za pomocą współrzędnych:
+
+```{r}
+#| eval: false
+moja_siatka2 = rast(xmin = 345943.2, ymin = 493660,
+                    xmax = 368893.2, ymax = 517870,
+                    res = 90, crs = crs(poznan))
+```
+
+## Przycięcie rastra do granicy warstwy
+
+Argument `mask = TRUE` przycina raster do obwiedni warstwy, a dodatkowo nadaje wartość `NA`
+komórkom położonym poza jej granicą:
+
+```{r}
+poznan_rst = crop(moja_siatka, poznan, mask = TRUE)
+plot(poznan_rst)
+```
+
+## Zmiana rozdzielczości rastra
+
+Funkcja `aggregate()` łączy komórki, zmniejszając rozdzielczość. Argument `fact` określa
+krotność zmiany (`fact = 2` zamienia komórki 90 m na 180 m), a argument `fun` — funkcję, za
+pomocą której łączone są wartości.
+
+```{r}
+poznan_rst_agg = aggregate(poznan_rst, fact = 2, fun = "sum")
+poznan_rst_agg
+```
+
+> Zagreguj warstwę rastrową `srtm` do rozdzielczości 360 m. Jaką wartość musi przyjąć argument
+> `fact`? Warstwa `srtm` to cyfrowy model wysokościowy — jej komórki zawierają wysokość n.p.m.
+> Jakiej funkcji należy użyć do agregacji takich danych?
+
+## Pozostałe elementy mapy
+
+Dane punktowe można przedstawić funkcją `tm_dots()` (punkty o stałej wielkości) lub
+`tm_symbols()` (symbole o zmiennej wielkości i wypełnieniu):
+
+```{r}
+#| message: false
+#| warning: false
+cook_centroidy = st_centroid(cook)
+
+tm_shape(cook_centroidy) +
+  tm_dots(fill = "CRIME_RATE",
+          fill.scale = tm_scale_continuous(values = "viridis", label.na = "Brak danych"),
+          fill.legend = tm_legend(title = "Kradzieże / 1000 mieszk."),
+          size = 0.5)
+```
+
+Łączenie warstw wektorowych:
+
+```{r}
+#| message: false
+tm_shape(cook) +
+  tm_polygons(fill = "CRIME_RATE",
+              fill.scale = tm_scale_intervals(values = "brewer.yl_or_rd"),
+              fill.legend = tm_legend(title = "Kradzieże / 1000 mieszk.")) +
+  tm_shape(cook_centroidy) +
+  tm_dots(size = 0.1)
+```
+
+Zapis mapy do pliku graficznego:
+
+```{r}
+#| eval: false
+tm = tm_shape(cook) +
+  tm_polygons(fill = "CRIME_RATE")
+tmap_save(tm, "out/mapa.png", width = 600, height = 600)
+```

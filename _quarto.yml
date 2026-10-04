@@ -10,35 +10,40 @@ book:
     - index.qmd
     - part: 01_wstep.qmd
       chapters:
-        - 02_wprowadzenie.qmd
-        - 03_zastosowanie.qmd
-        - 04_daneprzestrzenne.qmd
-        - 05_eksploracja.qmd
-    - part: 06_punkty.qmd
+        - 02_dane_przestrzenne.qmd
+    - part: 03_eksploracja_teoria.qmd
       chapters:
-        - 07_punkty_centrograficzne.qmd
+        - 04_eksploracja.qmd
+    - part: 05_punkty_teoria.qmd
+      chapters:
+        - 06_punkty_centrograficzne.qmd
+        - 07_punkty_intensywnosc.qmd
         - 08_punkty_odleglosc.qmd
-        - 09_punkty_intensywnosc.qmd
-    - part: 10_poligony.qmd
-      chapters: 
-        - 11_poligony_sasiedztwo.qmd
-        - 12_poligony_autokorelacja.qmd
-    - part: 13_pola.qmd
-      chapters: 
-        - 14_pola_interpolacja.qmd
-        - 15_pola_modelowanie.qmd
-        - 16_pola_estymacja.qmd
-        - 17_pola_ocena.qmd
-    - part: "ZADANIA"
-      chapters: 
-        - 18_zadania_samodzielne.qmd
-        - 19_projekt.qmd
-        - 20_projekt_geostatystyka.qmd
-  cover-image: cover.jpg
+    - part: 09_obszarowe_teoria.qmd
+      chapters:
+        - 10_obszarowe_sasiedztwo.qmd
+        - 11_obszarowe_autokorelacja.qmd
+    - part: 12_pola_teoria.qmd
+      chapters:
+        - 13_pola_interpolacja.qmd
+        - 14_pola_semiwariogram.qmd
+        - 15_pola_estymacja.qmd
+        - 16_pola_ocena.qmd
+    - part: "ZADANIA I PROJEKTY"
+      chapters:
+        - 17_zadania_samodzielne.qmd
+        - 18_projekt1.qmd
+        - 19_projekt2_geostatystyka.qmd
+  appendices:
+    - A_pakiety.qmd
+    - B_funkcje.qmd
+    - C_operacje.qmd
+    - D_slownik.qmd
+    - references.qmd
 
 execute:
   freeze: auto
-    
+
 bibliography: references.bib
 
 format:
@@ -47,5 +52,6 @@ format:
       - cosmo
       - brand
 
-editor: visual
+lang: pl
 
+editor: visual

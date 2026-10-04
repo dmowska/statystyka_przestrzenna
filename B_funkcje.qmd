@@ -1,0 +1,168 @@
+# Funkcje {#sec-funkcje}
+
+Zestawienie funkcji używanych w skrypcie, pogrupowane według czynności. Każdy rozdział
+praktyczny ma własną, krótszą sekcję „… w R" — ten załącznik zbiera wszystko w jednym miejscu,
+aby przy pracy nad projektem nie było potrzeby przeszukiwania rozdziałów.
+
+Kolumna **Gdzie** wskazuje miejsce, w którym użycie funkcji jest pokazane. Przykłady samych
+operacji technicznych znajdują się w @sec-operacje.
+
+## Wczytywanie i zapis danych
+
+| Czynność | Pakiet | Funkcja | Gdzie |
+|---|---|---|---|
+| wczytanie tabeli z pliku tekstowego | base | `read.csv()` | @sec-dane-przestrzenne |
+| wczytanie danych wektorowych (.gpkg, .shp) | `sf` | `read_sf()` | @sec-dane-przestrzenne |
+| sprawdzenie, jakie warstwy zawiera geopaczka | `sf` | `st_layers()` | @sec-dane-przestrzenne |
+| zapis danych wektorowych (nadpisuje plik) | `sf` | `write_sf()` | @sec-dane-przestrzenne |
+| zapis kolejnej warstwy do istniejącej geopaczki | `sf` | `st_write(layer =, delete_dsn =)` | @sec-operacje |
+| wczytanie danych rastrowych | `terra` | `rast()` | @sec-dane-przestrzenne |
+| zapis danych rastrowych | `terra` | `writeRaster()` | @sec-dane-przestrzenne |
+| zapis mapy do pliku graficznego | `tmap` | `tmap_save()` | @sec-operacje |
+
+## Tworzenie obiektów i układy współrzędnych
+
+| Czynność | Pakiet | Funkcja | Gdzie |
+|---|---|---|---|
+| zamiana tabeli ze współrzędnymi na obiekt przestrzenny | `sf` | `st_as_sf(coords =, crs =)` | @sec-dane-przestrzenne |
+| liczba warstw i nazwy warstw rastra | `terra` | `nlyr()`, `names()` | @sec-dane-przestrzenne |
+| utworzenie pojedynczego punktu | `sf` | `st_point()` | @sec-operacje |
+| utworzenie kolumny geometrii z układem współrzędnych | `sf` | `st_sfc()` | @sec-operacje |
+| utworzenie obiektu `sf` z kolumny geometrii | `sf` | `st_sf()` | @sec-operacje |
+| sprawdzenie układu współrzędnych | `sf` / `terra` | `st_crs()` / `crs()` | @sec-operacje |
+| sprawdzenie zgodności układów dwóch warstw | `sf` | `st_crs(x) == st_crs(y)` | @sec-dane-przestrzenne |
+| zmiana układu współrzędnych | `sf` | `st_transform()` | @sec-dane-przestrzenne |
+| usunięcie geometrii (obiekt przestrzenny → tabela) | `sf` | `st_drop_geometry()` | @sec-operacje |
+| wydobycie współrzędnych | `sf` | `st_coordinates()` | @sec-operacje |
+| wydobycie samej geometrii | `sf` | `st_geometry()` | @sec-operacje |
+| podejrzenie pełnej struktury obiektu | base | `str()` | @sec-operacje |
+| zasięg przestrzenny danych (obwiednia) | `sf` | `st_bbox()` | @sec-dane-przestrzenne |
+| zamiana obwiedni na poligon | `sf` | `st_as_sfc()` | @sec-operacje |
+
+## Przetwarzanie danych wektorowych
+
+| Czynność | Pakiet | Funkcja | Gdzie |
+|---|---|---|---|
+| dołączenie atrybutów do geometrii | `dplyr` | `left_join()` | @sec-dane-przestrzenne |
+| selekcja na podstawie atrybutów | `dplyr` | `filter()` | @sec-dane-przestrzenne |
+| strefa buforowa | `sf` | `st_buffer()` | @sec-operacje |
+| centroidy poligonów | `sf` | `st_centroid()` | @sec-operacje |
+| selekcja na podstawie lokalizacji | `sf` | indeksowanie `x[y, ]` | @sec-dane-przestrzenne |
+| selekcja z inną relacją przestrzenną | `sf` | indeksowanie z argumentem `op = st_within` | @sec-operacje |
+| siatka wektorowa | `sf` | `st_make_grid()` | @sec-operacje |
+| zliczenie punktów w poligonach | `sf` | `lengths(st_intersects())` | @sec-dane-przestrzenne |
+| pole powierzchni | `sf` | `st_area()` | @sec-pola-semiwariogram |
+| odległość między obiektami | `sf` | `st_distance()` | @sec-pola-semiwariogram |
+
+## Przetwarzanie danych rastrowych
+
+| Czynność | Pakiet | Funkcja | Gdzie |
+|---|---|---|---|
+| przycięcie rastra | `terra` | `crop()` | @sec-dane-przestrzenne |
+| liczba komórek rastra | `terra` | `ncell()` | @sec-dane-przestrzenne |
+| zamiana rastra na zmienną jakościową | base | `as.factor()` | @sec-dane-przestrzenne |
+| utworzenie pustej siatki rastrowej | `terra` | `rast(ext =, res =, crs =)` | @sec-operacje |
+| przypisanie wartości komórkom | `terra` | `setValues()` | @sec-operacje |
+| przycięcie z maskowaniem do granicy | `terra` | `crop(mask = TRUE)`, `mask()` | @sec-operacje |
+| zmiana rozdzielczości | `terra` | `aggregate(fact =, fun =)` | @sec-operacje |
+| raster → tabela | `terra` | `as.data.frame()` | @sec-operacje |
+| zamiana obiektu `sf` na `SpatVector` | `terra` | `vect()` | @sec-pola-interpolacja |
+
+## Statystyka punktowa
+
+| Czynność | Pakiet | Funkcja | Gdzie |
+|---|---|---|---|
+| średnia centralna | `sfdep` | `center_mean()` | @sec-punkty-centrograficzne |
+| mediana centralna | `sfdep` | `center_median()` | @sec-punkty-centrograficzne |
+| odległość standardowa | `sfdep` | `std_distance()` | @sec-punkty-centrograficzne |
+| parametry elipsy odchylenia standardowego (`sx`, `sy`, `theta`) | `sfdep` | `std_dev_ellipse()` | @sec-punkty-centrograficzne |
+| parametry elipsy → geometria do narysowania | `sfdep` | `st_ellipse(sx =, sy =)` | @sec-punkty-centrograficzne |
+| okno analizy na podstawie innego obiektu | `spatstat` | `as.owin()` | @sec-punkty-intensywnosc |
+| dane punktowe → wzorzec punktowy klasy `ppp` | `spatstat` | `as.ppp(W =)` | @sec-punkty-intensywnosc |
+| przeskalowanie jednostek obiektu `ppp` | `spatstat` | `rescale()` | @sec-punkty-intensywnosc |
+| liczba punktów we wzorcu | `spatstat` | `npoints()` | @sec-punkty-intensywnosc |
+| zliczenie punktów w oczkach siatki | `spatstat` | `quadratcount(nx =, ny =)` | @sec-punkty-intensywnosc |
+| test zliczania w kwadratach (chi-kwadrat) | `spatstat` | `quadrat.test(nx =, ny =)` | @sec-punkty-intensywnosc |
+| estymacja jądrowa intensywności | `spatstat` | `density(sigma =)` | @sec-punkty-intensywnosc |
+| wynik `spatstat` (`im`) → raster | `terra` | `rast()` | @sec-punkty-intensywnosc |
+| macierz odległości między wszystkimi parami punktów | `spatstat` | `pairdist()` | @sec-punkty-odleglosc |
+| odległości do najbliższego sąsiada | `spatstat` | `nndist()` | @sec-punkty-odleglosc |
+| raster odległości od każdej komórki do najbliższego punktu | `spatstat` | `distmap()` | @sec-punkty-odleglosc |
+| wskaźnik Clarka-Evansa *R* | `spatstat` | `clarkevans(correction =)` | @sec-punkty-odleglosc |
+| test oparty na wskaźniku Clarka-Evansa | `spatstat` | `clarkevans.test(correction =, alternative =)` | @sec-punkty-odleglosc |
+| funkcja G — dystrybuanta odległości do najbliższego sąsiada | `spatstat` | `Gest(correction =)` | @sec-punkty-odleglosc |
+| funkcja K Ripleya | `spatstat` | `Kest(correction =)` | @sec-punkty-odleglosc |
+| obwiednia dla funkcji G lub K | `spatstat` | `envelope(nsim =, nrank =, global =)` | @sec-punkty-odleglosc |
+| test maksymalnej odchyłki dla całej krzywej | `spatstat` | `mad.test()` | wspomniany w @sec-punkty-odleglosc |
+| siatka regularna do zliczeń | `sf` | `st_make_grid(n =)` | @sec-punkty-intensywnosc |
+
+::: {.callout-warning}
+## Maskowanie funkcji
+`terra` zawiera własne `rescale()`, `density()` i `area()` o takich samych nazwach jak
+w `spatstat`, ale przeznaczone dla danych rastrowych. Po wywołaniu `library(terra)` zasłaniają
+one funkcje `spatstat`, a `rescale()` na obiekcie klasy `ppp` przestaje działać. Dlatego
+`terra` wywołujemy z przedrostkiem (`terra::rast()`) i nie ładujemy funkcją `library()`.
+Szczegóły: @sec-punkty-intensywnosc.
+:::
+
+## Sąsiedztwo i autokorelacja przestrzenna
+
+| Czynność | Pakiet | Funkcja | Gdzie |
+|---|---|---|---|
+| lista sąsiadów na podstawie wspólnej granicy | `spdep` | `poly2nb(queen =)` | @sec-obszarowe-sasiedztwo, @sec-obszarowe-autokorelacja |
+| lista sąsiadów na podstawie odległości | `spdep` | `dnearneigh()` | @sec-obszarowe-sasiedztwo |
+| lista *k* najbliższych sąsiadów | `spdep` | `knearneigh()`, `knn2nb()` | @sec-obszarowe-sasiedztwo |
+| liczba sąsiadów każdej jednostki | `spdep` | `card()` | @sec-obszarowe-sasiedztwo, @sec-obszarowe-autokorelacja |
+| macierz wag przestrzennych | `spdep` | `nb2listw(style =, glist =)` | @sec-obszarowe-sasiedztwo, @sec-obszarowe-autokorelacja |
+| lista sąsiadów → macierz | `spdep` | `listw2mat()`, `nb2mat()` | @sec-obszarowe-sasiedztwo |
+| sąsiedztwo jako warstwa liniowa | `spdep` | `nb2lines(as_sf = TRUE)` | @sec-obszarowe-sasiedztwo |
+| sprawdzenie symetrii sąsiedztwa | `spdep` | `is.symmetric.nb()` | @sec-obszarowe-sasiedztwo |
+| zmienna opóźniona przestrzennie | `spdep` | `lag.listw()` | @sec-obszarowe-autokorelacja |
+| odległości między sąsiadami | `spdep` | `nbdists()` | @sec-obszarowe-sasiedztwo |
+| globalna I Morana — test asymptotyczny | `spdep` | `moran.test()` | @sec-obszarowe-autokorelacja |
+| globalna I Morana — test Monte Carlo | `spdep` | `moran.mc(nsim =)` | @sec-obszarowe-autokorelacja |
+| globalna C Geary'ego | `spdep` | `geary.test()`, `geary.mc()` | @sec-obszarowe-autokorelacja |
+| globalna G Getisa & Orda (wymaga wag `"B"`) | `spdep` | `globalG.test()` | @sec-obszarowe-autokorelacja |
+| wykres rozrzutu Morana | `spdep` | `moran.plot()` | @sec-obszarowe-autokorelacja |
+| lokalna I Morana | `spdep` | `localmoran()` | @sec-obszarowe-autokorelacja |
+| lokalna C Geary'ego | `spdep` | `localC_perm(nsim =, iseed =)` | @sec-obszarowe-autokorelacja |
+| lokalna G Getisa & Orda | `spdep` | `localG_perm(nsim =, iseed =)` | @sec-obszarowe-autokorelacja |
+| klasyfikacja klastrów ze statystyki lokalnej | `spdep` | `hotspot(Prname =, cutoff =, p.adjust =)` | @sec-obszarowe-autokorelacja |
+
+## Interpolacja i geostatystyka
+
+| Czynność | Pakiet | Funkcja | Gdzie |
+|---|---|---|---|
+| siatka interpolacyjna (pusty raster) | `terra` | `rast(ext =, res =, crs =)` | @sec-pola-interpolacja |
+| diagramy Woronoja | `terra` | `voronoi()` | @sec-pola-interpolacja |
+| parametry modelu interpolacji lub krigingu | `gstat` | `gstat(formula =, locations =, model =, set =, degree =, beta =, nmax =, maxdist =)` | @sec-pola-interpolacja, @sec-pola-estymacja |
+| interpolacja w siatce | `terra` | `interpolate(siatka, model, fun = interpolate_gstat)` | @sec-pola-interpolacja |
+| estymacja w wybranych lokalizacjach | `gstat` | `predict()` | @sec-pola-estymacja |
+| przycięcie wyniku do granicy | `terra` | `mask()`, `crop(mask = TRUE)` | @sec-pola-interpolacja |
+| wykres rozrzutu z przesunięciem | `gstat` | `hscat(breaks =)` | @sec-pola-semiwariogram |
+| chmura semiwariogramu | `gstat` | `variogram(cloud = TRUE)` | @sec-pola-semiwariogram |
+| semiwariogram empiryczny | `gstat` | `variogram(cutoff =, width =)` | @sec-pola-semiwariogram |
+| definicja modelu semiwariogramu | `gstat` | `vgm(psill =, model =, range =, nugget =)` | @sec-pola-semiwariogram |
+| dopasowanie parametrów modelu | `gstat` | `fit.variogram()` | @sec-pola-semiwariogram |
+| przegląd modeli podstawowych | `gstat` | `show.vgms(models =, as.groups =)` | @sec-pola-semiwariogram |
+| podział zbioru na treningowy i testowy | `rsample` | `initial_split(prop =, strata =)`, `training()`, `testing()` | @sec-pola-ocena |
+| kroswalidacja | `gstat` | `krige.cv()` | @sec-pola-ocena |
+| statystyki jakości estymacji | base | `mean()`, `sqrt(mean(x^2))`, `cor()^2` | @sec-pola-ocena |
+| zapis modelu semiwariogramu | base | `saveRDS()`, `readRDS()` | @sec-pola-semiwariogram |
+
+## Wizualizacja
+
+| Czynność | Pakiet | Funkcja | Gdzie |
+|---|---|---|---|
+| wskazanie warstwy do wizualizacji | `tmap` | `tm_shape()` | @sec-dane-przestrzenne |
+| dane poligonowe | `tmap` | `tm_polygons()`, `tm_borders()` | @sec-dane-przestrzenne |
+| dane punktowe | `tmap` | `tm_symbols()` | @sec-dane-przestrzenne |
+| dane punktowe o stałej wielkości | `tmap` | `tm_dots()` | @sec-operacje |
+| dane rastrowe | `tmap` | `tm_raster()` | @sec-dane-przestrzenne |
+| skala barw dla zmiennej ciągłej | `tmap` | `tm_scale_continuous()` | @sec-dane-przestrzenne |
+| skala barw dla przedziałów | `tmap` | `tm_scale_intervals()` | @sec-dane-przestrzenne |
+| skala barw dla zmiennej jakościowej | `tmap` | `tm_scale_categorical()` | @sec-dane-przestrzenne |
+| tytuł i opis legendy | `tmap` | `tm_legend()` | @sec-dane-przestrzenne |
+| podziałka liniowa | `tmap` | `tm_scalebar()` | @sec-dane-przestrzenne |
+| siatka współrzędnych | `tmap` | `tm_grid()`, `tm_graticules()` | @sec-eksploracja |
+| kilka map obok siebie | `tmap` | `tmap_arrange()` | @sec-punkty-intensywnosc |

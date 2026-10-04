@@ -1,0 +1,715 @@
+# Miary autokorelacji danych obszarowych {#sec-obszarowe-autokorelacja}
+
+::: {.callout-note}
+## Czego się nauczysz
+
+**Po tym rozdziale potrafisz wykonać w R:**
+
+-   zbudować listę sąsiadów i macierz wag przestrzennych (`poly2nb()`, `nb2listw()`),
+-   obliczyć globalne miary autokorelacji: I Morana, C Geary'ego i G Getisa & Orda,
+    w wariancie asymptotycznym i opartym na symulacji,
+-   sporządzić wykres rozrzutu Morana,
+-   obliczyć lokalną statystykę I Morana i wydzielić na jej podstawie klastry (`localmoran()`,
+    `hotspot()`),
+-   wskazać obszary wysokich i niskich wartości lokalną statystyką G Getisa & Orda
+    (`localG_perm()`),
+-   zapisać wyniki analizy do pliku.
+
+**Rozumiesz i umiesz zinterpretować:**
+
+-   co oznacza znak i wielkość statystyki I Morana oraz C Geary'ego,
+-   różnicę między testem asymptotycznym a testem opartym na symulacji Monte Carlo,
+-   dlaczego G Getisa & Orda nie wykrywa autokorelacji ujemnej,
+-   cztery ćwiartki wykresu rozrzutu Morana i odpowiadające im typy klastrów,
+-   dlaczego klastry wydziela się **wyłącznie** z wartości istotnych statystycznie,
+-   wynik lokalnej statystyki C Geary'ego (`localC_perm()`) — czytasz go, nie liczysz
+    samodzielnie,
+-   od czego zależy powtarzalność wyniku procedur opartych na permutacjach.
+
+**Teoria:** [Najważniejsze informacje](09_obszarowe_teoria.qmd#najwazniejsze-obszarowe).
+**Funkcje:** @sec-funkcje. **Słownik pojęć:** @sec-slownik.
+:::
+
+## Wprowadzenie
+
+Dane obszarowe opisują wartość zagregowaną w jednostce przestrzennej: stopę bezrobocia
+w powiecie, frekwencję wyborczą w gminie, liczbę ludności w obszarze spisowym. Pytanie, które
+zadajemy tym danym w tym rozdziale, brzmi: **czy jednostki sąsiadujące ze sobą mają wartości
+podobne, czy różne** — i czy odnotowane podobieństwo jest większe, niż wynikałoby z przypadku.
+
+Odpowiadamy na nie w dwóch skalach. **Miary globalne** sprowadzają cały zbiór do jednej liczby
+i rozstrzygają, czy wzorzec przestrzenny w ogóle istnieje. **Miary lokalne** liczone są osobno
+dla każdej jednostki i wskazują, **gdzie** leżą zgrupowania podobnych wartości oraz jednostki
+odstające od swojego otoczenia. Obie grupy są potrzebne: miara globalna bliska zeru nie wyklucza
+istnienia lokalnych klastrów, które wzajemnie się znoszą.
+
+Trzy pytania pokrewne należą gdzie indziej:
+
+-   **Dlaczego wzorzec powstał** — do modelowania przestrzennego, które wykracza poza ten
+    przedmiot. Autokorelacja jest własnością rozkładu wartości w przestrzeni; wskazanie
+    przyczyn wymaga odniesienia zmiennej do innych zmiennych.
+-   **Jak wynik zmienia się wraz z podziałem na jednostki** — do **problemu zmiennych jednostek
+    odniesienia** (ang. *modifiable areal unit problem*, MAUP), opisanego w rozdziale
+    teoretycznym części. Ta sama zmienna agregowana do gmin i do powiatów daje
+    różne wartości miar autokorelacji; w rozdziale pracujemy na jednym, ustalonym podziale.
+-   **Jak wybrać definicję sąsiedztwa** — do rozdziału teoretycznego części, który opisuje
+    pozostałe kryteria: odległość i *k* najbliższych sąsiadów. Przyjmujemy regułę *queen*,
+    bo tak zbudowane są dane.
+
+## Struktura obiektów: lista sąsiadów i macierz wag
+
+Wszystkie miary tego rozdziału wymagają wcześniejszego zapisania informacji o tym, które
+jednostki ze sobą sąsiadują. Pakiet `spdep` używa do tego dwóch klas obiektów.
+
+Obiekt klasy **`nb`** (ang. *neighbour list*) to lista o tylu elementach, ile jest jednostek.
+Element *i* zawiera **numery wierszy** jednostek sąsiadujących z jednostką *i*. Jest to wyłącznie
+informacja o sąsiedztwie: sąsiad albo jest, albo go nie ma.
+
+Obiekt klasy **`listw`** (ang. *weights list*) to lista sąsiadów uzupełniona o **wagi**
+przypisane każdej parze sąsiadów. Dopiero on wchodzi do funkcji liczących statystyki. Sposób
+nadania wag określa argument `style`:
+
+| `style` | Wagi | Kiedy używamy |
+|---|---|---|
+| `"W"` | standaryzowane wierszami — wagi w każdym wierszu sumują się do 1 | domyślny wybór dla I Morana i C Geary'ego |
+| `"B"` | binarne — 1 dla sąsiada, 0 dla pozostałych | wymagane przez `globalG.test()` |
+
+Przy standaryzacji wierszami jednostka mająca 7 sąsiadów przypisuje każdemu z nich wagę 1/7,
+a jednostka mająca 2 sąsiadów — po 1/2. Wartość sąsiada znaczy więc tym więcej, im mniej
+sąsiadów ma dana jednostka.
+
+Ważna konsekwencja praktyczna: obiekty `nb` i `listw` odwołują się do jednostek przez **numer
+wiersza**, a nie przez identyfikator. Zmiana kolejności wierszy albo usunięcie choćby jednego
+wiersza po zbudowaniu listy sąsiadów unieważnia ją. Listę sąsiadów budujemy zawsze na tym
+obiekcie, na którym liczymy statystyki.
+
+## Miary autokorelacji przestrzennej w R
+
+| Miara | Funkcja | Wagi | Wynik |
+|---|---|---|---|
+| I Morana — test asymptotyczny | `moran.test()` | `"W"` | deterministyczny |
+| I Morana — test Monte Carlo | `moran.mc()` | `"W"` | **losowy** (zależy od `nsim` i ziarna) |
+| C Geary'ego — test asymptotyczny | `geary.test()` | `"W"` | deterministyczny |
+| C Geary'ego — test Monte Carlo | `geary.mc()` | `"W"` | **losowy** |
+| G Getisa & Orda — globalna | `globalG.test()` | `"B"` | deterministyczny |
+| wykres rozrzutu Morana | `moran.plot()` | `"W"` | deterministyczny |
+| lokalna I Morana | `localmoran()` | `"W"` | deterministyczny |
+| lokalna C Geary'ego | `localC_perm()` | `"W"` | **losowy** |
+| lokalna G Getisa & Orda | `localG_perm()` | `"W"` | **losowy** |
+| klasyfikacja klastrów | `hotspot()` | — | dziedziczy po statystyce |
+
+Pełne zestawienie funkcji — @sec-funkcje.
+
+```{r}
+#| label: pakiety
+#| message: false
+#| warning: false
+library(sf)
+library(tmap)
+library(spdep)
+library(dplyr)
+```
+
+Funkcje `moran.mc()` i `geary.mc()` losują przy każdym wywołaniu, a wyniku nie da się odtworzyć
+bez ustawienia ziarna generatora liczb losowych. Ustawiamy je raz, na początku rozdziału.
+
+```{r}
+#| label: ziarno
+set.seed(1111)
+```
+
+Funkcje `localC_perm()` i `localG_perm()` mają własny argument `iseed`, niezależny od
+`set.seed()` — podajemy go przy każdym wywołaniu.
+
+## Przykład: stopa bezrobocia w powiatach w 2023 roku
+
+Dane pochodzą z Banku Danych Lokalnych GUS.
+
+-   `data/bezrobocie_pl.csv` — identyfikator powiatu (`Kod`), nazwa i stopa bezrobocia
+    rejestrowanego w latach 2004, 2010, 2021 i 2023 (kolumny `SB2004`, `SB2010`, `SB2021`,
+    `SB2023`),
+-   `data/powiaty_pl.gpkg` — granice 380 powiatów,
+-   `data/wojewodztwa.gpkg` — granice województw; używane wyłącznie jako tło map.
+
+::: {.callout-note}
+## Kroki analizy
+
+1.  Wczytanie i złączenie danych, mapa zmiennej — `read.csv()`, `read_sf()`, `left_join()`.
+2.  Macierz wag przestrzennych — `poly2nb()`, `nb2listw()`.
+3.  Miary globalne — `moran.test()`, `moran.mc()`, `geary.test()`, `geary.mc()`,
+    `globalG.test()`.
+4.  Lokalna statystyka I Morana — `localmoran()`.
+5.  Klastry — `hotspot()`.
+6.  Obszary wysokich i niskich wartości — `localG_perm()`.
+7.  Zapis wyników — `write_sf()`.
+
+Kod spoza tych siedmiu kroków jest objaśnieniem: nie trzeba go uruchamiać, żeby wykonać
+analizę.
+:::
+
+### Krok 1: dane {.unnumbered}
+
+```{r}
+#| label: dane-wczytanie
+#| message: false
+bezrobocie = read.csv("data/bezrobocie_pl.csv", sep = ";", dec = ".")
+powiaty_granica = read_sf("data/powiaty_pl.gpkg")
+woj_granica = read_sf("data/wojewodztwa.gpkg")
+```
+
+Kolumna `TERYT` w warstwie granic zawiera czterocyfrowy identyfikator powiatu zapisany jako
+**tekst** (`"0201"`), a kolumna `Kod` w pliku CSV — siedmiocyfrowy identyfikator zapisany jako
+**liczba** (`201000`). Żeby złączyć oba zbiory, dopisujemy do `TERYT` trzy zera i zamieniamy
+wynik na liczbę.
+
+```{r}
+#| label: dane-zlaczenie
+powiaty = powiaty_granica |>
+  mutate(Kod = as.integer(paste0(TERYT, "000"))) |>
+  select(Kod) |>
+  left_join(bezrobocie, by = "Kod")
+powiaty
+```
+
+Wypisany obiekt jest klasy `sf`. Nagłówek podaje kolejno: liczbę obiektów i liczbę pól
+atrybutowych (`380 features and 6 fields`), typ geometrii (`MULTIPOLYGON` — powiat może składać
+się z kilku rozłącznych wielokątów), wymiar (`XY`), zasięg przestrzenny (`Bounding box`) oraz
+układ współrzędnych — PUWG 1992, wypisywany przez R jako `ETRF2000-PL / CS92`; jest to układ
+odwzorowany, więc odległości są w metrach. Kolumna `geom`
+zachowuje się jak każda inna kolumna: pozostaje powiązana z wierszami przy złączeniu, filtrowaniu
+i sortowaniu.
+
+`left_join()` zachowuje wszystkie wiersze warstwy granic, więc gdyby któryś powiat nie znalazł
+odpowiednika w pliku CSV, otrzymałby `NA` zamiast zniknąć bez ostrzeżenia.
+
+```{r}
+#| label: mapa-zmiennej
+#| message: false
+#| warning: false
+tm_shape(powiaty) +
+  tm_polygons(fill = "SB2023",
+              fill.scale = tm_scale_intervals(values = "brewer.yl_or_br"),
+              fill.legend = tm_legend(title = "Stopa bezrobocia\nw 2023 r. [%]")) +
+  tm_shape(woj_granica) +
+  tm_borders(col = "black", lwd = 2)
+```
+
+### Krok 2: macierz wag przestrzennych {.unnumbered}
+
+Funkcja `poly2nb()` buduje listę sąsiadów na podstawie wspólnej granicy. Argument
+`queen = TRUE` oznacza regułę *queen* — sąsiadami są jednostki mające wspólny odcinek granicy
+**lub choćby jeden wspólny punkt**. Reguła *rook* (`queen = FALSE`) wymaga wspólnego odcinka.
+
+```{r}
+#| label: sasiedztwo
+nb_q = poly2nb(powiaty, queen = TRUE)
+nb_q
+```
+
+Wypis obiektu `nb` podaje: liczbę jednostek (`Number of regions`), łączną liczbę relacji
+sąsiedztwa (`Number of nonzero links` — każda para liczona dwukrotnie, raz z każdej strony),
+udział niezerowych komórek w pełnej macierzy 380 × 380 (`Percentage nonzero weights`) oraz
+średnią liczbę sąsiadów przypadającą na jednostkę (`Average number of links`). Dla powiatów
+w Polsce wynosi ona `{r} round(mean(card(nb_q)), 2)`.
+
+Pierwszy element listy zawiera numery wierszy sąsiadów pierwszego powiatu:
+
+```{r}
+#| label: sasiedzi-powiatu
+nb_q[[1]]
+powiaty$Nazwa[nb_q[[1]]]
+```
+
+Funkcja `nb2listw()` dodaje do listy sąsiadów wagi. Budujemy dwie macierze: standaryzowaną
+wierszami — do I Morana i C Geary'ego — oraz binarną, potrzebną do globalnej statystyki
+G Getisa & Orda.
+
+```{r}
+#| label: wagi
+lw = nb2listw(nb_q, style = "W")
+lw_b = nb2listw(nb_q, style = "B")
+lw
+```
+
+Wypis obiektu `listw` powtarza charakterystykę listy sąsiadów, a poniżej podaje przyjęty styl
+wag (`Weights style: W`) i stałe macierzy wag używane we wzorach testów: `n` — liczba jednostek,
+`S0` — suma wszystkich wag (przy standaryzacji wierszami równa liczbie jednostek), `S1` i `S2` —
+sumy pomocnicze wchodzące do wzoru na wariancję statystyki.
+
+Pierwszy powiat ma `{r} length(nb_q[[1]])` sąsiadów, więc po standaryzacji każdy z nich
+otrzymuje wagę `{r} round(lw$weights[[1]][1], 4)`:
+
+```{r}
+#| label: wagi-pierwszy-powiat
+lw$weights[[1]]
+```
+
+### Krok 3: miary globalne {.unnumbered}
+
+**I Morana.** Test asymptotyczny wymaga podania wektora wartości i macierzy wag. Hipoteza zerowa
+to brak autokorelacji przestrzennej.
+
+```{r}
+#| label: moran-test
+moran.test(powiaty$SB2023, listw = lw)
+```
+
+Test asymptotyczny opiera się na założeniu o rozkładzie statystyki. Test oparty na symulacji
+Monte Carlo tego założenia nie wymaga: w każdej z `nsim` symulacji wartości zmiennej są losowo
+przypisywane do jednostek, statystyka liczona jest ponownie, a wynik obserwowany porównywany
+z rozkładem wartości uzyskanych przy losowym rozmieszczeniu.
+
+```{r}
+#| label: moran-mc
+moran_mc = moran.mc(powiaty$SB2023, listw = lw, nsim = 999)
+moran_mc
+```
+
+Pseudo *p*-value nie może być mniejsze niż `1 / (nsim + 1)`, więc przy 999 symulacjach
+najmniejszą osiągalną wartością jest 0,001. Liczba symulacji jest zatem **elementem wyniku** —
+przy `nsim = 99` ten sam zbiór dałby *p* = 0,01.
+
+**C Geary'ego.** Ta sama para testów, ta sama macierz wag.
+
+```{r}
+#| label: geary
+geary.test(powiaty$SB2023, listw = lw)
+geary.mc(powiaty$SB2023, listw = lw, nsim = 999)
+```
+
+**G Getisa & Orda.** Ta miara wymaga **wag binarnych**: wywołana z macierzą standaryzowaną
+wierszami zwraca ostrzeżenie `Binary weights recommended`, a wynik testu zmienia się o kilka
+rzędów wielkości. Dlatego podajemy `lw_b`.
+
+```{r}
+#| label: global-g
+globalG.test(powiaty$SB2023, listw = lw_b)
+```
+
+### Krok 4: lokalna statystyka I Morana {.unnumbered}
+
+Funkcja `localmoran()` liczy statystykę osobno dla każdej jednostki.
+
+```{r}
+#| label: local-moran
+locm = localmoran(powiaty$SB2023, listw = lw)
+head(locm)
+
+# dwie kolumny wyniku dopisujemy do obiektu przestrzennego, żeby móc je zwizualizować
+powiaty$I = locm[, "Ii"]
+powiaty$I_pvalue = locm[, "Pr(z != E(Ii))"]
+```
+
+Wynikiem jest macierz o pięciu kolumnach: `Ii` — wartość statystyki dla jednostki, `E.Ii`
+i `Var.Ii` — jej wartość oczekiwana i wariancja przy hipotezie zerowej, `Z.Ii` — standaryzowane
+odchylenie, `Pr(z != E(Ii))` — poziom istotności.
+
+Istotną statystykę lokalną ma `{r} sum(powiaty$I_pvalue <= 0.05)` z
+`{r} nrow(powiaty)` powiatów.
+
+::: {.callout-note}
+## Objaśnienie — poza ścieżką zadania
+
+Dlaczego klastry wydziela się tylko z wartości istotnych? Mapa po lewej przedstawia **surowe**
+wartości $I_i$, mapa po prawej — odpowiadające im poziomy istotności. Czerwone i niebieskie
+plamy po lewej obejmują znacznie większy obszar niż powiaty, dla których wynik jest istotny
+statystycznie. Czytanie samej mapy po lewej prowadziłoby do wskazania klastrów tam, gdzie
+rozmieszczenie wartości mieści się w granicach przypadku.
+
+```{r}
+#| message: false
+#| warning: false
+#| fig-width: 9
+tm_i = tm_shape(powiaty) +
+  tm_polygons(fill = "I",
+              fill.scale = tm_scale_continuous(values = "-brewer.rd_bu", midpoint = 0),
+              fill.legend = tm_legend(title = "lokalna I Morana")) +
+  tm_title("Wartości statystyki")
+
+tm_p = tm_shape(powiaty) +
+  tm_polygons(fill = "I_pvalue",
+              fill.scale = tm_scale_intervals(breaks = c(0, 0.001, 0.01, 0.05, 1),
+                                              values = c("red", "orange", "yellow", "grey80")),
+              fill.legend = tm_legend(title = "p-value")) +
+  tm_title("Istotność statystyczna")
+
+tmap_arrange(tm_i, tm_p)
+```
+:::
+
+### Krok 5: klastry {.unnumbered}
+
+Klaster to jednostka, która ma **istotną** statystykę lokalną i **określone położenie względem
+swojego otoczenia**. Położenie odczytuje się z wykresu rozrzutu Morana, który zestawia wartość
+zmiennej (oś x) z wartością zmiennej opóźnionej przestrzennie (oś y, ang. *spatial lag* —
+średnia wartość sąsiadów). Przerywane linie wyznaczają średnie obu zmiennych i dzielą wykres
+na cztery ćwiartki.
+
+```{r}
+#| label: moran-plot
+#| fig-width: 7
+#| fig-height: 7
+moran.plot(powiaty$SB2023, listw = lw, labels = powiaty$Nazwa,
+           xlab = "Stopa bezrobocia w 2023 r. [%]",
+           ylab = "Średnia stopa bezrobocia sąsiadów [%]")
+```
+
+Argument `labels` podpisuje punkty wyróżniające się wpływem na linię regresji — pozwala
+odczytać nazwy powiatów najmocniej odstających od ogólnej zależności.
+
+Nachylenie linii regresji na tym wykresie jest **tożsame z globalną statystyką I Morana** —
+wynosi `{r} round(coef(lm(lag.listw(lw, powiaty$SB2023) ~ powiaty$SB2023))[2], 4)`, czyli
+dokładnie tyle, co wartość zwrócona przez `moran.test()`.
+
+Przerywane linie dzielą wykres na cztery ćwiartki, a każda z nich odpowiada innemu typowi
+zależności między jednostką a jej otoczeniem:
+
+| Ćwiartka | Jednostka | Sąsiedzi | Autokorelacja |
+|---|---|---|---|
+| Q1: HH | wysoka | wysokie | dodatnia |
+| Q2: LH | niska | wysokie | ujemna |
+| Q3: LL | niska | niskie | dodatnia |
+| Q4: HL | wysoka | niskie | ujemna |
+
+```{r}
+#| echo: false
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: "Ćwiartki wykresu rozrzutu Morana dla stopy bezrobocia w 2023 roku."
+sb = powiaty$SB2023
+sb_lag = lag.listw(lw, sb)
+moran.plot(sb, listw = lw, labels = FALSE,
+           xlab = "Stopa bezrobocia w 2023 r. [%]",
+           ylab = "Średnia stopa bezrobocia sąsiadów [%]")
+text(min(sb) + 0.12 * diff(range(sb)), max(sb_lag), "Q2: LH", cex = 1.6, col = "steelblue3")
+text(max(sb) - 0.08 * diff(range(sb)), max(sb_lag), "Q1: HH", cex = 1.6, col = "red")
+text(max(sb) - 0.08 * diff(range(sb)), min(sb_lag), "Q4: HL", cex = 1.6, col = "lightcoral")
+text(min(sb) + 0.12 * diff(range(sb)), min(sb_lag), "Q3: LL", cex = 1.6, col = "blue")
+```
+
+Funkcja `hotspot()` łączy oba kryteria: przypisuje jednostce ćwiartkę wykresu rozrzutu
+i odrzuca jednostki, dla których statystyka nie jest istotna. Argument `Prname` wskazuje
+kolumnę z poziomem istotności, `cutoff` — próg istotności, a `p.adjust` — korektę na
+wielokrotne testowanie. Jednostki nieistotne otrzymują `NA`.
+
+```{r}
+#| label: klastry
+powiaty$localI = hotspot(locm, Prname = "Pr(z != E(Ii))",
+                         cutoff = 0.05, p.adjust = "none")
+table(powiaty$localI, useNA = "ifany")
+```
+
+`hotspot()` ma domyślnie `cutoff = 0.005` i `p.adjust = "fdr"`. Podajemy oba argumenty jawnie,
+bo wybieramy inaczej: próg 0,05 i **brak** korekty. Jest to świadome odstępstwo — statystyka
+lokalna liczona dla 380 jednostek to 380 testów naraz, więc korekta FDR jest metodycznie
+uzasadniona, ale przy tych danych redukuje liczbę klastrów z
+`{r} sum(!is.na(powiaty$localI))` do
+`{r} sum(!is.na(hotspot(locm, Prname = "Pr(z != E(Ii))", cutoff = 0.05, p.adjust = "fdr")))`.
+Przy własnej analizie warto zobaczyć obie wersje.
+
+```{r}
+#| label: mapa-klastrow
+#| message: false
+#| warning: false
+kolory_moran = c("High-High" = "red", "High-Low" = "lightcoral",
+                 "Low-High" = "steelblue1", "Low-Low" = "blue")
+
+tm_shape(powiaty) +
+  tm_polygons(fill = "localI",
+              fill.scale = tm_scale_categorical(values = kolory_moran,
+                                                value.na = "grey90",
+                                                label.na = "nieistotne"),
+              fill.legend = tm_legend(title = "Klastry\n(lokalna I Morana)")) +
+  tm_shape(woj_granica) +
+  tm_borders(col = "black", lwd = 2)
+```
+
+### Krok 6: obszary wysokich i niskich wartości {.unnumbered}
+
+Lokalna statystyka G Getisa & Orda odpowiada na węższe pytanie niż lokalna I Morana: czy
+jednostka wraz z sąsiadami tworzy skupisko wartości wysokich (*hot spot*), czy niskich
+(*cold spot*). Nie wykrywa jednostek odstających od otoczenia, bo **nie mierzy autokorelacji
+ujemnej**.
+
+Funkcja `localG_perm()` wyznacza istotność przez permutacje, więc wymaga podania liczby
+symulacji (`nsim`) oraz ziarna (`iseed`). Bez `iseed` każde uruchomienie daje nieco inną liczbę
+jednostek istotnych.
+
+```{r}
+#| label: local-g
+locg = localG_perm(powiaty$SB2023, listw = lw, nsim = 999, iseed = 1111)
+powiaty$localG = hotspot(locg, Prname = "Pr(z != E(Gi)) Sim",
+                         cutoff = 0.05, p.adjust = "none")
+table(powiaty$localG, useNA = "ifany")
+```
+
+Kategoria `High` to obszary wysokich wartości, `Low` — obszary niskich wartości.
+
+```{r}
+#| label: mapa-local-g
+#| message: false
+#| warning: false
+kolory_g = c("Low" = "blue", "High" = "red")
+
+tm_shape(powiaty) +
+  tm_polygons(fill = "localG",
+              fill.scale = tm_scale_categorical(values = kolory_g,
+                                                value.na = "grey90",
+                                                label.na = "nieistotne"),
+              fill.legend = tm_legend(title = "Obszary wysokich\ni niskich wartości")) +
+  tm_shape(woj_granica) +
+  tm_borders(col = "black", lwd = 2)
+```
+
+::: {.callout-note}
+## Objaśnienie — poza ścieżką zadania
+
+**Lokalna statystyka C Geary'ego** mierzy sumę kwadratów różnic między jednostką a jej
+sąsiadami, więc jest wielkością **nieujemną**: niskie wartości oznaczają podobieństwo do
+sąsiadów (autokorelacja dodatnia), wysokie — odmienność (autokorelacja ujemna). Funkcja
+`hotspot()` zwraca dla niej inny zestaw kategorii niż dla I Morana: obok `High-High` i `Low-Low`
+pojawiają się `Other Positive` (jednostka podobna do sąsiadów, ale bez jednoznacznego kierunku)
+oraz `Negative` (jednostka odstająca).
+
+```{r}
+#| message: false
+#| warning: false
+locc = localC_perm(powiaty$SB2023, listw = lw, nsim = 999, iseed = 1111)
+powiaty$localC = hotspot(locc, Prname = "Pr(z != E(Ci)) Sim",
+                         cutoff = 0.05, p.adjust = "none")
+table(powiaty$localC, useNA = "ifany")
+
+kolory_c = c("High-High" = "red", "Low-Low" = "blue",
+             "Other Positive" = "lightcoral", "Negative" = "steelblue1")
+
+tm_shape(powiaty) +
+  tm_polygons(fill = "localC",
+              fill.scale = tm_scale_categorical(values = kolory_c,
+                                                value.na = "grey90",
+                                                label.na = "nieistotne"),
+              fill.legend = tm_legend(title = "Klastry\n(lokalna C Geary'ego)")) +
+  tm_shape(woj_granica) +
+  tm_borders(col = "black", lwd = 2)
+```
+:::
+
+### Krok 7: zapis wyników {.unnumbered}
+
+```{r}
+#| label: zapis
+#| message: false
+dir.create("out", showWarnings = FALSE)
+write_sf(powiaty, "out/powiaty_autokorelacja.gpkg")
+```
+
+### Interpretacja wyniku {.unnumbered}
+
+**Miary globalne są zgodne i wskazują na dodatnią autokorelację przestrzenną.** Statystyka
+I Morana wynosi `{r} round(moran.test(powiaty$SB2023, listw = lw)$estimate[[1]], 4)`, czyli
+jest dodatnia i wyraźnie większa od wartości oczekiwanej przy braku autokorelacji
+(`{r} round(moran.test(powiaty$SB2023, listw = lw)$estimate[[2]], 4)`). Statystyka C Geary'ego
+wynosi `{r} round(geary.test(powiaty$SB2023, listw = lw)$estimate[[1]], 4)`, a więc mieści się
+w przedziale 0–1, który również odpowiada autokorelacji dodatniej. Oba testy Monte Carlo dały
+pseudo *p*-value `{r} moran_mc$p.value`, czyli wartość najmniejszą osiągalną przy 999
+symulacjach. Statystyka G Getisa & Orda prowadzi do tego samego wniosku.
+
+Dodatnia autokorelacja oznacza, że powiaty o podobnej stopie bezrobocia **sąsiadują ze sobą
+częściej, niż wynikałoby z losowego rozmieszczenia wartości**. Miara globalna nie mówi jednak,
+gdzie te zgrupowania leżą — do tego potrzebne są miary lokalne.
+
+**Istotną statystykę lokalną ma `{r} sum(powiaty$I_pvalue <= 0.05)` z
+`{r} nrow(powiaty)` powiatów**, czyli nieco ponad jedna piąta zbioru. Pozostałe powiaty nie
+różnią się od swojego otoczenia bardziej, niż można oczekiwać przy rozmieszczeniu losowym —
+i dlatego nie trafiają do żadnego klastra.
+
+Klastry rozkładają się następująco:
+
+-   **High-High** — `{r} sum(powiaty$localI == "High-High", na.rm = TRUE)` powiatów: powiaty
+    o wysokiej stopie bezrobocia otoczone powiatami o wysokiej stopie bezrobocia. Tworzą dwa
+    zwarte obszary: południowo-wschodni (Podkarpacie) i mazowiecko-świętokrzyski w okolicach
+    Radomia.
+-   **Low-Low** — `{r} sum(powiaty$localI == "Low-Low", na.rm = TRUE)` powiatów: powiaty
+    o niskiej stopie bezrobocia otoczone podobnymi. Skupiają się wokół największych miast:
+    Warszawy, Poznania, Krakowa i Trójmiasta.
+-   **Low-High** i **High-Low** — łącznie `{r} sum(powiaty$localI %in% c("Low-High", "High-Low"), na.rm = TRUE)` powiatów:
+    jednostki odstające od swojego otoczenia. Jest ich niewiele, co jest zgodne z dodatnią wartością
+    globalnej statystyki I Morana.
+
+Statystyka G Getisa & Orda wskazuje obszary wysokich wartości w
+`{r} sum(powiaty$localG == "High", na.rm = TRUE)` powiatach, a obszary niskich wartości —
+w `{r} sum(powiaty$localG == "Low", na.rm = TRUE)` powiatach.
+Liczby te nie pokrywają się z liczebnościami klastrów High-High i Low-Low z lokalnej I Morana,
+bo obie statystyki mierzą co innego: I Morana porównuje jednostkę z jej sąsiadami, a G sumuje
+wartości w otoczeniu i porównuje tę sumę z sumą dla całego zbioru. **Zgodność kierunku wniosku
+przy różnych liczebnościach jest typowa i nie świadczy o błędzie.**
+
+Wynik jest opisem rozmieszczenia, nie wyjaśnieniem. Mapa wskazuje, że wysokie bezrobocie
+grupuje się na Podkarpaciu i w okolicach Radomia; pytanie o przyczyny tego układu należy do
+modelowania, które zestawia stopę bezrobocia z innymi zmiennymi.
+
+## Pytania kontrolne
+
+> **1.** Czym różni się obiekt klasy `nb` od obiektu klasy `listw`?
+
+::: {.callout-tip collapse="true"}
+## Sprawdź odpowiedź
+Obiekt `nb` to sama **lista sąsiadów**: dla każdej jednostki numery wierszy jednostek z nią
+sąsiadujących. Informacja jest binarna — sąsiad albo jest, albo go nie ma.
+
+Obiekt `listw` to lista sąsiadów **uzupełniona o wagi** przypisane każdej parze. Sposób nadania
+wag określa argument `style` funkcji `nb2listw()`. Funkcje liczące miary autokorelacji
+przyjmują `listw`, nie `nb`.
+:::
+
+> **2.** Czym różni się reguła *queen* od reguły *rook*?
+
+::: {.callout-tip collapse="true"}
+## Sprawdź odpowiedź
+Zakresem tego, co uznaje się za wspólną granicę. Reguła *rook* wymaga wspólnego **odcinka**
+granicy. Regule *queen* wystarcza jeden wspólny **punkt** — sąsiadami są więc także jednostki
+stykające się narożnikiem.
+
+Reguła *queen* daje zawsze co najmniej tyle samo relacji sąsiedztwa co *rook*, nigdy mniej.
+W funkcji `poly2nb()` wybiera się ją argumentem `queen = TRUE` (wartość domyślna).
+:::
+
+> **3.** Dlaczego `globalG.test()` wymaga wag binarnych, a `moran.test()` standaryzowanych
+> wierszami?
+
+::: {.callout-tip collapse="true"}
+## Sprawdź odpowiedź
+Statystyka G Getisa & Orda jest zbudowana jako **stosunek sumy wartości w otoczeniu do sumy
+wszystkich wartości**. Przy wagach standaryzowanych wierszami sumowane są wartości przemnożone
+przez ułamki, co zmienia sens tego stosunku. `spdep` zwraca w takim wypadku ostrzeżenie
+`Binary weights recommended`.
+
+Dla I Morana i C Geary'ego standaryzacja wierszami sprawia, że wkład każdej jednostki jest
+porównywalny niezależnie od liczby jej sąsiadów — bez niej jednostki mające wielu sąsiadów
+ważyłyby w wyniku więcej.
+:::
+
+> **4.** Które miary autokorelacji wykrywają autokorelację ujemną, a która wyłącznie dodatnią?
+
+::: {.callout-tip collapse="true"}
+## Sprawdź odpowiedź
+Autokorelację ujemną wykrywają **I Morana** (wartości poniżej zera) i **C Geary'ego**
+(wartości z przedziału 1–2), a w skali lokalnej — lokalna I Morana (ćwiartki `Low-High`
+i `High-Low`) oraz lokalna C Geary'ego (kategoria `Negative`).
+
+**G Getisa & Orda** mierzy wyłącznie autokorelację dodatnią. Jej hipotezą alternatywną jest
+skupienie wartości podobnych: statystyka sumuje wartości w otoczeniu jednostki i sprawdza,
+czy suma jest nietypowo wysoka albo nietypowo niska względem całego zbioru. Jednostka
+o wysokiej wartości otoczona niskimi daje w tym otoczeniu sumę przeciętną, więc w tej
+statystyce się nie wyróżni.
+:::
+
+> **5.** Statystyka globalna I Morana dla pewnego zbioru wyniosła 0,02 przy *p* = 0,4. Czy to
+> znaczy, że w danych nie ma żadnych zgrupowań podobnych wartości?
+
+::: {.callout-tip collapse="true"}
+## Sprawdź odpowiedź
+Nie. Oznacza to tylko, że **w skali całego zbioru** nie ma podstaw do odrzucenia hipotezy
+o braku autokorelacji przestrzennej.
+
+Miara globalna sprowadza cały zbiór do jednej liczby, więc klaster wysokich wartości w jednej
+części obszaru i klaster niskich wartości w innej mogą się w niej wzajemnie znieść. Dlatego
+statystyki globalne i lokalne liczy się razem: globalna odpowiada na pytanie „czy", lokalna —
+„gdzie".
+:::
+
+> **6.** Dlaczego klastry wydziela się wyłącznie z istotnych statystycznie wartości statystyki
+> lokalnej?
+
+::: {.callout-tip collapse="true"}
+## Sprawdź odpowiedź
+Ponieważ sama wartość $I_i$ zawsze jest dodatnia albo ujemna — każda jednostka trafia do jednej
+z czterech ćwiartek wykresu rozrzutu, także wtedy, gdy jej położenie względem sąsiadów jest
+zwykłą zmiennością losową. Mapa surowych wartości $I_i$ pokazuje więc „klastry" w całym
+obszarze.
+
+Istotność statystyczna rozstrzyga, czy odnotowane podobieństwo do sąsiadów jest większe, niż
+można oczekiwać przy losowym rozmieszczeniu wartości. Dla stopy bezrobocia w 2023 roku warunek
+ten spełnia `{r} sum(powiaty$I_pvalue <= 0.05)` z `{r} nrow(powiaty)` powiatów.
+:::
+
+> **7.** Co oznaczają ćwiartki Q2 (LH) i Q4 (HL) wykresu rozrzutu Morana?
+
+::: {.callout-tip collapse="true"}
+## Sprawdź odpowiedź
+Obie oznaczają **ujemną** autokorelację przestrzenną, czyli jednostkę odstającą od swojego
+otoczenia.
+
+Q2 (LH) to jednostka o wartości niższej od średniej otoczona jednostkami o wartościach
+wysokich. Q4 (HL) — odwrotnie: jednostka o wartości wysokiej otoczona niskimi. Dodatnią
+autokorelację wskazują ćwiartki Q1 (HH) i Q3 (LL).
+:::
+
+> **8.** Dwie osoby policzyły lokalną statystykę G Getisa & Orda dla tych samych danych
+> i otrzymały różną liczbę obszarów wysokich wartości. Co mogło się stać?
+
+::: {.callout-tip collapse="true"}
+## Sprawdź odpowiedź
+`localG_perm()` wyznacza istotność przez **permutacje**, więc wynik zależy od losowania. Bez
+ustawienia ziarna (`iseed`) każde uruchomienie daje nieco inny zestaw jednostek istotnych —
+przy `nsim = 99` różnice sięgają kilku jednostek.
+
+Drugą możliwą przyczyną jest inna liczba symulacji: przy `nsim = 999` pseudo *p*-value jest
+wyznaczane dokładniej niż przy `nsim = 99`, więc liczba jednostek istotnych też się zmienia.
+Żeby wynik był odtwarzalny, trzeba ustalić **oba** parametry.
+:::
+
+> **9.** Dlaczego lokalna statystyka C Geary'ego nie przyjmuje wartości ujemnych?
+
+::: {.callout-tip collapse="true"}
+## Sprawdź odpowiedź
+Ponieważ liczona jest jako suma **kwadratów** różnic między wartością jednostki a wartościami
+jej sąsiadów: $c_i = \sum_j w_{ij}(x_i - x_j)^2$. Suma kwadratów nie może być ujemna.
+
+Interpretacja opiera się więc nie na znaku, lecz na położeniu wartości względem rozkładu
+uzyskanego z permutacji: **niskie** wartości $c_i$ oznaczają podobieństwo do sąsiadów
+(autokorelacja dodatnia), **wysokie** — odmienność (autokorelacja ujemna).
+:::
+
+## Podsumowanie
+
+| Metoda | Funkcja | Co mówi o danych | Warunek poprawnego użycia |
+|---|---|---|---|
+| lista sąsiadów | `poly2nb(queen =)` | które jednostki ze sobą sąsiadują | budowana na obiekcie, na którym liczone są statystyki |
+| macierz wag | `nb2listw(style =)` | jak mocno liczy się każdy sąsiad | styl wag dobrany do miary |
+| globalna I Morana | `moran.test()`, `moran.mc()` | czy w całym zbiorze podobne wartości sąsiadują ze sobą częściej niż losowo | wagi `"W"`; pytanie „gdzie" należy do miar lokalnych |
+| globalna C Geary'ego | `geary.test()`, `geary.mc()` | to samo, na skali odwróconej (0–1 to autokorelacja dodatnia) | wagi `"W"`; pytanie „gdzie" należy do miar lokalnych |
+| globalna G Getisa & Orda | `globalG.test()` | czy w zbiorze występuje **dodatnia** autokorelacja | wagi `"B"`; autokorelację ujemną wykrywają I Morana i C Geary'ego |
+| wykres rozrzutu Morana | `moran.plot()` | położenie każdej jednostki względem sąsiadów; nachylenie = globalna I Morana | istotność odczytuje się z `localmoran()` |
+| lokalna I Morana | `localmoran()` | wartość statystyki i jej istotność dla każdej jednostki | klastry wydziela dopiero `hotspot()` |
+| klasyfikacja klastrów | `hotspot()` | typ klastra (HH, LL, LH, HL) dla jednostek istotnych | wynik zależy od `cutoff` i `p.adjust` — podajemy je jawnie |
+| lokalna G Getisa & Orda | `localG_perm()` | gdzie leżą obszary wysokich i niskich wartości | wymaga `nsim` i `iseed`; jednostki odstające wykrywa lokalna I Morana |
+| lokalna C Geary'ego | `localC_perm()` | podobieństwo jednostki do sąsiadów, także jednostki odstające | statystyka nieujemna — wniosek z pseudo *p*-value, nie ze znaku |
+
+Cztery zasady, do których wracamy przy projekcie:
+
+1.  **Listę sąsiadów buduje się na tym obiekcie, na którym liczy się statystyki.** Obiekty `nb`
+    i `listw` odwołują się do numerów wierszy; usunięcie wiersza po zbudowaniu listy unieważnia
+    ją.
+2.  **Styl wag wybiera się świadomie.** `"W"` dla I Morana i C Geary'ego, `"B"` dla
+    `globalG.test()`.
+3.  **Klaster to istotność plus położenie względem otoczenia.** Mapa surowych wartości
+    statystyki lokalnej nie jest mapą klastrów.
+4.  **Procedury permutacyjne wymagają ustalenia `nsim` i ziarna.** Bez nich wynik zmienia się
+    przy każdym uruchomieniu, a liczby podane w opracowaniu stają się nieodtwarzalne.
+
+## Pełny kod analizy
+
+Poniżej zebrany jest cały kod Kroków 1–7 w kolejności wykonania — do skopiowania do własnego
+skryptu zamiast przeklejania pojedynczych fragmentów. Nie ma w nim kodu objaśniającego ani
+ryciny dydaktycznej: to dokładnie ta ścieżka, która prowadzi od danych wejściowych do pliku
+`out/powiaty_autokorelacja.gpkg`.
+
+```{r}
+#| ref.label: ["pakiety", "ziarno", "dane-wczytanie", "dane-zlaczenie", "mapa-zmiennej",
+#|   "sasiedztwo", "sasiedzi-powiatu", "wagi", "wagi-pierwszy-powiat",
+#|   "moran-test", "moran-mc", "geary", "global-g",
+#|   "local-moran", "moran-plot", "klastry", "mapa-klastrow",
+#|   "local-g", "mapa-local-g", "zapis"]
+#| eval: false
+#| echo: true
+```

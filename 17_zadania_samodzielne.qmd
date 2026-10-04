@@ -1,0 +1,647 @@
+# Zadania samodzielne {#sec-zadania}
+
+Każde zadanie wykonujesz na zajęciach, na podstawie rozdziału przeczytanego w domu. Metryczka
+na początku sekcji podaje **materiał** do przeczytania, **dane** i **pakiety** potrzebne do
+wykonania zadania.
+
+Część zadania oznaczona jako **Rozszerzenie** jest nieobowiązkowa — przeznaczona dla osób,
+które skończą wcześniej.
+
+## Dane przestrzenne w R
+
+**Materiał:** @sec-dane-przestrzenne · **Dane:** `punkty.csv`, `clc.tif` ·
+**Pakiety:** `sf`, `terra`, `tmap`, `dplyr`
+
+### Cel {.unnumbered}
+
+Przejście od tabeli ze współrzędnymi do warstwy przestrzennej i zestawienie jej z rastrem
+pokrycia terenu.
+
+### Dane {.unnumbered}
+
+-   `punkty.csv` — pomiary wykonane w Suwalskim Parku Krajobrazowym. Kolumny `x` i `y`
+    zawierają współrzędne w układzie **EPSG:2180**, kolumna `temp` — temperaturę powietrza
+    w °C, a `srtm`, `clc`, `ndvi`, `savi` — wysokość terenu, klasę pokrycia terenu i dwa
+    wskaźniki roślinności.
+-   `clc.tif` — raster pokrycia terenu (Corine Land Cover).
+
+::: {.callout-warning}
+## Uwaga na brakujące wartości
+
+Kolumna `temp` zawiera jeden brak (`NA`). Do wyboru wierszy użyj funkcji `filter()` z pakietu
+`dplyr`, **nie indeksowania podstawowego**. Zapis `punkty[punkty$temp > 20, ]` zwraca wiersz
+widmo z brakami we wszystkich kolumnach, przez co `st_as_sf()` przerywa działanie komunikatem
+`missing values in coordinates not allowed`.
+:::
+
+### Zadanie {.unnumbered}
+
+1.  Wczytaj tabelę z pliku `punkty.csv` (`read.csv()`) i wybierz punkty o temperaturze
+    **powyżej 20 °C** (`filter()`). Ile wierszy ma wynik?
+
+2.  Zamień tabelę na obiekt przestrzenny `punkty20`
+    (`st_as_sf(coords = c("x", "y"), crs = "EPSG:2180")`). Wypisz obiekt i odpowiedz:
+    jaki ma typ geometrii, jaki zasięg przestrzenny i jaki układ współrzędnych?
+
+3.  Wyznacz obwiednię warstwy punktowej i przypisz ją do obiektu `punkty20_bb`
+    (`st_bbox()`).
+
+4.  Wczytaj raster `clc.tif` (`rast()`) i przytnij go do obwiedni (`crop()`), tworząc obiekt
+    `clc20`.
+
+    -   Porównaj liczbę komórek przed przycięciem i po nim (`ncell()`).
+    -   Sprawdź, czy układy współrzędnych warstwy punktowej i rastra są zgodne
+        (`st_crs()`, `crs()`).
+
+5.  Stwórz mapę: raster `clc20` w tle, punkty `punkty20` na wierzchu. Pokrycie terenu jest
+    zmienną **jakościową**, więc przed mapowaniem zamień raster na zmienną jakościową
+    (`as.factor()`) i użyj skali `tm_scale_categorical()`.
+
+6.  Zapisz wyniki: warstwę punktową (`write_sf()`) do `out/punkty20.gpkg`, raster
+    (`writeRaster()`) do `out/clc20.tif` oraz mapę (`tmap_save()`) do
+    `out/punkty20_clc.png`.
+
+### Rozszerzenie {.unnumbered}
+
+Powtórz kroki 1–5 dla punktów o temperaturze **poniżej 12 °C**. Jak zmienia się zasięg
+obwiedni i które klasy pokrycia terenu dominują w każdym z dwóch wycinków?
+
+### Co oddać {.unnumbered}
+
+-   plik `.qmd` z kodem rozwiązania,
+-   plik `.html` wygenerowany z tego `.qmd`,
+-   `out/punkty20.gpkg`, `out/clc20.tif`, `out/punkty20_clc.png`,
+-   dwa–trzy zdania interpretacji: w jakim typie pokrycia terenu leżą punkty o najwyższej
+    temperaturze?
+
+## Eksploracyjna analiza danych
+
+**Materiał:** @sec-eksploracja · **Dane:** `out/powiaty_attr.gpkg` (przygotowany kodem
+poniżej), `wojewodztwa.gpkg` · **Pakiety:** `sf`, `dplyr`, `ggplot2`, `tmap`, `e1071`
+
+### Cel {.unnumbered}
+
+Eksploracja stopy bezrobocia w powiatach w Polsce w 2023 roku: rozkład zmiennej, wartości
+odstające, zróżnicowanie między makroregionami i rozkład przestrzenny.
+
+### Dane {.unnumbered}
+
+Dane pochodzą z Banku Danych Lokalnych GUS. Obiekt `powiaty` powstaje z czterech plików
+i zawiera **380 powiatów** oraz kolumny:
+
+| Kolumna | Zawartość |
+|---|---|
+| `Kod`, `Nazwa` | identyfikator i nazwa powiatu |
+| `SB2004`, `SB2010`, `SB2021`, `SB2023` | stopa bezrobocia rejestrowanego w kolejnych latach [%] |
+| `NUTS3_ID` | identyfikator regionu NUTS3 |
+| `MAKROREGION` | makroregion wg klasyfikacji NUTS1 |
+| `URBN_TYPE` | typologia miejsko-wiejska: *przeważająco miejskie* (co najmniej 80% ludności w klastrach miejskich), *pośrednie* (50–80%), *przeważająco wiejskie* (co najmniej 50% ludności w komórkach siatki obszarów wiejskich) |
+
+Granice województw (`wojewodztwa.gpkg`) służą wyłącznie jako tło map.
+
+::: {.callout-note}
+## Przygotowanie danych — kod gotowy do uruchomienia
+
+Poniższy kod łączy dane atrybutowe z geometrią i zapisuje wynik do `out/powiaty_attr.gpkg`.
+Uruchom go raz, na początku zajęć; właściwe zadanie zaczyna się od wczytania zapisanego pliku.
+
+Identyfikator powiatu jest w trzech plikach zapisany na trzy sposoby: w `bezrobocie_pl.csv`
+jako liczba siedmiocyfrowa (`201000`), w `powiaty_klasyfikacje.csv` jako ta sama liczba bez
+trzech końcowych zer (`201`), a w `powiaty_pl.gpkg` jako **tekst** z zerem wiodącym
+(`"0201"`). Kod doprowadza wszystkie trzy do wspólnej postaci.
+
+```{r}
+#| eval: false
+library(sf)
+library(dplyr)
+
+# stopa bezrobocia: Kod to siedmiocyfrowy identyfikator powiatu (201000)
+bezrobocie = read.csv("data/bezrobocie_pl.csv", sep = ";", dec = ".")
+
+# klasyfikacje: TERYT to ten sam identyfikator bez trzech końcowych zer (201)
+klasyfikacje = read.csv("data/powiaty_klasyfikacje.csv") |>
+  mutate(Kod = TERYT * 1000,
+         URBN_TYPE = factor(URBN_TYPE,
+                            levels = 1:3,
+                            labels = c("przeważająco miejskie", "pośrednie",
+                                       "przeważająco wiejskie"))) |>
+  select(Kod, NUTS3_ID, URBN_TYPE, MAKROREGION)
+
+# złączenie obu tabel atrybutowych
+powiaty_attr = left_join(bezrobocie, klasyfikacje, by = "Kod")
+
+# granice powiatów: TERYT to tekst z zerem wiodącym ("0201")
+powiaty = read_sf("data/powiaty_pl.gpkg") |>
+  mutate(Kod = as.integer(paste0(TERYT, "000"))) |>
+  select(Kod) |>
+  left_join(powiaty_attr, by = "Kod")
+
+dir.create("out", showWarnings = FALSE)
+write_sf(powiaty, "out/powiaty_attr.gpkg", delete_dsn = TRUE)
+```
+
+Po wczytaniu pliku sprawdź, czy przygotowanie danych się powiodło: obiekt powinien mieć
+**380 wierszy** i **zero braków** w kolumnach `SB2023`, `MAKROREGION` i `URBN_TYPE`
+(`nrow()`, `sum(is.na())`).
+
+Geopaczka nie przechowuje typu `factor`, więc po ponownym wczytaniu `URBN_TYPE` jest
+**tekstem**. Jeśli potrzebujesz ustalonej kolejności klas na wykresie, odtwórz ją funkcją
+`factor(levels = )`.
+:::
+
+### Zadanie {.unnumbered}
+
+1.  Oblicz statystyki opisowe zmiennej `SB2023` (`summary()`) oraz współczynnik skośności
+    (`e1071::skewness()`). Scharakteryzuj na ich podstawie stopę bezrobocia w 2023 roku.
+
+2.  Przedstaw rozkład zmiennej `SB2023` na histogramie i wykresie pudełkowym
+    (`ggplot()` + `geom_histogram()`, `geom_boxplot()`). Czy w zbiorze są wartości **globalnie
+    odstające**? Jeśli tak, wypisz nazwy tych powiatów (`filter()`).
+
+3.  Sprawdź, czy stopa bezrobocia różni się między makroregionami (`MAKROREGION`):
+
+    -   oblicz średnią, medianę, wartość minimalną i maksymalną w grupach
+        (`group_by()`, `summarise()`),
+    -   wykonaj wykres pudełkowy,
+    -   wykonaj test różnic między grupami (`aov()`) oraz test *post hoc* wskazujący, między
+        którymi makroregionami różnice są istotne (`TukeyHSD()`).
+
+4.  Stwórz mapę rozkładu przestrzennego zmiennej `SB2023` w powiatach, z granicami województw
+    w tle (`tm_shape()`, `tm_polygons()`, `tm_borders()`). Zapisz ją do pliku `.png`.
+
+5.  Stwórz drugą mapę: ta sama zmienna, a dodatkowo zaznacz punktami w kolorze czerwonym
+    **5% powiatów o najwyższej stopie bezrobocia** (`quantile()`, `filter()`,
+    `tm_symbols()`). Zapisz do pliku `.png`.
+
+### Rozszerzenie {.unnumbered}
+
+6.  Powtórz krok 3 dla typologii miejsko-wiejskiej (`URBN_TYPE`).
+
+7.  Stwórz mapę zmiany stopy bezrobocia między 2004 a 2023 rokiem
+    (`mutate(zmiana = SB2023 - SB2004)`). Jaką paletę barw wybierzesz do przedstawienia
+    zmian i dlaczego?
+
+### Co oddać {.unnumbered}
+
+-   plik `.qmd` z kodem rozwiązania,
+-   plik `.html` wygenerowany z tego `.qmd`,
+-   `out/powiaty_attr.gpkg` oraz pliki `.png` z mapami,
+-   dwa–trzy zdania interpretacji: gdzie w Polsce bezrobocie jest najwyższe i czy różnica
+    między makroregionami jest istotna statystycznie?
+
+## Punkty: statystyki centrograficzne i intensywność
+
+**Materiał:** @sec-punkty-centrograficzne, @sec-punkty-intensywnosc ·
+**Dane:** `poznan_budynki.gpkg` ·
+**Pakiety:** `sf`, `sfdep`, `spatstat`, `terra`, `tmap`, `dplyr`
+
+### Cel {.unnumbered}
+
+Opis rozkładu przestrzennego przedszkoli w Poznaniu: położenie środkowe, rozproszenie,
+kierunek oraz zmienność intensywności w obszarze miasta.
+
+### Dane {.unnumbered}
+
+Geopaczka `poznan_budynki.gpkg` zawiera cztery warstwy w układzie EPSG:2180:
+
+| Warstwa | Zawartość |
+|---|---|
+| `poznan` | granica miasta (1 poligon) |
+| `przedszkole` | budynki przedszkoli (171 poligonów) |
+| `kosciol` | budynki kościołów (90 poligonów) |
+| `szpital` | budynki szpitali (64 poligony) |
+
+Warstwy obiektów są **poligonowe**, a metody analizy rozkładu punktów wymagają warstwy
+punktowej — pierwszym krokiem jest wyznaczenie centroidów.
+
+::: {.callout-warning}
+## Kolejność ładowania pakietów
+
+Pakiet `terra` zasłania funkcje `rescale()`, `density()` i `area()` z pakietu `spatstat`.
+Funkcję skalującą wywołuj z przedrostkiem: `spatstat.geom::rescale()`.
+:::
+
+### Zadanie {.unnumbered}
+
+1.  Wczytaj warstwę granicy miasta oraz warstwę przedszkoli
+    (`read_sf(layer = )`), zamień budynki na punkty (`st_centroid()`) i zapisz warstwę
+    punktową do `out/punkty_poznan.gpkg` (`write_sf(layer = "przedszkole")`).
+    **Plik ten będzie potrzebny na następnych zajęciach.**
+
+2.  Oblicz statystyki centrograficzne przedszkoli: średnią centralną (`center_mean()`),
+    medianę centralną (`center_median()`), odległość standardową (`std_distance()`) oraz
+    elipsę odchylenia standardowego (`std_dev_ellipse()` + `st_ellipse()`).
+
+    -   O ile metrów średnia centralna różni się od mediany centralnej (`st_distance()`)?
+    -   Jaki jest stosunek dłuższej osi elipsy do krótszej?
+
+3.  Przedstaw na jednej mapie: granicę miasta, punkty, średnią centralną, medianę centralną,
+    okrąg o promieniu równym odległości standardowej (`st_buffer()`) oraz elipsę.
+
+4.  Utwórz obiekt klasy `ppp` (`as.owin()`, `as.ppp()`) i oblicz **średnią intensywność**
+    przedszkoli na km² (`spatstat.geom::rescale(ppp, 1000)`, `summary()$intensity`).
+
+5.  Wykonaj test zliczania w kwadratach dla siatki 4 × 4 (`quadrat.test()`) i przedstaw
+    zliczenia na rycinie (`quadratcount()`, `plot()`). Co oznacza wynik testu?
+
+6.  Wykonaj analizę gęstości jądra dla dwóch wartości pasma: `sigma = 500` i `sigma = 1500`
+    (`density()`, `terra::rast()`). Przedstaw obie mapy obok siebie i porównaj.
+
+### Rozszerzenie {.unnumbered}
+
+Powtórz kroki 1–6 dla **kościołów** i porównaj oba zbiory. Statystyka centrograficzna nabiera
+znaczenia dopiero przez porównanie: który zbiór jest bardziej rozproszony i czy kierunki
+elips są zgodne?
+
+### Co oddać {.unnumbered}
+
+-   plik `.qmd` z kodem rozwiązania,
+-   plik `.html` wygenerowany z tego `.qmd`,
+-   `out/punkty_poznan.gpkg` oraz ryciny `.png`,
+-   dwa–trzy zdania interpretacji: czy intensywność przedszkoli jest stała w obszarze miasta?
+
+## Punkty: metody oparte na odległości
+
+**Materiał:** @sec-punkty-odleglosc · **Dane:** `out/punkty_poznan.gpkg`,
+`poznan_budynki.gpkg` (warstwa `poznan`) · **Pakiety:** `sf`, `spatstat`, `ggplot2`
+
+### Cel {.unnumbered}
+
+Sprawdzenie, czy rozmieszczenie przedszkoli w Poznaniu odbiega od losowego i na jakiej
+odległości.
+
+### Dane {.unnumbered}
+
+Warstwa punktowa `przedszkole` z pliku `out/punkty_poznan.gpkg` przygotowanego na poprzednich
+zajęciach oraz granica miasta z `poznan_budynki.gpkg`.
+
+### Zadanie {.unnumbered}
+
+1.  Wczytaj dane, utwórz obiekt klasy `ppp` i oblicz odległości do najbliższego sąsiada
+    (`nndist()`). Podaj statystyki opisowe tych odległości (`summary()`) oraz ich decyle
+    (`quantile(probs = seq(0, 1, 0.1))`).
+
+2.  Przedstaw rozkład odległości do najbliższego sąsiada na **dystrybuancie empirycznej**
+    (`ggplot()` + `stat_ecdf()`). Jaki odsetek przedszkoli ma sąsiada bliżej niż 500 m?
+
+3.  Oblicz wskaźnik Clarka-Evansa **z jawnie podaną korektą brzegową**:
+    `clarkevans(ppp, correction = "cdf")`. Jak zinterpretujesz otrzymaną wartość?
+
+4.  Wykonaj test Clarka-Evansa dla trzech hipotez alternatywnych:
+    `clarkevans.test(ppp, correction = "cdf", alternative = )` z wartościami `"clustered"`,
+    `"regular"` i `"two.sided"`. Dlaczego jedna z nich daje *p* bliskie 1?
+
+5.  Wyznacz funkcję G (`Gest(correction = "none")`) oraz **obwiednię jednoczesną**:
+
+    ```r
+    set.seed(1111)
+    envelope(ppp, Gest, correction = "none", global = TRUE, nrank = 5, nsim = 99)
+    ```
+
+    Przedstaw wynik na wykresie. Czy krzywa empiryczna wychodzi poza obwiednię? Jaki poziom
+    istotności odpowiada ustawieniu `nrank = 5` przy `nsim = 99`?
+
+### Rozszerzenie {.unnumbered}
+
+**Brak.** Obwiednia jest najdłuższym obliczeniem tego bloku — jeśli skończysz
+wcześniej, sprawdź, jak zmienia się wynik przy `nsim = 199`.
+
+### Co oddać {.unnumbered}
+
+-   plik `.qmd` z kodem rozwiązania,
+-   plik `.html` wygenerowany z tego `.qmd`,
+-   ryciny `.png` (dystrybuanta, funkcja G z obwiednią),
+-   dwa–trzy zdania interpretacji: czy rozmieszczenie przedszkoli jest skupione, losowe czy
+    regularne i na jakiej podstawie tak twierdzisz?
+
+## Miary autokorelacji danych obszarowych
+
+**Materiał:** @sec-obszarowe-autokorelacja · **Dane:** `pol_pres15` z pakietu `spDataLarge` ·
+**Pakiety:** `sf`, `spdep`, `tmap`, `dplyr`, `spDataLarge`
+
+### Cel {.unnumbered}
+
+Sprawdzenie, czy frekwencja w II turze wyborów prezydenckich w 2015 roku wykazuje
+autokorelację przestrzenną, i wskazanie, gdzie leżą zgrupowania gmin o podobnych wartościach.
+
+### Dane {.unnumbered}
+
+Zbiór `pol_pres15` zawiera wyniki wyborów prezydenckich z 2015 roku na poziomie **2495 gmin**.
+Zmienna `II_turnout` to frekwencja w II turze, wyrażona jako **ułamek** (zakres 0,34–0,75).
+
+Pakiet `spDataLarge` nie jest dostępny na CRAN — instrukcja instalacji z r-universe znajduje
+się w @sec-pakiety.
+
+```{r}
+#| eval: false
+library(spDataLarge)
+data(pol_pres15, package = "spDataLarge")
+?pol_pres15
+```
+
+### Zadanie {.unnumbered}
+
+1.  Utwórz obiekt przestrzenny `wybory` zawierający kolumny `name`, `II_turnout` oraz
+    geometrię (`select()`). Stwórz mapę zmiennej `II_turnout`.
+
+2.  Zbuduj macierz wag przestrzennych: listę sąsiadów regułą *queen* (`poly2nb()`) oraz
+    dwa warianty wag — standaryzowany wierszami (`nb2listw(style = "W")`) i binarny
+    (`nb2listw(style = "B")`).
+
+3.  Oblicz **globalne** miary autokorelacji:
+
+    -   I Morana (`moran.test()`) i C Geary'ego (`geary.test()`) na wagach `"W"`,
+    -   G Getisa & Orda (`globalG.test()`) na wagach **binarnych**.
+
+    Czy wszystkie trzy prowadzą do tego samego wniosku?
+
+4.  Oblicz **lokalną statystykę I Morana** (`localmoran()`) i wydziel klastry:
+
+    ```r
+    hotspot(locm, Prname = "Pr(z != E(Ii))", cutoff = 0.05, p.adjust = "none")
+    ```
+
+    Podaj liczebności klastrów (`table()`) i przedstaw je na mapie.
+
+5.  Wskaż obszary wysokich i niskich wartości lokalną statystyką G Getisa & Orda:
+    `localG_perm(nsim = 999, iseed = 1111)` + `hotspot(Prname = "Pr(z != E(Gi)) Sim", cutoff = 0.05, p.adjust = "none")`.
+    Podaj liczebności i przedstaw na mapie.
+
+6.  Zapisz obiekt `wybory` wraz z dopisanymi kolumnami klastrów do `out/wybory.gpkg`.
+
+### Rozszerzenie {.unnumbered}
+
+Sporządź wykres rozrzutu Morana (`moran.plot()`) i wskaż, w której ćwiartce leżą gminy
+sklasyfikowane jako `High-Low`.
+
+### Co oddać {.unnumbered}
+
+-   plik `.qmd` z kodem rozwiązania,
+-   plik `.html` wygenerowany z tego `.qmd`,
+-   `out/wybory.gpkg` oraz mapy `.png`,
+-   dwa–trzy zdania interpretacji: gdzie leżą zgrupowania gmin o wysokiej frekwencji, a gdzie
+    o niskiej?
+
+## Metody interpolacji
+
+**Materiał:** @sec-pola-interpolacja · **Dane:** `punkty_pref.gpkg`, `granica.gpkg` ·
+**Pakiety:** `sf`, `terra`, `gstat`, `tmap`
+
+### Cel {.unnumbered}
+
+Wykonanie interpolacji wysokości terenu trzema metodami deterministycznymi i porównanie
+uzyskanych powierzchni.
+
+### Dane {.unnumbered}
+
+-   `punkty_pref.gpkg` — **264 punkty** pomiarowe w Suwalskim Parku Krajobrazowym, zmienne
+    `srtm` (wysokość terenu [m]), `temp`, `ndvi`, `savi`, `clc`. Zbiór nie zawiera braków.
+-   `granica.gpkg` — granica parku (63,4 km²).
+
+### Zadanie 1: obliczenie wartości IDW ze wzoru {.unnumbered}
+
+Tabela zawiera wartości punktów pomiarowych i ich odległości od lokalizacji, dla której
+szacujemy wartość:
+
+| Odległość *d* [m] | Wartość *z~i~* |
+|---|---|
+| 100 | 10 |
+| 150 | 15 |
+| 300 | 15 |
+| 400 | 20 |
+| 500 | 10 |
+| 600 | 20 |
+| 1000 | 10 |
+
+Wykorzystując poniższą funkcję, oblicz wartość w nieznanej lokalizacji dla sześciu
+wariantów: **3 najbliższe punkty** i **5 najbliższych punktów**, każdorazowo przy wykładniku
+potęgowym `power` równym 0, 1 i 2.
+
+```{r}
+#| eval: false
+idw = function(wartosc, d, power = 2) {
+  wagi = 1 / (d ^ power)
+  sum(wagi * wartosc) / sum(wagi)
+}
+```
+
+Który wariant daje wartość najniższą, a który najwyższą? Jak zmiana wykładnika wpływa na
+wynik?
+
+### Zadanie 2: interpolacja w siatce {.unnumbered}
+
+1.  Wczytaj dane i utwórz siatkę interpolacyjną o rozdzielczości **200 m** dla obszaru parku
+    (`rast(ext = , res = 200, crs = )`). Ile komórek ma siatka?
+
+2.  Wykonaj interpolację zmiennej `srtm` trzema metodami:
+
+    -   diagramy Woronoja (`voronoi()`, `crop()`),
+    -   metoda średniej ważonej odwrotnością odległości
+        (`gstat(set = list(idp = 2))` + `interpolate(fun = interpolate_gstat)` + `mask()`),
+    -   funkcja wielomianowa 1. stopnia (`gstat(degree = 1)` + `interpolate()` + `mask()`).
+
+    Funkcję pomocniczą `interpolate_gstat()` znajdziesz w @sec-pola-interpolacja.
+
+3.  Przedstaw trzy wyniki na jednej rycinie, **we wspólnej skali barw**
+    (`tmap_arrange()`). Czym różnią się uzyskane powierzchnie?
+
+4.  Wykonaj interpolację `srtm` metodą IDW przy trzech wartościach wykładnika:
+    `idp = 1`, `idp = 2` i `idp = 5`. Podaj zakres wartości każdej z powierzchni i porównaj
+    go z zakresem pomiarów. Jak wykładnik wpływa na wygładzenie powierzchni?
+
+### Rozszerzenie {.unnumbered}
+
+**Brak.**
+
+### Co oddać {.unnumbered}
+
+-   plik `.qmd` z kodem rozwiązania,
+-   plik `.html` wygenerowany z tego `.qmd`,
+-   `out/interpolacja_srtm.tif` oraz rycinę porównawczą `.png`,
+-   dwa–trzy zdania interpretacji: która metoda najlepiej oddaje rzeźbę terenu i dlaczego?
+
+## Geostatystyka: analiza i modelowanie struktury przestrzennej
+
+**Materiał:** @sec-pola-semiwariogram · **Dane:** `punkty_pref.gpkg`, `granica.gpkg` ·
+**Pakiety:** `sf`, `gstat`
+
+### Cel {.unnumbered}
+
+Opisanie struktury przestrzennej wysokości terenu semiwariogramem i dopasowanie do niego
+modelu.
+
+### Dane {.unnumbered}
+
+`punkty_pref.gpkg` (264 punkty, zmienna `srtm`) oraz `granica.gpkg` — potrzebna do obliczenia
+powierzchni obszaru.
+
+### Zadanie {.unnumbered}
+
+1.  Stwórz wykres rozrzutu z przesunięciem dla zmiennej `srtm`, dla odstępów od 0 do 5000 m
+    co 625 m (`hscat(breaks = seq(0, 5000, by = 625))`). Jak zmienia się współczynnik
+    korelacji wraz z odległością?
+
+2.  Wykonaj obliczenia pomocnicze: liczbę wszystkich par obserwacji, średnią odległość między
+    punktami oraz połowę pierwiastka z powierzchni obszaru (`st_area()`).
+
+3.  Stwórz semiwariogram empiryczny zmiennej `srtm` (`variogram()`) i wyświetl go z liczbą
+    par w każdym odstępie (`plot(plot.numbers = TRUE)`). Ile par posłużyło do wyliczenia
+    pierwszego odstępu?
+
+4.  Zmodyfikuj semiwariogram tak, by jego maksymalny zasięg wynosił **3,5 km**
+    (`variogram(cutoff = 3500)`). Sprawdź w kolumnie `np`, czy w każdym odstępie jest co
+    najmniej 30 par.
+
+5.  Dopasuj do semiwariogramu empirycznego **model sferyczny**: najpierw podaj parametry
+    startowe odczytane z wykresu (`vgm(psill = , model = "Sph", range = , nugget = )`),
+    potem dopasuj je funkcją `fit.variogram()`. Porównaj graficznie model startowy
+    i dopasowany.
+
+6.  Dopasuj do tego samego semiwariogramu **model wykładniczy** (`"Exp"`) i **gaussowski**
+    (`"Gau"`). Porównaj trzy modele graficznie oraz pod względem miary dopasowania
+    `attr(model, "SSErr")`. Który dopasowuje się najlepiej?
+
+    ::: {.callout-note}
+    Zasięgi modeli wykładniczego i gaussowskiego to **zasięgi praktyczne** — odległość, na
+    której model osiąga 95% semiwariancji progowej. Nie są więc wprost porównywalne
+    z zasięgiem modelu sferycznego, który osiąga semiwariancję progową dokładnie na
+    odległości równej zasięgowi.
+    :::
+
+7.  Zapisz wybrany model do pliku `out/model_srtm.rds` (`saveRDS()`).
+
+### Rozszerzenie {.unnumbered}
+
+Dopasuj **model potęgowy** (`"Pow"`).
+
+::: {.callout-warning}
+W modelu potęgowym argument `range` oznacza **wykładnik potęgowy**, a nie odległość, i nie
+może przekraczać 2. Wywołanie `fit.variogram(vario, vgm(model = "Pow", nugget = 1))` przerywa
+działanie komunikatem `power model range (parameter) cannot exceed 2.0`. Podaj wartość
+startową mniejszą od 2, na przykład `vgm(model = "Pow", range = 1)`.
+:::
+
+### Co oddać {.unnumbered}
+
+-   plik `.qmd` z kodem rozwiązania,
+-   plik `.html` wygenerowany z tego `.qmd`,
+-   `out/model_srtm.rds` oraz wykresy `.png`,
+-   dwa–trzy zdania interpretacji: jaki jest zasięg autokorelacji wysokości terenu i co
+    oznacza wartość efektu samorodka?
+
+## Geostatystyka: estymacja
+
+**Materiał:** @sec-pola-estymacja · **Dane:** `punkty_pref.gpkg`, `granica.gpkg` ·
+**Pakiety:** `sf`, `terra`, `gstat`, `tmap`
+
+### Cel {.unnumbered}
+
+Wykonanie estymacji wysokości terenu krigingiem prostym i zwykłym oraz sprawdzenie, jak
+sąsiedztwo szukania wpływa na wynik.
+
+### Dane {.unnumbered}
+
+`punkty_pref.gpkg` (264 punkty, zmienna `srtm`) oraz `granica.gpkg`.
+
+### Zadanie {.unnumbered}
+
+1.  Wczytaj dane, stwórz semiwariogram empiryczny zmiennej `srtm` i dopasuj model sferyczny
+    (`variogram()`, `fit.variogram()`). Model z poprzednich zajęć możesz też wczytać:
+    `readRDS("out/model_srtm.rds")`.
+
+2.  Utwórz siatkę interpolacyjną o rozdzielczości **200 m** dla obszaru parku.
+
+3.  Wykonaj estymację **krigingiem prostym**, podając jako średnią wartość średnią zmiennej
+    (`gstat(beta = mean(punkty$srtm))`, `interpolate(fun = interpolate_gstat)`, `mask()`).
+
+4.  Wykonaj estymację **krigingiem zwykłym** w trzech ustawieniach sąsiedztwa szukania:
+
+    -   `nmax = 10` — dziesięć najbliższych punktów,
+    -   `nmax = 30` — trzydzieści najbliższych punktów,
+    -   `maxdist = 2000` — punkty położone w odległości do 2 km.
+
+5.  Porównaj wyniki na dwóch rycinach: **cztery mapy estymacji** (`var1.pred`) oraz
+    **cztery mapy wariancji krigingowej** (`var1.var`), każda grupa we wspólnej skali barw
+    (`tmap_arrange()`).
+
+6.  Odpowiedz: dlaczego mapy estymacji są do siebie bardzo podobne, a mapy wariancji
+    krigingowej nie? W którym wariancie wariancja krigingowa osiąga najwyższe wartości
+    i w jakich miejscach obszaru?
+
+7.  Zapisz wynik krigingu zwykłego z `nmax = 30` do `out/kriging_srtm.tif`
+    (`writeRaster()`).
+
+### Rozszerzenie {.unnumbered}
+
+**Brak.** Rdzeń obejmuje cztery estymacje i osiem map.
+
+### Co oddać {.unnumbered}
+
+-   plik `.qmd` z kodem rozwiązania,
+-   plik `.html` wygenerowany z tego `.qmd`,
+-   `out/kriging_srtm.tif` oraz dwie ryciny porównawcze `.png`,
+-   dwa–trzy zdania interpretacji: od czego zależy wariancja krigingowa i czy jest ona miarą
+    błędu estymacji?
+
+## Geostatystyka: ocena jakości estymacji
+
+**Materiał:** @sec-pola-ocena · **Dane:** `punkty_pref.gpkg`, `granica.gpkg` ·
+**Pakiety:** `sf`, `terra`, `gstat`, `rsample`, `tmap`, `ggplot2`
+
+### Cel {.unnumbered}
+
+Ocena jakości estymacji wysokości terenu dwiema metodami walidacji i porównanie ich wyników.
+
+### Dane {.unnumbered}
+
+`punkty_pref.gpkg` (264 punkty, zmienna `srtm`) oraz `granica.gpkg`.
+
+**Przed wykonaniem zadania ustaw `set.seed(1111)`.** Podział zbioru i kroswalidacja są
+procedurami losowymi — bez ustawionego ziarna wynik zmienia się przy każdym uruchomieniu.
+
+### Zadanie {.unnumbered}
+
+1.  Podziel zbiór na część treningową i testową w proporcji 75/25
+    (`initial_split(prop = 0.75, strata = srtm)`, `training()`, `testing()`). Podaj
+    liczebności obu podzbiorów i przedstaw je na mapie dwoma kolorami.
+
+2.  Na **zbiorze treningowym** zbuduj semiwariogram empiryczny i dopasuj model sferyczny
+    (`variogram()`, `fit.variogram()`).
+
+3.  Wykonaj estymację dla punktów **zbioru testowego** krigingiem zwykłym
+    (`gstat(locations = train, nmax = 30)`, `predict()`). Dopisz do wyniku wartość
+    obserwowaną i oblicz **błąd estymacji** jako różnicę
+    `obserwowane - estymowane`.
+
+4.  Przeanalizuj błąd estymacji na trzy sposoby:
+
+    -   mapa błędu ze skalą rozbieżną i punktem środkowym w zerze
+        (`tm_scale_continuous(values = "-brewer.rd_bu", midpoint = 0)`),
+    -   histogram (`geom_histogram()`) — czy rozkład jest symetryczny?
+    -   wykres rozrzutu wartości obserwowanych względem estymowanych, z prostą $y = x$
+        (`geom_abline(slope = 1, intercept = 0)`).
+
+5.  Oblicz trzy statystyki jakości estymacji:
+
+    -   średni błąd estymacji — `mean(blad)`,
+    -   pierwiastek błędu średniokwadratowego — `sqrt(mean(blad ^ 2))`,
+    -   współczynnik determinacji — `cor(obserwowane, estymowane) ^ 2`.
+
+    Czy estymacja jest obciążona? Jak duży jest typowy pojedynczy błąd?
+
+6.  Wykonaj **kroswalidację** na pełnym zbiorze danych (`krige.cv(nmax = 30)`) i oblicz te
+    same trzy statystyki, korzystając z kolumny `residual`. Zestaw wyniki obu metod w tabeli
+    i porównaj je. Czy niższa wartość pierwiastka błędu średniokwadratowego oznacza, że model
+    jest lepszy?
+
+### Rozszerzenie {.unnumbered}
+
+**Brak.** Rdzeń obejmuje dwie procedury walidacji, trzy statystyki i cztery ryciny.
+
+### Co oddać {.unnumbered}
+
+-   plik `.qmd` z kodem rozwiązania,
+-   plik `.html` wygenerowany z tego `.qmd`,
+-   tabelę porównawczą statystyk obu metod oraz ryciny `.png`,
+-   dwa–trzy zdania interpretacji: czy estymacja jest obciążona i czym różnią się wyniki obu
+    metod walidacji?

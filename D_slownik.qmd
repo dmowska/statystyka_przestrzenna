@@ -1,0 +1,152 @@
+# Słownik pojęć {#sec-slownik}
+
+Dokumentacja pakietów `sf`, `terra`, `spatstat`, `spdep` i `gstat` jest w języku angielskim.
+Ten słownik pozwala przejść od polskiej nazwy używanej w skrypcie do terminu,
+którego trzeba szukać w dokumentacji (`?nazwa_funkcji`) i w literaturze.
+
+## Dane przestrzenne i obiekty w R
+
+| Polski | Angielski | Uwagi |
+|---|---|---|
+| dane wektorowe | *vector data* | punkty, linie, poligony |
+| dane rastrowe | *raster data* | siatka komórek o jednakowej wielkości |
+| zasięg przestrzenny (obwiednia prostokątna) | *bounding box*, *extent* | `st_bbox()`, `ext()` |
+| układ współrzędnych | *coordinate reference system* (CRS) | `st_crs()` |
+| rozdzielczość | *resolution* | wielkość komórki rastra |
+| warstwa, kanał | *layer*, *band* | raster wielowarstwowy |
+| geopaczka | *geopackage* (.gpkg) | może zawierać wiele warstw |
+| centroid | *centroid* | `st_centroid()` |
+| strefa buforowa, otoczka | *buffer* | `st_buffer()` |
+| przycięcie | *crop* | `crop()` |
+| maskowanie | *mask* | `mask()` |
+| agregacja | *aggregate* | zmniejszenie rozdzielczości |
+| złączenie tabel | *join* | `left_join()` |
+| brakująca wartość | *missing value* (`NA`) | |
+
+## Eksploracyjna analiza danych
+
+| Polski | Angielski | Uwagi |
+|---|---|---|
+| eksploracyjna analiza danych | *exploratory data analysis* (EDA) | |
+| statystyki opisowe | *descriptive statistics* | `summary()` |
+| rozstęp międzykwartylowy | *interquartile range* (IQR) | |
+| wykres pudełkowy | *box plot* | `geom_boxplot()` |
+| wykres kwantyl-kwantyl | *quantile-quantile plot* (Q-Q) | `geom_qq()` |
+| estymator jądrowy gęstości | *kernel density estimation* (KDE) | `geom_density()` |
+| skośność | *skewness* | `skewness()` |
+| kurtoza | *kurtosis* | `kurtosis()` |
+| wartość odstająca globalnie | *global outlier* | |
+| wartość odstająca lokalnie | *local outlier* | wykrywana wyłącznie na mapie |
+| korelacja liniowa Pearsona | *Pearson correlation* | `cor.test(method = "pearson")` |
+| korelacja rang Spearmana | *Spearman rank correlation* | `cor.test(method = "spearman")` |
+| analiza wariancji | *analysis of variance* (ANOVA) | `aov()` |
+| porównania wielokrotne | *post-hoc comparisons* | `TukeyHSD()` |
+| próbkowanie regularne | *regular sampling* | typ próbkowania |
+| próbkowanie losowe | *random sampling* | |
+| próbkowanie losowe stratyfikowane | *stratified sampling* | |
+| próbkowanie preferencyjne | *clustered sampling* | |
+
+## Statystyka przestrzenna
+
+| Polski | Angielski | Uwagi |
+|---|---|---|
+| statystyka przestrzenna | *spatial statistics* | |
+| analizy przestrzenne | *spatial analysis* | szerszy zakres niż statystyka przestrzenna |
+| ekonometria przestrzenna | *spatial econometrics* | modelowanie procesów ekonomicznych z aspektem przestrzennym |
+| dane punktowe | *point pattern data* | przedmiotem analizy jest rozmieszczenie zdarzeń |
+| dane obszarowe | *area data*, *lattice data* | wartość zagregowana w jednostce przestrzennej |
+| dane powierzchniowe ciągłe przestrzennie | *surface data*, *spatially continuous data* | pomiar punktowy zjawiska ciągłego |
+| zależność przestrzenna | *spatial dependence* | |
+| pierwsze prawo geografii | *first law of geography* | sformułowanie Toblera |
+| autokorelacja przestrzenna | *spatial autocorrelation* | |
+| heterogeniczność przestrzenna | *spatial heterogeneity* | |
+| efektywna liczebność próby | *effective sample size* | równoważna liczba obserwacji niezależnych |
+| zdarzenie | *event* | obiekt lub zjawisko, którego lokalizację zarejestrowano |
+| znak | *mark* | dodatkowa cecha zdarzenia; w GIS — atrybut |
+| dane punktowe nieoznakowane | *unmarked spatial point pattern data* | same lokalizacje, bez atrybutów |
+| dane punktowe oznakowane | *marked spatial point pattern data* | lokalizacje wraz z wartością przypisaną zdarzeniu |
+| wzorzec punktowy | *planar point pattern* | klasa `ppp`; `as.ppp()` |
+| okno analizy | *window* | granica obszaru badań; `as.owin()` |
+| całkowita przestrzenna przypadkowość | *complete spatial randomness* (CSR) | hipoteza zerowa w analizie rozkładu punktów |
+| rozkład skupiony / losowy / regularny | *clustered* / *random* / *regular* | typ rozkładu punktów |
+| statystyki centrograficzne | *centrography* | przestrzenne statystyki opisowe |
+| średnia centralna | *mean center* | `center_mean()` |
+| mediana centralna | *median center* | `center_median()`; nie mylić z medianą geometryczną |
+| odległość standardowa | *standard distance* | `std_distance()` |
+| elipsa odchylenia standardowego | *standard deviational ellipse* | `std_dev_ellipse()` |
+| intensywność | *intensity* | |
+| test zliczania w kwadratach | *quadrat count test* | `quadrat.test()` |
+| estymacja gęstości jądra | *kernel density estimation* (KDE) | `density()` |
+| jądro | *kernel* | kształt i rozmiar ruchomego okna |
+| szerokość pasma | *bandwidth* | `density(sigma =)` |
+| najbliższy sąsiad | *nearest neighbour* | `nndist()` |
+| dystrybuanta empiryczna | *empirical cumulative distribution function* (ECDF) | `stat_ecdf()` |
+| wskaźnik Clarka-Evansa | *Clark-Evans index* | `clarkevans()`, `clarkevans.test()` |
+| funkcje podsumowujące | *summary functions* | funkcja G, funkcja K Ripleya |
+| funkcja G | *G function* | `Gest()`; odległość do najbliższego sąsiada |
+| funkcja K Ripleya | *Ripley's K function* | `Kest()`; wszystkie punkty w promieniu *r* |
+| obwiednia | *envelope* | `envelope()`; nie mylić z zasięgiem przestrzennym (*bounding box*) |
+| efekt brzegowy | *edge effect* | zawyża odległości mierzone przy granicy obszaru |
+| korekta brzegowa | *edge correction* | argument `correction =` |
+| sąsiedztwo | *neighbourhood* | `poly2nb()` |
+| lista sąsiadów | *neighbour list* | klasa `nb` |
+| reguła wspólnej granicy / wspólnego punktu | *rook* / *queen* | `poly2nb(queen =)` |
+| macierz wag przestrzennych | *spatial weights matrix* | `nb2listw()`, klasa `listw` |
+| standaryzacja wierszami | *row standardisation* | `style = "W"` |
+| wagi binarne | *binary weights* | `style = "B"` |
+| zmienna opóźniona przestrzennie | *spatial lag* | `lag.listw()` |
+| wykres rozrzutu Morana | *Moran scatterplot* | `moran.plot()` |
+| ćwiartka (wykresu rozrzutu) | *quadrant* | `hotspot(quadrant.type =)` |
+| klaster | *cluster* | `hotspot()` |
+| miary globalne / lokalne | *global* / *local* measures | |
+| test oparty na permutacjach | *permutation test* | `moran.mc()`, `localG_perm()` |
+| pseudo p-value | *pseudo p-value* | wartość zależy od `nsim` |
+| korekta na wielokrotne testowanie | *p-value adjustment* | `hotspot(p.adjust =)` |
+| obszar wysokich / niskich wartości | *hot spot* / *cold spot* | `localG_perm()` |
+| problem zmiennych jednostek odniesienia | *modifiable areal unit problem* (MAUP) | |
+
+## Geostatystyka
+
+| Polski | Angielski | Uwagi |
+|---|---|---|
+| geostatystyka | *geostatistics* | |
+| interpolacja przestrzenna | *spatial interpolation* | |
+| powierzchnia statystyczna | *statistical surface* | mapa rastrowa powstała z interpolacji |
+| przestrzenna ciągłość | *spatial continuity* | założenie geostatystyki |
+| stacjonarność | *stationarity* | założenie geostatystyki: brak trendów |
+| estymacja | *estimation* | szacowanie wartości w lokalizacji bez pomiaru |
+| symulacja | *simulation* | generowanie równie prawdopodobnych realizacji |
+| siatka interpolacyjna | *interpolation grid* | `rast(ext =, res =)` |
+| diagramy Woronoja | *Voronoi diagram* | `voronoi()`; inaczej poligony Thiessena (*Thiessen polygons*) |
+| metoda średniej ważonej odwrotnością odległości | *inverse distance weighted* (IDW) | `gstat(set = list(idp = ))` |
+| wykładnik potęgowy | *inverse distance weighting power* | `idp` |
+| funkcje wielomianowe | *polynomials* | `gstat(degree = )` |
+| funkcje sklejane | *splines* | metoda omawiana wyłącznie interpretacyjnie — w skrypcie nie jest wykonywana |
+| semiwariancja | *semivariance* | |
+| chmura semiwariogramu | *variogram cloud* | `variogram(cloud = TRUE)` |
+| semiwariogram empiryczny | *empirical variogram*, *sample variogram* | `variogram()` |
+| odstęp | *lag* | wektor przesunięcia $h$ między dwiema lokalizacjami |
+| głowa / ogon | *head* / *tail* | wartości na obu końcach wektora $h$ |
+| efekt samorodka | *nugget* | `model$psill[1]` |
+| semiwariancja progowa | *sill* | `sum(model$psill)` |
+| semiwariancja progowa cząstkowa | *partial sill* | `psill` w `vgm()` |
+| zasięg | *range* | odległość osiągnięcia semiwariancji progowej; dla `Sph` równa kolumnie `range` |
+| parametr zasięgu | *range parameter* | kolumna `range` w wyniku `fit.variogram()` |
+| zasięg praktyczny | *practical range* | odległość osiągnięcia 95% semiwariancji progowej: $3\cdot$`range` dla `Exp`, `range`$\cdot\sqrt{3}$ dla `Gau` |
+| modele dozwolone | *allowed models* | `vgm()`; warunek: dodatnia określoność |
+| dodatnia określoność | *positive definiteness* | warunek rozwiązywalności układu równań krigingu |
+| model nuggetowy | *nugget effect model* | brak autokorelacji przestrzennej |
+| model złożony | *nested model* | połączenie dwóch lub więcej modeli podstawowych |
+| model sferyczny / wykładniczy / gaussowski / potęgowy | *spherical* / *exponential* / *Gaussian* / *power* | `vgm()` |
+| wykres rozrzutu z przesunięciem | *h-scatterplot*, *lagged scatterplot* | `hscat()` |
+| kriging prosty / zwykły / z trendem | *simple* / *ordinary kriging* / *kriging with a trend* (KT) | `gstat()`; w części literatury KT występuje pod nazwą *universal kriging* |
+| sąsiedztwo szukania | *search neighborhood* | `nmax`, `maxdist` |
+| wariancja krigingowa | *kriging variance* | `var1.var` |
+| błąd estymacji | *estimation error*, *residual* | |
+| walidacja podzbiorem | *jackknifing*, *split-sample validation* | `initial_split()` |
+| kroswalidacja | *leave-one-out cross-validation* | `krige.cv()` |
+| reszta, błąd estymacji | *residual* | kolumna `residual` |
+| znormalizowany błąd estymacji | *z-score* | kolumna `zscore`: `residual / sqrt(var1.var)` |
+| średni błąd estymacji | *mean prediction error* (MPE) | `mean(blad)` |
+| pierwiastek błędu średniokwadratowego | *root mean square error* (RMSE) | `sqrt(mean(blad^2))` |
+| współczynnik determinacji | *coefficient of determination* ($r^2$) | `cor(obs, est)^2` |
